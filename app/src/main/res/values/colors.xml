@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="colorPrimary">#009688</color>
+  <color name="colorPrimaryDark">#00796b</color>
+  <color name="colorAccent">#ffab00</color>
+
+  <color name="notes_container_background">#eeeeee</color>
+  <color name="program_container_background">#fafafa</color>
+  <color name="program_nav_bar_background">#333333</color>
+  <color name="editor_container_background">#fafafa</color>
+
+</resources>

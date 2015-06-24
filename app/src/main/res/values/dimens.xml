@@ -1,0 +1,14 @@
+<resources>
+  <!-- Default screen margins, per the Android Design guidelines. -->
+  <dimen name="activity_horizontal_margin">16dp</dimen>
+  <dimen name="activity_vertical_margin">16dp</dimen>
+
+  <!-- TAP Activity dimensions -->
+  <dimen name="detail_backdrop_height">256dp</dimen>
+  <dimen name="fab_margin">16dp</dimen>
+  <dimen name="nav_header_height">100dp</dimen>
+  <dimen name="program_bar_width">320dp</dimen>
+  <dimen name="editor_minimum_height">48dp</dimen>
+
+  <dimen name="login_column_width">240dp</dimen>
+</resources>
