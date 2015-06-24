@@ -2,4 +2,7 @@
   <string name="app_name">TAPNotes</string>
 
   <string name="action_settings">Settings</string>
+    <string name="title_activity_scripture_testing">ScriptureTestingActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

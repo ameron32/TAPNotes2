@@ -2,13 +2,28 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ameron32.apps.tapnotes.v2" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name=".permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name=".permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:name=".TAPApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name" >
@@ -41,6 +56,7 @@
                 <category android:name="com.ameron32.trials.tapnotesreboot" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".parse.ui.MyDispatchMainActivity"
             android:label="@string/app_name"
@@ -54,8 +70,8 @@
         <activity
             android:name=".parse.ui.MyLoginParseActivity"
             android:label="@string/title_activity_my_login"
-            android:windowSoftInputMode="adjustResize|stateVisible"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
             <meta-data
                 android:name=".parse.ui.MyLoginActivity.PARSE_LOGIN_ENABLED"
                 android:value="true" />
@@ -64,22 +80,18 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="451a4e784d66f9e46edd52c2e4fe58e0ba5f1f4c" />
+
+        <!-- MICAH testing activity -->
+        <activity
+            android:name=".scripture.ScriptureTestingActivity"
+            android:label="@string/title_activity_scripture_testing"
+            android:parentActivityName=".ui.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ameron32.apps.tapnotes.v2.ui.MainActivity" />
+        </activity>
+        <!-- /MICAH -->
     </application>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
-    <permission
-        android:name=".permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name=".permission.C2D_MESSAGE" />
-
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 </manifest>
+

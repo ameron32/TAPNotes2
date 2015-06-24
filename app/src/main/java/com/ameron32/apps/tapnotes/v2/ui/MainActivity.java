@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
 import com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
@@ -108,6 +110,9 @@ public class MainActivity extends TAPActivity
         return true;
       case R.id.action_settings:
 
+        return true;
+      case R.id.action_scripture_activity:
+        startActivity(new Intent(getActivity(), ScriptureTestingActivity.class));
         return true;
       }
 
