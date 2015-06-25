@@ -7,34 +7,52 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.AnimatorRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by klemeilleur on 6/12/2015.
  */
-public class AnimatingPaneLayout extends FrameLayout {
+public class AnimatingPaneLayout
+    extends FrameLayout
+    implements IDualLayout {
 
-  private View mLeftPane;
-  private View mMainPane;
-  private @AnimatorRes int zoomAnimatorStart;
-  private @AnimatorRes int zoomAnimatorEnd;
-  private @AnimatorRes int leftAnimatorStart;
-  private @AnimatorRes int leftAnimatorEnd;
-  private @AnimatorRes int rightAnimatorStart;
-  private @AnimatorRes int rightAnimatorEnd;
-  private @AnimatorRes int nullAnimator;
-  private boolean isEnabled = false;
-  private AnimationOptions leftToTopOptions;
-  private AnimationOptions mainToBottomOptions;
-  private AnimationOptions leftToBottomOptions;
-  private AnimationOptions mainToTopOptions;
+  /*
+   * TODO Improve animation when isDisplacement = true [AKA Tablet devices]
+   */
+
+  @Nullable private View mLeftPane;
+  @Nullable private View mMainPane;
+  @NonNull  private @AnimatorRes int zoomAnimatorStart;
+  @NonNull  private @AnimatorRes int zoomAnimatorEnd;
+  @NonNull  private @AnimatorRes int leftAnimatorStart;
+  @NonNull  private @AnimatorRes int leftAnimatorEnd;
+  @NonNull  private @AnimatorRes int rightAnimatorStart;
+  @NonNull  private @AnimatorRes int rightAnimatorEnd;
+  @NonNull  private @AnimatorRes int nullAnimator;
+  @NonNull  private boolean isEnabled = false;
+  @NonNull  private boolean isDisplacement = false;
+  @NonNull  private AnimationOptions leftToTopOptions;
+  @NonNull  private AnimationOptions mainToBottomOptions;
+  @NonNull  private AnimationOptions leftToBottomOptions;
+  @NonNull  private AnimationOptions mainToTopOptions;
+
+  @NonNull  private int mDefaultPaddingLeft;
+  @NonNull  private int mOffsetPaddingLeft;
+
+  @Nullable private PanelListener mDefaultPanelListener;
+  @NonNull  private List<PanelListener> mListeners;
 
 
   public AnimatingPaneLayout(Context context) {
@@ -79,6 +97,75 @@ public class AnimatingPaneLayout extends FrameLayout {
     mLeftPane = getChildAt(0);
     mMainPane = getChildAt(1);
     isEnabled = true;
+    isDisplacement = getContext().getResources().getBoolean(R.bool.dual_layout_uses_displacement);
+    mListeners = new ArrayList<>();
+
+    mDefaultPaddingLeft = mMainPane.getPaddingLeft();
+    mOffsetPaddingLeft = Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width));
+
+    if (isDisplacement) {
+      mDefaultPanelListener = new PanelListener() {
+
+        @Override
+        public void onPanelOpened() {
+          openBuffer();
+        }
+
+        @Override
+        public void onPanelClosed() {
+          closeBuffer();
+        }
+
+        private void openBuffer() {
+          mMainPane.setPadding(
+              mDefaultPaddingLeft + mOffsetPaddingLeft,
+              mMainPane.getPaddingTop(),
+              mMainPane.getPaddingRight(),
+              mMainPane.getPaddingBottom());
+        }
+
+        private void closeBuffer() {
+          mMainPane.setPadding(
+              mDefaultPaddingLeft - mOffsetPaddingLeft,
+              mMainPane.getPaddingTop(),
+              mMainPane.getPaddingRight(),
+              mMainPane.getPaddingBottom());
+        }
+      };
+      addPanelListener(mDefaultPanelListener);
+    }
+  }
+
+  public void addPanelListener(PanelListener listener) {
+    if (!this.mListeners.contains(listener)) {
+      this.mListeners.add(listener);
+    }
+  }
+
+  public void removePanelListener(PanelListener listener) {
+    if (this.mListeners.contains(listener)) {
+      this.mListeners.remove(listener);
+    }
+  }
+
+  private void dispatchOnPanelOpened() {
+    if (this.mListeners.isEmpty()) {
+      return;
+    }
+
+    for (PanelListener l : this.mListeners) {
+      l.onPanelOpened();
+    }
+  }
+
+  private void dispatchOnPanelClosed() {
+    if (this.mListeners.isEmpty()) {
+      return;
+    }
+
+    for (PanelListener l : this.mListeners) {
+      l.onPanelClosed();
+    }
   }
 
   @Override
@@ -100,6 +187,7 @@ public class AnimatingPaneLayout extends FrameLayout {
     leftToTopOptions = mainToBottomOptions = leftToBottomOptions = mainToTopOptions = null;
   }
 
+  @Override
   public void toggleLayout() {
     if (isAnimating() || !isEnabled) {
       return;
@@ -232,6 +320,11 @@ public class AnimatingPaneLayout extends FrameLayout {
     }
   }
 
+  public interface PanelListener {
+    void onPanelOpened();
+    void onPanelClosed();
+  }
+
   class SwitchActions implements Animator.AnimatorListener {
 
     private static final float SCALE_AMOUNT = 0.95f;
@@ -273,6 +366,8 @@ public class AnimatingPaneLayout extends FrameLayout {
     @Override
     public void onAnimationEnd(Animator animation) {
       setAnimating(false);
+      if (isLeftPaneOnTop()) { dispatchOnPanelOpened(); }
+        else { dispatchOnPanelClosed(); }
       reset();
     }
 

@@ -3,7 +3,7 @@ package com.ameron32.apps.tapnotes.v2.parse.ui;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ameron32.apps.tapnotes.v2.ui.MainActivity;
+import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 
 
 /**
@@ -13,7 +13,7 @@ public class MyDispatchMainActivity extends MyDispatchActivity {
 
   @Override
   protected Class<?> getTargetClass() {
-    return MainActivity.class;
+    return MNIActivity.class;
   }
 
   @Override

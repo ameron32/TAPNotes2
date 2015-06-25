@@ -18,12 +18,12 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 
 
 
-import com.ameron32.apps.tapnotes.v2.ui.MainActivity;
+import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 
 import dagger.Module;
 
 @Module(
-    injects = MainActivity.class,
+    injects = MNIActivity.class,
     complete = false
 )
 public class DemoApplicationModule {

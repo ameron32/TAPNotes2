@@ -25,7 +25,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.MNIActivity"
             android:label="@string/app_name" >
         </activity>
 
@@ -85,10 +85,10 @@
         <activity
             android:name=".scripture.ScriptureTestingActivity"
             android:label="@string/title_activity_scripture_testing"
-            android:parentActivityName=".ui.MainActivity" >
+            android:parentActivityName=".ui.MNIActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ameron32.apps.tapnotes.v2.ui.MainActivity" />
+                android:value=".ui.MNIActivity" />
         </activity>
         <!-- /MICAH -->
     </application>

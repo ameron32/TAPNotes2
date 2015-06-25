@@ -21,7 +21,7 @@ import android.app.Activity;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityCalendarViewDialogController;
 import com.ameron32.apps.tapnotes.v2.ui.EditorFragment;
-import com.ameron32.apps.tapnotes.v2.ui.MainActivity;
+import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 import com.ameron32.apps.tapnotes.v2.ui.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
@@ -57,7 +57,7 @@ import dagger.Provides;
 //        MaterialImageViewTestFragment.class,
 //        PhotoViewerTestFragment.class,
 //        SettingsActivity.class,
-        MainActivity.class,
+        MNIActivity.class,
         NotesFragment.class,
         ProgramFragment.class,
         EditorFragment.class
