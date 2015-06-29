@@ -2,7 +2,12 @@
   <string name="app_name">TAPNotes</string>
 
   <string name="action_settings">Settings</string>
-    <string name="title_activity_scripture_testing">ScriptureTestingActivity</string>
+  <string name="title_activity_scripture_testing">ScriptureTestingActivity</string>
 
-    <string name="hello_world">Hello world!</string>
+  <string name="hello_world">Hello world!</string>
+
+  <!-- EDITOR MENU -->
+  <string name="editor_menu_title_text_scripture">Scripture</string>
+  <string name="editor_menu_title_text_picture">Picture</string>
+  <string name="editor_menu_title_text_video">Video</string>
 </resources>

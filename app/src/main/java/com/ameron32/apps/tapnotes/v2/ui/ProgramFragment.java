@@ -43,6 +43,11 @@ public class ProgramFragment extends TAPFragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
+    setNavigation();
+    setupProgram();
+  }
+
+  private void setNavigation() {
     mToolbar.setNavigationIcon(R.drawable.ic_action_arrow_back);
     mToolbar.setNavigationOnClickListener(
         new View.OnClickListener() {
@@ -52,6 +57,10 @@ public class ProgramFragment extends TAPFragment {
           }
         }
     );
+  }
+
+  private void setupProgram() {
+
   }
 
   @Override

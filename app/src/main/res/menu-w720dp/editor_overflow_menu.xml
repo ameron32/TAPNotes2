@@ -5,15 +5,15 @@
       android:id="@+id/editor_item_scripture"
       android:orderInCategory="1"
       android:title="@string/editor_menu_title_text_scripture"
-      app:showAsAction="never"/>
+      app:showAsAction="ifRoom"/>
   <item
       android:id="@+id/editor_item_picture"
       android:orderInCategory="2"
       android:title="@string/editor_menu_title_text_picture"
-      app:showAsAction="never"/>
+      app:showAsAction="ifRoom"/>
   <item
       android:id="@+id/editor_item_video"
       android:orderInCategory="3"
       android:title="@string/editor_menu_title_text_video"
-      app:showAsAction="never"/>
+      app:showAsAction="ifRoom"/>
 </menu>
