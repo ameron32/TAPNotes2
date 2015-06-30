@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -16,82 +17,75 @@ import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
 
 import butterknife.InjectView;
 
-
+/**
+ * Activity -- Main Notetaking Interface.
+ * <p>
+ * Use {@link MNIActivity#makeIntent(Context, String)} to startActivity.
+ */
 public class MNIActivity extends TAPActivity
     implements ProgramFragment.Callbacks, NotesFragment.TestCallbacks {
+
+  private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
+
+  /**
+   * @param context
+   *        required context for Intent
+   * @param programId
+   *        the objectId of the ParseObject for the Program to load
+   * @return the intent ready to startActivity
+   */
+  public static Intent makeIntent(final Context context,
+      final String programId) {
+    final Intent i = new Intent(context, MNIActivity.class);
+    i.putExtra(EXTRA_KEY_PROGRAM_ID, programId);
+    return i;
+  }
 
   @InjectView(R.id.drawer_layout)
   DrawerLayout mDrawerLayout;
   @InjectView(R.id.nav_view)
   NavigationView mNavigationView;
 
-  IDualLayout mDualLayout;
+  private IDualLayout mDualLayout;
+
+  private String mProgramId;
+
+
+
+  // ---------------------------------------------------
+  // LIFECYCLE
+  // ---------------------------------------------------
+
+  @Override
+  protected @LayoutRes int getLayoutResource() {
+    // rather than setContentView(), provide inflatable layout here
+    return R.layout.activity_mni;
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    // setContentView() handled in super.onCreate()
+    readBundle(savedInstanceState);
     findViews();
 
     setupDrawer();
-    addNotesFragment();
-    addProgramFragment();
-    addEditorFragment();
-  }
+    commitNotesFragment();   //blank
+    commitProgramFragment(); //blank
+    commitEditorFragment();  //blank
 
-  private void findViews() {
-    IDualLayout displacing = (IDualLayout) findViewById(R.id.pane_displacing_layout);
-    IDualLayout overlapping = (IDualLayout) findViewById(R.id.pane_overlapping_layout);
-    mDualLayout = (displacing != null) ? displacing : overlapping;
-    if (mDualLayout == null) {
-      throw new IllegalStateException("mDualLayout cannot be null.");
+    if (mProgramId != null) {
+      // load programs
+      loadProgram(mProgramId);
+      loadNotes(mProgramId);
     }
   }
 
-  @Override
-  protected @LayoutRes int getLayoutResource() {
-    return R.layout.activity_mni;
-  }
 
-  private void setupDrawer() {
-    setupDrawerContent(mNavigationView);
-  }
 
-  private void addNotesFragment() {
-    // TODO consider replacing the default NOTES with explanatory fragment
-    final String tag = "notes";
-    final String toolbarTitle = getString(R.string.generic_toolbar_title);
-    final String text1 = "";
-    final String imageUrl = "";
-    getSupportFragmentManager().beginTransaction()
-        .replace(R.id.notes_container, NotesFragment.create(toolbarTitle, text1, imageUrl), tag)
-        .commit();
-  }
-
-  private void addProgramFragment() {
-    final String tag = "program";
-    getSupportFragmentManager().beginTransaction()
-        .replace(R.id.program_container, ProgramFragment.create(), tag)
-        .commit();
-  }
-
-  private void addEditorFragment() {
-    final String tag = "editor";
-    getSupportFragmentManager().beginTransaction()
-        .replace(R.id.editor_container, EditorFragment.create(), tag)
-        .commit();
-  }
-
-  private void setupDrawerContent(NavigationView navigationView) {
-    navigationView.setNavigationItemSelectedListener(
-        new NavigationView.OnNavigationItemSelectedListener() {
-          @Override
-          public boolean onNavigationItemSelected(MenuItem menuItem) {
-            menuItem.setChecked(true);
-            mDrawerLayout.closeDrawers();
-            return true;
-          }
-        });
-  }
+  // ---------------------------------------------------
+  // MENU
+  // ---------------------------------------------------
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
@@ -112,15 +106,88 @@ public class MNIActivity extends TAPActivity
         toggleProgramPane();
         return true;
       case R.id.action_settings:
-
+        startActivity(SettingsActivity.makeIntent(getContext()));
         return true;
       case R.id.action_scripture_activity:
         startActivity(new Intent(getActivity(), ScriptureTestingActivity.class));
         return true;
-      }
+    }
 
     return super.onOptionsItemSelected(item);
   }
+
+
+
+  // ---------------------------------------------------
+  //
+  // ---------------------------------------------------
+
+  private void readBundle(Bundle savedInstanceState) {
+    if (savedInstanceState != null) {
+      mProgramId = getIntent().getStringExtra(EXTRA_KEY_PROGRAM_ID);
+    }
+  }
+
+  private void findViews() {
+    IDualLayout displacing = (IDualLayout) findViewById(R.id.pane_displacing_layout);
+    IDualLayout overlapping = (IDualLayout) findViewById(R.id.pane_overlapping_layout);
+    mDualLayout = (displacing != null) ? displacing : overlapping;
+    if (mDualLayout == null) {
+      throw new IllegalStateException("mDualLayout cannot be null.");
+    }
+  }
+
+
+  private void setupDrawer() {
+    setupDrawerContent(mNavigationView);
+  }
+
+  private void commitNotesFragment() {
+    // TODO consider replacing the default NOTES with explanatory fragment
+    final String tag = "notes";
+    final String toolbarTitle = getString(R.string.generic_toolbar_title);
+    final String text1 = "";
+    final String imageUrl = "";
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.notes_container, NotesFragment.create(toolbarTitle, text1, imageUrl), tag)
+        .commit();
+  }
+
+  private void commitProgramFragment() {
+    final String tag = "program";
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.program_container, ProgramFragment.create(), tag)
+        .commit();
+  }
+
+  private void commitEditorFragment() {
+    final String tag = "editor";
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.editor_container, EditorFragment.create(), tag)
+        .commit();
+  }
+
+  private void loadProgram(String programId) {
+    //TODO Add logic
+  }
+
+  private void loadNotes(String programId) {
+    //TODO Add logic
+  }
+
+  private void setupDrawerContent(NavigationView navigationView) {
+    navigationView.setNavigationItemSelectedListener(
+        new NavigationView.OnNavigationItemSelectedListener() {
+          @Override
+          public boolean onNavigationItemSelected(MenuItem menuItem) {
+            menuItem.setChecked(true);
+            mDrawerLayout.closeDrawers();
+            return true;
+          }
+        });
+  }
+
+
 
 
 

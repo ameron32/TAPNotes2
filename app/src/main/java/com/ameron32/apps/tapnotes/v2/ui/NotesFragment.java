@@ -55,8 +55,6 @@ public class NotesFragment extends TAPFragment
 
   @Inject
   ActivitySnackBarController mSnackBar;
-  @Inject
-  ActivityFullScreenController mFullScreen;
 
   private ITalkToolbar mTalkToolbar;
   private String mToolbarTitle;
@@ -109,7 +107,7 @@ public class NotesFragment extends TAPFragment
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    final View rootView = inflater.inflate(R.layout.fragment_notes, container, false);
+    final View rootView = inflater.inflate(R.layout.fragment_mni_notes, container, false);
     return rootView;
   }
 
@@ -128,18 +126,6 @@ public class NotesFragment extends TAPFragment
   public void onDestroyView() {
     ButterKnife.reset(this);
     super.onDestroyView();
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-    mFullScreen.hideSystemUI(getView());
-  }
-
-  @Override
-  public void onPause() {
-    mFullScreen.showSystemUI(getView());
-    super.onPause();
   }
 
   private void setupRecycler() {

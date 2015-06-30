@@ -91,7 +91,18 @@
                 android:value=".ui.MNIActivity" />
         </activity>
         <!-- /MICAH -->
+        <activity
+            android:name=".ui.ProgramSelectionActivity"
+            android:label="@string/title_activity_program_selection" >
+        </activity>
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".ui.MNIActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.ameron32.apps.tapnotes.v2.ui.MNIActivity" />
+        </activity>
     </application>
 
 </manifest>
-

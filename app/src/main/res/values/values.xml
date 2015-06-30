@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+  <!-- AnimatingPaneLayout configuration options -->
   <bool name="dual_layout_uses_displacement">false</bool>
+  <integer name="default_animation_duration">400</integer>
+  <integer name="default_translation_right_distance">200</integer>
+  <integer name="default_translation_left_distance">-200</integer>
+  <integer name="default_translation_start">0</integer>
+
 </resources>

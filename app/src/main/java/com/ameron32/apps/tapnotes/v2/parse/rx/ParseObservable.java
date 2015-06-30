@@ -1,22 +1,14 @@
-package com.ameron32.apps.tapnotes.v2.parse.object;
+package com.ameron32.apps.tapnotes.v2.parse.rx;
 
 
 import rx.schedulers.*;
 import rx.Observable;
-import rx.functions.*;
-import rx.observables.*;
 
 import com.parse.*;
 
 import java.util.List;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-
-import android.app.Activity;
 
 public class ParseObservable {
 

@@ -27,5 +27,6 @@
 
   <!-- Empty animation, duration placeholder only. -->
   <objectAnimator
-      android:duration="500" />
+      android:duration="@integer/default_animation_duration" />
+
 </set>

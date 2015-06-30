@@ -1,6 +1,5 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,7 +19,7 @@ public class ScriptureTestingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scripture_testing);
+        setContentView(R.layout.activity_testing_scripture);
         ButterKnife.inject(this);
 
         setSupportActionBar(mToolbar);

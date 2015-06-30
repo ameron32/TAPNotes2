@@ -46,7 +46,7 @@ public class ActivityCalendarViewDialogController extends AbsController {
   }
 
   private View getCalendarView() {
-    View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_calendar, null);
+    View view = LayoutInflater.from(getContext()).inflate(R.layout.frame_dialog_calendar, null);
     MaterialCalendarView calendarView = (MaterialCalendarView) view.findViewById(R.id.calendarView);
     calendarView.setSelectedDate(DateTime.now().toDate());
     return view;

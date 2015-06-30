@@ -1,9 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.parse.object;
 
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
-import static com.ameron32.apps.tapnotes.v2.parse.object.ParseConstants.*;
+import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
 
 /**
  * Created by klemeilleur on 6/29/2015.

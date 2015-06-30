@@ -40,7 +40,7 @@ public class AnimatingPaneLayout
   @NonNull  private @AnimatorRes int leftAnimatorEnd;
   @NonNull  private @AnimatorRes int rightAnimatorStart;
   @NonNull  private @AnimatorRes int rightAnimatorEnd;
-  @NonNull  private @AnimatorRes int nullAnimator;
+//  @NonNull  private @AnimatorRes int nullAnimator;
   @NonNull  private boolean isEnabled = false;
   @NonNull  private boolean isDisplacement = false;
   @NonNull  private AnimationOptions leftToTopOptions;
@@ -83,7 +83,7 @@ public class AnimatingPaneLayout
     leftAnimatorEnd = R.animator.dodge_return_left_to_back;
     rightAnimatorStart = R.animator.dodge_right;
     rightAnimatorEnd = R.animator.dodge_return_right;
-    nullAnimator = R.animator.null_delay_only;
+//    nullAnimator = R.animator.null_delay_only;
   }
 
   @Override
@@ -266,9 +266,9 @@ public class AnimatingPaneLayout
     options.end.setTarget(options.view);
 
     options.firstSet.play(options.zoomOut);
-    options.firstSet.play(options.start).after(options.zoomOut);
+    options.firstSet.play(options.start).with(options.zoomOut);
     options.secondSet.play(options.end);
-    options.secondSet.play(options.zoomIn).after(options.end);
+    options.secondSet.play(options.zoomIn).with(options.end);
 
     options.firstSet.addListener(options.switchActions);
     options.secondSet.addListener(options.animationComplete);

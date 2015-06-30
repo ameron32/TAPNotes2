@@ -32,7 +32,7 @@ public class ProgramFragment extends TAPFragment {
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    final View rootView = inflater.inflate(R.layout.fragment_program, container, false);
+    final View rootView = inflater.inflate(R.layout.fragment_mni_program, container, false);
     return rootView;
   }
 

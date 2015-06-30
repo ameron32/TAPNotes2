@@ -33,7 +33,7 @@
                 app:layout_collapseMode="parallax"/>
 
             <include
-                layout="@layout/header_toolbar_talk"/>
+                layout="@layout/frame_header_toolbar_talk"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

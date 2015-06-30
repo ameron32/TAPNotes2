@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.parse.adapter.AbsRecyclerQueryAdapter;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ParseType;
-import com.ameron32.apps.tapnotes.v2.parse.object.TestObject;
+import com.ameron32.apps.tapnotes.v2.parse.object._TestObject;
 import com.parse.ParseACL;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
@@ -16,22 +16,17 @@ import com.parse.ParseObject;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
-import net.danlew.android.joda.DateUtils;
-import net.danlew.android.joda.JodaTimeAndroid;
-
-import org.joda.time.LocalDateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<TestObject, _DummyTestAdapter.ViewHolder> {
+public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<_TestObject, _DummyTestAdapter.ViewHolder> {
 
   private View.OnClickListener onClickListener = new View.OnClickListener() {
     @Override
@@ -41,7 +36,7 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<TestObject, _Dumm
   };
 
   public _DummyTestAdapter() {
-    super(TestObject.class, true);
+    super(_TestObject.class, true);
 
   }
 
@@ -61,7 +56,7 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<TestObject, _Dumm
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     holder.itemView.setOnClickListener(onClickListener);
-    TestObject to = getItem(position);
+    _TestObject to = getItem(position);
     final StringBuilder sb = new StringBuilder();
     for (int i = 0; i < to.getColumnCount(); i++) {
       final String key = to.getKey(i);

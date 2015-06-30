@@ -19,7 +19,7 @@ public class MyLoginParseActivity extends MyLoginActivity {
 
   @Override
   protected int inflateActivityLayout() {
-    return R.layout.activity_my_login;
+    return R.layout.activity_login_parse;
   }
 
   @Override

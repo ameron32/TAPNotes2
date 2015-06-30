@@ -29,8 +29,8 @@
   <objectAnimator
       android:interpolator="@anim/accel_interpolator"
       android:propertyName="translationX"
-      android:valueFrom="400"
-      android:valueTo="0"
-      android:duration="500" />
+      android:valueFrom="@integer/default_translation_right_distance"
+      android:valueTo="@integer/default_translation_start"
+      android:duration="@integer/default_animation_duration" />
 
 </set>

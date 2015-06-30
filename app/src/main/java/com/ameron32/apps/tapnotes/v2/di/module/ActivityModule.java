@@ -30,6 +30,9 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesCont
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityTitleController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
+import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionFragment;
+import com.ameron32.apps.tapnotes.v2.ui.ProgramTemplateFragment;
 
 import javax.inject.Singleton;
 
@@ -58,6 +61,9 @@ import dagger.Provides;
 //        PhotoViewerTestFragment.class,
 //        SettingsActivity.class,
         MNIActivity.class,
+        ProgramSelectionActivity.class,
+        ProgramSelectionFragment.class,
+        ProgramTemplateFragment.class,
         NotesFragment.class,
         ProgramFragment.class,
         EditorFragment.class

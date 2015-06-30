@@ -36,7 +36,7 @@ public class EditorFragment extends TAPFragment {
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    final View view = inflater.inflate(R.layout.fragment_editor, container, false);
+    final View view = inflater.inflate(R.layout.fragment_mni_editor, container, false);
     ButterKnife.inject(this, view);
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());

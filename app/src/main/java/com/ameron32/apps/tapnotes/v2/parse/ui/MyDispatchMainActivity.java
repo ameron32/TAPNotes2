@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
+import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
 
 
 /**
@@ -13,7 +14,7 @@ public class MyDispatchMainActivity extends MyDispatchActivity {
 
   @Override
   protected Class<?> getTargetClass() {
-    return MNIActivity.class;
+    return ProgramSelectionActivity.class;
   }
 
   @Override
