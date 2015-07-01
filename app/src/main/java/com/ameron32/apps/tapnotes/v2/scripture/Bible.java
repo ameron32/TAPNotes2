@@ -8,4 +8,13 @@ public class Bible {
         return books[bookNumber].chapters[chapter].verses[verse];
     }
 
+    public String getVerses(int bookNumber, int chapter, int... verses) {
+        final StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < verses.length; i++) {
+            int verse = verses[i];
+            sb.append(getVerse(bookNumber, chapter, verse));
+        }
+        return sb.toString();
+    }
+
 }
