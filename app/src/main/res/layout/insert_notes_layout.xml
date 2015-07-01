@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ NOTES LIST LAYOUT
+  ~
+  ~ Needs to have a very elastic width, 4P thru 10L.
+  ~ The RecyclerView will contain the theme scripture(s)
+  ~ as the first items, aka header views.
+  ~ Also, in the future I would like to reduce the width
+  ~ on large-landscape tablets.
+  ~
+  ~ Remember:
+  ~    use references to @string/ for localization
+  ~    use references to @color/ for theme flexibility
+  -->
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>

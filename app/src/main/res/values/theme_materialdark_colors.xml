@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- TODO needs updating to color spec -->
+  <color name="materialdark_colorPrimary">@color/Teal</color>
+  <color name="materialdark_colorPrimaryDark">@color/DarkTeal</color>
+  <color name="materialdark_colorAccent">@color/Tangerine</color>
+
+  <color name="materialdark_notes_container_background">@color/LightGrey</color>
+  <color name="materialdark_program_container_background">@color/OffWhite</color>
+  <color name="materialdark_program_nav_bar_background">@color/Charcoal</color>
+  <color name="materialdark_editor_container_background">@color/OffWhite</color>
+</resources>

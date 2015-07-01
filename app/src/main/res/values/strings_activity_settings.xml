@@ -26,6 +26,18 @@
     <item>-1</item>
   </string-array>
 
+  <string name="pref_title_select_theme">Choose A Theme</string>
+  <string-array name="pref_theme_list_titles">
+    <item>Teal 2015</item>
+    <item>Material Dark</item>
+    <item>Ultra Black</item>
+  </string-array>
+  <string-array name="pref_theme_list_values">
+    <item>0</item>
+    <item>1</item>
+    <item>2</item>
+  </string-array>
+
   <!-- Example settings for Data & Sync -->
   <string name="pref_header_data_sync">Data &amp; sync</string>
 

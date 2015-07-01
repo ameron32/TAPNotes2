@@ -20,12 +20,14 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 
 import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
 
 import dagger.Module;
 
 @Module(
     injects = {
         MNIActivity.class,
+        SettingsActivity.class,
         ProgramSelectionActivity.class
     },
     complete = false

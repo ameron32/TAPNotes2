@@ -10,7 +10,7 @@
       android:id="@+id/program_container"
       android:layout_width="@dimen/program_bar_width"
       android:layout_height="match_parent"
-      android:background="@color/program_container_background">
+      android:background="?program_container_background">
 
     <!-- COMMIT FRAGMENT -->
 

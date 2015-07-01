@@ -40,7 +40,7 @@ public class EditorFragment extends TAPFragment {
     ButterKnife.inject(this, view);
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());
-    DrawableCompat.setTint(d, getResources().getColor(R.color.colorAccent));
+    DrawableCompat.setTint(d, getResources().getColor(R.color.teal_colorAccent));
     return view;
   }
 

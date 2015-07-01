@@ -12,8 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 
@@ -56,10 +59,18 @@ public class MNIActivity extends TAPActivity
   // LIFECYCLE
   // ---------------------------------------------------
 
+  @Inject
+  ApplicationThemeController themeController;
+
   @Override
   protected @LayoutRes int getLayoutResource() {
     // rather than setContentView(), provide inflatable layout here
     return R.layout.activity_mni;
+  }
+
+  @Override
+  protected int provideThemeResource() {
+    return themeController.getTheme();
   }
 
   @Override

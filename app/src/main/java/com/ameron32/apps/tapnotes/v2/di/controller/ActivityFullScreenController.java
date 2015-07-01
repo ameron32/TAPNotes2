@@ -32,7 +32,7 @@ import android.view.View;
 /**
  * Created by klemeilleur on 4/20/2015.
  */
-public class ActivityFullScreenController extends AbsController {
+public class ActivityFullScreenController extends AbsActivityController {
 
   public ActivityFullScreenController(final Activity activity) {
     super(activity);

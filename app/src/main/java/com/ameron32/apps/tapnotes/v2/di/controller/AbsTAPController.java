@@ -29,7 +29,7 @@ import com.ameron32.apps.tapnotes.v2.ui.TAPActivity;
 /**
  * Created by klemeilleur on 4/20/2015.
  */
-public abstract class AbsTAPController extends AbsController {
+public abstract class AbsTAPController extends AbsActivityController {
 
   final TAPActivity mTAPActivity;
 

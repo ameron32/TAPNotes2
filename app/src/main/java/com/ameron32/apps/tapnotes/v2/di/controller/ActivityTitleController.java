@@ -26,7 +26,7 @@ import android.app.Activity;
  * control of the activity title. While not exceedingly useful in practice, this concept could be
  * expanded to things like facilitating control over the action bar, dialogs, notifications, etc.
  */
-public class ActivityTitleController extends AbsController {
+public class ActivityTitleController extends AbsActivityController {
 
   public ActivityTitleController(final Activity activity) {
     super(activity);

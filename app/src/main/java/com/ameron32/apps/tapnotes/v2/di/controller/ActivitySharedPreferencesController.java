@@ -5,7 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class ActivitySharedPreferencesController extends AbsController {
+public class ActivitySharedPreferencesController extends AbsActivityController {
 
   private static final String SHARED_PREFERENCES_KEY = "SharedPreferencesKey";
 

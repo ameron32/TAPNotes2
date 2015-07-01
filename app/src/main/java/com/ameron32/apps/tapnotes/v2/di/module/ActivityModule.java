@@ -33,6 +33,7 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramTemplateFragment;
+import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
 
 import javax.inject.Singleton;
 
@@ -61,6 +62,7 @@ import dagger.Provides;
 //        PhotoViewerTestFragment.class,
 //        SettingsActivity.class,
         MNIActivity.class,
+        SettingsActivity.class,
         ProgramSelectionActivity.class,
         ProgramSelectionFragment.class,
         ProgramTemplateFragment.class,

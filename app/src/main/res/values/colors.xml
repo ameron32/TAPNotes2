@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <color name="colorPrimary">#009688</color>
-  <color name="colorPrimaryDark">#00796b</color>
-  <color name="colorAccent">#ffab00</color>
+  <!-- Color Palette -->
+  <color name="Teal">#009688</color>
+  <color name="DarkTeal">#00796b</color>
+  <color name="Tangerine">#ffab00</color>
+  <color name="LightGrey">#eeeeee</color>
+  <color name="OffWhite">#fafafa</color>
+  <color name="Charcoal">#333333</color>
 
-  <color name="notes_container_background">#eeeeee</color>
-  <color name="program_container_background">#fafafa</color>
-  <color name="program_nav_bar_background">#333333</color>
-  <color name="editor_container_background">#fafafa</color>
-
+  <color name="AMOLEDBlack">#000000</color>
+  <color name="UltraBlack">#000000</color>
+  <color name="Black">#000000</color>
+  <color name="AMOLEDWhite">#FFFFFF</color>
+  <color name="UltraWhite">#FFFFFF</color>
+  <color name="White">#FFFFFF</color>
+  <color name="LightGrey2">#dddddd</color>
 </resources>

@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.Injector;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.crashlytics.android.Crashlytics;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
@@ -40,6 +45,7 @@ public class TAPActivity extends AppCompatActivity {
     initializeActivityModules_Dagger1();
     lifecycleSubject.onNext(LifecycleEvent.CREATE);
     setContentView(findContentView(getLayoutResource()));
+    setTheme(provideThemeResource());
     ButterKnife.inject(this);
   }
 
@@ -57,6 +63,10 @@ public class TAPActivity extends AppCompatActivity {
 
   protected @LayoutRes int getLayoutResource() {
     return NO_LAYOUT_RESOURCE;
+  }
+
+  protected @StyleRes int provideThemeResource() {
+    return R.style.Teal2015Theme;
   }
 
   private View findContentView(@LayoutRes int contentLayout) {

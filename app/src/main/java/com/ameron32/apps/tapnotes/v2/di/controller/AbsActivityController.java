@@ -28,10 +28,10 @@ import android.app.Activity;
 import android.content.Context;
 
 
-public abstract class AbsController {
+public abstract class AbsActivityController {
   private final Activity activity;
 
-  public AbsController(final Activity activity) {
+  public AbsActivityController(final Activity activity) {
     this.activity = activity;
   }
 

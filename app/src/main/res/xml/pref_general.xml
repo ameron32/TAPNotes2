@@ -30,4 +30,13 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
+    <ListPreference
+        android:key="theme_list"
+        android:title="@string/pref_title_select_theme"
+        android:defaultValue="-2"
+        android:entries="@array/pref_theme_list_titles"
+        android:entryValues="@array/pref_theme_list_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
 </PreferenceScreen>

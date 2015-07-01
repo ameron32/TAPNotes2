@@ -16,17 +16,17 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import javax.inject.Inject;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -54,6 +54,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
    */
   private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+  @Inject
+  ApplicationThemeController themeController;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -68,6 +71,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
       // Show the Up button in the action bar.
+      // TODO toolbar/actionbar?
 //      getActionBar().setDisplayHomeAsUpEnabled(true);
     }
   }
@@ -133,6 +137,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
     bindPreferenceSummaryToValue(findPreference("example_list"));
     bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
     bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+
+
+    configureTheme(findPreference("theme_list"));
+  }
+
+  private static void configureTheme(final Preference preference) {
+    bindPreferenceSummaryToValue(preference);
+    final String value = PreferenceManager
+        .getDefaultSharedPreferences(preference.getContext())
+        .getString(preference.getKey(), "");
+    Log.d(SettingsActivity.class.getSimpleName(), "preference value: " + value);
   }
 
   /**
@@ -249,6 +264,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
             .getString(preference.getKey(), ""));
   }
 
+  @Override
+  protected boolean isValidFragment(String fragmentName) {
+    if (fragmentName.equals(GeneralPreferenceFragment.class.getName())
+        || fragmentName.equals(NotificationPreferenceFragment.class.getName())
+        || fragmentName.equals(DataSyncPreferenceFragment.class.getName())) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /**
    * This fragment shows general preferences only. It is used when the
    * activity is showing a two-pane settings UI.
@@ -266,6 +292,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
       // guidelines.
       bindPreferenceSummaryToValue(findPreference("example_text"));
       bindPreferenceSummaryToValue(findPreference("example_list"));
+
+      // THEME SETTINGS
+      configureTheme(findPreference("theme_list"));
     }
   }
 

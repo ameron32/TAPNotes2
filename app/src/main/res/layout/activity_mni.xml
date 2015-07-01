@@ -15,7 +15,7 @@
 
     <FrameLayout
         android:id="@+id/editor_container"
-        android:background="@color/editor_container_background"
+        android:background="?editor_container_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

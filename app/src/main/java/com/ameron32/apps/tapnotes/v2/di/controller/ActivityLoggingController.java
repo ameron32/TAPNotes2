@@ -31,7 +31,7 @@ import timber.log.Timber;
 /**
  * Created by klemeilleur on 4/8/2015.
  */
-public class ActivityLoggingController extends AbsController {
+public class ActivityLoggingController extends AbsActivityController {
 
   public ActivityLoggingController(final Activity activity) {
     super(activity);

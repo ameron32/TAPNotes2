@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="teal_colorPrimary">@color/Teal</color>
+  <color name="teal_colorPrimaryDark">@color/DarkTeal</color>
+  <color name="teal_colorAccent">@color/Tangerine</color>
+
+  <color name="teal_notes_container_background">@color/LightGrey</color>
+  <color name="teal_program_container_background">@color/OffWhite</color>
+  <color name="teal_program_nav_bar_background">@color/Charcoal</color>
+  <color name="teal_editor_container_background">@color/OffWhite</color>
+</resources>

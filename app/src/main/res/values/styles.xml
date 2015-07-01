@@ -1,15 +1,43 @@
 <resources>
 
   <!-- Base application theme. -->
-  <style name="AppTheme" parent="CoreTheme">
+  <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
 
   </style>
 
-  <style name="CoreTheme" parent="Theme.AppCompat.Light.NoActionBar">
+  <style name="Teal2015Theme" parent="AppTheme">
     <!-- Customize your theme here. -->
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
+    <item name="colorPrimary">@color/teal_colorPrimary</item>
+    <item name="colorPrimaryDark">@color/teal_colorPrimaryDark</item>
+    <item name="colorAccent">@color/teal_colorAccent</item>
+
+    <item name="editor_container_background">@color/teal_editor_container_background</item>
+    <item name="notes_container_background">@color/teal_notes_container_background</item>
+    <item name="program_nav_bar_background">@color/teal_program_nav_bar_background</item>
+    <item name="program_container_background">@color/teal_program_container_background</item>
+  </style>
+
+  <style name="UltraBlackTheme" parent="AppTheme">
+    <item name="colorPrimary">@color/ultrablack_colorPrimary</item>
+    <item name="colorPrimaryDark">@color/ultrablack_colorPrimaryDark</item>
+    <item name="colorAccent">@color/ultrablack_colorAccent</item>
+
+    <item name="editor_container_background">@color/ultrablack_editor_container_background</item>
+    <item name="notes_container_background">@color/ultrablack_notes_container_background</item>
+    <item name="program_nav_bar_background">@color/ultrablack_program_nav_bar_background</item>
+    <item name="program_container_background">@color/ultrablack_program_container_background</item>
+  </style>
+
+  <style name="MaterialDarkTheme" parent="AppTheme">
+    <!-- Customize your theme here. -->
+    <item name="colorPrimary">@color/materialdark_colorPrimary</item>
+    <item name="colorPrimaryDark">@color/materialdark_colorPrimaryDark</item>
+    <item name="colorAccent">@color/materialdark_colorAccent</item>
+
+    <item name="editor_container_background">@color/materialdark_editor_container_background</item>
+    <item name="notes_container_background">@color/materialdark_notes_container_background</item>
+    <item name="program_nav_bar_background">@color/materialdark_program_nav_bar_background</item>
+    <item name="program_container_background">@color/materialdark_program_container_background</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 
 import com.ameron32.apps.tapnotes.v2.TAPApplication;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -77,5 +78,11 @@ public class ApplicationModule {
   @Singleton
   Bus provideOttoEventBusOnUIThread() {
     return new Bus(ThreadEnforcer.MAIN);
+  }
+
+  @Provides
+  @Singleton
+  ApplicationThemeController provideThemeController() {
+    return new ApplicationThemeController(mApplication);
   }
 }

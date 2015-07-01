@@ -15,7 +15,7 @@ import org.joda.time.DateTime;
 /**
  * Created by klemeilleur on 6/22/2015.
  */
-public class ActivityCalendarViewDialogController extends AbsController {
+public class ActivityCalendarViewDialogController extends AbsActivityController {
   private DialogInterface.OnClickListener dialogListener;
 
   public ActivityCalendarViewDialogController(Activity activity) {

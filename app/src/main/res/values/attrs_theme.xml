@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <attr name="editor_container_background" format="reference|color" />
+  <attr name="notes_container_background" format="reference|color" />
+  <attr name="program_nav_bar_background" format="reference|color" />
+  <attr name="program_container_background" format="reference|color" />
+</resources>

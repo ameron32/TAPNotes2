@@ -26,6 +26,10 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.di.Injector;
+import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
+import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
+
 import butterknife.ButterKnife;
 
 /**
@@ -40,10 +44,16 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    Injector.INSTANCE.inject(this);
     getDelegate().installViewFactory();
     getDelegate().onCreate(savedInstanceState);
     super.onCreate(savedInstanceState);
     ButterKnife.inject(this);
+  }
+
+  private void initializeActivityModules_Dagger1() {
+    Injector.INSTANCE.init(new ActivityModule(this));
+    Injector.INSTANCE.init(new DefaultAndroidActivityModule(this));
   }
 
   @Override

@@ -11,7 +11,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 /**
  * Created by Kris on 4/25/2015.
  */
-public class ActivityAlertDialogController extends AbsController {
+public class ActivityAlertDialogController extends AbsActivityController {
   private DialogInterface.OnClickListener dialogListener;
 
   public ActivityAlertDialogController(Activity activity) {

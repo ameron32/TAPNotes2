@@ -7,7 +7,7 @@ import android.support.design.widget.Snackbar;
 /**
  * Created by klemeilleur on 3/2/2015.
  */
-public class ActivitySnackBarController extends AbsController {
+public class ActivitySnackBarController extends AbsActivityController {
 
   public ActivitySnackBarController(final Activity activity) {
     super(activity);

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ PROGRAM (TALK LIST) LAYOUT
+  ~
+  ~ This view will never be any width other than 320dp.
+  ~ Stick to layout_width="match_parent"
+  ~ and you'll maintain proper width.
+  ~
+  ~ Remember:
+  ~    use references to @string/ for localization
+  ~    use references to @color/ for theme flexibility
+  -->
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"/>
