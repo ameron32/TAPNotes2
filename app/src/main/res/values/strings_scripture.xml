@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="spanish_verse_prefix">_BI12_.</string>
+    <string name="default_verse_prefix">b</string>
+
+    <string name="default_verse_split">split</string>
+    <string name="default_verse_suffix">.xhtml</string>
+
+
+</resources>

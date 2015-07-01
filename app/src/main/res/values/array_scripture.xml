@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="allowed_tags">
+
+        <item>&lt;sup&gt;</item>
+        <item>&lt;/sup&gt;</item>
+        <item>&lt;strong&gt;</item>
+        <item>&lt;/strong&gt;</item>
+
+
+    </string-array>
+
+</resources>
