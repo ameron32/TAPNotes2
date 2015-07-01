@@ -12,6 +12,9 @@ import com.ameron32.apps.tapnotes.v2.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * PRIMARY TESTING ACTIVITY for MICAH
+ */
 public class ScriptureTestingActivity extends AppCompatActivity {
 
     @InjectView(R.id.toolbar)
@@ -26,6 +29,11 @@ public class ScriptureTestingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        BibleBuilder bb = new BibleBuilder();
+        bb.buildDefaultBible(this);
+
     }
 
     @Override
