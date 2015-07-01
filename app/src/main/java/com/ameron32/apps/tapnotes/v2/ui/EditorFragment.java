@@ -1,10 +1,14 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.AttrRes;
+import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,8 +44,23 @@ public class EditorFragment extends TAPFragment {
     ButterKnife.inject(this, view);
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());
-    DrawableCompat.setTint(d, getResources().getColor(R.color.teal_colorAccent));
+    int color = getColorFromAttribute(R.attr.colorAccent, R.color.teal_colorAccent);
+//    getResources().getColor(R.color.teal_colorAccent)
+    DrawableCompat.setTint(d, color);
     return view;
+  }
+
+  private int getColorFromAttribute(@AttrRes int attr, @ColorRes int defaultColor) {
+    TypedValue typedValue = new TypedValue();
+    getActivity().getTheme()
+        .resolveAttribute(attr, typedValue, true);
+    int[] accentColor = new int[] { attr };
+    int indexOfAttrColor = 0;
+    TypedArray a = getContext()
+        .obtainStyledAttributes(typedValue.data, accentColor);
+    int color = a.getColor(indexOfAttrColor, defaultColor);
+    a.recycle();
+    return color;
   }
 
   @Override

@@ -28,4 +28,8 @@ public abstract class TAPFragment extends Fragment {
     Injector.INSTANCE.inject(this);
     super.onCreate(savedInstanceState);
   }
+
+  public Context getContext() {
+    return getActivity();
+  }
 }

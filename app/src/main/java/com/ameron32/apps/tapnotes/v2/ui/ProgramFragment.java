@@ -91,10 +91,6 @@ public class ProgramFragment extends TAPFragment {
     }
   }
 
-  private Context getContext() {
-    return getActivity();
-  }
-
   public interface Callbacks {
     void toggleProgramPane();
   }

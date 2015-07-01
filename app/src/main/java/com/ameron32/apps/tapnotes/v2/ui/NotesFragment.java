@@ -137,10 +137,6 @@ public class NotesFragment extends TAPFragment
     mRecyclerView.setAdapter(adapter);
   }
 
-  private Context getContext() {
-    return getActivity();
-  }
-
   @Override
   public void itemClicked(View v, int position) {
     if (mCallbacks != null) {
