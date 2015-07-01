@@ -40,8 +40,17 @@ public class ApplicationThemeController extends AbsApplicationController {
     }
 
     switch(theme) {
-      case R.style.Teal2015Theme:
-      setThemeInPreferences(theme);
+      case 0:
+        setThemeInPreferences(R.style.Teal2015Theme);
+        break;
+      case 1:
+        setThemeInPreferences(R.style.MaterialDarkTheme);
+        break;
+      case 2:
+        setThemeInPreferences(R.style.UltraBlackTheme);
+        break;
+      default:
+        setThemeInPreferences(R.style.Teal2015Theme);
     }
   }
 

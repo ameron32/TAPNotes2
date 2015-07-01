@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -117,7 +118,7 @@ public class MNIActivity extends TAPActivity
         toggleProgramPane();
         return true;
       case R.id.action_settings:
-        startActivity(SettingsActivity.makeIntent(getContext()));
+        startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
         return true;
       case R.id.action_scripture_activity:
         startActivity(new Intent(getActivity(), ScriptureTestingActivity.class));
@@ -127,7 +128,16 @@ public class MNIActivity extends TAPActivity
     return super.onOptionsItemSelected(item);
   }
 
+  private static final int SETTINGS_REQUEST_CODE = 141;
 
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+      // Settings
+      this.recreate();
+    }
+  }
 
   // ---------------------------------------------------
   //
@@ -159,6 +169,7 @@ public class MNIActivity extends TAPActivity
     final String toolbarTitle = getString(R.string.generic_toolbar_title);
     final String text1 = "";
     final String imageUrl = "";
+    removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.notes_container, NotesFragment.create(toolbarTitle, text1, imageUrl), tag)
         .commit();
@@ -166,6 +177,7 @@ public class MNIActivity extends TAPActivity
 
   private void commitProgramFragment() {
     final String tag = "program";
+    removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.program_container, ProgramFragment.create(), tag)
         .commit();
@@ -173,9 +185,19 @@ public class MNIActivity extends TAPActivity
 
   private void commitEditorFragment() {
     final String tag = "editor";
+    removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.editor_container, EditorFragment.create(), tag)
         .commit();
+  }
+
+  private void removeFragment(final String tag) {
+    final Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+    if (fragment != null) {
+      getSupportFragmentManager().beginTransaction()
+          .remove(fragment)
+          .commit();
+    }
   }
 
   private void loadProgram(String programId) {
@@ -197,8 +219,6 @@ public class MNIActivity extends TAPActivity
           }
         });
   }
-
-
 
 
 

@@ -40,12 +40,12 @@ public class TAPActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Injector.INSTANCE.inject(this);
+    setTheme(provideThemeResource());
     super.onCreate(savedInstanceState);
     Fabric.with(this, new Crashlytics());
     initializeActivityModules_Dagger1();
     lifecycleSubject.onNext(LifecycleEvent.CREATE);
     setContentView(findContentView(getLayoutResource()));
-    setTheme(provideThemeResource());
     ButterKnife.inject(this);
   }
 

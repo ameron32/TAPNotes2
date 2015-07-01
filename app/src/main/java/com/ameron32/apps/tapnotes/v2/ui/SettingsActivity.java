@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.media.audiofx.BassBoost;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,9 +54,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
    * shown on tablets.
    */
   private static final boolean ALWAYS_SIMPLE_PREFS = false;
-
-  @Inject
-  ApplicationThemeController themeController;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -138,16 +136,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
     bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
     bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 
-
-    configureTheme(findPreference("theme_list"));
-  }
-
-  private static void configureTheme(final Preference preference) {
-    bindPreferenceSummaryToValue(preference);
-    final String value = PreferenceManager
-        .getDefaultSharedPreferences(preference.getContext())
-        .getString(preference.getKey(), "");
-    Log.d(SettingsActivity.class.getSimpleName(), "preference value: " + value);
+    bindPreferenceSummaryToTheme(findPreference("theme_list"));
   }
 
   /**
@@ -264,6 +253,51 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
             .getString(preference.getKey(), ""));
   }
 
+  @Inject ApplicationThemeController themeController;
+
+  private Preference.OnPreferenceChangeListener mBindPreferenceSummaryToThemeListener;
+
+  public void bindPreferenceSummaryToTheme(Preference preference) {
+    if (mBindPreferenceSummaryToThemeListener == null) {
+      mBindPreferenceSummaryToThemeListener = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object value) {
+          String stringValue = value.toString();
+          String key = preference.getKey();
+
+          if (preference instanceof ListPreference) {
+            // For list preferences, look up the correct display value in
+            // the preference's 'entries' list.
+            ListPreference listPreference = (ListPreference) preference;
+            int index = listPreference.findIndexOfValue(stringValue);
+
+            // Set the summary to reflect the new value.
+            preference.setSummary(
+                index >= 0
+                    ? listPreference.getEntries()[index]
+                    : null);
+
+            Log.d(SettingsActivity.class.getSimpleName(),
+                "preference | key: " + key + " value:" + stringValue);
+            themeController.setTheme(index);
+            setResult(RESULT_OK);
+          }
+          return true;
+        };
+      };
+    }
+
+    // Set the listener to watch for value changes.
+    preference.setOnPreferenceChangeListener(mBindPreferenceSummaryToThemeListener);
+
+    // Trigger the listener immediately with the preference's
+    // current value.
+    mBindPreferenceSummaryToThemeListener.onPreferenceChange(preference,
+        PreferenceManager
+            .getDefaultSharedPreferences(preference.getContext())
+            .getString(preference.getKey(), ""));
+  }
+
   @Override
   protected boolean isValidFragment(String fragmentName) {
     if (fragmentName.equals(GeneralPreferenceFragment.class.getName())
@@ -293,8 +327,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
       bindPreferenceSummaryToValue(findPreference("example_text"));
       bindPreferenceSummaryToValue(findPreference("example_list"));
 
-      // THEME SETTINGS
-      configureTheme(findPreference("theme_list"));
+      ((SettingsActivity) getActivity()).
+        bindPreferenceSummaryToTheme(findPreference("theme_list"));
     }
   }
 
