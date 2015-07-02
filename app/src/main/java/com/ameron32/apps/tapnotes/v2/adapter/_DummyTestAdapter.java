@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +38,6 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<_TestObject, _Dum
 
   public _DummyTestAdapter() {
     super(_TestObject.class, true);
-
   }
 
 //  private OnItemClickListener mListener;
@@ -55,7 +55,21 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<_TestObject, _Dum
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    holder.itemView.setOnClickListener(onClickListener);
+    final _TestObject item = getItem(position);
+
+    if (item.getBoolean("isDismissed")) {
+      holder.itemView.setBackgroundColor(Color.BLACK);
+    } else {
+      holder.itemView.setBackgroundColor(Color.WHITE);
+    }
+
+    if (item.getBoolean("isMoved")) {
+      holder.textView.setTextColor(Color.YELLOW);
+    } else {
+      holder.textView.setTextColor(Color.GREEN);
+    }
+
+//    holder.itemView.setOnClickListener(onClickListener);
     _TestObject to = getItem(position);
     final StringBuilder sb = new StringBuilder();
     for (int i = 0; i < to.getColumnCount(); i++) {
@@ -73,6 +87,11 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<_TestObject, _Dum
       }
       sb.append("\n\n");
     }
+
+    if (item.getBoolean("isMoved")) {
+      sb.append("I WAS MOVED TO: " + item.getNumber("newPosition"));
+    }
+
     holder.textView.setText(sb.toString() + "**********");
 //    holder.itemView.setOnClickListener(new View.OnClickListener() {
 //      @Override
@@ -145,6 +164,18 @@ public class _DummyTestAdapter extends AbsRecyclerQueryAdapter<_TestObject, _Dum
     }
     return display.toString();
   }
+
+  public void onItemMove(int itemMovedAtPosition, int itemMovedToPosition) {
+    final _TestObject item = getItem(itemMovedAtPosition);
+    item.put("newPosition", itemMovedToPosition);
+    item.put("isMoved", true);
+  }
+
+  public void onItemDismiss(int itemDismissedAtPosition) {
+    final _TestObject item = getItem(itemDismissedAtPosition);
+    item.put("isDismissed", true);
+  }
+
 
   static class ViewHolder extends RecyclerView.ViewHolder {
     @InjectView(android.R.id.text1)

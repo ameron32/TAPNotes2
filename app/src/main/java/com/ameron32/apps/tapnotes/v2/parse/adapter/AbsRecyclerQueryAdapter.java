@@ -12,6 +12,8 @@ import com.parse.ParseQueryAdapter.QueryFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import bolts.Capture;
+
 /**
  * ParseQueryAdapter modified for RecyclerView.
  * Includes AutoReloadable interface.
@@ -119,7 +121,6 @@ public abstract class
     });
   }
 
-
   public interface OnDataSetChangedListener {
     public void onDataSetChanged();
   }
@@ -128,7 +129,9 @@ public abstract class
   private final List<OnDataSetChangedListener> mDataSetListeners;
 
   public void addOnDataSetChangedListener(OnDataSetChangedListener listener) {
-    mDataSetListeners.add(listener);
+    if (!mDataSetListeners.contains(listener)) {
+      mDataSetListeners.add(listener);
+    }
   }
 
   public void removeOnDataSetChangedListener(OnDataSetChangedListener listener) {
@@ -177,6 +180,46 @@ public abstract class
   private void dispatchOnLoaded(List<T> objects, ParseException e) {
     for (OnQueryLoadListener<T> l : mQueryListeners) {
       l.onLoaded(objects, e);
+    }
+  }
+
+  public static class LimitReachedException extends Exception {
+    /**
+     * Constructs a new {@code Exception} that includes the current stack trace.
+     */
+    public LimitReachedException() {
+      super();
+    }
+
+    /**
+     * Constructs a new {@code Exception} with the current stack trace and the
+     * specified detail message.
+     *
+     * @param detailMessage the detail message for this exception.
+     */
+    public LimitReachedException(String detailMessage) {
+      super(detailMessage);
+    }
+
+    /**
+     * Constructs a new {@code Exception} with the current stack trace, the
+     * specified detail message and the specified cause.
+     *
+     * @param detailMessage the detail message for this exception.
+     * @param throwable
+     */
+    public LimitReachedException(String detailMessage, Throwable throwable) {
+      super(detailMessage, throwable);
+    }
+
+    /**
+     * Constructs a new {@code Exception} with the current stack trace and the
+     * specified cause.
+     *
+     * @param throwable the cause of this exception.
+     */
+    public LimitReachedException(Throwable throwable) {
+      super(throwable);
     }
   }
 }

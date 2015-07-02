@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="generic_toolbar_title">Blank</string>
+  <string name="generic_toolbar_title">Test</string>
   <string name="dialog_select_text">SELECT</string>
   <string name="editor_hint_no_text">Type your note here then press the orange button to submit.</string>
   <string name="dialog_ok">OK</string>

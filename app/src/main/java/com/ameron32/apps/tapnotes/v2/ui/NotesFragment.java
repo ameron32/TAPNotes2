@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class NotesFragment extends TAPFragment
   private String mText1;
   private String mImageUrl;
   private TestCallbacks mCallbacks;
+  private ItemTouchHelper mItemTouchHelper;
 
   public NotesFragment() {
   }
@@ -129,12 +131,15 @@ public class NotesFragment extends TAPFragment
   }
 
   private void setupRecycler() {
+    mRecyclerView.setHasFixedSize(true);
     mRecyclerView.setLayoutManager(
         new LinearLayoutManager(getContext()));
 //    final _DummyAdapter adapter = new _DummyAdapter();
 //    adapter.setItemClickListener(this);
     final _DummyTestAdapter adapter = new _DummyTestAdapter();
     mRecyclerView.setAdapter(adapter);
+    mItemTouchHelper = new ItemTouchHelper(new MyCallback(adapter));
+    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
   }
 
   @Override
@@ -191,5 +196,33 @@ public class NotesFragment extends TAPFragment
 
   public interface TestCallbacks {
     void itemClicked(int position);
+  }
+
+  public class MyCallback extends ItemTouchHelper.SimpleCallback {
+
+    private final _DummyTestAdapter mAdapter;
+
+    public MyCallback(_DummyTestAdapter adapter) {
+      super(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
+          ItemTouchHelper.RIGHT);
+      this.mAdapter = adapter;
+    }
+
+    @Override
+    public boolean onMove(RecyclerView recyclerView,
+        RecyclerView.ViewHolder viewHolder,
+        RecyclerView.ViewHolder target) {
+      if (viewHolder.getItemViewType() != target.getItemViewType()) {
+        return false;
+      }
+
+      mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+      return true;
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+      mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+    }
   }
 }

@@ -20,7 +20,6 @@ public class ApplicationThemeController extends AbsApplicationController {
 
   public ApplicationThemeController(Application application) {
     super(application);
-
   }
 
   public int getTheme() {
