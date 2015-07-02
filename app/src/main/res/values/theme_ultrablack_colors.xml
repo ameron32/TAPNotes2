@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+
+  <color name="ultrablack_navBar_upper">#000000</color>
+  <color name="ultrablack_navBar_lower">#000000</color>
+  <color name="ultrablack_listItem_dark">#000000</color>
+  <color name="ultrablack_listItem_selected">#171717</color>
+  <color name="ultrablack_listItem">#000000</color>
+  <color name="ultrablack_text_bright">#c7c7c7</color>
+  <color name="ultrablack_text_dimmed">#434343</color>
+  <color name="ultrablack_text_bold">#dedede</color>
+  <color name="ultrablack_text_scripture">#b2b2b2</color>
+  <color name="ultrablack_icon_color">#b2b2b2</color>
+  <color name="ultrablack_line_dark_color">#1f1f1f</color>
+  <color name="ultrablack_line_light_color">#1f1f1f</color>
+
+
+
+  <!--Kris's colors below-->
+
   <color name="ultrablack_colorPrimary">@color/AMOLEDBlack</color>
   <color name="ultrablack_colorPrimaryDark">@color/AMOLEDBlack</color>
   <color name="ultrablack_colorAccent">@color/AMOLEDWhite</color>

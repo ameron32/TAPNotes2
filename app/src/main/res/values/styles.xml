@@ -7,6 +7,20 @@
 
   <style name="Teal2015Theme" parent="AppTheme">
     <!-- Customize your theme here. -->
+
+    <item name="navBar_upper">@color/teal_navBar_upper</item>
+    <item name="navBar_lower">@color/teal_navBar_lower</item>
+    <item name="listItem_dark">@color/teal_listItem</item>
+    <item name="listItem_selected">@color/teal_listItem_selected</item>
+    <item name="listItem">@color/teal_listItem</item>
+    <item name="text_bright">@color/teal_text_bright</item>
+    <item name="text_dimmed">@color/teal_text_dimmed</item>
+    <item name="text_bold">@color/teal_text_bold</item>
+    <item name="text_scripture">@color/teal_text_scripture</item>
+    <item name="icon_color">@color/teal_icon_color</item>
+    <item name="line_dark_color">@color/teal_line_dark_color</item>
+
+    <!-- Kris's items below-->
     <item name="colorPrimary">@color/teal_colorPrimary</item>
     <item name="colorPrimaryDark">@color/teal_colorPrimaryDark</item>
     <item name="colorAccent">@color/teal_colorAccent</item>
@@ -17,7 +31,23 @@
     <item name="program_container_background">@color/teal_program_container_background</item>
   </style>
 
+
+
   <style name="UltraBlackTheme" parent="AppTheme">
+
+    <item name="navBar_upper">@color/ultrablack_navBar_upper</item>
+    <item name="navBar_lower">@color/ultrablack_navBar_lower</item>
+    <item name="listItem_dark">@color/ultrablack_listItem</item>
+    <item name="listItem_selected">@color/ultrablack_listItem_selected</item>
+    <item name="listItem">@color/ultrablack_listItem</item>
+    <item name="text_bright">@color/ultrablack_text_bright</item>
+    <item name="text_dimmed">@color/ultrablack_text_dimmed</item>
+    <item name="text_bold">@color/ultrablack_text_bold</item>
+    <item name="text_scripture">@color/ultrablack_text_scripture</item>
+    <item name="icon_color">@color/ultrablack_icon_color</item>
+    <item name="line_dark_color">@color/ultrablack_line_dark_color</item>
+
+    <!--Kris's items below-->
     <item name="colorPrimary">@color/ultrablack_colorPrimary</item>
     <item name="colorPrimaryDark">@color/ultrablack_colorPrimaryDark</item>
     <item name="colorAccent">@color/ultrablack_colorAccent</item>
@@ -30,6 +60,21 @@
 
   <style name="MaterialDarkTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
+
+    <item name="navBar_upper">@color/materialdark_navBar_upper</item>
+    <item name="navBar_lower">@color/materialdark_navBar_lower</item>
+    <item name="listItem_dark">@color/materialdark_listItem</item>
+    <item name="listItem_selected">@color/materialdark_listItem_selected</item>
+    <item name="listItem">@color/materialdark_listItem</item>
+    <item name="text_bright">@color/materialdark_text_bright</item>
+    <item name="text_dimmed">@color/materialdark_text_dimmed</item>
+    <item name="text_bold">@color/materialdark_text_bold</item>
+    <item name="text_scripture">@color/materialdark_text_scripture</item>
+    <item name="icon_color">@color/materialdark_icon_color</item>
+    <item name="line_dark_color">@color/materialdark_line_dark_color</item>
+
+
+    <!--Kris's items below-->
     <item name="colorPrimary">@color/materialdark_colorPrimary</item>
     <item name="colorPrimaryDark">@color/materialdark_colorPrimaryDark</item>
     <item name="colorAccent">@color/materialdark_colorAccent</item>

@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+  <color name="teal_navBar_upper">#00796b</color>
+  <color name="teal_navBar_lower">#009688</color>
+  <color name="teal_listItem_dark">#ebebeb</color>
+  <color name="teal_listItem_selected">#ead798</color>
+  <color name="teal_listItem">#e0e0e0</color>
+  <color name="teal_text_bright">#393425</color>
+  <color name="teal_text_dimmed">#c2c2c2</color>
+  <color name="teal_text_bold">#fb8c31</color>
+  <color name="teal_text_scripture">#3a948b</color>
+  <color name="teal_icon_color">#737373</color>
+  <color name="teal_line_dark_color">#c5c5c5</color>
+  <color name="teal_line_light_color">#e4e4e4</color>
+
+  <!-- Kris's colors below-->
   <color name="teal_colorPrimary">@color/Teal</color>
   <color name="teal_colorPrimaryDark">@color/DarkTeal</color>
   <color name="teal_colorAccent">@color/Tangerine</color>
