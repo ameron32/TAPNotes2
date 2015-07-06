@@ -17,12 +17,15 @@ import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.ITalkToolbar;
 import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -64,6 +67,12 @@ public class NotesFragment extends TAPFragment
   private ItemTouchHelper mItemTouchHelper;
 
   public NotesFragment() {
+  }
+
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return NotesLayoutFragmentDelegate.create(NotesFragment.this);
   }
 
   public static NotesFragment create(String toolbarTitle, String text1, String imageUrl) {

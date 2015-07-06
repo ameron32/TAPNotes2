@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,6 +29,11 @@ public class ProgramSelectionFragment extends TAPFragment {
   TestCallbacks mCallbacks;
 
   public ProgramSelectionFragment() {}
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return ProgramSelectionLayoutFragmentDelegate.create(ProgramSelectionFragment.this);
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,

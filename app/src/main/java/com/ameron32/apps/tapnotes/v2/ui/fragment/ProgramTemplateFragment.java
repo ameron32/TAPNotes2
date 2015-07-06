@@ -9,7 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramTemplateLayoutFragmentDelegate;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +53,12 @@ public class ProgramTemplateFragment extends TAPFragment {
 
   public ProgramTemplateFragment() {
     // Required empty public constructor
+  }
+
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return ProgramTemplateLayoutFragmentDelegate.create(ProgramTemplateFragment.this);
   }
 
   @Override

@@ -15,7 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -31,12 +34,20 @@ public class EditorFragment extends TAPFragment {
     return f;
   }
 
+
+
   public EditorFragment() {}
 
   @InjectView(R.id.toolbar)
   Toolbar mToolbar;
   @InjectView(R.id.button_submit_note)
   ImageButton mSubmitButton;
+
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return EditorLayoutFragmentDelegate.create(EditorFragment.this);
+  }
 
   @Nullable
   @Override
