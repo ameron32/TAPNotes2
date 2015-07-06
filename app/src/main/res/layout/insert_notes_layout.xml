@@ -12,7 +12,7 @@
   ~    use references to @string/ for localization
   ~    use references to @color/ for theme flexibility
   -->
-<com.h6ah4i.android.widget.advrecyclerview
+<RecyclerView
     android:id="@+id/recycler"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"

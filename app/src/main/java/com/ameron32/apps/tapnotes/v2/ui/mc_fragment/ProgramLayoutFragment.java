@@ -1,15 +1,14 @@
-package com.ameron32.apps.tapnotes.v2.ui.fragment;
+package com.ameron32.apps.tapnotes.v2.ui.mc_fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.ui.adapter.DummyProgramListAdapter;
+import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.DummyProgramListAdapter;
 
 /**
  * Created by Micah on 7/3/2015.

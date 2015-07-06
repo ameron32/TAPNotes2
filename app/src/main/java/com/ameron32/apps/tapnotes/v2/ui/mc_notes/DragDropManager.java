@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui.notes;
+package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 /**
  * Created by Micah on 7/4/2015.

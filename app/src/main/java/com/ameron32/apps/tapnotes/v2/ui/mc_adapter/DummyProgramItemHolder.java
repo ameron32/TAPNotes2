@@ -1,8 +1,6 @@
-package com.ameron32.apps.tapnotes.v2.ui.adapter;
+package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 

@@ -1,9 +1,8 @@
-package com.ameron32.apps.tapnotes.v2.ui.adapter;
+package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

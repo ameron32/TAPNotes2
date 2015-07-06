@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui.notes;
+package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -7,37 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
-import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 
 /**
  * Created by Micah on 7/4/2015.
  */
-public class NotesRecyclerAdapter extends RecyclerView.Adapter<NotesRecyclerAdapter.NoteViewHolder>implements com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter<NotesRecyclerAdapter.NoteViewHolder> {
+public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder>implements com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter<NoteViewHolder> {
 
     private static final String TAG = "NotesRecyclerAdapter";
     public static final int offsetToStartDrag = 100;
 
+    private AbstractDataProvider mProvider;
 
 
-    public static class NoteViewHolder extends AbstractDraggableItemViewHolder {
 
-        public NoteViewHolder(View v) {
-            super(v);
-
-        }
-    }
 
 
     @Override
     public boolean onCheckCanStartDrag(NoteViewHolder holder, int position, int x, int y) {
         // x, y --- relative from the itemView's top-left
         final View containerView = holder.mContainer;
-        final View dragHandleView = holder.mDragHandle;
 
         final int offsetX = containerView.getLeft() + (int) (ViewCompat.getTranslationX(containerView) + 0.5f);
         final int offsetY = containerView.getTop() + (int) (ViewCompat.getTranslationY(containerView) + 0.5f);
 
-        return hitTest(dragHandleView, x - offsetX, y - offsetY);
+        return hitTest(containerView, x - offsetX, y - offsetY);
 
     }
 
