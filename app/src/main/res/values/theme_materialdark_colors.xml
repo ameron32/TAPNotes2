@@ -2,6 +2,23 @@
 <resources>
 
   <!-- TODO needs updating to color spec -->
+
+
+  <color name="materialdark_navBar_upper">#455a64</color>
+  <color name="materialdark_navBar_lower">#607d8b</color>
+  <color name="materialdark_listItem_dark">#111111</color>
+  <color name="materialdark_listItem_selected">#820f0f</color>
+  <color name="materialdark_listItem">#212121</color>
+  <color name="materialdark_text_bright">#e1e1e1</color>
+  <color name="materialdark_text_dimmed">#757575</color>
+  <color name="materialdark_text_bold">#e3e3e3</color>
+  <color name="materialdark_text_scripture">#e37d76</color>
+  <color name="materialdark_icon_color">#ffffff</color>
+  <color name="materialdark_line_dark_color">#1f1f1f</color>
+  <color name="materialdark_line_light_color">#494949</color>
+
+  <!--Kris's colors below-->
+
   <color name="materialdark_colorPrimary">@color/Teal</color>
   <color name="materialdark_colorPrimaryDark">@color/DarkTeal</color>
   <color name="materialdark_colorAccent">@color/Tangerine</color>

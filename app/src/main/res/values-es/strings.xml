@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="attendance">Asistencia: </string>
+    <string name="baptized">Bautizado: </string>
+
+    <string name="day1">viernes, 14 de Agosto</string>
+    <string name="day2">sábado, 15 de Agosto</string>
+    <string name="day3">domingo, 16 de Agosto</string>
+
+</resources>
