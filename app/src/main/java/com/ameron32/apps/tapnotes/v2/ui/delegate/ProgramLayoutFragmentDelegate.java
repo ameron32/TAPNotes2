@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -16,8 +16,13 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 /**
  * Created by klemeilleur on 7/6/2015.
+ *
+ * EXAMPLE OF FragmentDelegate USAGE. NOTICE THE SIMILARITY TO REGULAR FRAGMENT.
  */
 public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
 
@@ -32,19 +37,26 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    com.levelupstudio.recyclerview.ExpandableRecyclerView erv = (com.levelupstudio.recyclerview.ExpandableRecyclerView) inflater.inflate(R.layout.insert_program_layout, container);
-    erv.setExpandableAdapter(new DummyProgramListAdapter(this.getActivity()));
-    erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-    return erv;
+    return inflater.inflate(R.layout.insert_program_layout, container);
   }
 
+  @InjectView(R.id.recycler) ExpandableRecyclerView erv;
 
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    ButterKnife.inject(this, view);
 
+    // moved erv initialization to onViewCreated
+    erv.setExpandableAdapter(new DummyProgramListAdapter(this.getActivity()));
+    erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+  }
 
-
-
-
-
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    ButterKnife.reset(this);
+  }
 
   /**
    * PLACEHOLDER ONLY

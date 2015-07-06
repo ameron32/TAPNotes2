@@ -1,7 +1,6 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -23,7 +22,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
-import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;

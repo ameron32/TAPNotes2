@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.frmk;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,12 +12,9 @@ import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.Injector;
-import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.crashlytics.android.Crashlytics;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
@@ -33,7 +30,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 /**
  * Created by klemeilleur on 6/18/2015.
  */
-public class TAPActivity extends AppCompatActivity {
+public abstract class TAPActivity extends AppCompatActivity {
 
   private static final int NO_LAYOUT_RESOURCE = -1;
 

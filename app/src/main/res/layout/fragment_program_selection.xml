@@ -6,7 +6,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
-                tools:context="com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionFragment">
+                tools:context="com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment">
 
   <TextView
       android:text="@string/hello_world"

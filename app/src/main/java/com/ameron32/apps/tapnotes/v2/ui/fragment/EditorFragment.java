@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

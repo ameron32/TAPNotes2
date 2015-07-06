@@ -1,6 +1,5 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +14,11 @@ import android.view.MenuItem;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 
 import javax.inject.Inject;
 

@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 
 /**
  * A simple {@link Fragment} subclass.

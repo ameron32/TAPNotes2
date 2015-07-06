@@ -25,7 +25,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.ui.TAPActivity;
 
 import java.util.ArrayList;
 import java.util.List;

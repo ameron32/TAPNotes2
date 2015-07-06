@@ -24,7 +24,7 @@
 
 package com.ameron32.apps.tapnotes.v2.di.controller;
 
-import com.ameron32.apps.tapnotes.v2.ui.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 
 /**
  * Created by klemeilleur on 4/20/2015.

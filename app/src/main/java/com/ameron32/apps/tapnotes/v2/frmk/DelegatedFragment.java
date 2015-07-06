@@ -71,6 +71,9 @@ public abstract class DelegatedFragment extends Fragment {
    */
   @Override
   public void onInflate(Activity activity, AttributeSet attrs, Bundle savedInstanceState) {
+    if (mDelegate == null) {
+      mDelegate = createDelegate();
+    }
     super.onInflate(activity, attrs, savedInstanceState);
     getDelegate().onInflate(activity, attrs, savedInstanceState);
   }
@@ -83,6 +86,9 @@ public abstract class DelegatedFragment extends Fragment {
    */
   @Override
   public void onAttach(Activity activity) {
+    if (mDelegate == null) {
+      mDelegate = createDelegate();
+    }
     super.onAttach(activity);
     getDelegate().onAttach(activity);
   }
@@ -103,7 +109,9 @@ public abstract class DelegatedFragment extends Fragment {
    */
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
-    mDelegate = createDelegate();
+    if (mDelegate == null) {
+      mDelegate = createDelegate();
+    }
     super.onCreate(savedInstanceState);
     getDelegate().onCreate(savedInstanceState);
   }
