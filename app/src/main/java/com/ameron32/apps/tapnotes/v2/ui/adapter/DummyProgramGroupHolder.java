@@ -22,9 +22,9 @@ public class DummyProgramGroupHolder extends ExpandableRecyclerView.ExpandableVi
     public DummyProgramGroupHolder(View v, int type){
         super(v);
 
-        ButterKnife.inject(this, v);
+       // ButterKnife.inject(this, v);
 
-        /*Not sure if BK will work when baptismTextView is null... so leaving this here for now - Micah
+        //Not sure if BK will work when baptismTextView is null... so leaving this here for now - Micah
         if (type ==0){
             dateTextView = (TextView)v.findViewById(R.id.dateTextView);
             attendanceTextView = (EditText)v.findViewById(R.id.attendanceEditText);
@@ -33,7 +33,7 @@ public class DummyProgramGroupHolder extends ExpandableRecyclerView.ExpandableVi
             attendanceTextView = (EditText)v.findViewById(R.id.attendanceEditText);
             baptismTextView = (EditText)v.findViewById(R.id.baptismEditText);
         }
-        */
+
     }
 
 }

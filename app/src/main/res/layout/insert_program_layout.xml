@@ -11,7 +11,7 @@
   ~    use references to @color/ for theme flexibility
   -->
 <com.levelupstudio.recyclerview.ExpandableRecyclerView
-    android:id="@+id/recycler"
+    android:id="@+id/programRecycler"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

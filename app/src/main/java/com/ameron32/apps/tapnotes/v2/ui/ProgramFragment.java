@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.ui.adapter.DummyProgramListAdapter;
+import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -33,6 +36,7 @@ public class ProgramFragment extends TAPFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View rootView = inflater.inflate(R.layout.fragment_mni_program, container, false);
+
     return rootView;
   }
 
