@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.di.Injector;
+import com.ameron32.apps.tapnotes.v2.frmk.DelegatedFragment;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -19,7 +20,7 @@ import butterknife.InjectView;
 /**
  * Created by klemeilleur on 6/12/2015.
  */
-public abstract class TAPFragment extends Fragment {
+public abstract class TAPFragment extends DelegatedFragment {
 
   public TAPFragment() {}
 

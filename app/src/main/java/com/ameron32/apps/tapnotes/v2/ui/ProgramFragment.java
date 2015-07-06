@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -28,6 +29,11 @@ public class ProgramFragment extends TAPFragment {
   }
 
   public ProgramFragment() {}
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return ProgramLayoutFragmentDelegate.create(ProgramFragment.this);
+  }
 
   @Nullable
   @Override
