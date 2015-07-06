@@ -7,11 +7,9 @@ import com.ameron32.apps.tapnotes.v2.di.Injector;
 import com.ameron32.apps.tapnotes.v2.di.module.ApplicationModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidApplicationModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DemoApplicationModule;
-import com.ameron32.apps.tapnotes.v2.parse.object.Day;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object._NoteObject;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Session;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.parse.object._TestObject;
 import com.crashlytics.android.Crashlytics;
@@ -77,8 +75,6 @@ public class TAPApplication extends Application {
     ParseObject.registerSubclass(_NoteObject.class);
 
     ParseObject.registerSubclass(Program.class);
-    ParseObject.registerSubclass(Day.class);
-    ParseObject.registerSubclass(Session.class);
     ParseObject.registerSubclass(Talk.class);
     ParseObject.registerSubclass(Note.class);
 

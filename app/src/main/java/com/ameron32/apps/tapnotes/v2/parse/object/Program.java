@@ -1,7 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.parse.object;
 
-import com.ameron32.apps.tapnotes.v2.model.IDay;
 import com.ameron32.apps.tapnotes.v2.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
@@ -25,8 +25,7 @@ public class Program
   }
 
   @Override
-  public IDay[] getDays() {
-    // FIXME
+  public ITalk[] getTalks() {
     return null;
   }
 }

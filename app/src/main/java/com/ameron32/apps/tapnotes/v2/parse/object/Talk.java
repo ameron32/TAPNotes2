@@ -1,9 +1,12 @@
 package com.ameron32.apps.tapnotes.v2.parse.object;
 
+import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
+
+import java.util.Date;
 
 import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
 
@@ -27,6 +30,26 @@ public class Talk
   @Override
   public INote[] getNotes() {
     // FIXME
+    return null;
+  }
+
+  @Override
+  public Date getDateAndTime() {
+    return null;
+  }
+
+  @Override
+  public EventType getEventType() {
+    return null;
+  }
+
+  @Override
+  public String getTalkTitle() {
+    return null;
+  }
+
+  @Override
+  public String getSymposiumTitle() {
     return null;
   }
 }
