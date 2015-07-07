@@ -22,5 +22,7 @@ public class NotesLayoutFragment extends Fragment {
 
     }
 
+    // onDataReceived(ITalk talk, List<INote> notes);
+
 
 }

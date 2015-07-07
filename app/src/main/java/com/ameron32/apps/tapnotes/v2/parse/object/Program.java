@@ -5,7 +5,7 @@ import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
-import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
+import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 
 /**
  * Created by klemeilleur on 6/29/2015.
@@ -27,5 +27,9 @@ public class Program
   @Override
   public ITalk[] getTalks() {
     return null;
+  }
+
+  public String getName() {
+    return this.getString(PROGRAM_NAME_STRING_KEY);
   }
 }

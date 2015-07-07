@@ -4,7 +4,7 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
-import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
+import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 
 /**
  * Created by klemeilleur on 6/29/2015.
@@ -17,7 +17,7 @@ public class Note
 
   public static Note create(final String text) {
     final Note n = new Note();
-    n.put(NOTE_TEXT_KEY, text);
+    n.put(NOTE_TEXT_STRING_KEY, text);
     return n;
   }
 
@@ -27,6 +27,6 @@ public class Note
 
   @Override
   public String getNoteText() {
-    return this.getString(NOTE_TEXT_KEY);
+    return this.getString(NOTE_TEXT_STRING_KEY);
   }
 }
