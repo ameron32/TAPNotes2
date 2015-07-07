@@ -12,12 +12,9 @@ public class NoteDataProvider extends AbstractDataProvider {
         final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         mData = new LinkedList<>();
-
-
-
     }
 
-    public void populateWithExistingNotes(List<DummyNote> notes){
+    public void populateWithExistingNotes(LinkedList<DummyNote> notes){
         mData = notes;
         //TODO - Make sure Kris hands a list of notes with the appropriate data.
     }

@@ -49,7 +49,7 @@ public class NotesFragment extends TAPFragment
   AppBarLayout mAppBarLayout;
   @InjectView(R.id.toolbar)
   Toolbar mToolbar;
-  @InjectView(R.id.recycler)
+  @InjectView(R.id.notesRecycler)
   RecyclerView mRecyclerView;
   @InjectView(R.id.text_toolbar_header_item1)
   TextView mTextView1;

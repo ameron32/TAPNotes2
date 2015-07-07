@@ -77,7 +77,7 @@ public class ProgramFragment extends TAPFragment {
     if (activity instanceof Callbacks) {
       mCallbacks = (Callbacks) activity;
     } else {
-      throw new IllegalStateException("Activity must inherit " + Callbacks.class.getSimpleName());
+      throw new IllegalStateException("Activity must implement " + Callbacks.class.getSimpleName());
     }
   }
 

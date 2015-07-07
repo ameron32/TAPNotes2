@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.scripture;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -9,6 +10,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
+import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -45,6 +48,7 @@ public class ScriptureTestingActivity extends AppCompatActivity {
         } catch (BibleResourceNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
@@ -52,10 +56,47 @@ public class ScriptureTestingActivity extends AppCompatActivity {
         super.onResume();
 
         try {
-            mHelloTextView.setText(Html.fromHtml(mBible.getVerses(0, 0, 0,1,2,3,4,5,6,7,8,9,10,11)));
+            mHelloTextView.setText(Html.fromHtml(mBible.getVerses(0, 0, 0)));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        startRecycler();
+    }
+
+
+    @InjectView(R.id.expandable_recyclerview_testing)
+    ExpandableRecyclerView erv;
+
+    private static final String[] dummyHeaders = {
+            "Friday",
+            "Saturday",
+            "Sunday"
+    };
+
+
+    private static final String[][] dummyContent = {
+            {"fri 1","fri 2","fri 3"},
+            {"sat 4","sat 5","sat 6","sat 7","sat 8"},
+            {"sun 9","sun 10"}
+    };
+
+    public void startRecycler() {
+        ButterKnife.inject(this);
+        erv.setLayoutManager(new LinearLayoutManager(this));
+        erv.setExpandableAdapter(getAdapter());
+    }
+
+    private ProgramAdapter getAdapter() {
+        ProgramAdapter adapter = new ProgramAdapter(dummyHeaders, dummyContent);
+        adapter.setStableIdsMode(2); // important command for restorating state
+        return adapter;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        ButterKnife.reset(this);
     }
 
     @Override
@@ -73,9 +114,9 @@ public class ScriptureTestingActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (id) {
+            case R.id.action_settings:
+                return true;}
 
         return super.onOptionsItemSelected(item);
     }

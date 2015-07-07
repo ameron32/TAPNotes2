@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+
+    <!-- TODO REMOVE FROM FINAL VERSION -->
+    <item android:id="@+id/action_notes" android:title="NOTES"
         android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_program" android:title="PROGRAM"
+        android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/action_editor" android:title="EDITOR"
+        android:orderInCategory="102" app:showAsAction="never" />
 </menu>

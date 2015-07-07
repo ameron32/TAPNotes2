@@ -8,18 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecyclerAdapter;
 
-/**
- * Created by Micah on 7/4/2015.
- */
 public class NotesLayoutFragment extends Fragment {
 
     RecyclerView recyclerView;
 
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.insert_notes_layout, container);
-
+        recyclerView = (RecyclerView)inflater.inflate(R.layout.insert_notes_layout, container);
+        recyclerView.setAdapter(new NotesRecyclerAdapter());
+        return recyclerView;
 
     }
 
