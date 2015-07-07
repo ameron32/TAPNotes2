@@ -3,7 +3,9 @@ package com.ameron32.apps.tapnotes.v2.parse;
 /**
  * Created by klemeilleur on 6/29/2015.
  */
-public class ParseConstants {
+public class Constants {
+
+  public static final String CONVENTION2015_PROGRAM_OBJECT_ID = "BPCRNbT6Lf";
 
   // OBJECT KEY NAMES on Parse Server
   public static final String NOTE_OBJECT_NAME = "Note";

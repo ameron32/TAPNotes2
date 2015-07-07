@@ -11,7 +11,16 @@ import android.view.ViewGroup;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,11 +30,16 @@ import butterknife.InjectView;
  */
 public class ProgramFragment extends TAPFragment {
 
-  private Callbacks mCallbacks;
+  private static final String PROGRAM_OBJECT_ID_ARG = "PROGRAM_OBJECT_ID_ARG";
 
-  public static ProgramFragment create() {
+  private Callbacks mCallbacks;
+  private String mProgramId;
+
+  public static ProgramFragment create(String programId) {
     final ProgramFragment f = new ProgramFragment();
-    f.setArguments(new Bundle());
+    final Bundle args = new Bundle();
+    args.putString(PROGRAM_OBJECT_ID_ARG, programId);
+    f.setArguments(args);
     return f;
   }
 
@@ -36,11 +50,36 @@ public class ProgramFragment extends TAPFragment {
     return ProgramLayoutFragmentDelegate.create(ProgramFragment.this);
   }
 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setupProgram();
+  }
+
+  private void setupProgram() {
+    if (getArguments() == null) {
+      throw new IllegalStateException("should have args bundle. Generate using factory create() method.");
+    }
+
+    final Bundle args = getArguments();
+    mProgramId = args.getString(PROGRAM_OBJECT_ID_ARG);
+    try {
+      // TODO consider moving off UI-Thread
+      final Program program = Queries.Local.getProgram(mProgramId);
+      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+
+      // TODO give Talks to Delegate
+//      ((ProgramLayoutFragmentDelegate) getDelegate()).onDataReceived(talks);
+
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View rootView = inflater.inflate(R.layout.fragment_mni_program, container, false);
-
     return rootView;
   }
 
@@ -52,7 +91,6 @@ public class ProgramFragment extends TAPFragment {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     setNavigation();
-    setupProgram();
   }
 
   private void setNavigation() {
@@ -67,9 +105,6 @@ public class ProgramFragment extends TAPFragment {
     );
   }
 
-  private void setupProgram() {
-
-  }
 
   @Override
   public void onAttach(Activity activity) {
@@ -77,7 +112,7 @@ public class ProgramFragment extends TAPFragment {
     if (activity instanceof Callbacks) {
       mCallbacks = (Callbacks) activity;
     } else {
-      throw new IllegalStateException("Activity must inherit " + Callbacks.class.getSimpleName());
+      throw new IllegalStateException("Activity must implement " + Callbacks.class.getSimpleName());
     }
   }
 
@@ -101,6 +136,7 @@ public class ProgramFragment extends TAPFragment {
 
   public interface Callbacks {
     void toggleProgramPane();
+    void changeNotesFragmentTo(Talk talk);
   }
 }
 

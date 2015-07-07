@@ -25,7 +25,6 @@ import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -40,7 +39,7 @@ public class NotesFragment extends TAPFragment
     implements OnItemClickListener, ITalkToolbar {
 
   private static final String TITLE_ARG = "TITLE_ARG";
-  private static final String TEXT1_ARG = "TEXT1_ARG";
+  private static final String TALK_ID_ARG = "TALK_ID_ARG";
   private static final String IMAGEURL_ARG = "IMAGEURL_ARG";
 
   @InjectView(R.id.collapsing_toolbar)
@@ -67,6 +66,7 @@ public class NotesFragment extends TAPFragment
   private ItemTouchHelper mItemTouchHelper;
 
   public NotesFragment() {
+    // empty constructor
   }
 
 
@@ -75,11 +75,11 @@ public class NotesFragment extends TAPFragment
     return NotesLayoutFragmentDelegate.create(NotesFragment.this);
   }
 
-  public static NotesFragment create(String toolbarTitle, String text1, String imageUrl) {
+  public static NotesFragment create(String toolbarTitle, String talkId, String imageUrl) {
     final NotesFragment f = new NotesFragment();
-    Bundle args = new Bundle();
+    final Bundle args = new Bundle();
     args.putString(TITLE_ARG, toolbarTitle);
-    args.putString(TEXT1_ARG, text1);
+    args.putString(TALK_ID_ARG, talkId);
     args.putString(IMAGEURL_ARG, imageUrl);
     f.setArguments(args);
     return f;
@@ -109,7 +109,7 @@ public class NotesFragment extends TAPFragment
     final Bundle args = getArguments();
     if (args != null) {
       mToolbarTitle = args.getString(TITLE_ARG);
-      mText1 = args.getString(TEXT1_ARG);
+      mText1 = args.getString(TALK_ID_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
@@ -129,8 +129,16 @@ public class NotesFragment extends TAPFragment
     mTalkToolbar = this;
     onToolbarViewCreated(mToolbar);
     setTitles();
-    setupRecycler();
+    // setupRecycler();
+
+    loadData();
   }
+
+  private void loadData() {
+    // TODO hand-off received data to delegate for UI update
+    // ((NotesLayoutFragmentDelegate) getDelegate).onDataReceived(talk, notes);
+  }
+
 
   @Override
   public void onDestroyView() {
@@ -138,17 +146,17 @@ public class NotesFragment extends TAPFragment
     super.onDestroyView();
   }
 
-  private void setupRecycler() {
-    mRecyclerView.setHasFixedSize(true);
-    mRecyclerView.setLayoutManager(
-        new LinearLayoutManager(getContext()));
-//    final _DummyAdapter adapter = new _DummyAdapter();
-//    adapter.setItemClickListener(this);
-    final _DummyTestAdapter adapter = new _DummyTestAdapter();
-    mRecyclerView.setAdapter(adapter);
-    mItemTouchHelper = new ItemTouchHelper(new MyCallback(adapter));
-    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-  }
+//  private void setupRecycler() {
+//    mRecyclerView.setHasFixedSize(true);
+//    mRecyclerView.setLayoutManager(
+//        new LinearLayoutManager(getContext()));
+////    final _DummyAdapter adapter = new _DummyAdapter();
+////    adapter.setItemClickListener(this);
+//    final _DummyTestAdapter adapter = new _DummyTestAdapter();
+//    mRecyclerView.setAdapter(adapter);
+//    mItemTouchHelper = new ItemTouchHelper(new MyCallback(adapter));
+//    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+//  }
 
   @Override
   public void itemClicked(View v, int position) {

@@ -6,9 +6,13 @@ import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
-import java.util.Date;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
+import java.util.Locale;
+
+import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 
 /**
  * Created by klemeilleur on 6/29/2015.
@@ -17,6 +21,8 @@ import static com.ameron32.apps.tapnotes.v2.parse.ParseConstants.*;
 public class Talk
     extends ColumnableParseObject
     implements ITalk {
+
+  public static final int NO_SONG_NUMBER = -1;
 
   public static Talk create() {
     final Talk t = new Talk();
@@ -34,22 +40,44 @@ public class Talk
   }
 
   @Override
-  public Date getDateAndTime() {
-    return null;
+  public DateTime getDateAndTime(Locale locale) {
+    final String dateTime = this.getString(TALK_DATE_STRING_KEY);
+    final DateTimeFormatter formatter = DateTimeFormat.forPattern("d/MM/yyyy H:mm")
+        .withLocale(locale);
+    return DateTime.parse(dateTime, formatter);
   }
 
   @Override
   public EventType getEventType() {
-    return null;
+    return EventType.valueOf(this.getString(TALK_TYPE_STRING_KEY));
   }
 
   @Override
   public String getTalkTitle() {
-    return null;
+    return this.getString(TALK_TITLE_STRING_KEY);
   }
 
   @Override
   public String getSymposiumTitle() {
-    return null;
+    if (getEventType() == EventType.SYMPOSIUM_TALK) {
+      return getMetadata();
+    }
+    return "";
+  }
+
+  @Override
+  public int getSongNumber() {
+    if (getEventType() == EventType.SONG) {
+      return getSongNumberWithinMetadata();
+    }
+    return NO_SONG_NUMBER;
+  }
+
+  private int getSongNumberWithinMetadata() {
+    return Integer.valueOf(getMetadata().substring(1));
+  }
+
+  private String getMetadata() {
+    return this.getString(TALK_METADATA_STRING_KEY);
   }
 }
