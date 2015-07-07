@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.ItemDraggableRange;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Micah on 7/4/2015.
  */
@@ -16,10 +19,12 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder>im
     private static final String TAG = "NotesRecyclerAdapter";
     public static final int offsetToStartDrag = 100;
 
-    private AbstractDataProvider mProvider;
+    private NoteDataProvider mProvider;
 
+   public NotesRecyclerAdapter(){
+       mProvider = new NoteDataProvider();
 
-
+   }
 
 
     @Override
@@ -74,10 +79,12 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder>im
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
+        DummyNote note = (DummyNote)mProvider.getItem(position);
+        holder.textView.setText(note.getText());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mProvider.getCount();
     }
 }
