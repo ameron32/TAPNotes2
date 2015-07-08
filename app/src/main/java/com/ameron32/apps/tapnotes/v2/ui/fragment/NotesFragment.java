@@ -114,6 +114,8 @@ public class NotesFragment extends TAPFragment
     }
   }
 
+  // onDataReceived(ITalk talk, List<INote> notes);
+
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
