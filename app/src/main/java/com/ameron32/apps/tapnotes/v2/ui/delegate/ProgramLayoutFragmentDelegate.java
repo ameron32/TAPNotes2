@@ -64,7 +64,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
-
+    startRecycler();
   }
 
   @Override
@@ -73,11 +73,15 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
     ButterKnife.reset(this);
   }
 
-  public void startRecycler(List<ITalk> talks) {
+
+  public void startRecycler(){
     ButterKnife.inject(this.getActivity());
     erv.setExpandableAdapter(getAdapter());
     erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
+  }
+  public void startRecycler(List<ITalk> talks) {
+    startRecycler();
   }
 
   private ProgramAdapter getAdapter() {

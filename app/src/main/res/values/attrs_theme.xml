@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <attr name="navBar_upper" format="reference|color" />
-  <attr name="navBar_lower" format="reference|color" />
-  <attr name="listItem_dark" format="reference|color" />
-  <attr name="listItem_selected" format="reference|color" />
-  <attr name="listItem" format="reference|color" />
-  <attr name="text_bright" format="reference|color" />
-  <attr name="text_dimmed" format="reference|color" />
-  <attr name="text_bold" format="reference|color" />
-  <attr name="text_scripture" format="reference|color" />
+  <attr name="navBar_upper_color" format="reference|color" />
+  <attr name="navBar_lower_color" format="reference|color" />
+  <attr name="listItem_dark_color" format="reference|color" />
+  <attr name="listItem_selected_color" format="reference|color" />
+  <attr name="listItem_color" format="reference|color" />
+  <attr name="text_bright_color" format="reference|color" />
+  <attr name="text_dimmed_color" format="reference|color" />
+  <attr name="text_bold_color" format="reference|color" />
+  <attr name="text_scripture_color" format="reference|color" />
   <attr name="icon_color" format="reference|color" />
   <attr name="line_dark_color" format="reference|color" />
   <attr name="line_light_color" format="reference|color" />

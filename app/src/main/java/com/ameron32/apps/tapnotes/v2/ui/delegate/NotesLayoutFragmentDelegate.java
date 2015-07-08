@@ -13,8 +13,9 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecyclerAdapter;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 
 import java.util.List;
 
@@ -25,12 +26,19 @@ import butterknife.InjectView;
  * Created by klemeilleur on 7/6/2015.
  */
 public class NotesLayoutFragmentDelegate extends FragmentDelegate {
-  public void onDataReceived(ITalk talk, List<INote> notes) {
 
-  }
+
 
   @InjectView(R.id.notesRecycler)
   RecyclerView recyclerView;
+  private RecyclerView.LayoutManager layoutManager;
+  private NotesRecyclerAdapter adapter;
+  private  RecyclerView.Adapter wrappedAdapter;
+  private RecyclerViewDragDropManager dragDropManager;
+
+  public void onDataReceived(ITalk talk, List<INote> notes) {
+
+  }
 
 
   public static NotesLayoutFragmentDelegate create(Fragment fragment) {
@@ -52,7 +60,16 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
+    recyclerView = (RecyclerView)view.findViewById(R.id.notesRecycler);
 
+
+
+  }
+
+  @Override
+  public void onPause(){
+    dragDropManager.cancelDrag();
+    super.onPause();
   }
 
   @Override
@@ -65,6 +82,27 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate {
   public void onDestroyView() {
     super.onDestroyView();
     ButterKnife.reset(this);
+
+    if (dragDropManager != null) {
+      dragDropManager.release();
+      dragDropManager = null;
+    }
+
+    if (recyclerView != null) {
+      recyclerView.setItemAnimator(null);
+      recyclerView.setAdapter(null);
+      recyclerView = null;
+    }
+
+    if (wrappedAdapter != null) {
+      WrapperAdapterUtils.releaseAll(wrappedAdapter);
+      wrappedAdapter = null;
+    }
+    adapter = null;
+    layoutManager = null;
+
+    super.onDestroyView();
+
   }
 
   public void startRecycler() {

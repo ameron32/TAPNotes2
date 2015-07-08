@@ -12,6 +12,17 @@ public class NoteDataProvider extends AbstractDataProvider {
         final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         mData = new LinkedList<>();
+        DummyNote dn1 = new DummyNote();
+        dn1.setText("My dummy note 1");
+        mData.add(dn1);
+
+        DummyNote dn2 = new DummyNote();
+        dn2.setText("My dummy note 2");
+        mData.add(dn2);
+
+        DummyNote dn3 = new DummyNote();
+        dn3.setText("My dummy note 3");
+        mData.add(dn3);
     }
 
     public void populateWithExistingNotes(LinkedList<DummyNote> notes){

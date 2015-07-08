@@ -4,6 +4,8 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
  * Created by Micah on 7/6/2015.
  */
 public class DummyNote extends AbstractDataProvider.Data {
+
+    String noteText;
     @Override
     public long getId() {
         return 0;
@@ -24,9 +26,13 @@ public class DummyNote extends AbstractDataProvider.Data {
         return 0;
     }
 
+    public void setText(String text){
+        noteText=text;
+    }
+
     @Override
     public String getText() {
-        return null;
+        return noteText;
     }
 
     @Override

@@ -33,7 +33,6 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
     public abstract static class ViewHolder extends ExpandableRecyclerView.ExpandableViewHolder {
 
-
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
