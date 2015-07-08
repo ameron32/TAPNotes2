@@ -49,7 +49,7 @@ public class Talk
 
   @Override
   public EventType getEventType() {
-    return EventType.valueOf(this.getString(TALK_TYPE_STRING_KEY));
+    return EventType.valueOfAnyCase(this.getString(TALK_TYPE_STRING_KEY));
   }
 
   @Override
@@ -59,7 +59,7 @@ public class Talk
 
   @Override
   public String getSymposiumTitle() {
-    if (getEventType() == EventType.SYMPOSIUM_TALK) {
+    if (getEventType() == EventType.SYMPOSIUMTALK) {
       return getMetadata();
     }
     return "";

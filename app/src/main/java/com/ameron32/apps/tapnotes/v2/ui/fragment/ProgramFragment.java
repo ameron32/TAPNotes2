@@ -11,15 +11,16 @@ import android.view.ViewGroup;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.model.EventType;
+import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -68,12 +69,28 @@ public class ProgramFragment extends TAPFragment {
       final Program program = Queries.Local.getProgram(mProgramId);
       final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
 
+      // TODO remove fake note method
+//      _saveFakeNotes(talks, program);
+
       // TODO give Talks to Delegate
 //      ((ProgramLayoutFragmentDelegate) getDelegate()).onDataReceived(talks);
 
     } catch (ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  private void _saveFakeNotes(List<Talk> talks, Program program) {
+    List<Note> notes = new ArrayList<>(talks.size());
+    for (int i = 0; i < talks.size(); i++) {
+      Talk talk = talks.get(i);
+      if (talk.getEventType() == EventType.TALK ||
+          talk.getEventType() == EventType.SYMPOSIUMTALK) {
+        Note note = Note.create("test", program, talk, Commands.Local.getClientUser());
+        notes.add(note);
+      }
+    }
+    Commands.Local.saveEventuallyNotes(notes);
   }
 
   @Nullable

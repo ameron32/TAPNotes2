@@ -3,6 +3,7 @@ package com.ameron32.apps.tapnotes.v2.parse.object;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
+import com.parse.ParseUser;
 
 import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 
@@ -15,10 +16,14 @@ public class Note
     implements INote
 {
 
-  public static Note create(final String text) {
-    final Note n = new Note();
-    n.put(NOTE_TEXT_STRING_KEY, text);
-    return n;
+  public static Note create(final String text,
+      final Program program, final Talk talk, final ParseUser owner) {
+    final Note note = new Note();
+    note.put(NOTE_TEXT_STRING_KEY, text);
+    note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
+    note.put(NOTE_oTALK_OBJECT_KEY, talk);
+    note.put(NOTE_uOWNER_USER_KEY, owner);
+    return note;
   }
 
   public Note() {

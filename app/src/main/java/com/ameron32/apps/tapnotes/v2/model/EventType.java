@@ -5,5 +5,9 @@ package com.ameron32.apps.tapnotes.v2.model;
  */
 public enum EventType {
 
-  MUSIC, SONG, TALK, SYMPOSIUM_TALK;
+  MUSIC, SONG, TALK, SYMPOSIUMTALK;
+
+  public static EventType valueOfAnyCase(final String name) {
+    return EventType.valueOf(name.toUpperCase());
+  }
 }

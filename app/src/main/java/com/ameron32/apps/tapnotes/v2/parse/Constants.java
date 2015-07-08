@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.parse;
 
+import com.parse.ParseUser;
+
 /**
  * Created by klemeilleur on 6/29/2015.
  */
@@ -29,4 +31,5 @@ public class Constants {
   public static final String NOTE_oTALK_OBJECT_KEY = "oTalk";
   public static final String NOTE_uOWNER_USER_KEY = "uOwner";
   public static final String NOTE_TEXT_STRING_KEY = "text";
+
 }
