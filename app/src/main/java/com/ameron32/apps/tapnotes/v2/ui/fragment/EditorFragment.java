@@ -17,7 +17,9 @@ import android.widget.ImageButton;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 
 import butterknife.ButterKnife;
@@ -26,7 +28,9 @@ import butterknife.InjectView;
 /**
  * Created by klemeilleur on 6/15/2015.
  */
-public class EditorFragment extends TAPFragment {
+public class EditorFragment extends TAPFragment
+    implements IEditorDelegate.IEditorDelegateCallbacks
+{
 
   public static EditorFragment create() {
     final EditorFragment f = new EditorFragment();
@@ -79,5 +83,12 @@ public class EditorFragment extends TAPFragment {
   public void onDestroyView() {
     ButterKnife.reset(this);
     super.onDestroyView();
+  }
+
+
+
+  @Override
+  public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
+
   }
 }

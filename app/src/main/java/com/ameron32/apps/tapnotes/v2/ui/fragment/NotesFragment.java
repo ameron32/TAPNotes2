@@ -24,7 +24,10 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeader;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.ToolbarHeaderDelegate;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -36,29 +39,24 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class NotesFragment extends TAPFragment
-    implements OnItemClickListener, ITalkToolbar {
+    implements OnItemClickListener,
+      IToolbarHeader.IToolbarHeaderCallbacks,
+      INotesDelegate.INotesDelegateCallbacks{
 
   private static final String TITLE_ARG = "TITLE_ARG";
   private static final String TALK_ID_ARG = "TALK_ID_ARG";
   private static final String IMAGEURL_ARG = "IMAGEURL_ARG";
 
-  @InjectView(R.id.collapsing_toolbar)
-  CollapsingToolbarLayout mToolbarLayout;
   @InjectView(R.id.appbar)
   AppBarLayout mAppBarLayout;
   @InjectView(R.id.toolbar)
   Toolbar mToolbar;
   @InjectView(R.id.notesRecycler)
   RecyclerView mRecyclerView;
-  @InjectView(R.id.text_toolbar_header_item1)
-  TextView mTextView1;
-  @InjectView(R.id.image_toolbar_header_background)
-  ImageView mHeaderImage;
-
   @Inject
   ActivitySnackBarController mSnackBar;
 
-  private ITalkToolbar mTalkToolbar;
+  private IToolbarHeader mHeader;
   private String mToolbarTitle;
   private String mText1;
   private String mImageUrl;
@@ -128,10 +126,9 @@ public class NotesFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
 
-    mTalkToolbar = this;
-    onToolbarViewCreated(mToolbar);
+    mHeader = ToolbarHeaderDelegate.create(this);
+    mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
-    // setupRecycler();
 
     loadData();
   }
@@ -167,29 +164,65 @@ public class NotesFragment extends TAPFragment
     }
   }
 
-  private void setToolbarTitle(String title) {
-    if (isStringUsable(title)) {
-      mToolbarLayout.setTitle(title);
+  private void setTitles() {
+    if (mHeader == null) {
+      // do nothing
+      return;
     }
+
+    if (isStringUsable(mToolbarTitle)) {
+      mHeader.setTalkTitle(mToolbarTitle);
+    }
+    if (isStringUsable(mText1)) {
+      mHeader.setText1(mText1);
+    }
+    if (isStringUsable(mImageUrl)) {
+      mHeader.setImage(mImageUrl);
+    }
+  }
+
+
+
+  @Override
+  public void onPreviousPressed() {
+
   }
 
   @Override
-  public void setText1(String text1) {
-    if (isStringUsable(text1)) {
-      mTextView1.setText(text1);
-    }
+  public void onNextPressed() {
+
+  }
+
+
+
+  @Override
+  public void onUserClickBoldNote(String noteId) {
+
   }
 
   @Override
-  public void setImage(String imageUrl) {
-    if (isStringUsable(imageUrl)) {
-      if (URLUtil.isValidUrl(imageUrl)) {
-        Picasso.with(getContext()).load(imageUrl).into(mHeaderImage);
-      }
-    }
+  public void onUserClickImportantNote(String noteId) {
+
   }
 
-  private boolean isStringUsable(String testString) {
+  @Override
+  public void onUserClickEditNote(String noteId) {
+
+  }
+
+  @Override
+  public void onUserClickDeleteNote(String noteId) {
+
+  }
+
+  @Override
+  public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
+
+  }
+
+
+  
+  private boolean isStringUsable(final String testString) {
     if (testString != null) {
       if (testString.length() > 0) {
         return true;
@@ -198,19 +231,7 @@ public class NotesFragment extends TAPFragment
     return false;
   }
 
-  @Override
-  public void onToolbarViewCreated(Toolbar toolbar) {
-    final AppCompatActivity activity = ((AppCompatActivity) getActivity());
-    activity.setSupportActionBar(toolbar);
-    activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_menu);
-    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-  }
 
-  private void setTitles() {
-    setToolbarTitle(mToolbarTitle);
-    setText1(mText1);
-    setImage(mImageUrl);
-  }
 
   public interface TestCallbacks {
     void itemClicked(int position);

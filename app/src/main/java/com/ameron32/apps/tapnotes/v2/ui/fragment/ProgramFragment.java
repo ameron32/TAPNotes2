@@ -17,6 +17,7 @@ import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 import com.parse.ParseException;
 
@@ -29,7 +30,8 @@ import butterknife.InjectView;
 /**
  * Created by klemeilleur on 6/15/2015.
  */
-public class ProgramFragment extends TAPFragment {
+public class ProgramFragment extends TAPFragment
+    implements IProgramDelegate.IProgramDelegateCallbacks {
 
   private static final String PROGRAM_OBJECT_ID_ARG = "PROGRAM_OBJECT_ID_ARG";
 
@@ -136,6 +138,11 @@ public class ProgramFragment extends TAPFragment {
     if (mCallbacks != null) {
       mCallbacks.toggleProgramPane();
     }
+  }
+
+  @Override
+  public void onTalkClicked(String talkId) {
+    // TODO callbacks
   }
 
   public interface Callbacks {

@@ -6,6 +6,7 @@ import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
+import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
 import com.parse.ParseClassName;
 
 import org.joda.time.DateTime;
@@ -62,7 +63,8 @@ public class Talk
 
   @Override
   public List<Scripture> getTalkScriptures() {
-    return Scripture.generateAll(getTalkThemeScriptures());
+    return Scripture.generateAll(getTalkThemeScriptures(),
+        LocaleUtil.getUILocale());
   }
 
   @Override

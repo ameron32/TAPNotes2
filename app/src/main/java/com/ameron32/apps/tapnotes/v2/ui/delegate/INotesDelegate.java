@@ -12,7 +12,7 @@ public interface INotesDelegate {
   void synchronizeNotes(List<INote> allNotes);
   void addNotes(List<INote> notesToAdd);
   void removeNotes(List<INote> notesToRemove);
-  void changeNotes(List<INote> notesToChange);
+  void replaceNotes(List<INote> notesToReplace);
 
 
 

@@ -1,8 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -109,13 +111,15 @@ public final class Scripture implements IScripture {
         sb.append(bcv[i]);
         sb.append(" ");
       }
-      bookString = sb.toString().trim().substring(1).replace(".", "").toUpperCase(Locale.getDefault());
 
-      // Testing.Log.i(this.getClass().getSimpleName(), "book was trimmed as: " +
-      // book);
-      bookNumber = determineBook(bookString);
-      // Testing.Log.i(this.getClass().getSimpleName(), "book was found as: " +
-      // book);
+      bookString = sb.toString().trim()
+          .substring(1)
+          .replace(".", "")
+          .replace(":", " ")
+          .toUpperCase(LocaleUtil.getMachineLocale());
+
+      bookNumber = determineBook(bookString, locale);
+
       chapter = Integer.valueOf(sChapter);
 
       verses = convert(extractVerseBlocks(sVerses));
@@ -175,7 +179,7 @@ public final class Scripture implements IScripture {
         filter.add(c[i]);
       }
 
-      Iterator<Integer> it = filter.iterator();
+      final Iterator<Integer> it = filter.iterator();
       final int[] d = new int[filter.size()];
       int i = 0;
       while (it.hasNext()) {
@@ -189,17 +193,13 @@ public final class Scripture implements IScripture {
     /**
      * FORCED TO UPPERCASE
      */
-    private static int determineBook(String userInput) {
-      List<Book> books = Books.getBooks();
-      for (Book book : books) {
-        int bestGuess = book.getBestGuess(userInput);
-        return bestGuess;
-      }
-      return BOOK_NOT_FOUND;
+    private static int determineBook(String userInput, Locale locale) {
+
     }
 
-    public static List<String> splitMultiScripture() {
+    public static List<String> splitMultiScripture(String verseCodes) {
       // TODO  coordinate all possible inputs to break into individual scriptures
+      return Arrays.asList(new String[]{"empty"});
     }
   }
 }

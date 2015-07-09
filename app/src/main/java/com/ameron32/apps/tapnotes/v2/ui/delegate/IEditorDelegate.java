@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
+import android.support.annotation.Nullable;
+
 import com.ameron32.apps.tapnotes.v2.model.INote;
 
 /**
@@ -7,12 +9,12 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
  */
 public interface IEditorDelegate {
 
-  void updateEditorText(String newEditorText);
+  void updateEditorText(String newEditorText, @Nullable String noteId);
 
 
 
   public interface IEditorDelegateCallbacks {
 
-    void onSubmitClicked(String editorText, INote.NoteType type);
+    void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId);
   }
 }
