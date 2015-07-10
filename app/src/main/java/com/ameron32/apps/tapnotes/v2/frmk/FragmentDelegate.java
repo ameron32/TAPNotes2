@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.frmk;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -301,5 +302,9 @@ public abstract class FragmentDelegate {
 
   protected Activity getActivity() {
     return mFragment.getActivity();
+  }
+
+  protected Context getContext() {
+    return getActivity();
   }
 }

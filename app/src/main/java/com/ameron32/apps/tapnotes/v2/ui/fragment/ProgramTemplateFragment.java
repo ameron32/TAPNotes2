@@ -31,5 +31,4 @@ public class ProgramTemplateFragment extends TAPFragment {
     // Inflate the layout for this fragment
     return inflater.inflate(R.layout.fragment_program_template, container, false);
   }
-
 }

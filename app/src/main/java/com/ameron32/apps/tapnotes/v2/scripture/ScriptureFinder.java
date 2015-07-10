@@ -10,6 +10,7 @@ import com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -17,67 +18,67 @@ import java.util.Locale;
  */
 public class ScriptureFinder {
 
-    public String[] getVerses(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
+  public String[] getVerses(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
 
-       validateRequest(b, bookNumber, chapter, verses);
+    validateRequest(b, bookNumber, chapter, verses);
 
-        String[] verseText = new String[verses.length];
-        for (int i=0; i<verses.length; i++){
-            verseText[i] = b.books[bookNumber].chapters[chapter].verses[verses[i]];
-        }
-
-        return verseText;
+    String[] verseText = new String[verses.length];
+    for (int i=0; i<verses.length; i++){
+      verseText[i] = b.books[bookNumber].chapters[chapter].verses[verses[i]];
     }
 
-    public String[] getChapter(Bible b, int bookNumber, int chapter) throws ScriptureNotFoundException{
+    return verseText;
+  }
 
-        validateRequest(b, bookNumber, chapter, null);
+  public String[] getChapter(Bible b, int bookNumber, int chapter) throws ScriptureNotFoundException{
 
-        int totalVerses = b.books[bookNumber].chapters.length;
-        int[] verses = new int[totalVerses];
-        for (int i=0; i<totalVerses; i++){
-            verses[i]=i;
-        }
-        return getVerses(b, bookNumber, chapter, verses);
+    validateRequest(b, bookNumber, chapter, null);
+
+    int totalVerses = b.books[bookNumber].chapters.length;
+    int[] verses = new int[totalVerses];
+    for (int i=0; i<totalVerses; i++){
+      verses[i]=i;
+    }
+    return getVerses(b, bookNumber, chapter, verses);
+  }
+
+  private void validateRequest(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
+
+    if ((bookNumber<0)||(bookNumber>65)){
+      throw new ScriptureNotFoundException(ScriptureNotFoundException.BOOK_NOT_FOUND);
     }
 
-    private void validateRequest(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
-
-        if ((bookNumber<0)||(bookNumber>65)){
-            throw new ScriptureNotFoundException(ScriptureNotFoundException.BOOK_NOT_FOUND);
-        }
-
-        int totalChapters = b.books[bookNumber].chapters.length;
-        if ((chapter<0)||(chapter>totalChapters-1)){
-            throw new ScriptureNotFoundException(ScriptureNotFoundException.CHAPTER_NOT_FOUND);
-        }
-
-        if (verses!=null){
-            int totalVerses = b.books[bookNumber].chapters[chapter].verses.length;
-            for (int a=0; a<verses.length; a++){
-                if ((verses[a]<0)||(verses[a]>totalVerses)){
-                    throw new ScriptureNotFoundException(ScriptureNotFoundException.VERSE_NOT_FOUND);
-                }
-            }
-        }
-
+    int totalChapters = b.books[bookNumber].chapters.length;
+    if ((chapter<0)||(chapter>totalChapters-1)){
+      throw new ScriptureNotFoundException(ScriptureNotFoundException.CHAPTER_NOT_FOUND);
     }
 
-    public class ScriptureNotFoundException extends Exception{
-
-        private int type;
-        public final static int BOOK_NOT_FOUND = 0;
-        public final static int CHAPTER_NOT_FOUND = 1;
-        public final static int VERSE_NOT_FOUND = 2;
-
-        public ScriptureNotFoundException(int code){
-            type = code;
+    if (verses!=null){
+      int totalVerses = b.books[bookNumber].chapters[chapter].verses.length;
+      for (int a=0; a<verses.length; a++){
+        if ((verses[a]<0)||(verses[a]>totalVerses)){
+          throw new ScriptureNotFoundException(ScriptureNotFoundException.VERSE_NOT_FOUND);
         }
-
-        public int getType(){
-            return type;
-        }
-
+      }
     }
+
+  }
+
+  public class ScriptureNotFoundException extends Exception{
+
+    private int type;
+    public final static int BOOK_NOT_FOUND = 0;
+    public final static int CHAPTER_NOT_FOUND = 1;
+    public final static int VERSE_NOT_FOUND = 2;
+
+    public ScriptureNotFoundException(int code){
+      type = code;
+    }
+
+    public int getType(){
+      return type;
+    }
+
+  }
 
 }
