@@ -10,7 +10,6 @@
   <color name="teal_text_dimmed">#c2c2c2</color>
   <color name="teal_text_bold">#fb8c31</color>
   <color name="teal_text_scripture">#3a948b</color>
-  <color name="teal_icon_color">#737373</color>
   <color name="teal_line_dark_color">#c5c5c5</color>
   <color name="teal_line_light_color">#e4e4e4</color>
 
@@ -23,4 +22,23 @@
   <color name="teal_program_container_background">@color/OffWhite</color>
   <color name="teal_program_nav_bar_background">@color/Charcoal</color>
   <color name="teal_editor_container_background">@color/OffWhite</color>
+
+
+  <style name="listItem_teal">
+    <item name="android:background">@color/teal_listItem</item>
+    <item name="android:textColor">@color/teal_text_bright</item>
+  </style>
+
+
+
+  <style name="navBar_upper_teal"><item name="android:background">@color/teal_navBar_upper</item></style>
+  <style name="navBar_lower_teal"><item name="android:background">@color/teal_navBar_lower</item></style>
+  <style name="listItem_dark_teal"><item name="android:background">@color/teal_listItem_dark</item></style>
+  <style name="listItem_selected_teal"><item name="android:background">@color/teal_listItem_selected</item></style>
+
+  <style name="text_dimmed_teal"><item name="android:textColor">@color/teal_text_dimmed</item></style>
+  <style name="text_bold_teal"><item name="android:textColor">@color/teal_text_bold</item></style>
+  <style name="text_scripture_teal"><item name="android:textColor">@color/teal_text_scripture</item></style>
+  <style name="line_dark_teal"><item name="android:background">@color/teal_line_dark_color</item></style>
+  <style name="line_light_teal"><item name="android:background">@color/teal_line_light_color</item></style>
 </resources>

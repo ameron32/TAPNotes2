@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -16,10 +17,14 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
 
     @InjectView (R.id.container)
     public FrameLayout mContainer;
-    public TextView textView;
+
+    @InjectView(R.id.notesTextView)
+    public TextView notesTextView;
+
+
 
     public NoteViewHolder(View itemView) {
         super(itemView);
-
+        ButterKnife.inject(this, itemView);
     }
 }

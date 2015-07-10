@@ -15,7 +15,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/program_container"
     android:layout_height="match_parent"
-    android:layout_width="320dp">
+    android:layout_width="320dp"
+    style="?listItem">
 
 <com.levelupstudio.recyclerview.ExpandableRecyclerView
     android:id="@+id/programRecycler"

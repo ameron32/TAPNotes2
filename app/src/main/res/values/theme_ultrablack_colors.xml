@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-
   <color name="ultrablack_navBar_upper">#000000</color>
   <color name="ultrablack_navBar_lower">#000000</color>
   <color name="ultrablack_listItem_dark">#000000</color>
@@ -12,7 +10,6 @@
   <color name="ultrablack_text_dimmed">#434343</color>
   <color name="ultrablack_text_bold">#dedede</color>
   <color name="ultrablack_text_scripture">#b2b2b2</color>
-  <color name="ultrablack_icon_color">#b2b2b2</color>
   <color name="ultrablack_line_dark_color">#1f1f1f</color>
   <color name="ultrablack_line_light_color">#1f1f1f</color>
 
@@ -28,4 +25,20 @@
   <color name="ultrablack_program_container_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_program_nav_bar_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_editor_container_background">@color/AMOLEDBlack</color>
+
+
+
+  <style name="listItem_ultrablack">
+    <item name="android:background">@color/ultrablack_listItem</item>
+    <item name="android:textColor">@color/ultrablack_text_bright</item>
+  </style>
+  <style name="navBar_upper_ultrablack"><item name="android:background">@color/ultrablack_navBar_upper</item></style>
+  <style name="navBar_lower_ultrablack"><item name="android:background">@color/ultrablack_navBar_lower</item></style>
+  <style name="listItem_dark_ultrablack"><item name="android:background">@color/ultrablack_listItem_dark</item></style>
+  <style name="listItem_selected_ultrablack"><item name="android:background">@color/ultrablack_listItem_selected</item></style>
+  <style name="text_dimmed_ultrablack"><item name="android:textColor">@color/ultrablack_text_dimmed</item></style>
+  <style name="text_bold_ultrablack"><item name="android:textColor">@color/ultrablack_text_bold</item></style>
+  <style name="text_scripture_ultrablack"><item name="android:textColor">@color/ultrablack_text_scripture</item></style>
+  <style name="line_dark_ultrablack"><item name="android:background">@color/ultrablack_line_dark_color</item></style>
+  <style name="line_light_ultrablack"><item name="android:background">@color/ultrablack_line_light_color</item></style>
 </resources>
