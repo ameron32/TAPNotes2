@@ -84,7 +84,7 @@ public class MNIActivity extends TAPActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // setContentView() handled in super.onCreate()
-    mProgramId = getProgramId();
+    mProgramId = getProgramId(savedInstanceState);
     findViews();
 
     setupDrawer();
@@ -143,10 +143,17 @@ public class MNIActivity extends TAPActivity
   //
   // ---------------------------------------------------
 
-  private String getProgramId() {
-    final String programId = getIntent().getStringExtra(EXTRA_KEY_PROGRAM_ID);
-    if (programId != null) {
-      return programId;
+  private String getProgramId(final Bundle savedInstanceState) {
+    final String intentProgramId = getIntent().getStringExtra(EXTRA_KEY_PROGRAM_ID);
+    if (intentProgramId != null) {
+      return intentProgramId;
+    }
+
+    if (savedInstanceState != null) {
+      final String savedProgramId = savedInstanceState.getString(EXTRA_KEY_PROGRAM_ID);
+      if (savedProgramId != null) {
+        return savedProgramId;
+      }
     }
     throw new IllegalStateException("no StringExtra exists for programId. " +
         "Did you use the static factory to create the MNIActivity intent?");
@@ -161,6 +168,13 @@ public class MNIActivity extends TAPActivity
     }
   }
 
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (mProgramId != null) {
+      outState.putString(EXTRA_KEY_PROGRAM_ID, mProgramId);
+    }
+  }
 
   private void setupDrawer() {
     setupDrawerContent(mNavigationView);

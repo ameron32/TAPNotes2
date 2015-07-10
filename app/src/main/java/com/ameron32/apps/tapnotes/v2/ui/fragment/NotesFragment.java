@@ -4,28 +4,22 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.frmk.ITalkToolbar;
 import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -36,31 +30,27 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class NotesFragment extends TAPFragment
-    implements OnItemClickListener, ITalkToolbar {
+    implements OnItemClickListener,
+      IToolbarHeaderDelegate.IToolbarHeaderCallbacks,
+      INotesDelegate.INotesDelegateCallbacks{
 
   private static final String TITLE_ARG = "TITLE_ARG";
   private static final String TALK_ID_ARG = "TALK_ID_ARG";
   private static final String IMAGEURL_ARG = "IMAGEURL_ARG";
 
-  @InjectView(R.id.collapsing_toolbar)
-  CollapsingToolbarLayout mToolbarLayout;
   @InjectView(R.id.appbar)
   AppBarLayout mAppBarLayout;
   @InjectView(R.id.toolbar)
   Toolbar mToolbar;
   @InjectView(R.id.notesRecycler)
   RecyclerView mRecyclerView;
-  @InjectView(R.id.text_toolbar_header_item1)
-  TextView mTextView1;
-  @InjectView(R.id.image_toolbar_header_background)
-  ImageView mHeaderImage;
-
   @Inject
   ActivitySnackBarController mSnackBar;
 
-  private ITalkToolbar mTalkToolbar;
+  private IToolbarHeaderDelegate mHeader;
+  private INotesDelegate mNotesDelegate;
   private String mToolbarTitle;
-  private String mText1;
+  private String mSymposiumTitle;
   private String mImageUrl;
   private TestCallbacks mCallbacks;
   private ItemTouchHelper mItemTouchHelper;
@@ -109,10 +99,12 @@ public class NotesFragment extends TAPFragment
     final Bundle args = getArguments();
     if (args != null) {
       mToolbarTitle = args.getString(TITLE_ARG);
-      mText1 = args.getString(TALK_ID_ARG);
+      mSymposiumTitle = args.getString(TALK_ID_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
+
+  // onDataReceived(ITalk talk, List<INote> notes);
 
   @Nullable
   @Override
@@ -126,10 +118,10 @@ public class NotesFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
 
-    mTalkToolbar = this;
-    onToolbarViewCreated(mToolbar);
+    mHeader = (IToolbarHeaderDelegate) getDelegate();
+    mNotesDelegate = (INotesDelegate) getDelegate();
+    mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
-    // setupRecycler();
 
     loadData();
   }
@@ -165,29 +157,65 @@ public class NotesFragment extends TAPFragment
     }
   }
 
-  private void setToolbarTitle(String title) {
-    if (isStringUsable(title)) {
-      mToolbarLayout.setTitle(title);
+  private void setTitles() {
+    if (mHeader == null) {
+      // do nothing
+      return;
     }
+
+    if (isStringUsable(mToolbarTitle)) {
+      mHeader.setTalkTitle(mToolbarTitle);
+    }
+    if (isStringUsable(mSymposiumTitle)) {
+      mHeader.setSymposiumTitle(mSymposiumTitle);
+    }
+    if (isStringUsable(mImageUrl)) {
+      mHeader.setImage(mImageUrl);
+    }
+  }
+
+
+
+  @Override
+  public void onPreviousPressed() {
+    // TODO: KRIS delegate callback
   }
 
   @Override
-  public void setText1(String text1) {
-    if (isStringUsable(text1)) {
-      mTextView1.setText(text1);
-    }
+  public void onNextPressed() {
+    // TODO: KRIS delegate callback
+  }
+
+
+
+  @Override
+  public void onUserClickBoldNote(String noteId) {
+    // TODO: KRIS delegate callback
   }
 
   @Override
-  public void setImage(String imageUrl) {
-    if (isStringUsable(imageUrl)) {
-      if (URLUtil.isValidUrl(imageUrl)) {
-        Picasso.with(getContext()).load(imageUrl).into(mHeaderImage);
-      }
-    }
+  public void onUserClickImportantNote(String noteId) {
+    // TODO: KRIS delegate callback
   }
 
-  private boolean isStringUsable(String testString) {
+  @Override
+  public void onUserClickEditNote(String noteId) {
+    // TODO: KRIS delegate callback
+  }
+
+  @Override
+  public void onUserClickDeleteNote(String noteId) {
+    // TODO: KRIS delegate callback
+  }
+
+  @Override
+  public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
+    // TODO: KRIS delegate callback
+  }
+
+
+
+  private boolean isStringUsable(final String testString) {
     if (testString != null) {
       if (testString.length() > 0) {
         return true;
@@ -196,19 +224,7 @@ public class NotesFragment extends TAPFragment
     return false;
   }
 
-  @Override
-  public void onToolbarViewCreated(Toolbar toolbar) {
-    final AppCompatActivity activity = ((AppCompatActivity) getActivity());
-    activity.setSupportActionBar(toolbar);
-    activity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_menu);
-    activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-  }
 
-  private void setTitles() {
-    setToolbarTitle(mToolbarTitle);
-    setText1(mText1);
-    setImage(mImageUrl);
-  }
 
   public interface TestCallbacks {
     void itemClicked(int position);

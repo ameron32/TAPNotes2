@@ -11,15 +11,18 @@ import android.view.ViewGroup;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.model.EventType;
+import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
-import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -28,11 +31,13 @@ import butterknife.InjectView;
 /**
  * Created by klemeilleur on 6/15/2015.
  */
-public class ProgramFragment extends TAPFragment {
+public class ProgramFragment extends TAPFragment
+    implements IProgramDelegate.IProgramDelegateCallbacks {
 
   private static final String PROGRAM_OBJECT_ID_ARG = "PROGRAM_OBJECT_ID_ARG";
 
   private Callbacks mCallbacks;
+  private IProgramDelegate mDelegate;
   private String mProgramId;
 
   public static ProgramFragment create(String programId) {
@@ -63,17 +68,6 @@ public class ProgramFragment extends TAPFragment {
 
     final Bundle args = getArguments();
     mProgramId = args.getString(PROGRAM_OBJECT_ID_ARG);
-    try {
-      // TODO consider moving off UI-Thread
-      final Program program = Queries.Local.getProgram(mProgramId);
-      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
-
-      // TODO give Talks to Delegate
-//      ((ProgramLayoutFragmentDelegate) getDelegate()).onDataReceived(talks);
-
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
   }
 
   @Nullable
@@ -89,8 +83,39 @@ public class ProgramFragment extends TAPFragment {
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    confirmDelegateHasInterface();
     ButterKnife.inject(this, view);
     setNavigation();
+
+    giveTalksToDelegate();
+  }
+
+  private void confirmDelegateHasInterface() {
+    if (getDelegate() instanceof IProgramDelegate) {
+      mDelegate = ((IProgramDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + IProgramDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
+    }
+  }
+
+  private void giveTalksToDelegate() {
+    try {
+      // TODO consider moving off UI-Thread
+      final Program program = Queries.Local.getProgram(mProgramId);
+      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+      final List<ITalk> iTalks = new ArrayList<>(talks.size());
+      iTalks.addAll(talks);
+
+      // TODO remove fake note method
+//      _MiscUtils._saveFakeNotes(talks, program);
+
+      // TODO give Talks to Delegate
+      mDelegate.loadProgramTalks(iTalks);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   private void setNavigation() {
@@ -125,6 +150,7 @@ public class ProgramFragment extends TAPFragment {
   @Override
   public void onDestroyView() {
     ButterKnife.reset(this);
+    mDelegate = null;
     super.onDestroyView();
   }
 
@@ -132,6 +158,11 @@ public class ProgramFragment extends TAPFragment {
     if (mCallbacks != null) {
       mCallbacks.toggleProgramPane();
     }
+  }
+
+  @Override
+  public void onTalkClicked(String talkId) {
+    // TODO callbacks
   }
 
   public interface Callbacks {

@@ -27,7 +27,7 @@
     android:padding="16dp">
 
   <TextView
-      android:id="@+id/text_toolbar_header_item1"
+      android:id="@+id/text_symposium_title"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       tools:text="item1"

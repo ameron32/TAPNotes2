@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.parse.Parse;
-import com.parse.ParseUser;
 
 /**
  * Created by klemeilleur on 6/18/2015.
@@ -39,7 +39,7 @@ public abstract class MyDispatchActivity extends Activity {
   }
 
   private void runDispatch() {
-    if (ParseUser.getCurrentUser() != null) {
+    if (Commands.Local.getClientUser() != null) {
       debugLog("user logged in " + getTargetClass());
       startActivityForResult(new Intent(this, getTargetClass()), TARGET_REQUEST);
     } else {

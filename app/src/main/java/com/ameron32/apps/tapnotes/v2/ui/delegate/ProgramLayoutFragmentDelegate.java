@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.SimpleDividerItemDecoration;
@@ -25,10 +26,22 @@ import butterknife.InjectView;
  *
  * EXAMPLE OF FragmentDelegate USAGE. NOTICE THE SIMILARITY TO REGULAR FRAGMENT.
  */
-public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
-  public void onDataReceived(List<ITalk> talks) {
-    startRecycler(talks);
-  }
+public class ProgramLayoutFragmentDelegate extends FragmentDelegate
+    implements IProgramDelegate
+{
+
+  private static final IProgramDelegate.IProgramDelegateCallbacks stubCallbacks
+      = new IProgramDelegate.IProgramDelegateCallbacks() {
+
+    @Override
+    public void onTalkClicked(String talkId) {
+      // stub only
+    }
+  };
+
+  private IProgramDelegate.IProgramDelegateCallbacks mCallbacks;
+
+
 
   @InjectView(R.id.programRecycler)
   ExpandableRecyclerView erv;
@@ -65,13 +78,25 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
+    confirmHostFragmentHasNecessaryCallbacks();
     startRecycler();
+  }
+
+  private void confirmHostFragmentHasNecessaryCallbacks() {
+    if (getFragment() instanceof IProgramDelegate.IProgramDelegateCallbacks) {
+      mCallbacks = ((IProgramDelegate.IProgramDelegateCallbacks) getFragment());
+    } else {
+      throw new IllegalStateException("host fragment " +
+          "should implement " + IProgramDelegate.IProgramDelegateCallbacks.class.getSimpleName() +
+          "to support callback methods.");
+    }
   }
 
   @Override
   public void onDestroyView() {
-    super.onDestroyView();
     ButterKnife.reset(this);
+    mCallbacks = stubCallbacks;
+    super.onDestroyView();
   }
 
 
@@ -83,6 +108,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
     erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
   }
+
   public void startRecycler(List<ITalk> talks) {
     startRecycler();
   }
@@ -94,4 +120,11 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
   }
 
 
+
+  @Override
+  public void loadProgramTalks(List<ITalk> talks) {
+    // TODO: MICAH delegate method
+
+    startRecycler(talks);
+  }
 }

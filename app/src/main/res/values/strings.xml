@@ -12,6 +12,4 @@
   <string name="editor_menu_title_text_video">Video</string>
   <string name="title_activity_program_selection">ProgramSelectionActivity</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-  <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -2,14 +2,19 @@ package com.ameron32.apps.tapnotes.v2.parse.object;
 
 import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
+import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
 import com.parse.ParseClassName;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.List;
 import java.util.Locale;
 
 import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
@@ -20,7 +25,7 @@ import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 @ParseClassName(TALK_OBJECT_NAME)
 public class Talk
     extends ColumnableParseObject
-    implements ITalk {
+    implements ITalk<Scripture, Bible> {
 
   public static final int NO_SONG_NUMBER = -1;
 
@@ -49,7 +54,7 @@ public class Talk
 
   @Override
   public EventType getEventType() {
-    return EventType.valueOf(this.getString(TALK_TYPE_STRING_KEY));
+    return EventType.valueOfAnyCase(this.getString(TALK_TYPE_STRING_KEY));
   }
 
   @Override
@@ -58,8 +63,13 @@ public class Talk
   }
 
   @Override
+  public List<Scripture> getTalkScriptures(final Bible bible) {
+    return Scripture.generateAll(bible, getTalkThemeScriptures());
+  }
+
+  @Override
   public String getSymposiumTitle() {
-    if (getEventType() == EventType.SYMPOSIUM_TALK) {
+    if (getEventType() == EventType.SYMPOSIUMTALK) {
       return getMetadata();
     }
     return "";
@@ -71,6 +81,10 @@ public class Talk
       return getSongNumberWithinMetadata();
     }
     return NO_SONG_NUMBER;
+  }
+
+  private String getTalkThemeScriptures() {
+    return this.getString(TALK_SCRIPTURES_STRING_KEY);
   }
 
   private int getSongNumberWithinMetadata() {
