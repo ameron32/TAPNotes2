@@ -1,6 +1,9 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +24,13 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
     private static final int VIEW_TYPE_CHILD = 0;
     private static final int VIEW_TYPE_GROUP_WITH_BAPTISM = 1;
     private static final int VIEW_TYPE_GROUP_WITHOUT_BAPTISM = 2;
+
+    //NOTE: When adding a new theme, add a field here for the name, and appropriate branches to the switch statements
+    // in the setChildExpired method.
+    private static final String THEME_TEAL2015 = "Teal2015Theme";
+    private static final String THEME_ULTRABLACK = "UltraBlackTheme";
+    private static final String THEME_MATERIALDARK = "MaterialDarkTheme";
+
 
     private final String[] dummyHeaders;
     private final String[][] dummyContent;
@@ -50,7 +60,6 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
         }
 
-
         @Override
         protected boolean canExpand() {
             return true;
@@ -61,14 +70,10 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
         @InjectView(R.id.dateTextView) TextView dateTextView;
 
-
         public GroupViewHolderWithBaptism(@NonNull View itemView) {
-
             super(itemView);
             ButterKnife.inject(this, itemView);
-
         }
-
 
         @Override
         protected boolean canExpand() {
@@ -76,18 +81,16 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         }
     }
 
-
     public static class ChildViewHolder extends ViewHolder {
 
-
         @InjectView (R.id.program_item_textview) TextView textView;
+        public boolean expired = false;
 
         public ChildViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
 
         }
-
 
         @Override
         protected boolean canExpand() {
@@ -97,7 +100,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
         @Override
         protected boolean onViewClicked(final View myView) {
-            myView.setVisibility(View.INVISIBLE);
+            /*myView.setVisibility(View.INVISIBLE);
             myView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -106,6 +109,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
                     }
                 }
             }, 2000);
+            */
             return false;
         }
     }
@@ -158,7 +162,42 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
 
         ChildViewHolder cvh = (ChildViewHolder) viewHolder;
+        String themeName = "";
+        try {
+            themeName = getTheme(cvh.textView.getContext());
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         cvh.textView.setText(dummyContent[i][i2].toString());
+
+        if (cvh.expired){
+            setChildExpired(cvh, themeName);
+        }
+
+    }
+
+    private void setChildExpired(ChildViewHolder cvh, String themeName){
+
+        switch (themeName){
+            case THEME_TEAL2015:
+                cvh.textView.setBackgroundResource(R.color.teal_listItem_dark);
+                return;
+            case THEME_MATERIALDARK:
+                cvh.textView.setBackgroundResource(R.color.materialdark_listItem_dark);
+                return;
+            case THEME_ULTRABLACK:
+                cvh.textView.setBackgroundResource(R.color.ultrablack_listItem_dark);
+            default:
+                return;
+        }
+
+    }
+
+
+
+
+    private String getTheme(Context context) throws PackageManager.NameNotFoundException {
+        return context.getResources().getResourceEntryName(context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_META_DATA).applicationInfo.theme);
     }
 
 

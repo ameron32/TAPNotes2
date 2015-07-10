@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:style="http://schemas.android.com/tools"
+    style="?listItem"
     android:orientation="vertical"
     android:layout_width="320dp"
     android:layout_height="fill_parent"
@@ -8,6 +8,7 @@
     >
 
     <TextView
+        style="?listItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
@@ -15,7 +16,8 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -32,18 +34,22 @@
             android:layout_height="wrap_content">
 
             <TextView
+                style="?listItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/attendance"
                 android:id="@+id/attendanceTextView"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                />
 
             <TextView
+                style="?listItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/baptized"
                 android:id="@+id/textView5"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+               />
         </LinearLayout>
 
         <LinearLayout
@@ -52,6 +58,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                style="?listItem"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:inputType="number"
@@ -59,6 +66,7 @@
                 android:id="@+id/attendanceEditText" />
 
             <EditText
+                style="?listItem"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:inputType="number"

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="320dp"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    style="?listItem">
 
     <TextView
+        style="?listItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
@@ -28,6 +30,7 @@
             android:layout_height="wrap_content">
 
             <TextView
+                style="?listItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/attendance"
@@ -42,6 +45,7 @@
             android:layout_height="wrap_content">
 
             <EditText
+                style="?listItem"
                 android:layout_width="50dp"
                 android:layout_height="25dp"
                 android:inputType="number"

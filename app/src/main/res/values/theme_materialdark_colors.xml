@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-  <!-- TODO needs updating to color spec -->
 
 
   <color name="materialdark_navBar_upper">#455a64</color>
@@ -13,7 +12,6 @@
   <color name="materialdark_text_dimmed">#757575</color>
   <color name="materialdark_text_bold">#e3e3e3</color>
   <color name="materialdark_text_scripture">#e37d76</color>
-  <color name="materialdark_icon_color">#ffffff</color>
   <color name="materialdark_line_dark_color">#1f1f1f</color>
   <color name="materialdark_line_light_color">#494949</color>
 
@@ -27,4 +25,21 @@
   <color name="materialdark_program_container_background">@color/OffWhite</color>
   <color name="materialdark_program_nav_bar_background">@color/Charcoal</color>
   <color name="materialdark_editor_container_background">@color/OffWhite</color>
+
+
+
+  <style name="listItem_materialdark">
+    <item name="android:background">@color/materialdark_listItem</item>
+    <item name="android:textColor">@color/materialdark_text_bright</item>
+  </style>
+
+  <style name="navBar_upper_materialdark"><item name="android:background">@color/materialdark_navBar_upper</item></style>
+  <style name="navBar_lower_materialdark"><item name="android:background">@color/materialdark_navBar_lower</item></style>
+  <style name="listItem_dark_materialdark"><item name="android:background">@color/materialdark_listItem_dark</item></style>
+  <style name="listItem_selected_materialdark"><item name="android:background">@color/materialdark_listItem_selected</item></style>
+  <style name="text_dimmed_materialdark"><item name="android:textColor">@color/materialdark_text_dimmed</item></style>
+  <style name="text_bold_materialdark"><item name="android:textColor">@color/materialdark_text_bold</item></style>
+  <style name="text_scripture_materialdark"><item name="android:textColor">@color/materialdark_text_scripture</item></style>
+  <style name="line_dark_materialdark"><item name="android:background">@color/materialdark_line_dark_color</item></style>
+  <style name="line_light_materialdark"><item name="android:background">@color/materialdark_line_light_color</item></style>
 </resources>

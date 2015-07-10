@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2;
 
 import android.app.Application;
 import android.content.res.Resources;
+import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.di.Injector;
 import com.ameron32.apps.tapnotes.v2.di.module.ApplicationModule;

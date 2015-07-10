@@ -31,10 +31,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate {
 
   @InjectView(R.id.notesRecycler)
   RecyclerView recyclerView;
-  private RecyclerView.LayoutManager layoutManager;
-  private NotesRecyclerAdapter adapter;
-  private  RecyclerView.Adapter wrappedAdapter;
-  private RecyclerViewDragDropManager dragDropManager;
+
 
   public void onDataReceived(ITalk talk, List<INote> notes) {
 
@@ -61,15 +58,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     recyclerView = (RecyclerView)view.findViewById(R.id.notesRecycler);
-
-
-
-  }
-
-  @Override
-  public void onPause(){
-    dragDropManager.cancelDrag();
-    super.onPause();
   }
 
   @Override
@@ -83,25 +71,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate {
     super.onDestroyView();
     ButterKnife.reset(this);
 
-    if (dragDropManager != null) {
-      dragDropManager.release();
-      dragDropManager = null;
-    }
-
-    if (recyclerView != null) {
-      recyclerView.setItemAnimator(null);
-      recyclerView.setAdapter(null);
-      recyclerView = null;
-    }
-
-    if (wrappedAdapter != null) {
-      WrapperAdapterUtils.releaseAll(wrappedAdapter);
-      wrappedAdapter = null;
-    }
-    adapter = null;
-    layoutManager = null;
-
-    super.onDestroyView();
 
   }
 

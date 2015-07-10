@@ -12,6 +12,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
+import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.SimpleDividerItemDecoration;
 import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
 import java.util.List;
@@ -76,6 +77,8 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
 
   public void startRecycler(){
     ButterKnife.inject(this.getActivity());
+
+    erv.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     erv.setExpandableAdapter(getAdapter());
     erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 

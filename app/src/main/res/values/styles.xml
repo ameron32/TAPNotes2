@@ -5,21 +5,20 @@
 
   </style>
 
+
   <style name="Teal2015Theme" parent="AppTheme">
     <!-- Customize your theme here. -->
-
-    <item name="navBar_upper_color">@color/teal_navBar_upper</item>
-    <item name="navBar_lower_color">@color/teal_navBar_lower</item>
-    <item name="listItem_dark_color">@color/teal_listItem</item>
-    <item name="listItem_selected_color">@color/teal_listItem_selected</item>
-    <item name="listItem_color">@color/teal_listItem</item>
-    <item name="text_bright_color">@color/teal_text_bright</item>
-    <item name="text_dimmed_color">@color/teal_text_dimmed</item>
-    <item name="text_bold_color">@color/teal_text_bold</item>
-    <item name="text_scripture_color">@color/teal_text_scripture</item>
-    <item name="icon_color">@color/teal_icon_color</item>
-    <item name="line_dark_color">@color/teal_line_dark_color</item>
-
+    <item name="listItem">@style/listItem_teal</item>
+    <item name="navBar_upper">@style/navBar_upper_teal</item>
+    <item name="navBar_lower">@style/navBar_lower_teal</item>
+    <item name="listItem_dark">@style/listItem_dark_teal</item>
+    <item name="listItem_selected">@style/listItem_selected_teal</item>
+    <item name="text_dimmed">@style/text_dimmed_teal</item>
+    <item name="text_bold">@style/text_bold_teal</item>
+    <item name="text_scripture">@style/text_scripture_teal</item>
+    <item name="line_dark">@style/line_dark_teal</item>
+    <item name="line_light">@style/line_light_teal</item>
+    
     <!-- Kris's items below-->
     <item name="colorPrimary">@color/teal_colorPrimary</item>
     <item name="colorPrimaryDark">@color/teal_colorPrimaryDark</item>
@@ -35,17 +34,16 @@
 
   <style name="UltraBlackTheme" parent="AppTheme">
 
-    <item name="navBar_upper_color">@color/ultrablack_navBar_upper</item>
-    <item name="navBar_lower_color">@color/ultrablack_navBar_lower</item>
-    <item name="listItem_dark_color">@color/ultrablack_listItem</item>
-    <item name="listItem_selected_color">@color/ultrablack_listItem_selected</item>
-    <item name="listItem_color">@color/ultrablack_listItem</item>
-    <item name="text_bright_color">@color/ultrablack_text_bright</item>
-    <item name="text_dimmed_color">@color/ultrablack_text_dimmed</item>
-    <item name="text_bold_color">@color/ultrablack_text_bold</item>
-    <item name="text_scripture_color">@color/ultrablack_text_scripture</item>
-    <item name="icon_color">@color/ultrablack_icon_color</item>
-    <item name="line_dark_color">@color/ultrablack_line_dark_color</item>
+    <item name="listItem">@style/listItem_ultrablack</item>
+    <item name="navBar_upper">@style/navBar_upper_ultrablack</item>
+    <item name="navBar_lower">@style/navBar_lower_ultrablack</item>
+    <item name="listItem_dark">@style/listItem_dark_ultrablack</item>
+    <item name="listItem_selected">@style/listItem_selected_ultrablack</item>
+    <item name="text_dimmed">@style/text_dimmed_ultrablack</item>
+    <item name="text_bold">@style/text_bold_ultrablack</item>
+    <item name="text_scripture">@style/text_scripture_ultrablack</item>
+    <item name="line_dark">@style/line_dark_ultrablack</item>
+    <item name="line_light">@style/line_light_ultrablack</item>
 
     <!--Kris's items below-->
     <item name="colorPrimary">@color/ultrablack_colorPrimary</item>
@@ -61,20 +59,18 @@
   <style name="MaterialDarkTheme" parent="AppTheme">
     <!-- Customize your theme here. -->
 
-    <item name="navBar_upper_color">@color/materialdark_navBar_upper</item>
-    <item name="navBar_lower_color">@color/materialdark_navBar_lower</item>
-    <item name="listItem_dark_color">@color/materialdark_listItem</item>
-    <item name="listItem_selected_color">@color/materialdark_listItem_selected</item>
+    <item name="listItem">@style/listItem_materialdark</item>
+    <item name="navBar_upper">@style/navBar_upper_materialdark</item>
+    <item name="navBar_lower">@style/navBar_lower_materialdark</item>
+    <item name="listItem_dark">@style/listItem_dark_materialdark</item>
+    <item name="listItem_selected">@style/listItem_selected_materialdark</item>
 
+    <item name="text_dimmed">@style/text_dimmed_materialdark</item>
+    <item name="text_bold">@style/text_bold_materialdark</item>
+    <item name="text_scripture">@style/text_scripture_materialdark</item>
 
-    <item name="listItem_color">@color/materialdark_listItem</item>
-    <item name="text_bright_color">@color/materialdark_text_bright</item>
-    <item name="text_dimmed_color">@color/materialdark_text_dimmed</item>
-    <item name="text_bold_color">@color/materialdark_text_bold</item>
-    <item name="text_scripture_color">@color/materialdark_text_scripture</item>
-    <item name="icon_color">@color/materialdark_icon_color</item>
-    <item name="line_dark_color">@color/materialdark_line_dark_color</item>
-
+    <item name="line_dark">@style/line_dark_materialdark</item>
+    <item name="line_light">@style/line_light_materialdark</item>
 
     <!--Kris's items below-->
     <item name="colorPrimary">@color/materialdark_colorPrimary</item>
@@ -90,5 +86,7 @@
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
   </style>
+
+
 
 </resources>

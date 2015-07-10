@@ -37,7 +37,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> {
 
     @Override
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.insert_notes_list_item, parent, false);
 
@@ -48,7 +47,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
         DummyNote note = (DummyNote)mProvider.getItem(position);
-        holder.textView.setText(note.getText());
+        holder.notesTextView.setText(note.getText());
 
     }
 

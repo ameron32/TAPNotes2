@@ -19,7 +19,9 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
     public FrameLayout mContainer;
 
     @InjectView(R.id.notesTextView)
-    public TextView textView;
+    public TextView notesTextView;
+
+
 
     public NoteViewHolder(View itemView) {
         super(itemView);
