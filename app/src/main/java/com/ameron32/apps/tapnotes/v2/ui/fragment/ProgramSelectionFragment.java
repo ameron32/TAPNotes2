@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 
 import butterknife.ButterKnife;
@@ -49,7 +50,7 @@ public class ProgramSelectionFragment extends TAPFragment {
 
   @OnClick(R.id.testing_button_mni)
   void onClick() {
-    getCallbacks().startMNIActivity("0");
+    getCallbacks().startMNIActivity(Constants.CONVENTION2015_PROGRAM_OBJECT_ID);
   }
 
   @Override

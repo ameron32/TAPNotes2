@@ -12,9 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
@@ -81,19 +84,13 @@ public class MNIActivity extends TAPActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // setContentView() handled in super.onCreate()
-    readBundle(savedInstanceState);
+    mProgramId = getProgramId();
     findViews();
 
     setupDrawer();
-    commitNotesFragment();   //blank
-    commitProgramFragment(); //blank
+    commitNotesFragment(null);   //blank
+    commitProgramFragment(mProgramId); //blank
     commitEditorFragment();  //blank
-
-    if (mProgramId != null) {
-      // load programs
-      loadProgram(mProgramId);
-      loadNotes(mProgramId);
-    }
   }
 
 
@@ -146,10 +143,13 @@ public class MNIActivity extends TAPActivity
   //
   // ---------------------------------------------------
 
-  private void readBundle(Bundle savedInstanceState) {
-    if (savedInstanceState != null) {
-      mProgramId = getIntent().getStringExtra(EXTRA_KEY_PROGRAM_ID);
+  private String getProgramId() {
+    final String programId = getIntent().getStringExtra(EXTRA_KEY_PROGRAM_ID);
+    if (programId != null) {
+      return programId;
     }
+    throw new IllegalStateException("no StringExtra exists for programId. " +
+        "Did you use the static factory to create the MNIActivity intent?");
   }
 
   private void findViews() {
@@ -166,23 +166,23 @@ public class MNIActivity extends TAPActivity
     setupDrawerContent(mNavigationView);
   }
 
-  private void commitNotesFragment() {
+  private void commitNotesFragment(final String talkId) {
     // TODO consider replacing the default NOTES with explanatory fragment
     final String tag = "notes";
     final String toolbarTitle = getString(R.string.generic_toolbar_title);
-    final String text1 = "";
     final String imageUrl = "";
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.notes_container, NotesFragment.create(toolbarTitle, text1, imageUrl), tag)
+        .replace(R.id.notes_container,
+            NotesFragment.create(toolbarTitle, talkId, imageUrl), tag)
         .commit();
   }
 
-  private void commitProgramFragment() {
+  private void commitProgramFragment(final String programId) {
     final String tag = "program";
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.program_container, ProgramFragment.create(), tag)
+        .replace(R.id.program_container, ProgramFragment.create(programId), tag)
         .commit();
   }
 
@@ -201,14 +201,6 @@ public class MNIActivity extends TAPActivity
           .remove(fragment)
           .commit();
     }
-  }
-
-  private void loadProgram(String programId) {
-    //TODO Add logic
-  }
-
-  private void loadNotes(String programId) {
-    //TODO Add logic
   }
 
   private void setupDrawerContent(NavigationView navigationView) {
@@ -246,5 +238,10 @@ public class MNIActivity extends TAPActivity
         .replace(R.id.notes_container, notes)
         .addToBackStack(Integer.toString(position))
         .commit();
+  }
+
+  @Override
+  public void changeNotesFragmentTo(Talk talk) {
+    // TODO change fragments
   }
 }

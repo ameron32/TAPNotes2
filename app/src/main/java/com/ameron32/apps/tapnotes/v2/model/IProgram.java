@@ -6,4 +6,5 @@ package com.ameron32.apps.tapnotes.v2.model;
 public interface IProgram {
 
   ITalk[] getTalks();
+  String getName();
 }

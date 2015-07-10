@@ -47,7 +47,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate {
   };
 
 
-  public static ProgramLayoutFragmentDelegate create(Fragment fragment) {
+  public static ProgramLayoutFragmentDelegate create(final Fragment fragment) {
     final ProgramLayoutFragmentDelegate delegate = new ProgramLayoutFragmentDelegate();
     delegate.setFragment(fragment);
     return delegate;

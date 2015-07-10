@@ -19,6 +19,8 @@ import android.view.ViewGroup;
  */
 public abstract class DelegatedFragment extends Fragment {
 
+  // NOTE: delegate.onCreateView overrides fragment.onCreateView
+
   private FragmentDelegate mDelegate;
   private View storeView;
 
