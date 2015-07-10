@@ -4,8 +4,8 @@
   <color name="teal_navBar_upper">#00796b</color>
   <color name="teal_navBar_lower">#009688</color>
   <color name="teal_listItem_dark">#ebebeb</color>
-  <color name="teal_listItem_selected">#ead798</color>
-  <color name="teal_listItem">#e0e0e0</color>
+  <drawable name="teal_listItem_selected">#ead798</drawable>
+  <drawable name="teal_listItem">#e0e0e0</drawable>
   <color name="teal_text_bright">#393425</color>
   <color name="teal_text_dimmed">#c2c2c2</color>
   <color name="teal_text_bold">#fb8c31</color>
@@ -25,20 +25,23 @@
 
 
   <style name="listItem_teal">
-    <item name="android:background">@color/teal_listItem</item>
+    <item name="android:background">@drawable/listitem_selector_teal</item>
     <item name="android:textColor">@color/teal_text_bright</item>
   </style>
 
+  <style name="line_dark_teal">
+    <item name="android:color">@color/teal_line_dark_color</item>
+  </style>
 
 
   <style name="navBar_upper_teal"><item name="android:background">@color/teal_navBar_upper</item></style>
   <style name="navBar_lower_teal"><item name="android:background">@color/teal_navBar_lower</item></style>
   <style name="listItem_dark_teal"><item name="android:background">@color/teal_listItem_dark</item></style>
-  <style name="listItem_selected_teal"><item name="android:background">@color/teal_listItem_selected</item></style>
+  <style name="listItem_selected_teal"><item name="android:background">@drawable/teal_listItem_selected</item></style>
 
   <style name="text_dimmed_teal"><item name="android:textColor">@color/teal_text_dimmed</item></style>
   <style name="text_bold_teal"><item name="android:textColor">@color/teal_text_bold</item></style>
   <style name="text_scripture_teal"><item name="android:textColor">@color/teal_text_scripture</item></style>
-  <style name="line_dark_teal"><item name="android:background">@color/teal_line_dark_color</item></style>
+
   <style name="line_light_teal"><item name="android:background">@color/teal_line_light_color</item></style>
 </resources>

@@ -6,8 +6,8 @@
   <color name="materialdark_navBar_upper">#455a64</color>
   <color name="materialdark_navBar_lower">#607d8b</color>
   <color name="materialdark_listItem_dark">#111111</color>
-  <color name="materialdark_listItem_selected">#820f0f</color>
-  <color name="materialdark_listItem">#212121</color>
+  <drawable name="materialdark_listItem_selected">#820f0f</drawable>
+  <drawable name="materialdark_listItem">#212121</drawable>
   <color name="materialdark_text_bright">#e1e1e1</color>
   <color name="materialdark_text_dimmed">#757575</color>
   <color name="materialdark_text_bold">#e3e3e3</color>
@@ -29,17 +29,21 @@
 
 
   <style name="listItem_materialdark">
-    <item name="android:background">@color/materialdark_listItem</item>
+    <item name="android:background">@drawable/listitem_selector_materialdark</item>
     <item name="android:textColor">@color/materialdark_text_bright</item>
+  </style>
+
+  <style name="line_dark_materialdark">
+    <item name="android:color">@color/materialdark_line_dark_color</item>
   </style>
 
   <style name="navBar_upper_materialdark"><item name="android:background">@color/materialdark_navBar_upper</item></style>
   <style name="navBar_lower_materialdark"><item name="android:background">@color/materialdark_navBar_lower</item></style>
   <style name="listItem_dark_materialdark"><item name="android:background">@color/materialdark_listItem_dark</item></style>
-  <style name="listItem_selected_materialdark"><item name="android:background">@color/materialdark_listItem_selected</item></style>
+  <style name="listItem_selected_materialdark"><item name="android:background">@drawable/materialdark_listItem_selected</item></style>
   <style name="text_dimmed_materialdark"><item name="android:textColor">@color/materialdark_text_dimmed</item></style>
   <style name="text_bold_materialdark"><item name="android:textColor">@color/materialdark_text_bold</item></style>
   <style name="text_scripture_materialdark"><item name="android:textColor">@color/materialdark_text_scripture</item></style>
-  <style name="line_dark_materialdark"><item name="android:background">@color/materialdark_line_dark_color</item></style>
+
   <style name="line_light_materialdark"><item name="android:background">@color/materialdark_line_light_color</item></style>
 </resources>
