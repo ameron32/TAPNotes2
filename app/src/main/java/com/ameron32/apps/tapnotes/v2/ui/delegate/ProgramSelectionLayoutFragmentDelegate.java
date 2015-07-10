@@ -7,7 +7,9 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 /**
  * Created by klemeilleur on 7/6/2015.
  */
-public class ProgramSelectionLayoutFragmentDelegate extends FragmentDelegate {
+public class ProgramSelectionLayoutFragmentDelegate extends FragmentDelegate
+    implements IProgramSelectionDelegate
+{
 
   public static ProgramSelectionLayoutFragmentDelegate create(Fragment fragment) {
     final ProgramSelectionLayoutFragmentDelegate delegate = new ProgramSelectionLayoutFragmentDelegate();

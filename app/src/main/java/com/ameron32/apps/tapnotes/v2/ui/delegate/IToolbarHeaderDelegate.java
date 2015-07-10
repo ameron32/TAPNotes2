@@ -1,15 +1,18 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
-import com.ameron32.apps.tapnotes.v2.frmk.ITalkToolbar;
+import android.support.v7.widget.Toolbar;
 
 /**
  * Created by klemeilleur on 7/8/2015.
  */
-public interface IToolbarHeader extends ITalkToolbar {
+public interface IToolbarHeaderDelegate {
 
   void setTalkTitle(String title);
   void setSymposiumTitle(String title);
   void setSpeakerName(String speakerName);
+
+  void setImage(String imageUrl);
+  void onToolbarViewCreated(Toolbar toolbar);
 
 
 

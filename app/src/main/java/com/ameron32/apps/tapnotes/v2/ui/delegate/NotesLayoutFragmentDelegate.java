@@ -19,7 +19,6 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -30,10 +29,57 @@ import butterknife.InjectView;
 
 /**
  * Created by klemeilleur on 7/6/2015.
+ *
+ * THIS DELEGATE IS IN CHARGE OF BOTH THE TOOLBAR AND THE NOTES
  */
 public class NotesLayoutFragmentDelegate extends FragmentDelegate
-    implements INotesDelegate, IToolbarHeader
+    implements INotesDelegate, IToolbarHeaderDelegate
 {
+
+  private static final IToolbarHeaderCallbacks stubCallbacks1 = new IToolbarHeaderCallbacks() {
+    @Override
+    public void onPreviousPressed() {
+      // stub only
+    }
+
+    @Override
+    public void onNextPressed() {
+      // stub only
+    }
+  };
+
+  private IToolbarHeaderCallbacks mCallbacks1;
+
+  private static final INotesDelegateCallbacks stubCallbacks2 = new INotesDelegateCallbacks() {
+    @Override
+    public void onUserClickBoldNote(String noteId) {
+      // stub only
+    }
+
+    @Override
+    public void onUserClickImportantNote(String noteId) {
+      // stub only
+    }
+
+    @Override
+    public void onUserClickEditNote(String noteId) {
+      // stub only
+    }
+
+    @Override
+    public void onUserClickDeleteNote(String noteId) {
+      // stub only
+    }
+
+    @Override
+    public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
+      // stub only
+    }
+  };
+
+  private INotesDelegateCallbacks mCallbacks2;
+
+
 
   public void onDataReceived(ITalk talk, List<INote> notes) {
 
@@ -57,24 +103,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
 
 
-  private static final IToolbarHeaderCallbacks stubCallbacks = new IToolbarHeaderCallbacks() {
-    @Override
-    public void onPreviousPressed() {
-      // stub only
-    }
-
-    @Override
-    public void onNextPressed() {
-      // stub only
-    }
-  };
-
-  private IToolbarHeaderCallbacks mCallbacks;
-
-  @InjectView(R.id.text_toolbar_header_item1)
-  TextView mTextView1;
-  @InjectView(R.id.text_toolbar_header_item2)
-  TextView mTextView2;
+  @InjectView(R.id.text_symposium_title)
+  TextView mSymposiumTextView;
   @InjectView(R.id.image_toolbar_header_background)
   ImageView mHeaderImage;
   @InjectView(R.id.collapsing_toolbar)
@@ -91,10 +121,18 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
     if (getFragment() instanceof IToolbarHeaderCallbacks) {
-      mCallbacks = ((IToolbarHeaderCallbacks) getFragment());
+      mCallbacks1 = ((IToolbarHeaderCallbacks) getFragment());
     } else {
       throw new IllegalStateException("host fragment " +
           "should implement " + IToolbarHeaderCallbacks.class.getSimpleName() +
+          "to support callback methods.");
+    }
+
+    if (getFragment() instanceof IToolbarHeaderCallbacks) {
+      mCallbacks2 = ((INotesDelegateCallbacks) getFragment());
+    } else {
+      throw new IllegalStateException("host fragment " +
+          "should implement " + INotesDelegateCallbacks.class.getSimpleName() +
           "to support callback methods.");
     }
   }
@@ -107,7 +145,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   @Override
   public void onDestroyView() {
     ButterKnife.reset(this);
-    mCallbacks = stubCallbacks;
+    mCallbacks1 = stubCallbacks1;
+    mCallbacks2 = stubCallbacks2;
     super.onDestroyView();
   }
 
@@ -131,7 +170,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void setSymposiumTitle(String title) {
-    mTextView1.setText(title);
+    mSymposiumTextView.setText(title);
   }
 
   @Override
@@ -140,11 +179,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   }
 
 
-
-  @Override
-  public void setText1(String text1) {
-    mTextView2.setText(text1);
-  }
 
   @Override
   public void setImage(String imageUrl) {
@@ -165,21 +199,21 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void synchronizeNotes(List<INote> allNotes) {
-
+    // TODO: MICAH delegate method
   }
 
   @Override
   public void addNotes(List<INote> notesToAdd) {
-
+    // TODO: MICAH delegate method
   }
 
   @Override
   public void removeNotes(List<INote> notesToRemove) {
-
+    // TODO: MICAH delegate method
   }
 
   @Override
   public void replaceNotes(List<INote> notesToReplace) {
-
+    // TODO: MICAH delegate method
   }
 }

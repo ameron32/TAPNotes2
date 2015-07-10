@@ -89,6 +89,6 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
-
+    // TODO: KRIS delegate callback
   }
 }

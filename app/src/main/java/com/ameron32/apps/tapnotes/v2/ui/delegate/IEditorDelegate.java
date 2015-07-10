@@ -15,6 +15,13 @@ public interface IEditorDelegate {
 
   public interface IEditorDelegateCallbacks {
 
+    /**
+     * @param editorText
+     * @param type
+     * @param noteId
+     * provide a noteId when editing an existing note (see updateEditorText())
+     * provide null when submitting a brand new note
+     */
     void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId);
   }
 }

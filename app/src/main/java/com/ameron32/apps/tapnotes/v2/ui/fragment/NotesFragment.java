@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
@@ -24,9 +18,8 @@ import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeader;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -38,7 +31,7 @@ import butterknife.InjectView;
  */
 public class NotesFragment extends TAPFragment
     implements OnItemClickListener,
-      IToolbarHeader.IToolbarHeaderCallbacks,
+      IToolbarHeaderDelegate.IToolbarHeaderCallbacks,
       INotesDelegate.INotesDelegateCallbacks{
 
   private static final String TITLE_ARG = "TITLE_ARG";
@@ -54,9 +47,10 @@ public class NotesFragment extends TAPFragment
   @Inject
   ActivitySnackBarController mSnackBar;
 
-  private IToolbarHeader mHeader;
+  private IToolbarHeaderDelegate mHeader;
+  private INotesDelegate mNotesDelegate;
   private String mToolbarTitle;
-  private String mText1;
+  private String mSymposiumTitle;
   private String mImageUrl;
   private TestCallbacks mCallbacks;
   private ItemTouchHelper mItemTouchHelper;
@@ -105,7 +99,7 @@ public class NotesFragment extends TAPFragment
     final Bundle args = getArguments();
     if (args != null) {
       mToolbarTitle = args.getString(TITLE_ARG);
-      mText1 = args.getString(TALK_ID_ARG);
+      mSymposiumTitle = args.getString(TALK_ID_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
@@ -124,7 +118,8 @@ public class NotesFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
 
-    mHeader = (IToolbarHeader) getDelegate();
+    mHeader = (IToolbarHeaderDelegate) getDelegate();
+    mNotesDelegate = (INotesDelegate) getDelegate();
     mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
 
@@ -171,8 +166,8 @@ public class NotesFragment extends TAPFragment
     if (isStringUsable(mToolbarTitle)) {
       mHeader.setTalkTitle(mToolbarTitle);
     }
-    if (isStringUsable(mText1)) {
-      mHeader.setText1(mText1);
+    if (isStringUsable(mSymposiumTitle)) {
+      mHeader.setSymposiumTitle(mSymposiumTitle);
     }
     if (isStringUsable(mImageUrl)) {
       mHeader.setImage(mImageUrl);
@@ -183,39 +178,39 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onPreviousPressed() {
-
+    // TODO: KRIS delegate callback
   }
 
   @Override
   public void onNextPressed() {
-
+    // TODO: KRIS delegate callback
   }
 
 
 
   @Override
   public void onUserClickBoldNote(String noteId) {
-
+    // TODO: KRIS delegate callback
   }
 
   @Override
   public void onUserClickImportantNote(String noteId) {
-
+    // TODO: KRIS delegate callback
   }
 
   @Override
   public void onUserClickEditNote(String noteId) {
-
+    // TODO: KRIS delegate callback
   }
 
   @Override
   public void onUserClickDeleteNote(String noteId) {
-
+    // TODO: KRIS delegate callback
   }
 
   @Override
   public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
-
+    // TODO: KRIS delegate callback
   }
 
 
