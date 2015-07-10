@@ -14,7 +14,7 @@ public class LocaleUtil {
   /**
    * The default locale is not appropriate for machine-readable output.
    * The best choice there is usually Locale.US
-   *   – this locale is guaranteed to be available on all devices,
+   * this locale is guaranteed to be available on all devices,
    * and the fact that it has no surprising special cases and
    * is frequently used (especially for computer-computer communication)
    * means that it tends to be the most efficient choice too.

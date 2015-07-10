@@ -11,13 +11,13 @@ import java.util.Locale;
 /**
  * Created by klemeilleur on 6/29/2015.
  */
-public interface ITalk<T extends IScripture> {
+public interface ITalk<T extends IScripture, U extends IBible> {
 
   INote[] getNotes();
   DateTime getDateAndTime(Locale locale);
   EventType getEventType();
   String getTalkTitle();
-  List<T> getTalkScriptures();
+  List<T> getTalkScriptures(U bible);
   String getSymposiumTitle();
   int getSongNumber();
 }

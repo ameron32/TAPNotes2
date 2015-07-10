@@ -16,18 +16,18 @@ import java.util.TreeSet;
  */
 public final class Scripture implements IScripture {
 
-  public static List<Scripture> generateAll(String verseCodes, Locale locale) {
+  public static List<Scripture> generateAll(Bible bible, String verseCodes) {
     final List<String> codes = Tools.splitMultiScripture(verseCodes);
     final List<Scripture> scriptures = new ArrayList<>(codes.size());
     for (int i = 0; i < codes.size(); i++) {
-      scriptures.add(generate(codes.get(i), locale));
+      scriptures.add(generate(bible, codes.get(i)));
     }
     return scriptures;
   }
 
-  public static Scripture generate(String verseCode, Locale locale) {
+  public static Scripture generate(Bible bible, String verseCode) {
     try {
-      Tools.extractScripture(verseCode, locale);
+      Tools.extractScripture(bible, verseCode);
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -63,12 +63,11 @@ public final class Scripture implements IScripture {
   }
 
 
+
   /**
    *  TODO--NEEDS FINAL EVERYWHERE POSSIBLE
    */
   public static class Tools {
-
-    public static final int BOOK_NOT_FOUND = -1;
 
     /**
      *
@@ -95,7 +94,7 @@ public final class Scripture implements IScripture {
      *         list and series'.
      * @throws Exception
      */
-    private static Scripture extractScripture(String note, Locale locale)
+    private static Scripture extractScripture(Bible bible, String note)
         throws Exception {
 
       String bookString;
@@ -118,7 +117,7 @@ public final class Scripture implements IScripture {
           .replace(":", " ")
           .toUpperCase(LocaleUtil.getMachineLocale());
 
-      bookNumber = determineBook(bookString, locale);
+      bookNumber = determineBook(bible, bookString);
 
       chapter = Integer.valueOf(sChapter);
 
@@ -193,8 +192,9 @@ public final class Scripture implements IScripture {
     /**
      * FORCED TO UPPERCASE
      */
-    private static int determineBook(String userInput, Locale locale) {
-
+    private static int determineBook(Bible bible, String userInput) {
+      final BibleBookChooser bbc = new BibleBookChooser();
+      return bbc.determineBook(bible, userInput);
     }
 
     public static List<String> splitMultiScripture(String verseCodes) {

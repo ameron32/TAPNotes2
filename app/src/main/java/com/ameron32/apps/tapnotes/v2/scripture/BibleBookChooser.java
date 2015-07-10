@@ -1,5 +1,11 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
+
 import java.util.List;
 
 /**
@@ -7,12 +13,17 @@ import java.util.List;
  */
 public class BibleBookChooser {
 
-  public int determineBook(final String userInputBook) {
-    List<Book> books = Books.getBooks();
-    for (Book book : books) {
-      int bestGuess = book.getBestGuess(userInput);
-      return bestGuess;
+  public static final int BOOK_NOT_FOUND = -1;
+
+  public int determineBook(final Bible b, final String userInputBook) {
+
+    int bookNumber = b.findBibleBook(userInputBook);
+    if (bookNumber != BOOK_NOT_FOUND) {
+      // found a book number, return it
+      return bookNumber;
     }
+
+    // failed
     return BOOK_NOT_FOUND;
   }
 }

@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.frmk.ITalkToolbar;
 import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
@@ -27,7 +26,6 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeader;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.ToolbarHeaderDelegate;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -126,7 +124,7 @@ public class NotesFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
 
-    mHeader = ToolbarHeaderDelegate.create(this);
+    mHeader = (IToolbarHeader) getDelegate();
     mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
 
@@ -221,7 +219,7 @@ public class NotesFragment extends TAPFragment
   }
 
 
-  
+
   private boolean isStringUsable(final String testString) {
     if (testString != null) {
       if (testString.length() > 0) {

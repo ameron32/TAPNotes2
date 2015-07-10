@@ -5,6 +5,7 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
 import com.parse.ParseClassName;
@@ -24,7 +25,7 @@ import static com.ameron32.apps.tapnotes.v2.parse.Constants.*;
 @ParseClassName(TALK_OBJECT_NAME)
 public class Talk
     extends ColumnableParseObject
-    implements ITalk<Scripture> {
+    implements ITalk<Scripture, Bible> {
 
   public static final int NO_SONG_NUMBER = -1;
 
@@ -62,9 +63,8 @@ public class Talk
   }
 
   @Override
-  public List<Scripture> getTalkScriptures() {
-    return Scripture.generateAll(getTalkThemeScriptures(),
-        LocaleUtil.getUILocale());
+  public List<Scripture> getTalkScriptures(final Bible bible) {
+    return Scripture.generateAll(bible, getTalkThemeScriptures());
   }
 
   @Override
