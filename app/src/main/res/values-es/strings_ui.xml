@@ -8,4 +8,25 @@
     <string name="day2">sábado, 15 de Agosto</string>
     <string name="day3">domingo, 16 de Agosto</string>
 
+    <string name="monday">lunes</string>
+    <string name="tuesday">martes</string>
+    <string name="wednesday">miércoles</string>
+    <string name="thursday">jueves</string>
+    <string name="friday">viernes</string>
+    <string name="saturday">sábado</string>
+    <string name="sunday">domingo</string>
+
+    <string name="january">enero</string>
+    <string name="february">febrero</string>
+    <string name="march">marzo</string>
+    <string name="april">abril</string>
+    <string name="may">mayo</string>
+    <string name="june">junio</string>
+    <string name="july">julio</string>
+    <string name="august">agosto</string>
+    <string name="september">septiembre</string>
+    <string name="october">octubre</string>
+    <string name="november">noviembre</string>
+    <string name="december">diciembre</string>
+
 </resources>

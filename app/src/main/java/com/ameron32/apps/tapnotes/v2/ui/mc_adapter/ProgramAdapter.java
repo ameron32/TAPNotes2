@@ -3,14 +3,23 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.levelupstudio.recyclerview.ExpandableRecyclerView;
+
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -18,7 +27,7 @@ import butterknife.InjectView;
 /**
  * Created by Micah on 7/7/2015.
  */
-public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<ProgramAdapter.ViewHolder, Integer> {
+public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<ProgramAdapter.ViewHolder, Integer> implements IProgramDelegate{
 
 
     private static final int VIEW_TYPE_CHILD = 0;
@@ -32,13 +41,140 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
     private static final String THEME_MATERIALDARK = "MaterialDarkTheme";
 
 
-    private final String[] dummyHeaders;
-    private final String[][] dummyContent;
+    private ArrayList<DateTime> headers;
+    private ArrayList<ArrayList<ITalk>> content;
 
-    public ProgramAdapter(String[] dummyHeaders, String[][] dummyContent) {
-        this.dummyHeaders = dummyHeaders;
-        this.dummyContent = dummyContent;
+    Context mContext;
+
+    public ProgramAdapter(Context c){
+        mContext = c;
+        headers = new ArrayList<>();
+        content = new ArrayList<>();
+
     }
+
+    @Override
+    public void loadProgramTalks(List<ITalk> talks) {
+
+        sortProgramData(talks);
+
+    }
+
+    private void sortProgramData(List<ITalk> talks){
+
+        ArrayList<DateTime> dates = new ArrayList<>();
+        ArrayList<ArrayList<ITalk>> sortedTalks = new ArrayList<>();
+
+        for (ITalk t:talks){
+            DateTime date = t.getDateAndTime(mContext.getResources().getConfiguration().locale);
+            boolean addDate = true;
+            for (DateTime d:dates){
+                if (d.dayOfYear().get()== date.dayOfYear().get()){
+                    addDate = false;
+                }
+            }
+            if (addDate){
+                dates.add(date);
+            }
+        }
+
+        for (DateTime date:dates){
+            ArrayList<ITalk>talksForThisDate = new ArrayList<>();
+            for (ITalk t:talks){
+                if (t.getDateAndTime(mContext.getResources().getConfiguration().locale).dayOfYear().get() == date.dayOfYear().get()){
+                    talksForThisDate.add(t);
+                }
+            }
+
+            Collections.sort(talksForThisDate, new IntervalStartComparator());
+            sortedTalks.add(talksForThisDate);
+        }
+
+
+
+        content = sortedTalks;
+        headers = dates;
+
+    }
+
+
+    private String getWeekday(DateTime d){
+        StringBuilder title = new StringBuilder();
+        title.append(getDayOfWeek(d.dayOfWeek().get()));
+        return title.toString();
+    }
+    private String getDate(DateTime d){
+
+        StringBuilder title = new StringBuilder();
+        String date = d.dayOfMonth().getAsString();
+        String month = getMonth(d.monthOfYear().get());
+        String year = String.valueOf(d.getYear());
+
+        switch(mContext.getResources().getConfiguration().locale.getLanguage()){
+            case "es":{
+
+                title.append(date).append(" de ").append(month).append(" ").append(year);
+                return title.toString();
+            }
+            default:{
+                title.append(month).append(" ").append(date).append(", ").append(year);
+                return title.toString();
+            }
+        }
+
+    }
+
+    private String getDayOfWeek(int i){
+        switch (i){
+            case 1:
+                return mContext.getResources().getString(R.string.monday);
+            case 2:
+                return mContext.getResources().getString(R.string.tuesday);
+            case 3:
+                return mContext.getResources().getString(R.string.wednesday);
+            case 4:
+                return mContext.getResources().getString(R.string.thursday);
+            case 5:
+                return mContext.getResources().getString(R.string.friday);
+            case 6:
+                return mContext.getResources().getString(R.string.saturday);
+            case 7:
+            default:
+                return mContext.getResources().getString(R.string.sunday);
+        }
+    }
+
+    private String getMonth(int i){
+        switch (i){
+            case 1:
+                return mContext.getResources().getString(R.string.january);
+            case 2:
+                return mContext.getResources().getString(R.string.february);
+            case 3:
+                return mContext.getResources().getString(R.string.march);
+            case 4:
+                return mContext.getResources().getString(R.string.april);
+            case 5:
+                return mContext.getResources().getString(R.string.may);
+            case 6:
+                return mContext.getResources().getString(R.string.june);
+            case 7:
+                return mContext.getResources().getString(R.string.july);
+            case 8:
+                return mContext.getResources().getString(R.string.august);
+            case 9:
+                return mContext.getResources().getString(R.string.september);
+            case 10:
+                return mContext.getResources().getString(R.string.october);
+            case 11:
+                return mContext.getResources().getString(R.string.november);
+            case 12:
+            default:
+                return mContext.getResources().getString(R.string.december);
+        }
+    }
+
+
 
 
     public abstract static class ViewHolder extends ExpandableRecyclerView.ExpandableViewHolder {
@@ -52,8 +188,8 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
     public static class GroupViewHolderWithoutBaptism extends ViewHolder {
 
+        @InjectView(R.id.weekdayTextView) TextView weekdayView;
         @InjectView(R.id.dateTextView) TextView dateTextView;
-
         public GroupViewHolderWithoutBaptism(@NonNull View itemView) {
             super(itemView);
             ButterKnife.inject(this, itemView);
@@ -68,6 +204,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
     public static class GroupViewHolderWithBaptism extends ViewHolder {
 
+        @InjectView(R.id.weekdayTextView) TextView weekdayView;
         @InjectView(R.id.dateTextView) TextView dateTextView;
 
         public GroupViewHolderWithBaptism(@NonNull View itemView) {
@@ -139,11 +276,13 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
         if (viewHolder instanceof  GroupViewHolderWithBaptism){
             GroupViewHolderWithBaptism holder = (GroupViewHolderWithBaptism)viewHolder;
-            holder.dateTextView.setText(dummyHeaders[i]);
+            holder.weekdayView.setText(getWeekday(headers.get(i)));
+            holder.dateTextView.setText(getDate(headers.get(i)));
 
         }else if (viewHolder instanceof GroupViewHolderWithoutBaptism){
             GroupViewHolderWithoutBaptism holder = (GroupViewHolderWithoutBaptism)viewHolder;
-            holder.dateTextView.setText(dummyHeaders[i]);
+            holder.weekdayView.setText(getWeekday(headers.get(i)));
+            holder.dateTextView.setText(getDate(headers.get(i)));
 
         }else{
             return;
@@ -168,7 +307,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        cvh.textView.setText(dummyContent[i][i2].toString());
+        cvh.textView.setText(content.get(i).get(i2).getTalkTitle());
 
         if (cvh.expired){
             setChildExpired(cvh, themeName);
@@ -203,13 +342,13 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
     @Override
     protected int getGroupCount() {
-        return dummyHeaders.length;
+        return headers.size();
     }
 
 
     @Override
     protected int getChildrenCount(int i) {
-        return dummyContent[i].length;
+        return content.get(i).size();
     }
 
 
@@ -231,5 +370,16 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
     @Override
     public Integer getGroup(int i) {
         return i;
+    }
+
+
+
+    public class IntervalStartComparator implements Comparator<ITalk> {
+
+        @Override
+        public int compare(ITalk lhs, ITalk rhs) {
+
+            return lhs.getDateAndTime(mContext.getResources().getConfiguration().locale).compareTo(rhs.getDateAndTime(mContext.getResources().getConfiguration().locale));
+        }
     }
 } 

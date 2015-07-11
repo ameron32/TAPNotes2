@@ -79,7 +79,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     confirmHostFragmentHasNecessaryCallbacks();
-    startRecycler();
+    startRecycler(null);
   }
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
@@ -100,21 +100,20 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
   }
 
 
-  public void startRecycler(){
+
+  public void startRecycler(List<ITalk> talks) {
     ButterKnife.inject(this.getActivity());
 
     erv.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-    erv.setExpandableAdapter(getAdapter());
+    erv.setExpandableAdapter(getAdapter(talks));
     erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-
   }
 
-  public void startRecycler(List<ITalk> talks) {
-    startRecycler();
-  }
-
-  private ProgramAdapter getAdapter() {
-    ProgramAdapter adapter = new ProgramAdapter(dummyHeaders, dummyContent);
+  private ProgramAdapter getAdapter(List<ITalk> talks) {
+    ProgramAdapter adapter = new ProgramAdapter(this.getActivity());
+    if (talks!=null){
+    adapter.loadProgramTalks(talks);
+    }
     adapter.setStableIdsMode(2); // important command for restoring state
     return adapter;
   }
