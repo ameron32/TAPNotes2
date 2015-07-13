@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
+import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramRecycler;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.SimpleDividerItemDecoration;
 import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
@@ -44,21 +46,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
 
 
   @InjectView(R.id.programRecycler)
-  ExpandableRecyclerView erv;
-
-  private static final String[] dummyHeaders = {
-          "Friday",
-          "Saturday",
-          "Sunday"
-  };
-
-
-  private static final String[][] dummyContent = {
-          {"fri 1","fri 2","fri 3"},
-          {"sat 4","sat 5","sat 6","sat 7","sat 8"},
-          {"sun 9","sun 10"}
-  };
-
+  ProgramRecycler erv;
 
   public static ProgramLayoutFragmentDelegate create(final Fragment fragment) {
     final ProgramLayoutFragmentDelegate delegate = new ProgramLayoutFragmentDelegate();
@@ -79,7 +67,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     confirmHostFragmentHasNecessaryCallbacks();
-    startRecycler();
+    startRecycler(null);
   }
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
@@ -100,21 +88,27 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
   }
 
 
-  public void startRecycler(){
+
+  public void startRecycler(List<ITalk> talks) {
     ButterKnife.inject(this.getActivity());
 
     erv.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
-    erv.setExpandableAdapter(getAdapter());
-    erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+    erv.setExpandableAdapter(getAdapter(talks));
+    LinearLayoutManager llm =  new LinearLayoutManager(this.getActivity());
+    llm.setStackFromEnd(false);
+    llm.setReverseLayout(false);
+    erv.setLayoutManager(llm);
+
+    if (erv.getExpandableAdapter() instanceof ProgramAdapter)
+      ((ProgramAdapter)erv.getExpandableAdapter()).setCallBackListener(mCallbacks);
 
   }
 
-  public void startRecycler(List<ITalk> talks) {
-    startRecycler();
-  }
-
-  private ProgramAdapter getAdapter() {
-    ProgramAdapter adapter = new ProgramAdapter(dummyHeaders, dummyContent);
+  private ProgramAdapter getAdapter(List<ITalk> talks) {
+    ProgramAdapter adapter = new ProgramAdapter(this.getActivity());
+    if (talks!=null){
+    adapter.loadProgramTalks(talks);
+    }
     adapter.setStableIdsMode(2); // important command for restoring state
     return adapter;
   }
@@ -123,8 +117,9 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void loadProgramTalks(List<ITalk> talks) {
-    // TODO: MICAH delegate method
-
     startRecycler(talks);
   }
+
+
+
 }

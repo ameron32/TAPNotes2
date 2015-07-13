@@ -61,37 +61,10 @@ public class ScriptureTestingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        startRecycler();
+
     }
 
 
-    @InjectView(R.id.expandable_recyclerview_testing)
-    ExpandableRecyclerView erv;
-
-    private static final String[] dummyHeaders = {
-            "Friday",
-            "Saturday",
-            "Sunday"
-    };
-
-
-    private static final String[][] dummyContent = {
-            {"fri 1","fri 2","fri 3"},
-            {"sat 4","sat 5","sat 6","sat 7","sat 8"},
-            {"sun 9","sun 10"}
-    };
-
-    public void startRecycler() {
-        ButterKnife.inject(this);
-        erv.setLayoutManager(new LinearLayoutManager(this));
-        erv.setExpandableAdapter(getAdapter());
-    }
-
-    private ProgramAdapter getAdapter() {
-        ProgramAdapter adapter = new ProgramAdapter(dummyHeaders, dummyContent);
-        adapter.setStableIdsMode(2); // important command for restorating state
-        return adapter;
-    }
 
     @Override
     protected void onPause() {

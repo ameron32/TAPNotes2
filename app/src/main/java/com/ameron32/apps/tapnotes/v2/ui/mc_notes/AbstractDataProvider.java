@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
+import com.ameron32.apps.tapnotes.v2.model.INote;
+
 /**
  * Created by Micah on 7/6/2015.
  */
@@ -24,7 +26,7 @@ public abstract class AbstractDataProvider {
 
     public abstract int getCount();
 
-    public abstract Data getItem(int index);
+    public abstract INote getItem(int index);
 
     public abstract void removeItem(int position);
 

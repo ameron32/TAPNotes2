@@ -47,7 +47,7 @@ public class Talk
   @Override
   public DateTime getDateAndTime(Locale locale) {
     final String dateTime = this.getString(TALK_DATE_STRING_KEY);
-    final DateTimeFormatter formatter = DateTimeFormat.forPattern("d/MM/yyyy H:mm")
+    final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy H:mm")
         .withLocale(locale);
     return DateTime.parse(dateTime, formatter);
   }

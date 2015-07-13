@@ -1,31 +1,27 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
+import com.ameron32.apps.tapnotes.v2.model.INote;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class NoteDataProvider extends AbstractDataProvider {
-    private List<DummyNote> mData;
-    private DummyNote mLastRemovedData;
+    private List<INote> mData;
+    private INote mLastRemovedData;
     private int mLastRemovedPosition = -1;
 
     public NoteDataProvider() {
         final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         mData = new LinkedList<>();
-        DummyNote dn1 = new DummyNote();
-        dn1.setText("My dummy note 1");
-        mData.add(dn1);
 
-        DummyNote dn2 = new DummyNote();
-        dn2.setText("My dummy note 2");
-        mData.add(dn2);
-
-        DummyNote dn3 = new DummyNote();
-        dn3.setText("My dummy note 3");
-        mData.add(dn3);
     }
 
-    public void populateWithExistingNotes(LinkedList<DummyNote> notes){
+    public void addNote(INote note){
+        mData.add(note);
+    }
+
+    public void populateWithExistingNotes(LinkedList<INote> notes){
         mData = notes;
         //TODO - Make sure Kris hands a list of notes with the appropriate data.
     }
@@ -36,7 +32,7 @@ public class NoteDataProvider extends AbstractDataProvider {
     }
 
     @Override
-    public DummyNote getItem(int index) {
+    public INote getItem(int index) {
         if (index < 0 || index >= getCount()) {
             throw new IndexOutOfBoundsException("index = " + index);
         }
@@ -71,19 +67,34 @@ public class NoteDataProvider extends AbstractDataProvider {
             return;
         }
 
-        final DummyNote item = mData.remove(fromPosition);
+        final INote item = mData.remove(fromPosition);
 
         mData.add(toPosition, item);
         mLastRemovedPosition = -1;
     }
 
+    public void removeItem(INote note){
+        mData.remove(note);
+    }
+
     @Override
     public void removeItem(int position) {
         //noinspection UnnecessaryLocalVariable
-        final DummyNote removedItem = mData.remove(position);
+        final INote removedItem = mData.remove(position);
 
         mLastRemovedData = removedItem;
         mLastRemovedPosition = position;
     }
 
+
+    public void replaceNotes(List<INote> notesToReplace){
+        for (INote note:mData){
+            for (INote noteToReplace:notesToReplace){
+                //TODO - Notes need an ID field?  Would like to do the following:
+                //if (note.getID() == noteToReplace.getID()){
+                // note = noteToReplace;
+                // }
+            }
+        }
+    }
 }
