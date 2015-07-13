@@ -46,20 +46,6 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
   @InjectView(R.id.programRecycler)
   ExpandableRecyclerView erv;
 
-  private static final String[] dummyHeaders = {
-          "Friday",
-          "Saturday",
-          "Sunday"
-  };
-
-
-  private static final String[][] dummyContent = {
-          {"fri 1","fri 2","fri 3"},
-          {"sat 4","sat 5","sat 6","sat 7","sat 8"},
-          {"sun 9","sun 10"}
-  };
-
-
   public static ProgramLayoutFragmentDelegate create(final Fragment fragment) {
     final ProgramLayoutFragmentDelegate delegate = new ProgramLayoutFragmentDelegate();
     delegate.setFragment(fragment);
@@ -106,7 +92,10 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
 
     erv.addItemDecoration(new SimpleDividerItemDecoration(getActivity()));
     erv.setExpandableAdapter(getAdapter(talks));
-    erv.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+    LinearLayoutManager llm =  new LinearLayoutManager(this.getActivity());
+    llm.setStackFromEnd(false);
+    llm.setReverseLayout(false);
+    erv.setLayoutManager(llm);
   }
 
   private ProgramAdapter getAdapter(List<ITalk> talks) {
@@ -125,5 +114,13 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
     // TODO: MICAH delegate method
 
     startRecycler(talks);
+  }
+
+  public void addIProgramDelegateCallback(IProgramDelegateCallbacks callback){
+    ExpandableRecyclerView.ExpandableAdapter adpater = erv.getExpandableAdapter();
+    if (adpater instanceof ProgramAdapter){
+      ProgramAdapter pa = (ProgramAdapter)adpater;
+      pa.setCallBackListener(callback);
+    }
   }
 }

@@ -7,32 +7,45 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 /**
  * Created by Micah on 7/4/2015.
  */
-public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> {
+public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> implements INotesDelegate {
 
     private static final String TAG = "NotesRecyclerAdapter";
     public static final int offsetToStartDrag = 100;
+
+    private ArrayList<INotesDelegateCallbacks> mCallbacks;
 
     private NoteDataProvider mProvider;
 
    public NotesRecyclerAdapter(){
        mProvider = new NoteDataProvider();
        setHasStableIds(true);
+       mCallbacks = new ArrayList<>();
    }
+
+    public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback){
+        mCallbacks.add(callback);
+    }
 
 
     @Override
     public long getItemId(int position) {
-        return mProvider.getItem(position).getId();
+        return position;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return mProvider.getItem(position).getViewType();
+        return 0;
     }
 
     @Override
@@ -54,5 +67,35 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public int getItemCount() {
         return mProvider.getCount();
+    }
+
+
+
+
+    //INotesDelegate methods:
+    @Override
+    public void synchronizeNotes(List<INote> allNotes) {
+        LinkedList<INote> ll = new LinkedList<INote>(allNotes);
+        mProvider.populateWithExistingNotes(ll);
+    }
+
+    @Override
+    public void addNotes(List<INote> notesToAdd) {
+        for (INote note:notesToAdd)
+        mProvider.addNote(note);
+    }
+
+    @Override
+    public void removeNotes(List<INote> notesToRemove) {
+
+        for (INote note:notesToRemove){
+            mProvider.removeItem(note);
+        }
+
+    }
+
+    @Override
+    public void replaceNotes(List<INote> notesToReplace) {
+
     }
 }

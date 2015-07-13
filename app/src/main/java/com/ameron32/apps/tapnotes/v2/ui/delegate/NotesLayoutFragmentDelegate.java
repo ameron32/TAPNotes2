@@ -195,7 +195,11 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
-
+public void addINotesDelegateCallback(INotesDelegateCallbacks callback){
+  if (getAdapter()!=null){
+    getAdapter().addINotesDelegateCallbacks(callback);
+  }
+}
 
   @Override
   public void synchronizeNotes(List<INote> allNotes) {
