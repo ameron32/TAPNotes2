@@ -55,6 +55,7 @@ public class AnimatingPaneLayout
   @NonNull  private List<PanelListener> mListeners;
 
 
+
   public AnimatingPaneLayout(Context context) {
     super(context);
   }
@@ -84,6 +85,26 @@ public class AnimatingPaneLayout
     rightAnimatorStart = R.animator.dodge_right;
     rightAnimatorEnd = R.animator.dodge_return_right;
 //    nullAnimator = R.animator.null_delay_only;
+  }
+
+  @Override
+  protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+    if (!isAnimating()) {
+      if (isLeftPaneOnTop()) {
+        mMainPane.setPadding(
+            mDefaultPaddingLeft + mOffsetPaddingLeft,
+            mMainPane.getPaddingTop(),
+            mMainPane.getPaddingRight(),
+            mMainPane.getPaddingBottom());
+      } else {
+        mMainPane.setPadding(
+            mDefaultPaddingLeft,
+            mMainPane.getPaddingTop(),
+            mMainPane.getPaddingRight(),
+            mMainPane.getPaddingBottom());
+      }
+    }
+    super.onLayout(changed, left, top, right, bottom);
   }
 
   @Override
@@ -117,19 +138,11 @@ public class AnimatingPaneLayout
         }
 
         private void openBuffer() {
-          mMainPane.setPadding(
-              mDefaultPaddingLeft + mOffsetPaddingLeft,
-              mMainPane.getPaddingTop(),
-              mMainPane.getPaddingRight(),
-              mMainPane.getPaddingBottom());
+          requestLayout();
         }
 
         private void closeBuffer() {
-          mMainPane.setPadding(
-              mDefaultPaddingLeft - mOffsetPaddingLeft,
-              mMainPane.getPaddingTop(),
-              mMainPane.getPaddingRight(),
-              mMainPane.getPaddingBottom());
+          requestLayout();
         }
       };
       addPanelListener(mDefaultPanelListener);
@@ -366,8 +379,11 @@ public class AnimatingPaneLayout
     @Override
     public void onAnimationEnd(Animator animation) {
       setAnimating(false);
-      if (isLeftPaneOnTop()) { dispatchOnPanelOpened(); }
-        else { dispatchOnPanelClosed(); }
+      if (isLeftPaneOnTop()) {
+        dispatchOnPanelOpened();
+      } else {
+        dispatchOnPanelClosed();
+      }
       reset();
     }
 
