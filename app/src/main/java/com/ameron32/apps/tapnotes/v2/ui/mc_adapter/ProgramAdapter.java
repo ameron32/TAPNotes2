@@ -30,6 +30,7 @@ import butterknife.InjectView;
 public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<ProgramAdapter.ViewHolder, Integer> implements IProgramDelegate{
 
 
+
     private static final int VIEW_TYPE_GROUP_WITH_BAPTISM = 100;
     private static final int VIEW_TYPE_GROUP_WITHOUT_BAPTISM = 101;
     private static final int VIEW_TYPE_CHILD_MUSIC = 0;
@@ -47,27 +48,28 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
     private ArrayList<DateTime> headers;
     private ArrayList<ArrayList<ITalk>> content;
 
-    private ArrayList<IProgramDelegateCallbacks> mCallBackListeners;
+    private IProgramDelegateCallbacks mCallBack;
 
     Context mContext;
+
+    int selectedChildPosition = -1;
 
     public ProgramAdapter(Context c){
         mContext = c;
         headers = new ArrayList<>();
         content = new ArrayList<>();
-        mCallBackListeners = new ArrayList<>();
     }
 
     public void setCallBackListener(IProgramDelegateCallbacks listener){
         //TODO - Call this from the ProgramLayoutDelegate so Kris can pass his listeners through.
-        mCallBackListeners.add(listener);
+        mCallBack=listener;
     }
 
     public void talkClicked(String talk_ID){
-        for (IProgramDelegateCallbacks listener:mCallBackListeners){
-            listener.onTalkClicked(talk_ID);
-        }
+        mCallBack.onTalkClicked(talk_ID);
     }
+
+
 
     @Override
     public void loadProgramTalks(List<ITalk> talks) {
@@ -244,6 +246,8 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         @InjectView (R.id.program_item_textview) TextView textView;
         public String item_ID;
         ProgramAdapter mAdapter;
+        int group;
+        int position;
 
         public boolean expired = false;
 
@@ -260,6 +264,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         }
 
 
+
         @Override
         protected boolean onViewClicked(final View myView) {
 
@@ -269,8 +274,11 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
             if (h!=null){
                 mAdapter.talkClicked(h.item_ID);
             }
+            //myView.setSelected(true);
 
-            myView.setSelected(true);
+            if (myView.getParent() instanceof ProgramRecycler){
+                ((ProgramRecycler)myView.getParent()).itemClicked(myView);
+            }
 
             return false;
         }
@@ -353,7 +361,6 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
                 holder = cvh;
             break;
         }
-
 
 
         String themeName = "";

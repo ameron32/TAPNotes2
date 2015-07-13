@@ -18,7 +18,7 @@
     android:layout_width="320dp"
     style="?listItem">
 
-<com.levelupstudio.recyclerview.ExpandableRecyclerView
+<com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramRecycler
     android:id="@+id/programRecycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>

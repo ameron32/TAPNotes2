@@ -54,6 +54,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     @Override
     public void onUserClickBoldNote(String noteId) {
       // stub only
+
     }
 
     @Override
@@ -117,6 +118,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     super.onViewCreated(view, savedInstanceState);
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
+    if (recyclerView.getAdapter() instanceof NotesRecyclerAdapter)
+      ((NotesRecyclerAdapter)recyclerView.getAdapter()).addINotesDelegateCallbacks(mCallbacks2);
   }
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
@@ -195,11 +198,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
-public void addINotesDelegateCallback(INotesDelegateCallbacks callback){
-  if (getAdapter()!=null){
-    getAdapter().addINotesDelegateCallbacks(callback);
-  }
-}
+
 
   @Override
   public void synchronizeNotes(List<INote> allNotes) {

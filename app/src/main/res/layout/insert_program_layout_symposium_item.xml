@@ -5,7 +5,9 @@
     android:layout_height="wrap_content"
     android:paddingRight="25dp"
     android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+    android:paddingBottom="5dp"
+    style="?listItem"
+    >
 
     <TextView
         style="?listItem"
@@ -16,9 +18,11 @@
         android:textSize="15dp"
         android:layout_below="@+id/symposiumTextView"
         android:layout_alignLeft="@+id/symposiumTextView"
-        android:layout_alignStart="@+id/symposiumTextView" />
+        android:layout_alignStart="@+id/symposiumTextView"
+        />
 
     <TextView
+        style="?listItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Text"
