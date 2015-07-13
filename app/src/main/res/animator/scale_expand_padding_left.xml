@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Expand Margin. -->
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@anim/accel_interpolator"
+    android:valueFrom="@integer/default_padding_closed_distance"
+    android:valueTo="@integer/default_padding_open_distance"
+    android:duration="@integer/default_animation_duration" />
