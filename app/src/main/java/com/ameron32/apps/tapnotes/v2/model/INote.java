@@ -22,4 +22,5 @@ public interface INote {
   boolean isImportantNote();
   boolean isBoldNote();
   String getNextNoteId();
+
 }

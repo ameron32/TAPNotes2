@@ -11,4 +11,5 @@
   <dimen name="editor_minimum_height">48dp</dimen>
 
   <dimen name="login_column_width">240dp</dimen>
+
 </resources>

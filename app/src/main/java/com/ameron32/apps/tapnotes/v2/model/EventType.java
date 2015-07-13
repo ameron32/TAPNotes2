@@ -10,4 +10,6 @@ public enum EventType {
   public static EventType valueOfAnyCase(final String name) {
     return EventType.valueOf(name.toUpperCase());
   }
+
+
 }
