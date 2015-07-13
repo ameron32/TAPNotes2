@@ -17,9 +17,19 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.parse.ParseException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -49,6 +59,7 @@ public class NotesFragment extends TAPFragment
 
   private IToolbarHeaderDelegate mHeader;
   private INotesDelegate mNotesDelegate;
+  private String mTalkId;
   private String mToolbarTitle;
   private String mSymposiumTitle;
   private String mImageUrl;
@@ -65,7 +76,10 @@ public class NotesFragment extends TAPFragment
     return NotesLayoutFragmentDelegate.create(NotesFragment.this);
   }
 
-  public static NotesFragment create(String toolbarTitle, String talkId, String imageUrl) {
+  public static NotesFragment create(
+      String toolbarTitle,
+      String talkId,
+      String imageUrl) {
     final NotesFragment f = new NotesFragment();
     final Bundle args = new Bundle();
     args.putString(TITLE_ARG, toolbarTitle);
@@ -99,7 +113,7 @@ public class NotesFragment extends TAPFragment
     final Bundle args = getArguments();
     if (args != null) {
       mToolbarTitle = args.getString(TITLE_ARG);
-      mSymposiumTitle = args.getString(TALK_ID_ARG);
+      mTalkId = args.getString(TALK_ID_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
@@ -123,12 +137,27 @@ public class NotesFragment extends TAPFragment
     mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
 
-    loadData();
+    giveNotesToDelegate();
   }
 
-  private void loadData() {
+  private void giveNotesToDelegate() {
     // TODO hand-off received data to delegate for UI update
-    // ((NotesLayoutFragmentDelegate) getDelegate).onDataReceived(talk, notes);
+    try {
+      // TODO consider moving off UI-Thread
+      final Talk talk = Queries.Local.getTalk(mTalkId);
+      mSymposiumTitle = talk.getSymposiumTitle();
+      final List<Note> notes = Queries.Local.findClientOwnedNotesFor(talk);
+      final List<INote> iNotes = new ArrayList<>(notes.size());
+      iNotes.addAll(notes);
+
+      // TODO remove fake note method
+//      _MiscUtils._saveFakeNotes(talks, program);
+
+      // TODO give Notes to Delegate
+      mNotesDelegate.synchronizeNotes(iNotes);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
 

@@ -94,4 +94,9 @@ public class Talk
   private String getMetadata() {
     return this.getString(TALK_METADATA_STRING_KEY);
   }
+
+  @Override
+  public String getId() {
+    return this.getObjectId();
+  }
 }
