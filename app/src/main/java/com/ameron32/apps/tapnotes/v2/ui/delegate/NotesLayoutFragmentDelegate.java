@@ -36,6 +36,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     implements INotesDelegate, IToolbarHeaderDelegate
 {
 
+  private NotesRecyclerAdapter adapter;
+
   private static final IToolbarHeaderCallbacks stubCallbacks1 = new IToolbarHeaderCallbacks() {
     @Override
     public void onPreviousPressed() {
@@ -83,7 +85,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
 
   public void onDataReceived(ITalk talk, List<INote> notes) {
-
+    adapter.synchronizeNotes(notes);
   }
 
   public static NotesLayoutFragmentDelegate create(Fragment fragment) {
@@ -119,7 +121,9 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
     if (recyclerView.getAdapter() instanceof NotesRecyclerAdapter)
-      ((NotesRecyclerAdapter)recyclerView.getAdapter()).addINotesDelegateCallbacks(mCallbacks2);
+      adapter = (NotesRecyclerAdapter)recyclerView.getAdapter();
+    if (adapter!=null)
+      adapter.addINotesDelegateCallbacks(mCallbacks2);
   }
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
