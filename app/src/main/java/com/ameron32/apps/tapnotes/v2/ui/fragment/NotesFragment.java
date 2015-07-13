@@ -7,6 +7,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -137,7 +138,9 @@ public class NotesFragment extends TAPFragment
     mHeader.onToolbarViewCreated(mToolbar);
     setTitles();
 
-    giveNotesToDelegate();
+    if (isStringUsable(mTalkId)) {
+      giveNotesToDelegate();
+    }
   }
 
   private void giveNotesToDelegate() {
@@ -152,6 +155,8 @@ public class NotesFragment extends TAPFragment
 
       // TODO remove fake note method
 //      _MiscUtils._saveFakeNotes(talks, program);
+      Log.d(NotesFragment.class.getSimpleName(),
+          "iNotes.size() : " + iNotes.size());
 
       // TODO give Notes to Delegate
       mNotesDelegate.synchronizeNotes(iNotes);
@@ -159,7 +164,6 @@ public class NotesFragment extends TAPFragment
       e.printStackTrace();
     }
   }
-
 
   @Override
   public void onDestroyView() {

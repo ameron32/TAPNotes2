@@ -16,12 +16,14 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
+import com.parse.ParseException;
 
 import javax.inject.Inject;
 
@@ -88,7 +90,7 @@ public class MNIActivity extends TAPActivity
     findViews();
 
     setupDrawer();
-    commitNotesFragment(null);   //blank
+    commitNotesFragment(null, null, null); //blank
     commitProgramFragment(mProgramId); //blank
     commitEditorFragment();  //blank
   }
@@ -180,11 +182,9 @@ public class MNIActivity extends TAPActivity
     setupDrawerContent(mNavigationView);
   }
 
-  private void commitNotesFragment(final String talkId) {
+  private void commitNotesFragment(final String talkId, final String toolbarTitle, final String imageUrl) {
     // TODO consider replacing the default NOTES with explanatory fragment
     final String tag = "notes";
-    final String toolbarTitle = getString(R.string.generic_toolbar_title);
-    final String imageUrl = "";
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.notes_container,
@@ -255,7 +255,15 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void changeNotesFragmentTo(Talk talk) {
-    // TODO change fragments
+  public void changeNotesFragmentTo(String talkId) {
+    // TODO add an imageUrl
+    try {
+      final Talk talk = Queries.Local.getTalk(talkId);
+      final String talkName = talk.getTalkTitle();
+      final String imageUrl = ""; // TODO update
+      commitNotesFragment(talkId, talkName, imageUrl);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 }
