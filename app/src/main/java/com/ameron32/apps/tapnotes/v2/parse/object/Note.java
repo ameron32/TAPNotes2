@@ -42,6 +42,11 @@ public class Note
   }
 
   @Override
+  public String getId() {
+    return this.getObjectId();
+  }
+
+  @Override
   public String getNextNoteId() {
     return (getNextNote() == null) ? null : getNextNote().getObjectId();
   }

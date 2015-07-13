@@ -3,7 +3,7 @@ package com.ameron32.apps.tapnotes.v2.model;
 /**
  * Created by klemeilleur on 6/29/2015.
  */
-public interface INote {
+public interface INote extends IObject {
 
   public static final int TAG_BOLD_NOTE = 1;
   public static final int TAG_IMPORTANT_NOTE = 2;
@@ -15,7 +15,6 @@ public interface INote {
       return type.ordinal() + 101;
     }
   }
-
 
 
   String getNoteText();

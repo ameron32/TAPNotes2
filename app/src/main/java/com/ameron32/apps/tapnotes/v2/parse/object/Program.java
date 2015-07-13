@@ -32,4 +32,9 @@ public class Program
   public String getName() {
     return this.getString(PROGRAM_NAME_STRING_KEY);
   }
+
+  @Override
+  public String getId() {
+    return this.getObjectId();
+  }
 }

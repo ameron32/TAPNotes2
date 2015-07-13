@@ -81,11 +81,13 @@ public class Queries {
       return talk;
     }
 
-    public static List<Note> findClientOwnedNotesFor(Program program, Talk talk)
+    public static List<Note> findClientOwnedNotesFor(Talk talk)
         throws ParseException {
-      Log.d(TAG, "findClientOwnedNotesFor " + program.getObjectId() + ", " + talk.getObjectId());
+      Log.d(TAG, "findClientOwnedNotesFor " + talk.getObjectId());
       final List<Note> notes = ParseQuery.getQuery(Note.class)
           .fromLocalDatastore()
+          .whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY,
+              talk)
           .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
               Commands.Local.getClientUser())
           .find();
