@@ -64,11 +64,11 @@ public class _MiscUtils {
         } catch (ParseException e) {
           e.printStackTrace();
         }
-        Note note = Note.create("test2", program, talk, Commands.Local.getClientUser());
-        Commands.Live.saveNoteNow(note);
+        Note note = Note.create("test3", program, talk, Commands.Local.getClientUser());
+        Commands.Local.saveEventuallyNote(note);
         if (last != null) {
           last.setNextNote(note);
-          Commands.Live.saveNoteNow(last);
+          Commands.Local.saveEventuallyNote(last);
 //          notes2.add(last);
         }
 //        notes.add(note);
@@ -77,6 +77,7 @@ public class _MiscUtils {
 //    Commands.Live.saveNotesNow(notes);
 //    Commands.Live.saveNotesNow(notes2);
   }
+
 
 
   static class _CrunchifyLinkedListTest {

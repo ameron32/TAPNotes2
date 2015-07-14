@@ -100,35 +100,24 @@ public class AnimatingPaneLayout
   @Override
   protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
     if (isLayoutEnabled()) {
-      if (!isAnimating()) {
-        if (isLeftPaneOnTop()) {
-          mMainPane.setPadding(
-              mDefaultPaddingLeft + mOffsetPaddingLeft,
-              mMainPane.getPaddingTop(),
-              mMainPane.getPaddingRight(),
-              mMainPane.getPaddingBottom());
-        } else {
-          mMainPane.setPadding(
-              mDefaultPaddingLeft,
-              mMainPane.getPaddingTop(),
-              mMainPane.getPaddingRight(),
-              mMainPane.getPaddingBottom());
-        }
-      } else {
-        mMainPane.setPadding(
-            // TODO NOT WORKING???
-            mDefaultPaddingLeft + mAnimatedOffsetPaddingLeft,
-            mMainPane.getPaddingTop(),
-            mMainPane.getPaddingRight(),
-            mMainPane.getPaddingBottom());
-      }
+      int leftPad = mDefaultPaddingLeft;
+      final int topPad = mMainPane.getPaddingTop();
+      final int rightPad = mMainPane.getPaddingRight();
+      final int bottomPad = mMainPane.getPaddingBottom();
       if (isAnimating()) {
         mMainPane.setPadding(
-            // TODO NOT WORKING???
-            mDefaultPaddingLeft + mAnimatedOffsetPaddingLeft,
-            mMainPane.getPaddingTop(),
-            mMainPane.getPaddingRight(),
-            mMainPane.getPaddingBottom());
+            leftPad + mAnimatedOffsetPaddingLeft,
+            topPad, rightPad, bottomPad);
+      } else {
+        if (isLeftPaneOnTop()) {
+          mMainPane.setPadding(
+              leftPad + mOffsetPaddingLeft,
+              topPad, rightPad, bottomPad);
+        } else {
+          mMainPane.setPadding(
+              leftPad,
+              topPad, rightPad, bottomPad);
+        }
       }
     }
     super.onLayout(changed, left, top, right, bottom);
@@ -179,8 +168,6 @@ public class AnimatingPaneLayout
       mUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator value) {
-          Log.d(ValueAnimator.class.getSimpleName(), value.getAnimatedValue().toString());
-          // TODO NOT WORKING???
           mAnimatedOffsetPaddingLeft = Math.round((Float) value.getAnimatedValue());
           requestLayout();
         }
@@ -188,10 +175,7 @@ public class AnimatingPaneLayout
       mUpdateListener2 = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator value) {
-          Log.d(ValueAnimator.class.getSimpleName() + "2", value.getAnimatedValue().toString());
-          // TODO NOT WORKING???
           mAnimatedOffsetPaddingLeft = mOffsetPaddingLeft - Math.round((Float) value.getAnimatedValue());
-          Log.d(ValueAnimator.class.getSimpleName() + "2", mOffsetPaddingLeft + " - " + (Float) value.getAnimatedValue() + " = " + mAnimatedOffsetPaddingLeft);
           requestLayout();
         }
       };
@@ -485,6 +469,7 @@ prepareUpdateListener(options.start2);
       } else {
         dispatchOnPanelClosed();
       }
+      requestLayout();
       reset();
     }
 
