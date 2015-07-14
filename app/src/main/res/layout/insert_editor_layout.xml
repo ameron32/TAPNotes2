@@ -10,11 +10,11 @@
   ~    use references to @string/ for localization
   ~    use references to @color/ for theme flexibility
   -->
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:style="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="50dp">
 
   <Spinner
       android:id="@+id/spinner_note_type"
@@ -26,23 +26,64 @@
   <EditText
       android:id="@+id/edittext_note_editor"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="fill_parent"
       android:minHeight="@dimen/editor_minimum_height"
-      android:layout_toLeftOf="@+id/button_submit_note"
-      android:layout_toRightOf="@+id/spinner_note_type"
       android:ems="10"
       android:gravity="bottom|left"
       android:hint="@string/editor_hint_no_text"
       android:inputType="textMultiLine"
       android:maxLines="3"
-      android:textSize="14sp"/>
-
-  <ImageButton
-      android:id="@+id/button_submit_note"
-      style="?android:attr/borderlessButtonStyle"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_alignParentRight="true"
+      android:textSize="14sp"
       android:layout_centerVertical="true"
-      android:src="@drawable/ic_action_send"/>
+      android:layout_toRightOf="@+id/spinner_note_type"
+      android:layout_marginBottom="10dp"
+      android:layout_toLeftOf="@+id/button_submit_note"
+      android:layout_toStartOf="@+id/button_submit_note" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_video"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_videocam_black_48dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        style="?icon"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_camera"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/button_video"
+        android:layout_toStartOf="@+id/button_video"
+        android:src="@drawable/ic_photo_camera_black_48dp"
+
+        style="?icon"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_scripture"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/button_camera"
+        android:layout_toStartOf="@+id/button_camera"
+        android:src="@drawable/bible"
+ />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button_submit_note"
+        android:src="@drawable/ic_send_black_24dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/button_scripture"
+        android:layout_toStartOf="@+id/button_scripture"
+        android:longClickable="false" />
+
+
 </RelativeLayout>

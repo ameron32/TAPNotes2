@@ -2,8 +2,6 @@
 
 <resources>
 
-
-
   <attr name="listItem" format="reference"/>
   <attr name="navBar_upper" format="reference"/>
   <attr name="navBar_lower" format="reference"/>

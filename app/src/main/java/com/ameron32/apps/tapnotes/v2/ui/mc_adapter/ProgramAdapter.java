@@ -349,6 +349,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
                 ChildViewHolderWithSymposium cvhws = (ChildViewHolderWithSymposium) viewHolder;
                 cvhws.symposiumTextView.setText(content.get(i).get(i2).getSymposiumTitle());
                 cvhws.textView.setText(content.get(i).get(i2).getTalkTitle());
+                cvhws.item_ID = content.get(i).get(i2).getId();
                 holder = cvhws;
             break;
 
@@ -358,6 +359,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
             default:
                 ChildViewHolder cvh = (ChildViewHolder) viewHolder;
                 cvh.textView.setText(content.get(i).get(i2).getTalkTitle());
+                cvh.item_ID = content.get(i).get(i2).getId();
                 holder = cvh;
             break;
         }

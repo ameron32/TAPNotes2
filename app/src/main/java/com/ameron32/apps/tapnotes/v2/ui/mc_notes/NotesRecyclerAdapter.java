@@ -59,8 +59,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
-        DummyNote note = (DummyNote)mProvider.getItem(position);
-        holder.notesTextView.setText(note.getText());
+        INote note = mProvider.getItem(position);
+        holder.notesTextView.setText(note.getNoteText());
 
     }
 
@@ -77,6 +77,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void synchronizeNotes(List<INote> allNotes) {
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
+        //notifyDataSetChanged();
     }
 
     @Override

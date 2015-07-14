@@ -83,10 +83,12 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   private INotesDelegateCallbacks mCallbacks2;
 
 
+  public void onCreate(@Nullable Bundle savedInstanceState) {
 
-  public void onDataReceived(ITalk talk, List<INote> notes) {
-    adapter.synchronizeNotes(notes);
+    adapter = new NotesRecyclerAdapter();
+
   }
+
 
   public static NotesLayoutFragmentDelegate create(Fragment fragment) {
     final NotesLayoutFragmentDelegate delegate = new NotesLayoutFragmentDelegate();
@@ -97,6 +99,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
 
   protected NotesLayoutFragmentDelegate() {}
+
+
 
   @Nullable
   @Override
@@ -120,10 +124,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     super.onViewCreated(view, savedInstanceState);
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
-    if (recyclerView.getAdapter() instanceof NotesRecyclerAdapter)
-      adapter = (NotesRecyclerAdapter)recyclerView.getAdapter();
-    if (adapter!=null)
-      adapter.addINotesDelegateCallbacks(mCallbacks2);
+    startRecycler();
+
   }
 
   private void confirmHostFragmentHasNecessaryCallbacks() {
@@ -146,7 +148,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void onResume() {
-    startRecycler();
   }
 
   @Override
@@ -159,15 +160,15 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   public void startRecycler() {
     ButterKnife.inject(this.getActivity());
-    recyclerView.setAdapter(getAdapter());
+
+    if (adapter==null){
+      adapter = new NotesRecyclerAdapter();
+    }
+
+    recyclerView.setAdapter(adapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+    adapter.addINotesDelegateCallbacks(mCallbacks2);
   }
-
-  private NotesRecyclerAdapter getAdapter() {
-    NotesRecyclerAdapter adapter = new NotesRecyclerAdapter();
-    return adapter;
-  }
-
 
 
   @Override
@@ -207,6 +208,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   @Override
   public void synchronizeNotes(List<INote> allNotes) {
     // TODO: MICAH delegate method
+    adapter.synchronizeNotes(allNotes);
   }
 
   @Override
