@@ -3,18 +3,15 @@ package com.ameron32.apps.tapnotes.v2.ui.view;
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.Resources;
 import android.os.Build;
 import android.support.annotation.AnimatorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -62,6 +59,7 @@ public class AnimatingPaneLayout
 
   @Nullable private PanelListener mDefaultPanelListener;
   @NonNull  private ValueAnimator.AnimatorUpdateListener mUpdateListener;
+  @NonNull  private ValueAnimator.AnimatorUpdateListener mUpdateListener2;
   @NonNull  private List<PanelListener> mListeners;
 
 
@@ -123,6 +121,14 @@ public class AnimatingPaneLayout
           mMainPane.getPaddingRight(),
           mMainPane.getPaddingBottom());
     }
+    if (isAnimating()) {
+      mMainPane.setPadding(
+          // TODO NOT WORKING???
+          mDefaultPaddingLeft + mAnimatedOffsetPaddingLeft,
+          mMainPane.getPaddingTop(),
+          mMainPane.getPaddingRight(),
+          mMainPane.getPaddingBottom());
+    }
     super.onLayout(changed, left, top, right, bottom);
   }
 
@@ -142,7 +148,7 @@ public class AnimatingPaneLayout
 
     mDefaultPaddingLeft = mMainPane.getPaddingLeft();
     mOffsetPaddingLeft = Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width));
-    mAnimatedOffsetPaddingLeft = 0;
+    mAnimatedOffsetPaddingLeft = mDefaultPaddingLeft;
 
     if (isDisplacement) {
       mDefaultPanelListener = new PanelListener() {
@@ -171,7 +177,18 @@ public class AnimatingPaneLayout
         public void onAnimationUpdate(ValueAnimator value) {
           Log.d(ValueAnimator.class.getSimpleName(), value.getAnimatedValue().toString());
           // TODO NOT WORKING???
-          mAnimatedOffsetPaddingLeft = dpToPx((Float) value.getAnimatedValue());
+          mAnimatedOffsetPaddingLeft = Math.round((Float) value.getAnimatedValue());
+          requestLayout();
+        }
+      };
+      mUpdateListener2 = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator value) {
+          Log.d(ValueAnimator.class.getSimpleName() + "2", value.getAnimatedValue().toString());
+          // TODO NOT WORKING???
+          mAnimatedOffsetPaddingLeft = mOffsetPaddingLeft - Math.round((Float) value.getAnimatedValue());
+          Log.d(ValueAnimator.class.getSimpleName() + "2", mOffsetPaddingLeft + " - " + (Float) value.getAnimatedValue() + " = " + mAnimatedOffsetPaddingLeft);
+          requestLayout();
         }
       };
     }
@@ -252,7 +269,7 @@ public class AnimatingPaneLayout
     public View view;
     public Pane pane;
     public AnimatorSet firstSet, secondSet;
-    public Animator zoomOut, zoomIn, start, end, end2;
+    public Animator zoomOut, zoomIn, start, start2, end;
     public Animator.AnimatorListener switchActions;
     public Animator.AnimatorListener animationComplete;
   }
@@ -270,7 +287,8 @@ public class AnimatingPaneLayout
       case Left:
         options.start = AnimatorInflater.loadAnimator(getContext(), leftAnimatorStart);
         options.end = AnimatorInflater.loadAnimator(getContext(), leftAnimatorEnd);
-        options.end2 = AnimatorInflater.loadAnimator(getContext(), nullAnimator);
+        options.start2 = AnimatorInflater.loadAnimator(getContext(), nullAnimator);
+prepareUpdateListener(options.start2);
         options.view = mLeftPane;
         break;
       case Main:
@@ -279,16 +297,21 @@ public class AnimatingPaneLayout
         if (isDisplacement) {
           // if it is a displacement-style pane layout then the main pane should ALSO scale
           if (position == Position.Top) {
-            // shrinking if it *is going to be* on top
-            options.end2 = AnimatorInflater.loadAnimator(getContext(), scaleExpandAnimator);
-            ((ValueAnimator) options.end2).addUpdateListener(mUpdateListener);
+            // shrinking if it *was* on top
+//            options.start2 = AnimatorInflater.loadAnimator(getContext(), scaleExpandAnimator);
+            options.start2 = ValueAnimator.ofFloat(getContext().getResources().getDimension(R.dimen.program_bar_width));
+            options.start2.setDuration(400);
+prepareUpdateListener(options.start2);
           } else if (position == Position.Bottom) {
-            // expanding if it *is going to be* on bottom
-            options.end2 = AnimatorInflater.loadAnimator(getContext(), scaleContractAnimator);
-            ((ValueAnimator) options.end2).addUpdateListener(mUpdateListener);
+            // expanding if it *was* on bottom
+//            options.start2 = AnimatorInflater.loadAnimator(getContext(), scaleContractAnimator);
+            options.start2 = ValueAnimator.ofFloat(getContext().getResources().getDimension(R.dimen.program_bar_width));
+            options.start2.setDuration(400);
+prepareUpdateListener2(options.start2);
           }
         } else {
-          options.end2 = AnimatorInflater.loadAnimator(getContext(), nullAnimator);
+          options.start2 = AnimatorInflater.loadAnimator(getContext(), nullAnimator);
+prepareUpdateListener(options.start2);
         }
         options.view = mMainPane;
     }
@@ -310,6 +333,22 @@ public class AnimatingPaneLayout
     return options;
   }
 
+  private void prepareUpdateListener(Animator animator) {
+    if (animator instanceof ValueAnimator) {
+      final ValueAnimator valueAnimator = ((ValueAnimator) animator);
+      valueAnimator.removeAllUpdateListeners();
+      valueAnimator.addUpdateListener(mUpdateListener);
+    }
+  }
+
+  private void prepareUpdateListener2(Animator animator) {
+    if (animator instanceof ValueAnimator) {
+      final ValueAnimator valueAnimator = ((ValueAnimator) animator);
+      valueAnimator.removeAllUpdateListeners();
+      valueAnimator.addUpdateListener(mUpdateListener2);
+    }
+  }
+
   private void animateViewToPositionWithAnimator(final AnimationOptions options) {
     if (options == null) {
       setAnimating(false);
@@ -320,13 +359,13 @@ public class AnimatingPaneLayout
     options.zoomIn.setTarget(options.view);
     options.start.setTarget(options.view);
     options.end.setTarget(options.view);
-    options.end2.setTarget(options.view);
+    options.start2.setTarget(options.view);
 
     options.firstSet.play(options.zoomOut);
     options.firstSet.play(options.start).with(options.zoomOut);
     options.secondSet.play(options.end);
     options.secondSet.play(options.zoomIn).with(options.end);
-    options.secondSet.play(options.end2).with(options.end);
+    options.secondSet.play(options.start2).with(options.end);
 
     options.firstSet.addListener(options.switchActions);
     options.secondSet.addListener(options.animationComplete);
@@ -435,12 +474,5 @@ public class AnimatingPaneLayout
     @Override    public void onAnimationCancel(Animator animation) {    }
 
     @Override    public void onAnimationRepeat(Animator animation) {    }
-  }
-
-  private int dpToPx(float dp) {
-    // TODO NOT WORKING???
-    final Resources r = getContext().getResources();
-    float px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics());
-    return Math.round(px);
   }
 }
