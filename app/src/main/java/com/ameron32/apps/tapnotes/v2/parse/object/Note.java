@@ -102,11 +102,23 @@ public class Note
 
   private void addTag(int tag) {
     this.addAllUnique(NOTE_TAGS_ARRAY_KEY,
-        Arrays.asList(new int[] {tag}));
+        Arrays.asList(new int[] { tag }));
   }
 
   private void removeTag(int tag) {
     this.removeAll(NOTE_TAGS_ARRAY_KEY,
-        Arrays.asList(new int[]{tag}));
+        Arrays.asList(new int[]{ tag }));
+  }
+
+  @Override
+  public NoteType getNoteType() {
+    int size = getTags().size();
+    for (int i = 0; i < size; i++) {
+      int tag = getTags().get(i);
+      if (tag > NoteType.RANGE_MINIMUM_NOTETYPE_TAG) {
+        return NoteType.getTypeFrom(tag);
+      }
+    }
+    return NoteType.STANDARD;
   }
 }
