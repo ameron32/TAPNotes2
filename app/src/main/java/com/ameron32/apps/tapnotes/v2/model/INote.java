@@ -9,10 +9,20 @@ public interface INote extends IObject {
   public static final int TAG_IMPORTANT_NOTE = 2;
 
   public enum NoteType {
+
     STANDARD, SPEAKER, SCRIPTURE_ONLY, ATTENDANCE_COUNT, BAPTISM_COUNT;
 
+    public static final int RANGE_MINIMUM_NOTETYPE_TAG = 100;
+    public static final int OFFSET_NOTETYPE_TAG = 101;
+
     public static int getInteger(NoteType type) {
-      return type.ordinal() + 101;
+      final int tag = type.ordinal() + OFFSET_NOTETYPE_TAG;
+      return tag;
+    }
+
+    public static NoteType getTypeFrom(int tag) {
+      final int position = tag - OFFSET_NOTETYPE_TAG;
+      return NoteType.values()[position];
     }
   }
 
@@ -21,5 +31,5 @@ public interface INote extends IObject {
   boolean isImportantNote();
   boolean isBoldNote();
   String getNextNoteId();
-
+  NoteType getNoteType();
 }

@@ -27,6 +27,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
@@ -153,8 +154,6 @@ public class NotesFragment extends TAPFragment
       final List<INote> iNotes = new ArrayList<>(notes.size());
       iNotes.addAll(notes);
 
-      // TODO remove fake note method
-//      _MiscUtils._saveFakeNotes(talks, program);
       Log.d(NotesFragment.class.getSimpleName(),
           "iNotes.size() : " + iNotes.size());
 

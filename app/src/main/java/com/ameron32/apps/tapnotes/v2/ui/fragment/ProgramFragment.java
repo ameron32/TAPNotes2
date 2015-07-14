@@ -20,6 +20,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
@@ -107,6 +108,7 @@ public class ProgramFragment extends TAPFragment
       final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
       final List<ITalk> iTalks = new ArrayList<>(talks.size());
       iTalks.addAll(talks);
+
 
       // TODO remove fake note method
 //      _MiscUtils._saveFakeNotes(talks, program);

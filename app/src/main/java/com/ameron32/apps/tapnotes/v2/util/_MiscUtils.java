@@ -1,7 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.util;
 
+import android.util.Log;
+
 import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
@@ -48,16 +51,31 @@ public class _MiscUtils {
 
   public static void _saveFakeNotes(List<Talk> talks, Program program) {
 
-    List<Note> notes = new ArrayList<>(talks.size());
+//    List<Note> notes = new ArrayList<>(talks.size());
+//    List<Note> notes2 = new ArrayList<>();
     for (int i = 0; i < talks.size(); i++) {
       Talk talk = talks.get(i);
       if (talk.getEventType() == EventType.TALK ||
           talk.getEventType() == EventType.SYMPOSIUMTALK) {
-        Note note = Note.create("test", program, talk, Commands.Local.getClientUser());
-        notes.add(note);
+        Note last = null;
+        try {
+          last = Queries.Local.findLastClientOwnedNoteFor(talk);
+          Log.d("_MiscUtils", "last = " + last.toString());
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+        Note note = Note.create("test3", program, talk, Commands.Local.getClientUser());
+        Commands.Local.saveEventuallyNote(note);
+        if (last != null) {
+          last.setNextNote(note);
+          Commands.Local.saveEventuallyNote(last);
+//          notes2.add(last);
+        }
+//        notes.add(note);
       }
     }
-    Commands.Local.saveEventuallyNotes(notes);
+//    Commands.Live.saveNotesNow(notes);
+//    Commands.Live.saveNotesNow(notes2);
   }
 
 

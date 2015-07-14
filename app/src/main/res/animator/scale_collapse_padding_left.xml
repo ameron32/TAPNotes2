@@ -2,6 +2,6 @@
 <!-- Collapse Margin. -->
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     android:interpolator="@anim/accel_interpolator"
-    android:valueFrom="@integer/default_padding_open_distance"
+    android:valueFrom="@dimen/program_bar_width"
     android:valueTo="@integer/default_padding_closed_distance"
     android:duration="@integer/default_animation_duration" />

@@ -8,6 +8,8 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
 /**
@@ -16,6 +18,9 @@ import java.util.List;
 public class Queries {
 
   private static final String TAG = Queries.class.getSimpleName();
+  private static final int FIRST_OR_ONLY = 0;
+
+
 
   public static class Live {
 
@@ -92,6 +97,19 @@ public class Queries {
               Commands.Local.getClientUser())
           .find();
       return notes;
+    }
+
+    public static Note findLastClientOwnedNoteFor(Talk talk)
+        throws ParseException {
+      final List<Note> notes = ParseQuery.getQuery(Note.class)
+          .fromLocalDatastore()
+          .whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY,
+              talk)
+          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+              Commands.Local.getClientUser())
+          .whereDoesNotExist(Constants.NOTE_NEXTNOTE_OBJECT_KEY)
+          .find();
+      return notes.get(FIRST_OR_ONLY);
     }
 
     public static List<Talk> findAllProgramTalks(Program program)

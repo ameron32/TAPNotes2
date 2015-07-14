@@ -23,7 +23,8 @@ public class Note
 {
 
   public static Note create(final String text,
-      final Program program, final Talk talk, final ParseUser owner) {
+      final Program program, final Talk talk,
+      final ParseUser owner) {
     final Note note = new Note();
     note.put(NOTE_TEXT_STRING_KEY, text);
     note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
@@ -102,11 +103,27 @@ public class Note
 
   private void addTag(int tag) {
     this.addAllUnique(NOTE_TAGS_ARRAY_KEY,
-        Arrays.asList(new int[] {tag}));
+        Arrays.asList(new int[] { tag }));
   }
 
   private void removeTag(int tag) {
     this.removeAll(NOTE_TAGS_ARRAY_KEY,
         Arrays.asList(new int[]{tag}));
+  }
+
+  @Override
+  public NoteType getNoteType() {
+    int size = getTags().size();
+    for (int i = 0; i < size; i++) {
+      int tag = getTags().get(i);
+      if (tag > NoteType.RANGE_MINIMUM_NOTETYPE_TAG) {
+        return NoteType.getTypeFrom(tag);
+      }
+    }
+    return NoteType.STANDARD;
+  }
+
+  public void setNextNote(Note note) {
+    this.put(NOTE_NEXTNOTE_OBJECT_KEY, note);
   }
 }
