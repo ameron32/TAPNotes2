@@ -321,12 +321,24 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void editNote(String noteId) {
+  public void dispatchEditorOn(String noteId) {
     try {
       final Note note = Queries.Local.getNote(noteId);
       getEditorFragment().displayNoteToEdit(note);
+
     } catch (ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  @Override
+  public void editNote(String editorText, INote.NoteType type, Note note) {
+    if (type != note.getNoteType()) {
+      note.changeNoteType(type);
+    }
+    note.setNoteText(editorText);
+
+    Commands.Local.saveEventuallyNote(note);
+    getNotesFragment().notesChanged(listify(note));
   }
 }

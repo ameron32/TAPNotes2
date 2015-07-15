@@ -251,7 +251,7 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onUserClickEditNote(String noteId) {
-    mCallbacks.editNote(noteId);
+    mCallbacks.dispatchEditorOn(noteId);
   }
 
   @Override
@@ -330,6 +330,6 @@ public class NotesFragment extends TAPFragment
 
   public interface Callbacks {
 
-    void editNote(String noteId);
+    void dispatchEditorOn(String noteId);
   }
 }

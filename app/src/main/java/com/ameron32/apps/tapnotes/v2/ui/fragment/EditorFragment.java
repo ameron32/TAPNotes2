@@ -168,10 +168,7 @@ public class EditorFragment extends TAPFragment
   }
 
   private void editNote(String editorText, INote.NoteType type, Note note) {
-    if (type != note.getNoteType()) {
-      note.changeNoteType(type);
-    }
-    note.setNoteText(editorText);
+    mCallbacks.editNote(editorText, type, note);
   }
 
   @Override
@@ -196,5 +193,6 @@ public class EditorFragment extends TAPFragment
   public interface Callbacks {
 
     void createNote(String editorText, INote.NoteType type);
+    void editNote(String editorText, INote.NoteType type, Note note);
   }
 }

@@ -21,7 +21,7 @@
         android:id="@+id/editor_container"
         android:background="?editor_container_background"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true" >
 
