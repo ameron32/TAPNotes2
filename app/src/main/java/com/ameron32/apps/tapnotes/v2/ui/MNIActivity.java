@@ -31,6 +31,7 @@ import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -289,14 +290,15 @@ public class MNIActivity extends TAPActivity
 
   @Override
   public void createNote(String editorText, INote.NoteType type) {
-    Note lastNote = null;
+    Note prevNote = null;
     try {
       final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-      lastNote = Queries.Local.findLastClientOwnedNoteFor(talk);
+      prevNote = Queries.Local.findLastClientOwnedNoteFor(talk);
     } catch (ParseException e) {
       e.printStackTrace();
     }
     final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
+    final Note lastNote = prevNote;
 
     if (lastNote != null) {
       lastNote.setNext(note);
@@ -304,11 +306,18 @@ public class MNIActivity extends TAPActivity
     }
 
     if (note != null) {
-      Commands.Local.saveEventuallyNote(note);
+      // TODO replace with Observable!!!
+      Commands.Local.saveEventuallyNote(note,
+          new SaveCallback() {
+        @Override
+        public void done(ParseException e) {
+          if (e == null) {
+            getNotesFragment().notesChanged(listify(lastNote));
+            getNotesFragment().notesAdded(listify(note));
+          }
+        }
+      });
     }
-
-    getNotesFragment().notesChanged(listify(lastNote));
-    getNotesFragment().notesAdded(listify(note));
   }
 
   private List<INote> listify(INote... notes) {

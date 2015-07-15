@@ -6,6 +6,7 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -47,6 +48,12 @@ public class Commands {
     public static Note saveEventuallyNote(Note note) {
       Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
       note.saveEventually();
+      return note;
+    }
+
+    public static Note saveEventuallyNote(Note note, SaveCallback callback) {
+      Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
+      note.saveEventually(callback);
       return note;
     }
 
