@@ -54,7 +54,7 @@ public class AnimatingPaneLayout
   @NonNull  private AnimationOptions mMainToTopOptions;
 
   private int mDefaultPaddingLeft;
-  private int mOffsetPaddingLeft;
+//  private int mOffsetPaddingLeft;
   private int mAnimatedOffsetPaddingLeft;
 
   @Nullable private PanelListener mDefaultPanelListener;
@@ -111,7 +111,7 @@ public class AnimatingPaneLayout
       } else {
         if (isLeftPaneOnTop()) {
           mMainPane.setPadding(
-              leftPad + mOffsetPaddingLeft,
+              leftPad + getOffsetPaddingLeft(),
               topPad, rightPad, bottomPad);
         } else {
           mMainPane.setPadding(
@@ -138,7 +138,7 @@ public class AnimatingPaneLayout
     mListeners = new ArrayList<>();
 
     mDefaultPaddingLeft = mMainPane.getPaddingLeft();
-    mOffsetPaddingLeft = Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width));
+//    mOffsetPaddingLeft = getOffsetPaddingLeft();
     mAnimatedOffsetPaddingLeft = mDefaultPaddingLeft;
 
     if (isLayoutDisplacement()) {
@@ -168,18 +168,28 @@ public class AnimatingPaneLayout
       mUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator value) {
-          mAnimatedOffsetPaddingLeft = Math.round((Float) value.getAnimatedValue());
-          requestLayout();
+          if (isLayoutDisplacement()) {
+            mAnimatedOffsetPaddingLeft = Math.round((Float) value.getAnimatedValue());
+            requestLayout();
+          }
         }
       };
       mUpdateListener2 = new ValueAnimator.AnimatorUpdateListener() {
         @Override
         public void onAnimationUpdate(ValueAnimator value) {
-          mAnimatedOffsetPaddingLeft = mOffsetPaddingLeft - Math.round((Float) value.getAnimatedValue());
-          requestLayout();
+          if (isLayoutDisplacement()) {
+            mAnimatedOffsetPaddingLeft = getOffsetPaddingLeft() - Math.round((Float) value.getAnimatedValue());
+            requestLayout();
+          }
         }
       };
     }
+  }
+
+  private int getOffsetPaddingLeft() {
+    return (isLayoutDisplacement()) ?
+        Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width)) :
+        mDefaultPaddingLeft;
   }
 
   public void addPanelListener(PanelListener listener) {
