@@ -17,6 +17,7 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
+import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.model.INote;
@@ -46,7 +47,8 @@ import butterknife.InjectView;
 public class MNIActivity extends TAPActivity
     implements
       ProgramFragment.Callbacks,
-      EditorFragment.Callbacks
+      EditorFragment.Callbacks,
+      NotesFragment.Callbacks
 {
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
@@ -232,6 +234,10 @@ public class MNIActivity extends TAPActivity
         .commit();
   }
 
+  private IEditHandler getEditorFragment() {
+    return (IEditHandler) getSupportFragmentManager().findFragmentByTag("editor");
+  }
+
   private void removeFragment(final String tag) {
     final Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
     if (fragment != null) {
@@ -312,5 +318,15 @@ public class MNIActivity extends TAPActivity
       list.add(note);
     }
     return list;
+  }
+
+  @Override
+  public void editNote(String noteId) {
+    try {
+      final Note note = Queries.Local.getNote(noteId);
+      getEditorFragment().displayNoteToEdit(note);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 }

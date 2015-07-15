@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,22 +13,17 @@ import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
-import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
@@ -62,7 +56,9 @@ public class NotesFragment extends TAPFragment
   @Inject
   ActivitySnackBarController mSnackBar;
 
-  private IToolbarHeaderDelegate mHeader;
+  private Callbacks mCallbacks;
+
+  private IToolbarHeaderDelegate mHeaderDelegate;
   private INotesDelegate mNotesDelegate;
   private String mTalkId;
   private String mToolbarTitle;
@@ -93,6 +89,25 @@ public class NotesFragment extends TAPFragment
   }
 
   @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    if (activity instanceof Callbacks) {
+      mCallbacks = (Callbacks) activity;
+    } else {
+      throw new IllegalStateException(activity.getClass().getSimpleName()
+          + "must implement " + Callbacks.class.getSimpleName() + " in order to use "
+          + EditorFragment.class.getSimpleName());
+    }
+  }
+
+  @Override
+  public void onDetach() {
+    mCallbacks = null;
+    super.onDetach();
+  }
+
+
+  @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     final Bundle args = getArguments();
@@ -115,13 +130,33 @@ public class NotesFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
 
-    mHeader = (IToolbarHeaderDelegate) getDelegate();
-    mNotesDelegate = (INotesDelegate) getDelegate();
-    mHeader.onToolbarViewCreated(mToolbar);
+    confirmToolbarDelegateHasInterface();
+    confirmNotesDelegateHasInterface();
+    mHeaderDelegate.onToolbarViewCreated(mToolbar);
     setTitles();
 
     if (isStringUsable(mTalkId)) {
       giveNotesToDelegate();
+    }
+  }
+
+  private void confirmToolbarDelegateHasInterface() {
+    if (getDelegate() instanceof IToolbarHeaderDelegate) {
+      mHeaderDelegate = ((IToolbarHeaderDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + IToolbarHeaderDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
+    }
+  }
+
+  private void confirmNotesDelegateHasInterface() {
+    if (getDelegate() instanceof INotesDelegate) {
+      mNotesDelegate = ((INotesDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + INotesDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
     }
   }
 
@@ -147,24 +182,26 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onDestroyView() {
+    mHeaderDelegate = null;
+    mNotesDelegate = null;
     ButterKnife.reset(this);
     super.onDestroyView();
   }
 
   private void setTitles() {
-    if (mHeader == null) {
+    if (mHeaderDelegate == null) {
       // do nothing
       return;
     }
 
     if (isStringUsable(mToolbarTitle)) {
-      mHeader.setTalkTitle(mToolbarTitle);
+      mHeaderDelegate.setTalkTitle(mToolbarTitle);
     }
     if (isStringUsable(mSymposiumTitle)) {
-      mHeader.setSymposiumTitle(mSymposiumTitle);
+      mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
     }
     if (isStringUsable(mImageUrl)) {
-      mHeader.setImage(mImageUrl);
+      mHeaderDelegate.setImage(mImageUrl);
     }
   }
 
@@ -216,6 +253,7 @@ public class NotesFragment extends TAPFragment
   public void onUserClickEditNote(String noteId) {
     // TODO: KRIS delegate callback
     mSnackBar.toast("onUserClickEditNote: " + noteId + " to be implemented.");
+
   }
 
   @Override
@@ -288,5 +326,12 @@ public class NotesFragment extends TAPFragment
       }
     }
     return false;
+  }
+
+
+
+  public interface Callbacks {
+
+    void editNote(String noteId);
   }
 }

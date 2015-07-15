@@ -20,12 +20,14 @@ import android.widget.ImageView;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 import com.parse.ParseException;
 
@@ -38,7 +40,9 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class EditorFragment extends TAPFragment
-    implements IEditorDelegate.IEditorDelegateCallbacks,
+    implements
+      IEditHandler,
+      IEditorDelegate.IEditorDelegateCallbacks,
       Toolbar.OnMenuItemClickListener
 {
 
@@ -58,6 +62,7 @@ public class EditorFragment extends TAPFragment
   ImageView mSubmitButton;
 
   private Callbacks mCallbacks;
+  private IEditorDelegate mDelegate;
 
   @Inject
   ActivitySnackBarController mSnackBar;
@@ -101,9 +106,21 @@ public class EditorFragment extends TAPFragment
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    confirmDelegateHasInterface();
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     mToolbar.setOnMenuItemClickListener(this);
   }
+
+  private void confirmDelegateHasInterface() {
+    if (getDelegate() instanceof IEditorDelegate) {
+      mDelegate = ((IEditorDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + IEditorDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
+    }
+  }
+
 
   private int getColorFromAttribute(@AttrRes int attr, @ColorRes int defaultColor) {
     final TypedValue typedValue = new TypedValue();
@@ -120,11 +137,16 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void onDestroyView() {
+    mDelegate = null;
     ButterKnife.reset(this);
     super.onDestroyView();
   }
 
 
+  @Override
+  public void displayNoteToEdit(INote note) {
+    mDelegate.updateEditorText(note.getNoteText(), note.getId());
+  }
 
   @Override
   public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
