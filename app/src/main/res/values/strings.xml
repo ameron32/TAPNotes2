@@ -12,4 +12,12 @@
   <string name="editor_menu_title_text_video">Video</string>
   <string name="title_activity_program_selection">ProgramSelectionActivity</string>
 
+  <string-array name="spinner_options">
+    <item>Standard</item>
+    <item>Speaker</item>
+    <item>Scripture</item>
+    <item>Attendance</item>
+    <item>Baptism</item>
+    </string-array>
+
 </resources>

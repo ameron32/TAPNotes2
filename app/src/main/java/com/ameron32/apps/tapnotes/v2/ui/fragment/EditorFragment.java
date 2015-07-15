@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
@@ -29,7 +30,7 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class EditorFragment extends TAPFragment
-    implements IEditorDelegate.IEditorDelegateCallbacks
+        implements IEditorDelegate.IEditorDelegateCallbacks
 {
 
   public static EditorFragment create() {
@@ -45,7 +46,7 @@ public class EditorFragment extends TAPFragment
   @InjectView(R.id.toolbar)
   Toolbar mToolbar;
   @InjectView(R.id.button_submit_note)
-  ImageButton mSubmitButton;
+  ImageView mSubmitButton;
 
 
   @Override
@@ -69,11 +70,11 @@ public class EditorFragment extends TAPFragment
   private int getColorFromAttribute(@AttrRes int attr, @ColorRes int defaultColor) {
     TypedValue typedValue = new TypedValue();
     getActivity().getTheme()
-        .resolveAttribute(attr, typedValue, true);
+            .resolveAttribute(attr, typedValue, true);
     int[] accentColor = new int[] { attr };
     int indexOfAttrColor = 0;
     TypedArray a = getContext()
-        .obtainStyledAttributes(typedValue.data, accentColor);
+            .obtainStyledAttributes(typedValue.data, accentColor);
     int color = a.getColor(indexOfAttrColor, defaultColor);
     a.recycle();
     return color;

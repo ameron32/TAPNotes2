@@ -33,7 +33,6 @@
     <item name="android:color">@color/teal_line_dark_color</item>
   </style>
 
-
   <style name="navBar_upper_teal"><item name="android:background">@color/teal_navBar_upper</item></style>
   <style name="navBar_lower_teal"><item name="android:background">@color/teal_navBar_lower</item></style>
   <style name="listItem_dark_teal"><item name="android:background">@color/teal_listItem_dark</item></style>
