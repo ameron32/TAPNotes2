@@ -79,6 +79,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -86,6 +87,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         for (INote note:notesToAdd)
         mProvider.addNote(note);
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -97,6 +99,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         }
 
     }
+
 
     @Override
     public void replaceNotes(List<INote> notesToReplace) {
