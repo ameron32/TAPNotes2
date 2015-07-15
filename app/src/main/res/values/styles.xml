@@ -5,6 +5,11 @@
 
   </style>
 
+  <!-- Base application theme. -->
+  <style name="AppDarkTheme" parent="Theme.AppCompat.NoActionBar">
+
+  </style>
+
 
   <style name="Teal2015Theme" parent="AppTheme">
     <!-- Customize your theme here. -->
@@ -21,7 +26,7 @@
     <item name="text_bold">@style/text_bold_teal</item>
     <item name="text_scripture">@style/text_scripture_teal</item>
 
-    
+
     <!-- Kris's items below-->
     <item name="colorPrimary">@color/teal_colorPrimary</item>
     <item name="colorPrimaryDark">@color/teal_colorPrimaryDark</item>
@@ -34,7 +39,7 @@
 
 
 
-  <style name="UltraBlackTheme" parent="AppTheme">
+  <style name="UltraBlackTheme" parent="AppDarkTheme">
 
     <item name="listItem">@style/listItem_ultrablack</item>
     <item name="line_dark">@style/line_dark_ultrablack</item>
@@ -64,7 +69,7 @@
     <item name="program_container_background">@color/ultrablack_program_container_background</item>
   </style>
 
-  <style name="MaterialDarkTheme" parent="AppTheme">
+  <style name="MaterialDarkTheme" parent="AppDarkTheme">
     <!-- Customize your theme here. -->
 
     <item name="listItem">@style/listItem_materialdark</item>

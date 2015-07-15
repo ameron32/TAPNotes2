@@ -111,7 +111,7 @@ public class ProgramFragment extends TAPFragment
 
 
       // TODO remove fake note method
-//      _MiscUtils._saveFakeNotes(talks, program);
+//      _MiscUtils._postDurations(talks, program);
 
       // TODO give Talks to Delegate
       mDelegate.loadProgramTalks(iTalks);

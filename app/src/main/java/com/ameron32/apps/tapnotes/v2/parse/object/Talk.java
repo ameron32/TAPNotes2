@@ -83,6 +83,11 @@ public class Talk
     return NO_SONG_NUMBER;
   }
 
+  @Override
+  public int getDurationInMinutes() {
+    return this.getInt(TALK_DURATIONMINUTES_NUMBER_KEY);
+  }
+
   private String getTalkThemeScriptures() {
     return this.getString(TALK_SCRIPTURES_STRING_KEY);
   }
