@@ -78,12 +78,14 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void synchronizeNotes(List<INote> allNotes) {
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
+        notifyDataSetChanged();
     }
 
     @Override
     public void addNotes(List<INote> notesToAdd) {
         for (INote note:notesToAdd)
         mProvider.addNote(note);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -91,6 +93,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         for (INote note:notesToRemove){
             mProvider.removeItem(note);
+            notifyDataSetChanged();
         }
 
     }
@@ -98,6 +101,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     @Override
     public void replaceNotes(List<INote> notesToReplace) {
             mProvider.replaceNotes(notesToReplace);
+        notifyDataSetChanged();
     }
 
     private void setOnClickListener(View v){
