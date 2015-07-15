@@ -25,6 +25,7 @@ public class Constants {
   public static final String TALK_METADATA_STRING_KEY = "metadata";
   public static final String TALK_TITLE_STRING_KEY = "title";
   public static final String TALK_SCRIPTURES_STRING_KEY = "scriptures";
+  public static final String TALK_DURATIONMINUTES_NUMBER_KEY = "durationMinutes";
 
   // NOTE
   public static final String NOTE_oPROGRAM_OBJECT_KEY = "oProgram";

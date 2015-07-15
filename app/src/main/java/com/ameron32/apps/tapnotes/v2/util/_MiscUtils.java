@@ -13,7 +13,8 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import java.util.ArrayList;
+import org.eclipse.mat.parser.index.IndexManager;
+
 import java.util.List;
 
 /**
@@ -79,6 +80,9 @@ public class _MiscUtils {
   }
 
 
+  /*
+  LINKED LIST STORED FOR REVIEW ONLY
+   */
 
   static class _CrunchifyLinkedListTest {
 
