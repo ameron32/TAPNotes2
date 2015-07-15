@@ -15,7 +15,7 @@ public interface INote extends IObject {
     public static final int RANGE_MINIMUM_NOTETYPE_TAG = 100;
     public static final int OFFSET_NOTETYPE_TAG = 101;
 
-    public static int getInteger(NoteType type) {
+    public static int getTagInteger(NoteType type) {
       final int tag = type.ordinal() + OFFSET_NOTETYPE_TAG;
       return tag;
     }

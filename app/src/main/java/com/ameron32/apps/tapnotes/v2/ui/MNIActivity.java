@@ -16,7 +16,10 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
@@ -35,7 +38,11 @@ import butterknife.InjectView;
  * Use {@link MNIActivity#makeIntent(Context, String)} to startActivity.
  */
 public class MNIActivity extends TAPActivity
-    implements ProgramFragment.Callbacks, NotesFragment.TestCallbacks {
+    implements
+      ProgramFragment.Callbacks,
+      NotesFragment.TestCallbacks,
+      EditorFragment.Callbacks
+{
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
 
@@ -61,6 +68,7 @@ public class MNIActivity extends TAPActivity
   private IDualLayout mDualLayout;
 
   private String mProgramId;
+  private String mCurrentTalkId;
 
 
 
@@ -190,6 +198,7 @@ public class MNIActivity extends TAPActivity
         .replace(R.id.notes_container,
             NotesFragment.create(toolbarTitle, talkId, imageUrl), tag)
         .commit();
+    mCurrentTalkId = talkId;
   }
 
   private void commitProgramFragment(final String programId) {
@@ -264,6 +273,14 @@ public class MNIActivity extends TAPActivity
       commitNotesFragment(talkId, talkName, imageUrl);
     } catch (ParseException e) {
       e.printStackTrace();
+    }
+  }
+
+  @Override
+  public void createNote(String editorText, INote.NoteType type) {
+    final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
+    if (note != null) {
+      Commands.Local.saveEventuallyNote(note);
     }
   }
 }

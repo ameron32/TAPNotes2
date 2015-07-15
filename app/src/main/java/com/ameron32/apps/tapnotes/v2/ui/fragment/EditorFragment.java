@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
+import android.app.Activity;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -19,9 +21,12 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.parse.ParseException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,7 +35,8 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class EditorFragment extends TAPFragment
-        implements IEditorDelegate.IEditorDelegateCallbacks
+    implements IEditorDelegate.IEditorDelegateCallbacks,
+      Toolbar.OnMenuItemClickListener
 {
 
   public static EditorFragment create() {
@@ -48,10 +54,31 @@ public class EditorFragment extends TAPFragment
   @InjectView(R.id.button_submit_note)
   ImageView mSubmitButton;
 
+  private Callbacks mCallbacks;
+
+
 
   @Override
   protected FragmentDelegate createDelegate() {
     return EditorLayoutFragmentDelegate.create(EditorFragment.this);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    if (activity instanceof Callbacks) {
+      mCallbacks = (Callbacks) activity;
+    } else {
+      throw new IllegalStateException(activity.getClass().getSimpleName()
+          + "must implement " + Callbacks.class.getSimpleName() + " in order to use "
+          + EditorFragment.class.getSimpleName());
+    }
+  }
+
+  @Override
+  public void onDetach() {
+    mCallbacks = null;
+    super.onDetach();
   }
 
   @Nullable
@@ -60,6 +87,7 @@ public class EditorFragment extends TAPFragment
     final View view = inflater.inflate(R.layout.fragment_mni_editor, container, false);
     ButterKnife.inject(this, view);
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
+    mToolbar.setOnMenuItemClickListener(this);
     final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());
     int color = getColorFromAttribute(R.attr.colorAccent, R.color.teal_colorAccent);
 //    getResources().getColor(R.color.teal_colorAccent)
@@ -91,5 +119,48 @@ public class EditorFragment extends TAPFragment
   @Override
   public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
     // TODO: KRIS delegate callback
+    Note note = null;
+    if (noteId != null) {
+      try {
+        note = Queries.Local.getNote(noteId);
+
+        // FOUND EXISTING NOTE -- PROCEED TO EDIT NOTE -- then return
+        editNote(editorText, type, note);
+        return;
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    }
+
+    // failed to find existing note -- proceed to create new note
+    mCallbacks.createNote(editorText, type);
+  }
+
+  private void editNote(String editorText, INote.NoteType type, Note note) {
+    if (type != note.getNoteType()) {
+      note.changeNoteType(type);
+    }
+    note.setNoteText(editorText);
+  }
+
+  @Override
+  public boolean onMenuItemClick(MenuItem item) {
+    switch(item.getItemId()) {
+      case R.id.editor_item_scripture:
+        // TODO KRIS push to scripture picker
+        return true;
+      case R.id.editor_item_picture:
+        // TODO KRIS open camera activity
+        return true;
+      case R.id.editor_item_video:
+        // TODO KRIS open video activity
+        return true;
+    }
+    return false;
+  }
+
+  public interface Callbacks {
+
+    void createNote(String editorText, INote.NoteType type);
   }
 }
