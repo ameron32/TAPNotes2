@@ -19,7 +19,8 @@
   <FrameLayout
       android:id="@+id/notes_container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
+      android:layout_height="match_parent"
+      android:background="?notes_container_background">
 
     <!-- COMMIT FRAGMENT -->
 
