@@ -15,6 +15,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
+import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
@@ -28,6 +29,9 @@ import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.parse.ParseException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.InjectView;
@@ -40,7 +44,6 @@ import butterknife.InjectView;
 public class MNIActivity extends TAPActivity
     implements
       ProgramFragment.Callbacks,
-      NotesFragment.TestCallbacks,
       EditorFragment.Callbacks
 {
 
@@ -201,6 +204,10 @@ public class MNIActivity extends TAPActivity
     mCurrentTalkId = talkId;
   }
 
+  private INoteHandler getNotesFragment() {
+    return (INoteHandler) getSupportFragmentManager().findFragmentByTag("notes");
+  }
+
   private void commitProgramFragment(final String programId) {
     final String tag = "program";
     removeFragment(tag);
@@ -254,16 +261,6 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void itemClicked(int position) {
-    final Fragment notes = NotesFragment.create("Item " + position, "Text1: " + position, "http://i.imgur.com/ofKKBCG.jpg");
-    getSupportFragmentManager().beginTransaction()
-        .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-        .replace(R.id.notes_container, notes)
-        .addToBackStack(Integer.toString(position))
-        .commit();
-  }
-
-  @Override
   public void changeNotesFragmentTo(String talkId) {
     // TODO add an imageUrl
     try {
@@ -278,9 +275,34 @@ public class MNIActivity extends TAPActivity
 
   @Override
   public void createNote(String editorText, INote.NoteType type) {
+    Note lastNote = null;
+    try {
+      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      lastNote = Queries.Local.findLastClientOwnedNoteFor(talk);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
     final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
+
+    if (lastNote != null) {
+      lastNote.setNext(note);
+      Commands.Local.saveEventuallyNote(lastNote);
+    }
+
     if (note != null) {
       Commands.Local.saveEventuallyNote(note);
     }
+
+    getNotesFragment().notesChanged(listify(lastNote));
+    getNotesFragment().notesAdded(listify(note));
+  }
+
+  private List<INote> listify(INote... notes) {
+    final ArrayList<INote> list = new ArrayList<>(notes.length);
+    for (int i = 0; i < notes.length; i++) {
+      final INote note = notes[i];
+      list.add(note);
+    }
+    return list;
   }
 }

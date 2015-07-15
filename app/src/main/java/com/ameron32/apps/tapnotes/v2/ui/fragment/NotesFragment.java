@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.OnItemClickListener;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter._DummyTestAdapter;
@@ -43,9 +44,10 @@ import butterknife.InjectView;
  * Created by klemeilleur on 6/15/2015.
  */
 public class NotesFragment extends TAPFragment
-    implements OnItemClickListener,
+    implements
+      INoteHandler,
       IToolbarHeaderDelegate.IToolbarHeaderCallbacks,
-      INotesDelegate.INotesDelegateCallbacks{
+      INotesDelegate.INotesDelegateCallbacks {
 
   private static final String TITLE_ARG = "TITLE_ARG";
   private static final String TALK_ID_ARG = "TALK_ID_ARG";
@@ -66,8 +68,6 @@ public class NotesFragment extends TAPFragment
   private String mToolbarTitle;
   private String mSymposiumTitle;
   private String mImageUrl;
-  private TestCallbacks mCallbacks;
-  private ItemTouchHelper mItemTouchHelper;
 
   public NotesFragment() {
     // empty constructor
@@ -93,24 +93,6 @@ public class NotesFragment extends TAPFragment
   }
 
   @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    if (activity instanceof TestCallbacks) {
-      mCallbacks = (TestCallbacks) activity;
-    } else {
-      throw new IllegalStateException(activity.getClass().getSimpleName()
-          + "must implement " + TestCallbacks.class.getSimpleName() + "in order to use "
-          + NotesFragment.class.getSimpleName());
-    }
-  }
-
-  @Override
-  public void onDetach() {
-    mCallbacks = null;
-    super.onDetach();
-  }
-
-  @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     final Bundle args = getArguments();
@@ -120,8 +102,6 @@ public class NotesFragment extends TAPFragment
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
-
-  // onDataReceived(ITalk talk, List<INote> notes);
 
   @Nullable
   @Override
@@ -171,25 +151,6 @@ public class NotesFragment extends TAPFragment
     super.onDestroyView();
   }
 
-//  private void setupRecycler() {
-//    mRecyclerView.setHasFixedSize(true);
-//    mRecyclerView.setLayoutManager(
-//        new LinearLayoutManager(getContext()));
-////    final _DummyAdapter adapter = new _DummyAdapter();
-////    adapter.setItemClickListener(this);
-//    final _DummyTestAdapter adapter = new _DummyTestAdapter();
-//    mRecyclerView.setAdapter(adapter);
-//    mItemTouchHelper = new ItemTouchHelper(new MyCallback(adapter));
-//    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-//  }
-
-  @Override
-  public void itemClicked(View v, int position) {
-    if (mCallbacks != null) {
-      mCallbacks.itemClicked(position);
-    }
-  }
-
   private void setTitles() {
     if (mHeader == null) {
       // do nothing
@@ -207,7 +168,15 @@ public class NotesFragment extends TAPFragment
     }
   }
 
+  @Override
+  public void notesChanged(List<INote> notes) {
+    mNotesDelegate.replaceNotes(notes);
+  }
 
+  @Override
+  public void notesAdded(List<INote> notes) {
+    mNotesDelegate.addNotes(notes);
+  }
 
   @Override
   public void onPreviousPressed() {
@@ -317,39 +286,5 @@ public class NotesFragment extends TAPFragment
       }
     }
     return false;
-  }
-
-
-
-  public interface TestCallbacks {
-    void itemClicked(int position);
-  }
-
-  public class MyCallback extends ItemTouchHelper.SimpleCallback {
-
-    private final _DummyTestAdapter mAdapter;
-
-    public MyCallback(_DummyTestAdapter adapter) {
-      super(ItemTouchHelper.UP | ItemTouchHelper.DOWN,
-          ItemTouchHelper.RIGHT);
-      this.mAdapter = adapter;
-    }
-
-    @Override
-    public boolean onMove(RecyclerView recyclerView,
-        RecyclerView.ViewHolder viewHolder,
-        RecyclerView.ViewHolder target) {
-      if (viewHolder.getItemViewType() != target.getItemViewType()) {
-        return false;
-      }
-
-      mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-      return true;
-    }
-
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-      mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
-    }
   }
 }
