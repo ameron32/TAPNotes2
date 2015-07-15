@@ -114,6 +114,9 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
         }
 
+        noteText.setText("");
+        noteText.setTag(null);
+
 
       }
     });

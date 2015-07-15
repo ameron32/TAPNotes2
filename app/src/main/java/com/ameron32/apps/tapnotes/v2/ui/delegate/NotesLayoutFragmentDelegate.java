@@ -210,22 +210,36 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   public void synchronizeNotes(List<INote> allNotes) {
     // TODO: MICAH delegate method
     adapter.synchronizeNotes(allNotes);
+    desselect();
+
+
 
   }
 
   @Override
   public void addNotes(List<INote> notesToAdd) {
       adapter.addNotes(notesToAdd);
+    desselect();
+
   }
 
   @Override
   public void removeNotes(List<INote> notesToRemove) {
       adapter.removeNotes(notesToRemove);
+    desselect();
+
   }
 
   @Override
   public void replaceNotes(List<INote> notesToReplace) {
     adapter.replaceNotes(notesToReplace);
+    desselect();
 
+  }
+
+  private void desselect(){
+    int count = recyclerView.getChildCount();
+    for (int i=0; i<count; i++)
+    recyclerView.getChildAt(i).setSelected(false);
   }
 }
