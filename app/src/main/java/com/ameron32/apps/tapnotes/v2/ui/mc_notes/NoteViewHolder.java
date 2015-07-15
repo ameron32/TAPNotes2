@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
@@ -15,9 +16,8 @@ import butterknife.InjectView;
  */
 public class NoteViewHolder extends AbstractDraggableItemViewHolder {
 
-    @InjectView (R.id.container)
-    public FrameLayout mContainer;
-
+@InjectView(R.id.noteLayout)
+public RelativeLayout noteLayout;
     @InjectView(R.id.notesTextView)
     public TextView notesTextView;
 

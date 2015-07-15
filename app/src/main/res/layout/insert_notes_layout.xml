@@ -18,7 +18,7 @@
     android:layout_height="match_parent"
     android:layout_width="fill_parent">
 
-<android.support.v7.widget.RecyclerView
+<com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecycler
     android:id="@+id/notesRecycler"
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
