@@ -58,12 +58,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   ImageView submitButton;
   @InjectView(R.id.edittext_note_editor)
   EditText noteText;
-  @InjectView(R.id.button_scripture)
-  ImageView scriptureButton;
-  @InjectView(R.id.button_camera)
-  ImageView cameraButton;
-  @InjectView(R.id.button_video)
-  ImageView videoButton;
+
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
