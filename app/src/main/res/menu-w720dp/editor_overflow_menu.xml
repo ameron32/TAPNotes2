@@ -3,16 +3,19 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
       android:id="@+id/editor_item_scripture"
+      android:icon="@drawable/bible"
       android:orderInCategory="1"
       android:title="@string/editor_menu_title_text_scripture"
       app:showAsAction="ifRoom"/>
   <item
       android:id="@+id/editor_item_picture"
+      android:icon="@drawable/ic_photo_camera_black_48dp"
       android:orderInCategory="2"
       android:title="@string/editor_menu_title_text_picture"
       app:showAsAction="ifRoom"/>
   <item
       android:id="@+id/editor_item_video"
+      android:icon="@drawable/ic_videocam_black_48dp"
       android:orderInCategory="3"
       android:title="@string/editor_menu_title_text_video"
       app:showAsAction="ifRoom"/>
