@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
@@ -27,6 +28,8 @@ import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 import com.parse.ParseException;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -55,6 +58,9 @@ public class EditorFragment extends TAPFragment
   ImageView mSubmitButton;
 
   private Callbacks mCallbacks;
+
+  @Inject
+  ActivitySnackBarController mSnackBar;
 
 
 
@@ -86,24 +92,28 @@ public class EditorFragment extends TAPFragment
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_mni_editor, container, false);
     ButterKnife.inject(this, view);
-    mToolbar.inflateMenu(R.menu.editor_overflow_menu);
-    mToolbar.setOnMenuItemClickListener(this);
     final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());
     int color = getColorFromAttribute(R.attr.colorAccent, R.color.teal_colorAccent);
-//    getResources().getColor(R.color.teal_colorAccent)
     DrawableCompat.setTint(d, color);
     return view;
   }
 
+  @Override
+  public void onViewCreated(View view, Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    mToolbar.inflateMenu(R.menu.editor_overflow_menu);
+    mToolbar.setOnMenuItemClickListener(this);
+  }
+
   private int getColorFromAttribute(@AttrRes int attr, @ColorRes int defaultColor) {
-    TypedValue typedValue = new TypedValue();
+    final TypedValue typedValue = new TypedValue();
     getActivity().getTheme()
             .resolveAttribute(attr, typedValue, true);
-    int[] accentColor = new int[] { attr };
-    int indexOfAttrColor = 0;
-    TypedArray a = getContext()
+    final int[] accentColor = new int[] { attr };
+    final int indexOfAttrColor = 0;
+    final TypedArray a = getContext()
             .obtainStyledAttributes(typedValue.data, accentColor);
-    int color = a.getColor(indexOfAttrColor, defaultColor);
+    final int color = a.getColor(indexOfAttrColor, defaultColor);
     a.recycle();
     return color;
   }
@@ -118,7 +128,6 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
-    // TODO: KRIS delegate callback
     Note note = null;
     if (noteId != null) {
       try {
@@ -148,12 +157,15 @@ public class EditorFragment extends TAPFragment
     switch(item.getItemId()) {
       case R.id.editor_item_scripture:
         // TODO KRIS push to scripture picker
+        mSnackBar.toast("Scripture--to be implemented.");
         return true;
       case R.id.editor_item_picture:
         // TODO KRIS open camera activity
+        mSnackBar.toast("Picture--to be implemented.");
         return true;
       case R.id.editor_item_video:
         // TODO KRIS open video activity
+        mSnackBar.toast("Video--to be implemented.");
         return true;
     }
     return false;

@@ -52,9 +52,14 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
   }
 
   private void initializeActivityModules_Dagger1() {
-    Injector.INSTANCE.init(new ActivityModule(this));
-    Injector.INSTANCE.init(new DefaultAndroidActivityModule(this));
+    Object[] modules = getModules();
+    for (int i = 0; i < modules.length; i++) {
+      Object module = modules[i];
+      Injector.INSTANCE.init(module);
+    }
   }
+
+  protected abstract Object[] getModules();
 
   @Override
   protected void onPostCreate(Bundle savedInstanceState) {

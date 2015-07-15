@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
+import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
+import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -69,6 +71,14 @@ public class ProgramSelectionActivity
 
 
   ActivitySnackBarController snackBarController;
+
+  @Override
+  protected Object[] getModules() {
+    return new Object[] {
+        new ActivityModule(this),
+        new DefaultAndroidActivityModule(this)
+    };
+  }
 
   void onLoading() {
     snackBarController.toast("Starting...");

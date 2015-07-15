@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
+import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
+import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
@@ -81,6 +83,14 @@ public class MNIActivity extends TAPActivity
 
   @Inject
   ApplicationThemeController themeController;
+
+  @Override
+  protected Object[] getModules() {
+    return new Object[] {
+        new MNIActivityModule(this),
+        new DefaultAndroidActivityModule(this)
+    };
+  }
 
   @Override
   protected @LayoutRes int getLayoutResource() {
@@ -173,9 +183,7 @@ public class MNIActivity extends TAPActivity
   }
 
   private void findViews() {
-    IDualLayout displacing = (IDualLayout) findViewById(R.id.pane_displacing_layout);
-    IDualLayout overlapping = (IDualLayout) findViewById(R.id.pane_overlapping_layout);
-    mDualLayout = (displacing != null) ? displacing : overlapping;
+    mDualLayout = (IDualLayout) findViewById(R.id.pane_animating_layout);
     if (mDualLayout == null) {
       throw new IllegalStateException("mDualLayout cannot be null.");
     }

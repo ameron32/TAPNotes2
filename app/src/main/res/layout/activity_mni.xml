@@ -8,22 +8,34 @@
     android:fitsSystemWindows="true">
 
   <RelativeLayout
+      android:id="@+id/container"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-    <include layout="@layout/frame_center_panes" />
+    <include layout="@layout/frame_center_panes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/editor_container"/>
 
     <FrameLayout
         android:id="@+id/editor_container"
         android:background="?editor_container_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="72dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentLeft="true" >
 
       <!-- COMMIT FRAGMENT -->
 
     </FrameLayout>
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/snackbar_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editor_container"
+        android:layout_alignParentLeft="true" />
+
   </RelativeLayout>
 
   <android.support.design.widget.NavigationView

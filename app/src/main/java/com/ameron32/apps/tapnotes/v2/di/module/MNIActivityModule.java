@@ -19,21 +19,21 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 
 import android.app.Activity;
 
-import com.ameron32.apps.tapnotes.v2.di.controller.ActivityCalendarViewDialogController;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
-import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivityCalendarViewDialogController;
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityLoggingController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityTitleController;
-import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
+import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramTemplateFragment;
-import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
 
 import javax.inject.Singleton;
 
@@ -47,18 +47,18 @@ import dagger.Provides;
  */
 @Module(
     injects = {
-        SettingsActivity.class,
-        ProgramSelectionActivity.class,
-        ProgramSelectionFragment.class,
-        ProgramTemplateFragment.class,
+        MNIActivity.class,
+        NotesFragment.class,
+        ProgramFragment.class,
+        EditorFragment.class
     },
     addsTo = ApplicationModule.class,
     library = true
 )
-public class ActivityModule {
+public class MNIActivityModule {
   private final Activity mActivity;
 
-  public ActivityModule(final Activity activity) {
+  public MNIActivityModule(final Activity activity) {
     this.mActivity = activity;
   }
 

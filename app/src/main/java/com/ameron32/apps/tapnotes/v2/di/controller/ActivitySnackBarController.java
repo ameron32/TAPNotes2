@@ -1,7 +1,12 @@
 package com.ameron32.apps.tapnotes.v2.di.controller;
 
 import android.app.Activity;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
+import android.view.View;
+
+import com.ameron32.apps.tapnotes.v2.R;
 
 
 /**
@@ -16,8 +21,19 @@ public class ActivitySnackBarController extends AbsActivityController {
   public void toast(String message) {
 
     // from Design Support Library
-    Snackbar.make(getActivity().getWindow().getDecorView().findViewById(android.R.id.content),
+    final int snackBarView = R.id.snackbar_location;
+    final CoordinatorLayout preferredView = (CoordinatorLayout) getActivity().findViewById(snackBarView);
+    final View fallbackView = getActivity().getWindow().getDecorView().findViewById(android.R.id.content);
+    Snackbar.make((preferredView == null) ? fallbackView : preferredView,
         message, Snackbar.LENGTH_LONG).show();
+
+    final String pV = (preferredView == null) ? "null" : Integer.toString(preferredView.getId());
+    final String fbV = (fallbackView == null) ? "null" : Integer.toString(fallbackView.getId());
+
+    Log.d(ActivitySnackBarController.class.getSimpleName(),
+        "toast (" + getActivity().getClass().getSimpleName() + "): " + message + " with (" +
+            pV + "|" +
+            fbV + ")");
 
     // from package com.kenny.snackbar.SnackBar
 //    SnackBar.show(getActivity(), message);

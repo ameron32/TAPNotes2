@@ -24,6 +24,8 @@ import android.support.v4.app.NavUtils;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
+import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
+import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 
 import java.util.List;
 
@@ -254,6 +256,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
   }
 
   @Inject ApplicationThemeController themeController;
+
+  @Override
+  protected Object[] getModules() {
+    return new Object[] {
+        new ActivityModule(this),
+        new DefaultAndroidActivityModule(this)
+    };
+  }
 
   private Preference.OnPreferenceChangeListener mBindPreferenceSummaryToThemeListener;
 
