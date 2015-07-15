@@ -210,6 +210,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   public void synchronizeNotes(List<INote> allNotes) {
     // TODO: MICAH delegate method
     adapter.synchronizeNotes(allNotes);
+
   }
 
   @Override

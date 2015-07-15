@@ -108,7 +108,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       @Override
       public void onClick(View v) {
 
-        if (noteText.getTag() != null) {mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (String) noteText.getTag());
+        if (noteText.getTag() != null)
+        {mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (String) noteText.getTag());
         } else {
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
         }
