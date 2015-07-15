@@ -213,16 +213,17 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void addNotes(List<INote> notesToAdd) {
-    // TODO: MICAH delegate method
+      adapter.addNotes(notesToAdd);
   }
 
   @Override
   public void removeNotes(List<INote> notesToRemove) {
-    // TODO: MICAH delegate method
+      adapter.removeNotes(notesToRemove);
   }
 
   @Override
   public void replaceNotes(List<INote> notesToReplace) {
-    // TODO: MICAH delegate method
+    adapter.replaceNotes(notesToReplace);
+
   }
 }

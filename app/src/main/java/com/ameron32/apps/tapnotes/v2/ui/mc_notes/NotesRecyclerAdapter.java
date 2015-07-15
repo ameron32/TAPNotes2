@@ -23,18 +23,17 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     private static final String TAG = "NotesRecyclerAdapter";
     public static final int offsetToStartDrag = 100;
 
-    private ArrayList<INotesDelegateCallbacks> mCallbacks;
+    private INotesDelegateCallbacks mCallback;
 
     private NoteDataProvider mProvider;
 
    public NotesRecyclerAdapter(){
        mProvider = new NoteDataProvider();
        setHasStableIds(true);
-       mCallbacks = new ArrayList<>();
    }
 
     public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback){
-        mCallbacks.add(callback);
+        mCallback = callback;
     }
 
 
@@ -52,7 +51,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.insert_notes_list_item, parent, false);
-
+        setOnClickListener(v);
         return new NoteViewHolder(v);
     }
 
@@ -61,6 +60,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         INote note = mProvider.getItem(position);
         holder.notesTextView.setText(note.getNoteText());
+        holder.notesTextView.setTag(note);
+        setOnClickListener(holder.notesTextView);
 
     }
 
@@ -77,7 +78,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void synchronizeNotes(List<INote> allNotes) {
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
-        //notifyDataSetChanged();
     }
 
     @Override
@@ -97,6 +97,15 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     @Override
     public void replaceNotes(List<INote> notesToReplace) {
+            mProvider.replaceNotes(notesToReplace);
+    }
 
+    private void setOnClickListener(View v){
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCallback.onUserClickEditNote(((INote)v.getTag()).getId());
+            }
+        });
     }
 }

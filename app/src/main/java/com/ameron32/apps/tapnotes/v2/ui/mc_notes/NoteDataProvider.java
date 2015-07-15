@@ -91,9 +91,9 @@ public class NoteDataProvider extends AbstractDataProvider {
         for (INote note:mData){
             for (INote noteToReplace:notesToReplace){
                 //TODO - Notes need an ID field?  Would like to do the following:
-                //if (note.getID() == noteToReplace.getID()){
-                // note = noteToReplace;
-                // }
+                if (note.getId() == noteToReplace.getId()){
+                note = noteToReplace;
+                }
             }
         }
     }
