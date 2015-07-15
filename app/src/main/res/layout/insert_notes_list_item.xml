@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="64dp"
     style="?listItem"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/noteLayout">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <TextView
+        style="?listItem"
+        android:id="@+id/notesTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        >
+        android:layout_height="wrap_content"
+        android:gravity="left|center"
+        tools:ignore="RtlHardcoded"
+        android:minHeight="50dp"
+        android:layout_margin="10dp" />
+
+</RelativeLayout>
 
 
-
-        <TextView
-            style="?listItem"
-            android:id="@+id/notesTextView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            tools:ignore="RtlHardcoded" />
-
-    </FrameLayout>
-
-</FrameLayout>

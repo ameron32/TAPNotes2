@@ -60,8 +60,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         INote note = mProvider.getItem(position);
         holder.notesTextView.setText(note.getNoteText());
-        holder.notesTextView.setTag(note);
-        setOnClickListener(holder.notesTextView);
+        holder.noteLayout.setTag(note);
+        setOnClickListener(holder.noteLayout);
 
     }
 
@@ -104,6 +104,10 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (v.getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = (NotesRecycler)v.getParent();
+                    nr.itemClicked(v);
+                }
                 mCallback.onUserClickEditNote(((INote)v.getTag()).getId());
             }
         });

@@ -19,6 +19,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecycler;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecyclerAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -117,7 +118,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   @InjectView(R.id.collapsing_toolbar)
   CollapsingToolbarLayout mToolbarLayout;
   @InjectView(R.id.notesRecycler)
-  RecyclerView recyclerView;
+  NotesRecycler recyclerView;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
