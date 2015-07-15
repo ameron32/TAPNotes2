@@ -121,5 +121,14 @@ public class Queries {
           .find();
       return talks;
     }
+
+    public static Note getNote(String noteId)
+        throws ParseException {
+      Log.d(TAG, "getNote " + noteId);
+      final Note note = ParseQuery.getQuery(Note.class)
+          .fromLocalDatastore()
+          .get(noteId);
+      return note;
+    }
   }
 }

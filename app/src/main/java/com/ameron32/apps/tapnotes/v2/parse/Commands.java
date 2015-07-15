@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.parse;
 
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -55,6 +56,28 @@ public class Commands {
         saveEventuallyNote(note);
       }
       return notes;
+    }
+
+    public static List<INote> saveEventuallyParseNotes(List<INote> notes) {
+      Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
+      for (INote note : notes) {
+        if (note instanceof Note) {
+          saveEventuallyNote((Note) note);
+        }
+      }
+      return notes;
+    }
+
+    public static void deleteEventuallyNote(Note note) {
+      Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
+      note.deleteEventually();
+    }
+
+    public static void deleteEventuallyNotes(List<Note> notes) {
+      Log.d(TAG, "deleteEventuallyNotes: size " + notes.size());
+      for (Note note : notes) {
+        deleteEventuallyNote(note);
+      }
     }
   }
 }

@@ -68,6 +68,24 @@ public class Note
     return false;
   }
 
+  public boolean toggleImportantNote() {
+    boolean newState = false;
+    if (!isImportantNote()) {
+      newState = true;
+    }
+    setImportantNote(newState);
+    return newState;
+  }
+
+  public boolean toggleBoldNote() {
+    boolean newState = false;
+    if (!isBoldNote()) {
+      newState = true;
+    }
+    setBoldNote(newState);
+    return newState;
+  }
+
 
 
   @Override

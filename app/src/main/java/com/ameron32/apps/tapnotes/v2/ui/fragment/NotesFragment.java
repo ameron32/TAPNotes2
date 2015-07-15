@@ -20,6 +20,7 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -222,27 +223,89 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onUserClickBoldNote(String noteId) {
-    // TODO: KRIS delegate callback
+    try {
+      final Note note = Queries.Local.getNote(noteId);
+      note.toggleBoldNote();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
   public void onUserClickImportantNote(String noteId) {
-    // TODO: KRIS delegate callback
+    try {
+      final Note note = Queries.Local.getNote(noteId);
+      note.toggleImportantNote();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
   public void onUserClickEditNote(String noteId) {
     // TODO: KRIS delegate callback
+    mSnackBar.toast("onUserClickEditNote: " + noteId + " to be implemented.");
   }
 
   @Override
   public void onUserClickDeleteNote(String noteId) {
-    // TODO: KRIS delegate callback
+    try {
+      final Note note = Queries.Local.getNote(noteId);
+      mNotesDelegate.removeNotes(listify(note));
+      Commands.Local.deleteEventuallyNote(note);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
-  public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
-    // TODO: KRIS delegate callback
+  public void onUserRepositionNote(
+      String repositionedNoteId,
+      String noteIdBeforeOriginOfRepositionedNote,
+      String noteIdBeforeTargetOfRepositionedNote) {
+    Note mover = null;
+    Note beforeOrigin = null;
+    Note beforeTarget = null;
+    Note afterTarget = null;
+    Note afterMover = null;
+    try {
+      mover = Queries.Local.getNote(repositionedNoteId);
+      beforeOrigin = Queries.Local.getNote(noteIdBeforeOriginOfRepositionedNote);
+      beforeTarget = Queries.Local.getNote(noteIdBeforeTargetOfRepositionedNote);
+      final String afterTargetId = beforeTarget.getNextNoteId();
+      final String afterMoverId = mover.getNextNoteId();
+      afterTarget = Queries.Local.getNote(afterTargetId);
+      afterMover = Queries.Local.getNote(afterMoverId);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    if (mover == null ||
+        beforeOrigin == null || beforeTarget == null ||
+        afterTarget == null || afterMover == null) {
+      // fail out
+      return;
+    }
+    // proceed with all five notes
+    // attach mover to new location
+    mover.setNextNote(afterTarget);
+    beforeTarget.setNextNote(mover);
+
+    // connect gap left by mover
+    beforeOrigin.setNextNote(afterMover);
+
+    final List<INote> updates = listify(mover, beforeOrigin, beforeTarget);
+    mNotesDelegate.replaceNotes(updates);
+    Commands.Local.saveEventuallyParseNotes(updates);
+  }
+
+  private List<INote> listify(INote... notes) {
+    final ArrayList<INote> list = new ArrayList<>(notes.length);
+    for (int i = 0; i < notes.length; i++) {
+      final INote note = notes[i];
+      list.add(note);
+    }
+    return list;
   }
 
 
