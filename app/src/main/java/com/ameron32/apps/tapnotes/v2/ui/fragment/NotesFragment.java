@@ -251,9 +251,7 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onUserClickEditNote(String noteId) {
-    // TODO: KRIS delegate callback
-    mSnackBar.toast("onUserClickEditNote: " + noteId + " to be implemented.");
-
+    mCallbacks.editNote(noteId);
   }
 
   @Override
