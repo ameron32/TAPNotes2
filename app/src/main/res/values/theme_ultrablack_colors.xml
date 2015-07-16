@@ -41,6 +41,7 @@
     <item name="android:color">@color/ultrablack_line_dark_color</item>
   </style>
 
+
   <style name="navBar_upper_ultrablack"><item name="android:background">@color/ultrablack_navBar_upper</item></style>
   <style name="navBar_lower_ultrablack"><item name="android:background">@color/ultrablack_navBar_lower</item></style>
   <style name="listItem_dark_ultrablack"><item name="android:background">@color/ultrablack_listItem_dark</item></style>

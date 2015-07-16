@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
@@ -50,6 +52,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         mCallback = callback;
     }
 
+    public INotesDelegateCallbacks getmCallback(){return mCallback;}
 
     @Override
     public long getItemId(int position) {
@@ -66,9 +69,10 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.insert_notes_list_item, parent, false);
         setOnClickListener(v);
-        setLongPressListener(v);
         setonTouch(v);
-        return new NoteViewHolder(v);
+        NoteViewHolder holder = new NoteViewHolder(v);
+        setLongPressListener(v, holder.popup);
+        return holder;
     }
 
     @Override
@@ -76,7 +80,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         INote note = mProvider.getItem(position);
         holder.notesTextView.setText(note.getNoteText());
-        holder.noteLayout.setTag(note);
+        holder.noteLayout.setTag(R.string.holdertag, holder);
+        holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
 
     }
@@ -129,13 +134,14 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                     NotesRecycler nr = (NotesRecycler) v.getParent();
                     nr.itemClicked(v);
                 }
-                mCallback.onUserClickEditNote(((INote) v.getTag()));
+                mCallback.onUserClickEditNote(((INote) v.getTag(R.string.notetag)));
             }
         });
     }
 
-    private void setLongPressListener(View v) {
+    private void setLongPressListener(View v, View popup) {
         v.setOnLongClickListener(new View.OnLongClickListener() {
+
 
             @InjectView(R.id.repos_button)
             ImageView reposButton;
@@ -152,12 +158,17 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             @Override
             public boolean onLongClick(View v) {
 
+                if (v.getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = ((NotesRecycler) v.getParent());
+                    nr.itemClicked(v);
+                    popup.setVisibility(View.VISIBLE);
 
-
-
-/*                if (v.getParent() instanceof NotesRecycler){
-                    ((NotesRecycler)v.getParent()).itemClicked(v);
                 }
+
+
+
+
+/*
 
                 final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
