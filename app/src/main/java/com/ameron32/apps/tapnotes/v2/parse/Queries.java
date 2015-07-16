@@ -8,8 +8,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import org.json.JSONObject;
-
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,26 +19,47 @@ public class Queries {
   private static final String TAG = Queries.class.getSimpleName();
   private static final int FIRST_OR_ONLY = 0;
 
+  private static final int LIMIT_QUERY_MAXIMUM_ALLOWED = 1000;
+  private static final int LIMIT_SKIP_MAXIMUM_ALLOWED = 10000;
+
 
 
   public static class Live {
 
+    // CURRENT LIMIT = 10000
     public static List<Note> pinAllClientOwnedNotesFor(Program program)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
-      final List<Note> notes = ParseQuery.getQuery(Note.class)
-          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
-              Commands.Local.getClientUser())
-          .find();
+      int currentPage = 0;
+      final List<Note> notes = new ArrayList<>();
+      do {
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
+        notes.addAll(moreNotes);
+        currentPage++;
+      } while (notes.size() == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
+          notes.size() < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(notes);
       return notes;
     }
 
+    private static List<Note> queryClientOwnedNotesFor(Program program, int page)
+        throws ParseException {
+      final List<Note> notes = ParseQuery.getQuery(Note.class)
+          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+              Commands.Local.getClientUser())
+          .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED)
+          .find();
+      return notes;
+    }
+
+    // CURRENT LIMIT = 1000
     public static List<Talk> pinAllProgramTalksFor(Program program)
         throws ParseException {
       Log.d(TAG, "pinAllProgramTalksFor " + program.getObjectId());
       final List<Talk> talks = ParseQuery.getQuery(Talk.class)
           .whereEqualTo(Constants.TALK_oPROGRAM_OBJECT_KEY, program)
+          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED)
           .find();
       Talk.pinAll(talks);
       return talks;
