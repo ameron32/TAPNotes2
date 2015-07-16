@@ -65,8 +65,8 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         mCallBack=listener;
     }
 
-    public void talkClicked(String talk_ID){
-        mCallBack.onTalkClicked(talk_ID);
+    public void talkClicked(ITalk talk){
+        mCallBack.onTalkClicked(talk);
     }
 
 
@@ -244,10 +244,8 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
     public static class ChildViewHolder extends ViewHolder {
 
         @InjectView (R.id.program_item_textview) TextView textView;
-        public String item_ID;
+        public ITalk item;
         ProgramAdapter mAdapter;
-        int group;
-        int position;
 
         public boolean expired = false;
 
@@ -272,7 +270,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
             if (myView.getTag() instanceof ChildViewHolder)
             h = (ChildViewHolder) myView.getTag();
             if (h!=null){
-                mAdapter.talkClicked(h.item_ID);
+                mAdapter.talkClicked(h.item);
             }
             //myView.setSelected(true);
 
@@ -349,7 +347,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
                 ChildViewHolderWithSymposium cvhws = (ChildViewHolderWithSymposium) viewHolder;
                 cvhws.symposiumTextView.setText(content.get(i).get(i2).getSymposiumTitle());
                 cvhws.textView.setText(content.get(i).get(i2).getTalkTitle());
-                cvhws.item_ID = content.get(i).get(i2).getId();
+                cvhws.item = content.get(i).get(i2);
                 holder = cvhws;
             break;
 
@@ -359,7 +357,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
             default:
                 ChildViewHolder cvh = (ChildViewHolder) viewHolder;
                 cvh.textView.setText(content.get(i).get(i2).getTalkTitle());
-                cvh.item_ID = content.get(i).get(i2).getId();
+                cvh.item = content.get(i).get(i2);
                 holder = cvh;
             break;
         }

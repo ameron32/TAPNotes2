@@ -55,28 +55,28 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   private static final INotesDelegateCallbacks stubCallbacks2 = new INotesDelegateCallbacks() {
     @Override
-    public void onUserClickBoldNote(String noteId) {
+    public void onUserClickBoldNote(INote note) {
       // stub only
 
     }
 
     @Override
-    public void onUserClickImportantNote(String noteId) {
+    public void onUserClickImportantNote(INote note) {
       // stub only
     }
 
     @Override
-    public void onUserClickEditNote(String noteId) {
+    public void onUserClickEditNote(INote note) {
       // stub only
     }
 
     @Override
-    public void onUserClickDeleteNote(String noteId) {
+    public void onUserClickDeleteNote(INote note) {
       // stub only
     }
 
     @Override
-    public void onUserRepositionNote(String repositionedNoteId, String noteIdBeforeOriginOfRepositionedNote, String noteIdBeforeTargetOfRepositionedNote) {
+    public void onUserRepositionNote(INote repositionedNote, INote noteBeforeOriginOfRepositionedNote, INote noteBeforeTargetOfRepositionedNote) {
       // stub only
     }
   };
