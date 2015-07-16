@@ -12,6 +12,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.EventType;
+import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
@@ -163,10 +164,10 @@ public class ProgramFragment extends TAPFragment
   }
 
   @Override
-  public void onTalkClicked(String talkId) {
+  public void onTalkClicked(ITalk talk) {
     // TODO callbacks
     if (mCallbacks != null) {
-      mCallbacks.changeNotesFragmentTo(talkId);
+      mCallbacks.changeNotesFragmentTo(talk.getId());
     }
   }
 

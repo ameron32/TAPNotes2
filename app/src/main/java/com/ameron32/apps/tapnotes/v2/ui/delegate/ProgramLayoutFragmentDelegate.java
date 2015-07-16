@@ -13,6 +13,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramRecycler;
 import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.SimpleDividerItemDecoration;
@@ -36,7 +37,7 @@ public class ProgramLayoutFragmentDelegate extends FragmentDelegate
       = new IProgramDelegate.IProgramDelegateCallbacks() {
 
     @Override
-    public void onTalkClicked(String talkId) {
+    public void onTalkClicked(ITalk talk) {
       // stub only
     }
   };

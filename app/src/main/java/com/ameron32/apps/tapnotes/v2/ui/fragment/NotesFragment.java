@@ -230,7 +230,7 @@ public class NotesFragment extends TAPFragment
 
 
   @Override
-  public void onUserClickBoldNote(String noteId) {
+  public void onUserClickBoldNote(ITalk noteId) {
     try {
       final Note note = Queries.Local.getNote(noteId);
       note.toggleBoldNote();
