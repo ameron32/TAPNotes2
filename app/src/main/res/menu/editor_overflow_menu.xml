@@ -5,18 +5,18 @@
       android:id="@+id/editor_item_scripture"
       android:orderInCategory="1"
       android:title="@string/editor_menu_title_text_scripture"
-      android:icon="@drawable/bible"
+      android:icon="?ic_bible_icon"
       app:showAsAction="never"/>
   <item
       android:id="@+id/editor_item_picture"
       android:orderInCategory="2"
       android:title="@string/editor_menu_title_text_picture"
-      android:icon="@drawable/ic_photo_camera_black_48dp"
+      android:icon="?ic_photo_camera_icon"
       app:showAsAction="never"/>
   <item
       android:id="@+id/editor_item_video"
       android:orderInCategory="3"
       android:title="@string/editor_menu_title_text_video"
-      android:icon="@drawable/ic_videocam_black_48dp"
+      android:icon="?ic_videocam_icon"
       app:showAsAction="never"/>
 </menu>
