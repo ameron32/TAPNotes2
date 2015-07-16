@@ -86,7 +86,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   public void onCreate(@Nullable Bundle savedInstanceState) {
 
-    adapter = new NotesRecyclerAdapter();
+    adapter = new NotesRecyclerAdapter(getContext());
 
   }
 
@@ -163,7 +163,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     ButterKnife.inject(this.getActivity());
 
     if (adapter==null){
-      adapter = new NotesRecyclerAdapter();
+      adapter = new NotesRecyclerAdapter(getContext());
     }
 
     recyclerView.setAdapter(adapter);

@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:gravity="left|center"
         tools:ignore="RtlHardcoded"
-        android:minHeight="50dp"
+        android:minHeight="@dimen/note_row_height_min"
         android:layout_margin="10dp" />
 
 </RelativeLayout>
