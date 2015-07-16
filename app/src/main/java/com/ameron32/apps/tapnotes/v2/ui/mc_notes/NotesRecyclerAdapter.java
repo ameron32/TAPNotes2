@@ -1,10 +1,17 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
@@ -14,6 +21,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
 
 /**
  * Created by Micah on 7/4/2015.
@@ -22,17 +32,21 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     private static final String TAG = "NotesRecyclerAdapter";
     public static final int offsetToStartDrag = 100;
+    private final Context mContext;
+    int lastX;
+    int lastY;
 
     private INotesDelegateCallbacks mCallback;
 
     private NoteDataProvider mProvider;
 
-   public NotesRecyclerAdapter(){
-       mProvider = new NoteDataProvider();
-       setHasStableIds(true);
-   }
+    public NotesRecyclerAdapter(Context context) {
+        this.mContext = context;
+        mProvider = new NoteDataProvider();
+        setHasStableIds(true);
+    }
 
-    public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback){
+    public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback) {
         mCallback = callback;
     }
 
@@ -52,6 +66,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.insert_notes_list_item, parent, false);
         setOnClickListener(v);
+        setLongPressListener(v);
+        setonTouch(v);
         return new NoteViewHolder(v);
     }
 
@@ -71,8 +87,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     }
 
 
-
-
     //INotesDelegate methods:
     @Override
     public void synchronizeNotes(List<INote> allNotes) {
@@ -84,8 +98,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     @Override
     public void addNotes(List<INote> notesToAdd) {
-        for (INote note:notesToAdd)
-        mProvider.addNote(note);
+        for (INote note : notesToAdd)
+            mProvider.addNote(note);
         notifyDataSetChanged();
 
     }
@@ -93,7 +107,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     @Override
     public void removeNotes(List<INote> notesToRemove) {
 
-        for (INote note:notesToRemove){
+        for (INote note : notesToRemove) {
             mProvider.removeItem(note);
             notifyDataSetChanged();
         }
@@ -103,19 +117,79 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     @Override
     public void replaceNotes(List<INote> notesToReplace) {
-            mProvider.replaceNotes(notesToReplace);
+        mProvider.replaceNotes(notesToReplace);
         notifyDataSetChanged();
     }
 
-    private void setOnClickListener(View v){
+    private void setOnClickListener(View v) {
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getParent() instanceof NotesRecycler){
-                    NotesRecycler nr = (NotesRecycler)v.getParent();
+                if (v.getParent() instanceof NotesRecycler) {
+                    NotesRecycler nr = (NotesRecycler) v.getParent();
                     nr.itemClicked(v);
                 }
-                mCallback.onUserClickEditNote(((INote)v.getTag()).getId());
+                mCallback.onUserClickEditNote(((INote) v.getTag()).getId());
+            }
+        });
+    }
+
+    private void setLongPressListener(View v) {
+        v.setOnLongClickListener(new View.OnLongClickListener() {
+
+            @InjectView(R.id.repos_button)
+            ImageView reposButton;
+            @InjectView(R.id.bold_button)
+            ImageView boldButton;
+            @InjectView(R.id.important_button)
+            ImageView importantButton;
+            @InjectView(R.id.edit_button)
+            ImageView editButton;
+            @InjectView(R.id.delete_button)
+            ImageView deleteButton;
+
+
+            @Override
+            public boolean onLongClick(View v) {
+
+                final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                dialog.setContentView(R.layout.context_menu_layout);
+                ButterKnife.inject(this, v);
+
+                WindowManager.LayoutParams wmlp = dialog.getWindow().getAttributes();
+
+                wmlp.gravity = Gravity.CENTER_HORIZONTAL;
+                wmlp.y = lastY;   //y position
+                dialog.show();
+
+
+                return false;
+            }
+        });
+    }
+
+    private void setonTouch(View v) {
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent ev) {
+                final int action = ev.getAction();
+                switch (action & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN: {
+                        int y=0;
+                        if (v.getParent() instanceof NotesRecycler){
+                            NotesRecycler nr = (NotesRecycler)v.getParent();
+                            y=nr.indexOfChild(v)* (int)(mContext.getResources().getDimension(R.dimen.note_row_height_min));
+                        }
+
+
+                            lastY = (int) ev.getY();
+                            //lastY+=y;
+                        break;
+                    }
+                }
+                return false;
             }
         });
     }

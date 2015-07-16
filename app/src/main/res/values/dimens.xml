@@ -12,4 +12,6 @@
 
   <dimen name="login_column_width">240dp</dimen>
 
+  <dimen name="note_row_height_min">50dp</dimen>
+
 </resources>
