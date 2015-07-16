@@ -9,7 +9,7 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
  */
 public interface IEditorDelegate {
 
-  void updateEditorText(String newEditorText, @Nullable String noteId);
+  void updateEditorText(String newEditorText, @Nullable INote note);
 
 
 
@@ -22,6 +22,6 @@ public interface IEditorDelegate {
      * provide a noteId when editing an existing note (see updateEditorText())
      * provide null when submitting a brand new note
      */
-    void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId);
+    void onSubmitClicked(String editorText, INote.NoteType type, @Nullable INote note);
   }
 }

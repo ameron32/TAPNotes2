@@ -15,6 +15,6 @@ public interface IProgramDelegate {
 
   public interface IProgramDelegateCallbacks {
 
-    void onTalkClicked(String talkId);
+    void onTalkClicked(ITalk talk);
   }
 }

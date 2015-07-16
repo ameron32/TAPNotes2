@@ -18,14 +18,14 @@ public interface INotesDelegate {
 
   public interface INotesDelegateCallbacks {
 
-    void onUserClickBoldNote(String noteId);
-    void onUserClickImportantNote(String noteId);
-    void onUserClickEditNote(String noteId);
-    void onUserClickDeleteNote(String noteId);
+    void onUserClickBoldNote(INote note);
+    void onUserClickImportantNote(INote note);
+    void onUserClickEditNote(INote note);
+    void onUserClickDeleteNote(INote note);
 
     void onUserRepositionNote(
-        String repositionedNoteId,
-        String noteIdBeforeOriginOfRepositionedNote,
-        String noteIdBeforeTargetOfRepositionedNote);
+        INote repositionedNote,
+        INote noteBeforeOriginOfRepositionedNote,
+        INote noteBeforeTargetOfRepositionedNote);
   }
 }
