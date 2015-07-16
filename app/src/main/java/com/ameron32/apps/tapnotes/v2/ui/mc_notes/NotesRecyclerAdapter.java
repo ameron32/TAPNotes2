@@ -52,6 +52,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         mCallback = callback;
     }
 
+    public INotesDelegateCallbacks getmCallback(){return mCallback;}
 
     @Override
     public long getItemId(int position) {
@@ -79,7 +80,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         INote note = mProvider.getItem(position);
         holder.notesTextView.setText(note.getNoteText());
-        holder.noteLayout.setTag(note);
+        holder.noteLayout.setTag(R.string.holdertag, holder);
+        holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
 
     }
@@ -132,7 +134,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                     NotesRecycler nr = (NotesRecycler) v.getParent();
                     nr.itemClicked(v);
                 }
-                mCallback.onUserClickEditNote(((INote) v.getTag()));
+                mCallback.onUserClickEditNote(((INote) v.getTag(R.string.notetag)));
             }
         });
     }
