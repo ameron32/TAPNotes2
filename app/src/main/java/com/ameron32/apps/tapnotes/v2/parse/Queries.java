@@ -36,6 +36,8 @@ public class Queries {
         final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
         notes.addAll(moreNotes);
         currentPage++;
+        Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
+            currentPage + " notes.size(): " + notes.size());
       } while (notes.size() == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
           notes.size() < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(notes);
