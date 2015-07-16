@@ -17,6 +17,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
@@ -230,62 +231,51 @@ public class NotesFragment extends TAPFragment
 
 
   @Override
-  public void onUserClickBoldNote(String noteId) {
-    try {
-      final Note note = Queries.Local.getNote(noteId);
-      note.toggleBoldNote();
-    } catch (ParseException e) {
-      e.printStackTrace();
+  public void onUserClickBoldNote(INote note) {
+    if (note instanceof INoteEditable) {
+      ((INoteEditable) note).toggleBoldNote();
     }
   }
 
   @Override
-  public void onUserClickImportantNote(String noteId) {
-    try {
-      final Note note = Queries.Local.getNote(noteId);
-      note.toggleImportantNote();
-    } catch (ParseException e) {
-      e.printStackTrace();
+  public void onUserClickImportantNote(INote note) {
+    if (note instanceof INoteEditable) {
+      ((INoteEditable) note).toggleImportantNote();
     }
   }
 
   @Override
-  public void onUserClickEditNote(String noteId) {
-    mCallbacks.dispatchEditorOn(noteId);
+  public void onUserClickEditNote(INote note) {
+    mCallbacks.dispatchEditorOn(note);
   }
 
   @Override
-  public void onUserClickDeleteNote(String noteId) {
-    try {
-      final Note note = Queries.Local.getNote(noteId);
-      mNotesDelegate.removeNotes(listify(note));
-      Commands.Local.deleteEventuallyNote(note);
-    } catch (ParseException e) {
-      e.printStackTrace();
+  public void onUserClickDeleteNote(INote note) {
+    mNotesDelegate.removeNotes(listify(note));
+    if (note instanceof Note) {
+      Commands.Local.deleteEventuallyNote((Note) note);
     }
   }
 
   @Override
   public void onUserRepositionNote(
-      String repositionedNoteId,
-      String noteIdBeforeOriginOfRepositionedNote,
-      String noteIdBeforeTargetOfRepositionedNote) {
-    Note mover = null;
-    Note beforeOrigin = null;
-    Note beforeTarget = null;
-    Note afterTarget = null;
-    Note afterMover = null;
-    try {
-      mover = Queries.Local.getNote(repositionedNoteId);
-      beforeOrigin = Queries.Local.getNote(noteIdBeforeOriginOfRepositionedNote);
-      beforeTarget = Queries.Local.getNote(noteIdBeforeTargetOfRepositionedNote);
-      final String afterTargetId = beforeTarget.getNextNoteId();
-      final String afterMoverId = mover.getNextNoteId();
-      afterTarget = Queries.Local.getNote(afterTargetId);
-      afterMover = Queries.Local.getNote(afterMoverId);
-    } catch (ParseException e) {
-      e.printStackTrace();
+      INote repositionedNote,
+      INote noteBeforeOriginOfRepositionedNote,
+      INote noteBeforeTargetOfRepositionedNote) {
+    INoteEditable mover = null;
+    INoteEditable beforeOrigin = null;
+    INoteEditable beforeTarget = null;
+    if (repositionedNote instanceof INoteEditable) {
+      mover = (INoteEditable) repositionedNote;
     }
+    if (beforeOrigin instanceof INoteEditable) {
+      beforeOrigin = (INoteEditable) noteBeforeOriginOfRepositionedNote;
+    }
+    if (beforeTarget instanceof INoteEditable) {
+      beforeTarget = (INoteEditable) noteBeforeTargetOfRepositionedNote;
+    }
+    final INote afterTarget = beforeTarget.getNextNote();
+    final INote afterMover = mover.getNextNote();
 
     if (mover == null ||
         beforeOrigin == null || beforeTarget == null ||
@@ -330,6 +320,6 @@ public class NotesFragment extends TAPFragment
 
   public interface Callbacks {
 
-    void dispatchEditorOn(String noteId);
+    void dispatchEditorOn(INote note);
   }
 }

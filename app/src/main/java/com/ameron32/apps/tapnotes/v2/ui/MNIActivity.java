@@ -21,6 +21,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
@@ -276,16 +277,17 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void changeNotesFragmentTo(String talkId) {
-    // TODO add an imageUrl
-    try {
-      final Talk talk = Queries.Local.getTalk(talkId);
-      final String talkName = talk.getTalkTitle();
-      final String imageUrl = ""; // TODO update
-      commitNotesFragment(talkId, talkName, imageUrl);
-    } catch (ParseException e) {
-      e.printStackTrace();
+  public void changeNotesFragmentTo(ITalk talk) {
+    if (talk == null) {
+      // do nothing
+      return;
     }
+
+    // TODO add an imageUrl
+    final String talkId = talk.getId();
+    final String talkName = talk.getTalkTitle();
+    final String imageUrl = ""; // TODO update
+    commitNotesFragment(talkId, talkName, imageUrl);
   }
 
   @Override
@@ -307,16 +309,9 @@ public class MNIActivity extends TAPActivity
 
     if (note != null) {
       // TODO replace with Observable!!!
-      Commands.Local.saveEventuallyNote(note,
-          new SaveCallback() {
-        @Override
-        public void done(ParseException e) {
-          if (e == null) {
-            getNotesFragment().notesChanged(listify(lastNote));
-            getNotesFragment().notesAdded(listify(note));
-          }
-        }
-      });
+      Commands.Local.saveEventuallyNote(note);
+      getNotesFragment().notesChanged(listify(lastNote));
+      getNotesFragment().notesAdded(listify(note));
     }
   }
 
@@ -330,14 +325,8 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void dispatchEditorOn(String noteId) {
-    try {
-      final Note note = Queries.Local.getNote(noteId);
-      getEditorFragment().displayNoteToEdit(note);
-
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+  public void dispatchEditorOn(INote note) {
+    getEditorFragment().displayNoteToEdit(note);
   }
 
   @Override

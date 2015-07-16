@@ -69,8 +69,8 @@ public class Note
   }
 
   @Override
-  public String getNextNoteId() {
-    return (getNextNote() == null) ? null : getNextNote().getObjectId();
+  public INote getNextNote() {
+    return getNextParseNote();
   }
 
   @Override
@@ -150,7 +150,7 @@ public class Note
   }
 
 
-  private Note getNextNote() {
+  private Note getNextParseNote() {
     return (Note) this.get(NOTE_NEXTNOTE_OBJECT_KEY);
   }
 

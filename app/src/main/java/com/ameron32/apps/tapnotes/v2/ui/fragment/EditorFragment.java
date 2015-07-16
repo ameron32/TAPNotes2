@@ -145,26 +145,21 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void displayNoteToEdit(INote note) {
-    mDelegate.updateEditorText(note.getNoteText(), note.getId());
+    mDelegate.updateEditorText(note.getNoteText(), note);
   }
 
   @Override
-  public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable String noteId) {
-    Note note = null;
-    if (noteId != null) {
-      try {
-        note = Queries.Local.getNote(noteId);
-
-        // FOUND EXISTING NOTE -- PROCEED TO EDIT NOTE -- then return
-        editNote(editorText, type, note);
-        return;
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+  public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable INote note) {
+    if (note == null) {
+      // existing note was null -- proceed to create new note
+      mCallbacks.createNote(editorText, type);
+      return;
     }
 
-    // failed to find existing note -- proceed to create new note
-    mCallbacks.createNote(editorText, type);
+    // FOUND EXISTING NOTE -- PROCEED TO EDIT NOTE
+    if (note instanceof Note) {
+      editNote(editorText, type, (Note) note);
+    }
   }
 
   private void editNote(String editorText, INote.NoteType type, Note note) {

@@ -163,16 +163,16 @@ public class ProgramFragment extends TAPFragment
   }
 
   @Override
-  public void onTalkClicked(String talkId) {
+  public void onTalkClicked(ITalk talk) {
     // TODO callbacks
     if (mCallbacks != null) {
-      mCallbacks.changeNotesFragmentTo(talkId);
+      mCallbacks.changeNotesFragmentTo(talk);
     }
   }
 
   public interface Callbacks {
     void toggleProgramPane();
-    void changeNotesFragmentTo(String talkId);
+    void changeNotesFragmentTo(ITalk talk);
   }
 }
 
