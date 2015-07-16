@@ -12,8 +12,9 @@
         android:adjustViewBounds="true"
         android:id="@+id/repos_button"
         android:src="@drawable/reposition"
-        android:layout_margin="10dp"
-        />
+        style = "?navBar_upper"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -21,8 +22,9 @@
         android:id="@+id/bold_button"
         android:src="@drawable/bold"
         android:adjustViewBounds="true"
-        android:layout_margin="10dp"
-         />
+        style = "?navBar_upper"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -30,8 +32,9 @@
         android:id="@+id/important_button"
         android:src="@drawable/important"
         android:adjustViewBounds="true"
-        android:layout_margin="10dp"
-         />
+        style = "?navBar_upper"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
 
     <ImageView
@@ -40,8 +43,9 @@
         android:id="@+id/edit_button"
         android:src="@drawable/edit"
         android:adjustViewBounds="true"
-        android:layout_margin="10dp"
-         />
+        style = "?navBar_upper"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
 
     <ImageView
@@ -50,7 +54,8 @@
         android:id="@+id/delete_button"
         android:src="@drawable/delete"
         android:adjustViewBounds="true"
-        android:layout_margin="10dp"
-         />
+        style = "?navBar_upper"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
 </LinearLayout>
