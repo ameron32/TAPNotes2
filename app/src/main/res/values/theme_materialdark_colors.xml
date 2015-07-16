@@ -19,10 +19,13 @@
   <color name="materialdark_colorPrimaryDark">@color/DarkerBlueGrey</color>
   <color name="materialdark_colorAccent">@color/DarkRedGrey</color>
 
+  <color name="materialdark_textColorPrimary">@color/AMOLEDWhite</color>
+
   <color name="materialdark_notes_container_background">@color/SmoothGrey</color>
   <color name="materialdark_program_container_background">@color/AlmostBlack</color>
   <color name="materialdark_program_nav_bar_background">@color/DarkBlueGrey</color>
   <color name="materialdark_editor_container_background">@color/SilentGrey</color>
+  <color name="materialdark_default_background">@color/AMOLEDBlack</color>
 
 
 

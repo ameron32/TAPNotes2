@@ -31,10 +31,15 @@
     <item name="colorPrimary">@color/teal_colorPrimary</item>
     <item name="colorPrimaryDark">@color/teal_colorPrimaryDark</item>
     <item name="colorAccent">@color/teal_colorAccent</item>
+
+    <!--<item name="android:windowBackground">@color/teal_windowBackground</item>-->
+    <item name="android:textColorPrimary">@color/teal_textColorPrimary</item>
+
     <item name="editor_container_background">@color/teal_editor_container_background</item>
     <item name="notes_container_background">@color/teal_notes_container_background</item>
     <item name="program_nav_bar_background">@color/teal_program_nav_bar_background</item>
     <item name="program_container_background">@color/teal_program_container_background</item>
+    <item name="default_background">@color/teal_default_background</item>
 
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
     <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
@@ -67,10 +72,14 @@
     <item name="colorPrimaryDark">@color/ultrablack_colorPrimaryDark</item>
     <item name="colorAccent">@color/ultrablack_colorAccent</item>
 
+    <item name="android:windowBackground">@color/ultrablack_windowBackground</item>
+    <item name="android:textColorPrimary">@color/ultrablack_textColorPrimary</item>
+
     <item name="editor_container_background">@color/ultrablack_editor_container_background</item>
     <item name="notes_container_background">@color/ultrablack_notes_container_background</item>
     <item name="program_nav_bar_background">@color/ultrablack_program_nav_bar_background</item>
     <item name="program_container_background">@color/ultrablack_program_container_background</item>
+    <item name="default_background">@color/ultrablack_default_background</item>
 
     <!-- TODO MICAH change to white icons -->
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
@@ -101,10 +110,14 @@
     <item name="colorPrimaryDark">@color/materialdark_colorPrimaryDark</item>
     <item name="colorAccent">@color/materialdark_colorAccent</item>
 
+    <!--<item name="android:windowBackground">@color/materialdark_windowBackground</item>-->
+    <item name="android:textColorPrimary">@color/materialdark_textColorPrimary</item>
+
     <item name="editor_container_background">@color/materialdark_editor_container_background</item>
     <item name="notes_container_background">@color/materialdark_notes_container_background</item>
     <item name="program_nav_bar_background">@color/materialdark_program_nav_bar_background</item>
     <item name="program_container_background">@color/materialdark_program_container_background</item>
+    <item name="default_background">@color/materialdark_default_background</item>
 
     <!-- TODO MICAH change to white icons -->
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>

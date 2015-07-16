@@ -27,8 +27,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.di.Injector;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
@@ -42,9 +45,14 @@ import butterknife.ButterKnife;
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
   private AppCompatDelegate mDelegate;
 
+  @Inject
+  ApplicationThemeController themeController;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Injector.INSTANCE.inject(this);
+    initializeActivityModules_Dagger1();
+    setTheme(themeController.getTheme());
     getDelegate().installViewFactory();
     getDelegate().onCreate(savedInstanceState);
     super.onCreate(savedInstanceState);

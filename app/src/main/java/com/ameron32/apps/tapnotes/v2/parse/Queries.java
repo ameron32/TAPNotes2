@@ -31,15 +31,18 @@ public class Queries {
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
       int currentPage = 0;
+      int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
         final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
+        final int size = moreNotes.size();
+        notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
         currentPage++;
         Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
-            currentPage + " notes.size(): " + notes.size());
-      } while (notes.size() == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
-          notes.size() < LIMIT_SKIP_MAXIMUM_ALLOWED);
+            currentPage + " notesPinned: " + notesPinned);
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
+          notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(notes);
       return notes;
     }
@@ -76,6 +79,8 @@ public class Queries {
       return program;
     }
   }
+
+
 
   public static class Local {
 

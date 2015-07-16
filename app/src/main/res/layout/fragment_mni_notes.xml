@@ -51,7 +51,6 @@
         android:background="?notes_container_background"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- COMMIT FRAGMENT -->
         <include layout="@layout/insert_notes_layout" />
 
     </FrameLayout>

@@ -18,10 +18,13 @@
   <color name="teal_colorPrimaryDark">@color/DarkTeal</color>
   <color name="teal_colorAccent">@color/Tangerine</color>
 
+  <color name="teal_textColorPrimary">@color/AMOLEDBlack</color>
+
   <color name="teal_notes_container_background">@color/LightGrey</color>
   <color name="teal_program_container_background">@color/OffWhite</color>
   <color name="teal_program_nav_bar_background">@color/Charcoal</color>
   <color name="teal_editor_container_background">@color/OffWhite</color>
+  <color name="teal_default_background">@color/White</color>
 
 
   <style name="listItem_teal">

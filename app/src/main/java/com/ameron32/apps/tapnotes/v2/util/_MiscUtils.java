@@ -10,6 +10,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
@@ -78,6 +79,20 @@ public class _MiscUtils {
 //    Commands.Live.saveNotesNow(notes);
 //    Commands.Live.saveNotesNow(notes2);
   }
+
+  public static void _generate1001Notes(Talk talk, Program program)
+      throws ParseException {
+    Note lastNote = null;
+    for (int i = 0; i < 1001; i++) {
+      final Note note = Note.create("spam note " + (i+1), program, talk, Commands.Local.getClientUser());
+      if (lastNote != null) {
+        note.setNext(lastNote);
+      }
+      note.save();
+      lastNote = note;
+    }
+  }
+
 
 
   /*

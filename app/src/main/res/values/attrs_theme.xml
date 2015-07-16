@@ -32,6 +32,7 @@
   <attr name="notes_container_background" format="reference|color" />
   <attr name="program_nav_bar_background" format="reference|color" />
   <attr name="program_container_background" format="reference|color" />
+  <attr name="default_background" format="reference|color" />
 
   <attr name="ic_photo_camera_icon" format="reference" />
   <attr name="ic_videocam_icon" format="reference" />

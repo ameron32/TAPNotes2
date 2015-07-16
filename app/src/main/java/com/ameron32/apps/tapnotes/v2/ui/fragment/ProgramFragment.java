@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -111,7 +112,19 @@ public class ProgramFragment extends TAPFragment
 
 
       // TODO remove fake note method
-//      _MiscUtils._postDurations(talks, program);
+/*      new AsyncTask() {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+          try {
+            _MiscUtils._generate1001Notes(Queries.Local.getTalk("O9zHLdnag2"), program);
+          } catch (ParseException e) {
+            e.printStackTrace();
+          }
+          return null;
+        }
+      }.execute();*/
+
 
       // TODO give Talks to Delegate
       mDelegate.loadProgramTalks(iTalks);

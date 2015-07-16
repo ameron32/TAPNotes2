@@ -1,13 +1,16 @@
 package com.ameron32.apps.tapnotes.v2.ui;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
@@ -33,17 +36,32 @@ public class ProgramSelectionActivity
       Observer<ProgramSelectionActivity.Progress>
 {
 
+  @Inject
+  ApplicationThemeController themeController;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_program_selection);
+    // setContentView() handled in super.onCreate()
     snackBarController = new ActivitySnackBarController(this);
+  }
+
+  @Override
+  @LayoutRes
+  protected int getLayoutResource() {
+    // rather than setContentView(), provide inflatable layout here
+    return R.layout.activity_program_selection;
   }
 
   @Override
   protected void onDestroy() {
     snackBarController = null;
     super.onDestroy();
+  }
+
+  @Override
+  protected int provideThemeResource() {
+    return themeController.getTheme();
   }
 
   @Override
@@ -66,6 +84,17 @@ public class ProgramSelectionActivity
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  private static final int SETTINGS_REQUEST_CODE = 141;
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (requestCode == SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
+      // Settings
+      this.recreate();
+    }
   }
 
 

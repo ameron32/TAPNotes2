@@ -39,9 +39,10 @@ public class Note
   }
 
   @Nullable
-  public static Note create(final String text,
-                            final String programId, final String talkId,
-                            final ParseUser owner) {
+  public static Note create(
+      final String text,
+      final String programId, final String talkId,
+      final ParseUser owner) {
     Log.d(Note.class.getSimpleName(),
         "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
     try {

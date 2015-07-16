@@ -289,8 +289,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
 
             Log.d(SettingsActivity.class.getSimpleName(),
                 "preference | key: " + key + " value:" + stringValue);
-            themeController.setTheme(index);
+            setApplicationTheme(index);
             setResult(RESULT_OK);
+//            SettingsActivity.this.recreate();
           }
           return true;
         };
@@ -306,6 +307,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity  {
         PreferenceManager
             .getDefaultSharedPreferences(preference.getContext())
             .getString(preference.getKey(), ""));
+  }
+
+  private void setApplicationTheme(int index) {
+    themeController.setTheme(index);
   }
 
   @Override

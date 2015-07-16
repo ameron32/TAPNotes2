@@ -37,10 +37,10 @@ public abstract class TAPActivity extends AppCompatActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     Injector.INSTANCE.inject(this);
+    initializeActivityModules_Dagger1();
     setTheme(provideThemeResource());
     super.onCreate(savedInstanceState);
     Fabric.with(this, new Crashlytics());
-    initializeActivityModules_Dagger1();
     lifecycleSubject.onNext(LifecycleEvent.CREATE);
     setContentView(findContentView(getLayoutResource()));
     ButterKnife.inject(this);

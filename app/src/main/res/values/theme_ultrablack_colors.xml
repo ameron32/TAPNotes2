@@ -21,10 +21,14 @@
   <color name="ultrablack_colorPrimaryDark">@color/AMOLEDBlack</color>
   <color name="ultrablack_colorAccent">@color/AMOLEDWhite</color>
 
+  <color name="ultrablack_windowBackground">@color/AlmostBlack</color>
+  <color name="ultrablack_textColorPrimary">@color/AMOLEDWhite</color>
+
   <color name="ultrablack_notes_container_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_program_container_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_program_nav_bar_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_editor_container_background">@color/AMOLEDBlack</color>
+  <color name="ultrablack_default_background">@color/AlmostBlack</color>
 
 
 
