@@ -43,7 +43,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     @Override
     public void onSubmitClicked(String editorText,
                                 INote.NoteType type,
-                                @Nullable String noteId) {
+                                @Nullable INote note) {
       // stub only
     }
   };
@@ -89,7 +89,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
 
   @Override
-  public void updateEditorText(String newEditorText, @Nullable String noteID) {
+  public void updateEditorText(String newEditorText, @Nullable INote note) {
     // THIS METHOD SHOULD BE CALLED WHEN THE USER EDITS A NOTE
     // THE NOTE ID IS PROVIDED HERE.
     // RETURN THE NOTE ID AS A PARAMETER WITH THE CALLBACK METHOD
@@ -97,7 +97,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     // EXISTING NOTE.
     // TODO: MICAH delegate method
     noteText.setText(newEditorText);
-    noteText.setTag(noteID);
+    noteText.setTag(note);
 
 
   }
@@ -109,7 +109,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       public void onClick(View v) {
 
         if (noteText.getTag() != null)
-        {mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (String) noteText.getTag());
+        {mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote)noteText.getTag());
         } else {
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
         }

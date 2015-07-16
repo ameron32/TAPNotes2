@@ -152,7 +152,10 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             @Override
             public boolean onLongClick(View v) {
 
-                if (v.getParent() instanceof NotesRecycler){
+
+
+
+/*                if (v.getParent() instanceof NotesRecycler){
                     ((NotesRecycler)v.getParent()).itemClicked(v);
                 }
 
@@ -167,7 +170,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                 dialog.setContentView(R.layout.context_menu_layout);
                 ButterKnife.inject(this, v);
 
-                dialog.show();
+                dialog.show();*/
 
 
                 return false;
@@ -187,10 +190,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                             NotesRecycler nr = (NotesRecycler)v.getParent();
                             y=nr.indexOfChild(v)* (int)(mContext.getResources().getDimension(R.dimen.note_row_height_min));
                         }
-
-
-                            //lastY = (int) ev.getY();
-                            lastY=y + (int)(mContext.getResources().getDimension(R.dimen.note_row_height_min));
+                            lastY = y-200;
                         break;
                     }
                 }
