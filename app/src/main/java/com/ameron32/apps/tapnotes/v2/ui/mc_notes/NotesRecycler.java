@@ -6,6 +6,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ameron32.apps.tapnotes.v2.R;
+
 /**
  * Created by Micah on 7/15/2015.
  */
@@ -22,6 +24,8 @@ public class NotesRecycler extends RecyclerView {
         int size = this.getChildCount();
         for (int i=0; i<size; i++){
             getChildAt(i).setSelected(false);
+            getChildAt(i).findViewById(R.id.contextmenu).setVisibility(View.GONE);
+
         }
         view.setSelected(true);
 

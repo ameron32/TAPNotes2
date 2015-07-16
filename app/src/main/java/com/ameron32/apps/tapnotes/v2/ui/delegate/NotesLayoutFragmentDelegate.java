@@ -239,7 +239,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   private void desselect(){
     int count = recyclerView.getChildCount();
-    for (int i=0; i<count; i++)
+    for (int i=0; i<count; i++){
     recyclerView.getChildAt(i).setSelected(false);
+    }
   }
 }
