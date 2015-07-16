@@ -19,7 +19,7 @@ public class Queries {
   private static final String TAG = Queries.class.getSimpleName();
   private static final int FIRST_OR_ONLY = 0;
 
-  private static final int LIMIT_QUERY_MAXIMUM_ALLOWED = 1000;
+  private static final int LIMIT_QUERY_MAXIMUM_ALLOWED = 100;
   private static final int LIMIT_SKIP_MAXIMUM_ALLOWED = 10000;
 
 
@@ -36,7 +36,6 @@ public class Queries {
       do {
         final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
         final int size = moreNotes.size();
-        Note.pinAll(moreNotes);
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
         currentPage++;
@@ -44,6 +43,7 @@ public class Queries {
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
           notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      Note.pinAll(notes);
       return notes;
     }
 
