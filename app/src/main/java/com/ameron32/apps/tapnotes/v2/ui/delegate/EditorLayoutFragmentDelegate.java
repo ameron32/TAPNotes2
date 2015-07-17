@@ -25,14 +25,8 @@ import butterknife.InjectView;
  * Created by klemeilleur on 7/6/2015.
  */
 public class EditorLayoutFragmentDelegate extends FragmentDelegate
-    implements IEditorDelegate{
-
-  // *********************************************
-  // MICAH: You must
-
-  //KRIS: Must I?
-  // *********************************************
-
+    implements IEditorDelegate
+{
 
   public static EditorLayoutFragmentDelegate create(Fragment fragment) {
     final EditorLayoutFragmentDelegate delegate = new EditorLayoutFragmentDelegate();
@@ -47,6 +41,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     public void onSubmitClicked(String editorText,
                                 INote.NoteType type,
                                 @Nullable INote note) {
+      // stub only
+    }
+
+    @Override
+    public void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks) {
       // stub only
     }
   };
@@ -64,9 +63,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   EditText noteText;
 
   private ScriptureWatcher watcher;
+  private ISanitizer sanitizer;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
+    // during super.onViewCreated()--Sanitizer is instantiated
     super.onViewCreated(view, savedInstanceState);
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
@@ -75,6 +76,12 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     watcher = new ScriptureWatcher();
     noteText.addTextChangedListener(watcher);
 
+  }
+
+  @Override
+  public void onSanitizerCreated(ISanitizer sanitizer) {
+    this.sanitizer = sanitizer;
+    mCallbacks.setSanitizerCallbacks(watcher); // call after Sanitizer initialization
   }
 
   @Override

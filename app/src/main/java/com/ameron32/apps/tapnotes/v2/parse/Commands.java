@@ -4,11 +4,20 @@ import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleBookChooser;
+import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
+import com.ameron32.apps.tapnotes.v2.util.LocaleUtil;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by klemeilleur on 7/8/2015.
@@ -87,4 +96,5 @@ public class Commands {
       }
     }
   }
+
 }

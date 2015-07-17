@@ -27,10 +27,13 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.parse.ParseException;
 
 import javax.inject.Inject;
@@ -105,12 +108,20 @@ public class EditorFragment extends TAPFragment
     return view;
   }
 
+  Sanitizer s;
+  ScriptureFinder f;
+
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     confirmDelegateHasInterface();
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     mToolbar.setOnMenuItemClickListener(this);
+
+    s = new Sanitizer(getContext());
+    f = new ScriptureFinder();
+    s.setVerseVerifier(f);
+    mDelegate.onSanitizerCreated(s);
   }
 
   private void confirmDelegateHasInterface() {
@@ -162,6 +173,11 @@ public class EditorFragment extends TAPFragment
     if (note instanceof Note) {
       editNote(editorText, type, (Note) note);
     }
+  }
+
+  @Override
+  public void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks) {
+    s.setCallback(callbacks);
   }
 
   private void editNote(String editorText, INote.NoteType type, Note note) {

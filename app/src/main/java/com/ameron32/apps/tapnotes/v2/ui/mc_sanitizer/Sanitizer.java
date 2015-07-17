@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import com.ameron32.apps.tapnotes.v2.R;
@@ -13,8 +14,8 @@ import java.util.regex.Pattern;
  */
 public class Sanitizer implements ISanitizer{
 
-    String[] validNames = Resources.getSystem().getStringArray(R.array.bible_books);
-    int[] chapterAmts = Resources.getSystem().getIntArray(R.array.chapter_quantities);
+    String[] validNames;
+    int[] chapterAmts;
 
     String book;
     int bookNumber;
@@ -29,11 +30,18 @@ public class Sanitizer implements ISanitizer{
     IVerseVerifier vv;
     ISanitizerCallbacks mCallback;
 
+    public Sanitizer(Context context) {
+        // TODO: MICAH CONSIDER MERGING bible_books & book_names
+        // SEE strings_biblebooks.xml & strings_bible_book_reference.xml
+        validNames = context.getResources().getStringArray(R.array.bible_books);
+        chapterAmts = context.getResources().getIntArray(R.array.chapter_quantities);
+    }
+
     public void setVerseVerifier(IVerseVerifier v){
         vv = v;
     }
-    public void setCallback(ISanitizerCallbacks callback){mCallback = callback;};
 
+    public void setCallback(ISanitizerCallbacks callback){mCallback = callback;};
 
     @Override
     public void testForScriptures(String s) {
