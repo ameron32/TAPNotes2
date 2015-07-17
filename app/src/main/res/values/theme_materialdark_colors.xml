@@ -25,6 +25,7 @@
   <color name="materialdark_program_container_background">@color/AlmostBlack</color>
   <color name="materialdark_program_nav_bar_background">@color/DarkBlueGrey</color>
   <color name="materialdark_editor_container_background">@color/SilentGrey</color>
+  <color name="materialdark_scripture_picker_container_background">@color/SilentGrey</color>
   <color name="materialdark_default_background">@color/AMOLEDBlack</color>
 
 

@@ -1,6 +1,8 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -23,7 +26,12 @@ import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,8 +120,32 @@ public class ProgramFragment extends TAPFragment
 
 
       // TODO remove fake note method
-/*      new AsyncTask() {
+/*      Picasso.with(getContext())
+          .load("http://i.imgur.com/KUBBuRw.png")
+          .into(new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+              try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] data = baos.toByteArray();
+                ParseFile file = new ParseFile("CO-pgm15_E.png", data);
+                final Program program1 = ParseQuery.getQuery(Program.class)
+                    .find()
+                    .get(0);
+                program1.put(
+                    Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY,
+                    file);
+                program1.save();
+              } catch (ParseException e) {
+                e.printStackTrace();
+              }
+            }
 
+            @Override public void onBitmapFailed(Drawable errorDrawable) {}
+            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {}
+          });*/
+/*      new AsyncTask() {
         @Override
         protected Object doInBackground(Object[] params) {
           try {

@@ -29,6 +29,7 @@
 
   <!-- Kris's attributes below-->
   <attr name="editor_container_background" format="reference|color" />
+  <attr name="scripture_picker_container_background" format="reference|color" />
   <attr name="notes_container_background" format="reference|color" />
   <attr name="program_nav_bar_background" format="reference|color" />
   <attr name="program_container_background" format="reference|color" />

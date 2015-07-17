@@ -9,18 +9,11 @@
                 android:background="?default_background"
                 tools:context="com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment">
 
-  <TextView
-      android:text="@string/hello_world"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:id="@+id/textView"/>
-
-  <Button
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:text="To MNI"
+  <ImageButton
+      style="?attr/borderlessButtonStyle"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
       android:id="@+id/testing_button_mni"
-      android:layout_below="@+id/textView"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"/>
 

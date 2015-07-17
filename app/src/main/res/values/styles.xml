@@ -36,6 +36,7 @@
     <item name="android:textColorPrimary">@color/teal_textColorPrimary</item>
 
     <item name="editor_container_background">@color/teal_editor_container_background</item>
+    <item name="scripture_picker_container_background">@color/teal_editor_container_background</item>
     <item name="notes_container_background">@color/teal_notes_container_background</item>
     <item name="program_nav_bar_background">@color/teal_program_nav_bar_background</item>
     <item name="program_container_background">@color/teal_program_container_background</item>
@@ -76,6 +77,7 @@
     <item name="android:textColorPrimary">@color/ultrablack_textColorPrimary</item>
 
     <item name="editor_container_background">@color/ultrablack_editor_container_background</item>
+    <item name="scripture_picker_container_background">@color/ultrablack_editor_container_background</item>
     <item name="notes_container_background">@color/ultrablack_notes_container_background</item>
     <item name="program_nav_bar_background">@color/ultrablack_program_nav_bar_background</item>
     <item name="program_container_background">@color/ultrablack_program_container_background</item>
@@ -114,6 +116,7 @@
     <item name="android:textColorPrimary">@color/materialdark_textColorPrimary</item>
 
     <item name="editor_container_background">@color/materialdark_editor_container_background</item>
+    <item name="scripture_picker_container_background">@color/materialdark_editor_container_background</item>
     <item name="notes_container_background">@color/materialdark_notes_container_background</item>
     <item name="program_nav_bar_background">@color/materialdark_program_nav_bar_background</item>
     <item name="program_container_background">@color/materialdark_program_container_background</item>

@@ -17,6 +17,7 @@ public class Constants {
   // COLUMN KEYS for OBJECTS on Parse Server
   // PROGRAM
   public static final String PROGRAM_NAME_STRING_KEY = "name";
+  public static final String PROGRAM_PROGRAMIMAGE_FILE_KEY = "programImage";
 
   // TALK
   public static final String TALK_oPROGRAM_OBJECT_KEY = "oProgram";

@@ -66,10 +66,10 @@ public class NotesFragment extends TAPFragment
   private String mSymposiumTitle;
   private String mImageUrl;
 
+
   public NotesFragment() {
     // empty constructor
   }
-
 
   @Override
   protected FragmentDelegate createDelegate() {
@@ -97,7 +97,7 @@ public class NotesFragment extends TAPFragment
     } else {
       throw new IllegalStateException(activity.getClass().getSimpleName()
           + "must implement " + Callbacks.class.getSimpleName() + " in order to use "
-          + EditorFragment.class.getSimpleName());
+          + NotesFragment.class.getSimpleName());
     }
   }
 
@@ -113,8 +113,8 @@ public class NotesFragment extends TAPFragment
     super.onCreate(savedInstanceState);
     final Bundle args = getArguments();
     if (args != null) {
-      mToolbarTitle = args.getString(TITLE_ARG);
       mTalkId = args.getString(TALK_ID_ARG);
+      mToolbarTitle = args.getString(TITLE_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
   }
@@ -130,6 +130,7 @@ public class NotesFragment extends TAPFragment
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
+
 
     confirmToolbarDelegateHasInterface();
     confirmNotesDelegateHasInterface();

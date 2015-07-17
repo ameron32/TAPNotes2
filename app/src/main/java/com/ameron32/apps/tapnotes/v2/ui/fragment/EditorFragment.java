@@ -1,9 +1,11 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
@@ -172,22 +174,42 @@ public class EditorFragment extends TAPFragment
       case R.id.editor_item_scripture:
         // TODO KRIS push to scripture picker
         mSnackBar.toast("Scripture--to be implemented.");
+        mCallbacks.openScripturePicker();
         return true;
       case R.id.editor_item_picture:
-        // TODO KRIS open camera activity
-        mSnackBar.toast("Picture--to be implemented.");
+        final Intent toPhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(toPhoto, REQUEST_PHOTO);
         return true;
       case R.id.editor_item_video:
-        // TODO KRIS open video activity
-        mSnackBar.toast("Video--to be implemented.");
+        final Intent toVideo = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        startActivityForResult(toVideo, REQUEST_VIDEO);
         return true;
     }
     return false;
   }
 
+  private static final int REQUEST_PHOTO = 7747;
+  private static final int REQUEST_VIDEO = 7748;
+
+  @Override
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    if (resultCode == Activity.RESULT_OK) {
+      if (requestCode == REQUEST_PHOTO) {
+        mSnackBar.toast("Picture stored in Gallery.");
+      }
+      if (requestCode == REQUEST_VIDEO) {
+        mSnackBar.toast("Video stored in Gallery.");
+      }
+    }
+  }
+
+
+
   public interface Callbacks {
 
     void createNote(String editorText, INote.NoteType type);
     void editNote(String editorText, INote.NoteType type, Note note);
+    void openScripturePicker();
   }
 }

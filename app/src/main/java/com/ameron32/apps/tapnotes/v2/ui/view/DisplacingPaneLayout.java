@@ -6,14 +6,12 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 
 /**
  * Created by klemeilleur on 6/25/2015.
  * UNNECESSARY WITH IMPROVEMENTS TO OverlappingPaneLayout
  */
-public class DisplacingPaneLayout extends SlidingPaneLayout
-    implements IDualLayout,
+public class DisplacingPaneLayout extends SlidingPaneLayout implements
       SlidingPaneLayout.PanelSlideListener {
 
   private View mLeftPane;
@@ -53,7 +51,6 @@ public class DisplacingPaneLayout extends SlidingPaneLayout
     mOffsetPaddingRight = Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width));
   }
 
-  @Override
   public void toggleLayout() {
     if (isOpen()) {
       closePane();

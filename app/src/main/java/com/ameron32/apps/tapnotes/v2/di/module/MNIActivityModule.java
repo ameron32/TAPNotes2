@@ -27,13 +27,11 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesCont
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityTitleController;
 import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
-import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
-import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramTemplateFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
 
 import javax.inject.Singleton;
 
@@ -50,7 +48,8 @@ import dagger.Provides;
         MNIActivity.class,
         NotesFragment.class,
         ProgramFragment.class,
-        EditorFragment.class
+        EditorFragment.class,
+        ScripturePickerFragment.class
     },
     addsTo = ApplicationModule.class,
     library = true

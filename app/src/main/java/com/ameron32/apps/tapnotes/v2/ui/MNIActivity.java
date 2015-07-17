@@ -12,33 +12,33 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
-import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
-import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
+import com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout;
 import com.parse.ParseException;
-import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 /**
@@ -50,7 +50,8 @@ public class MNIActivity extends TAPActivity
     implements
       ProgramFragment.Callbacks,
       EditorFragment.Callbacks,
-      NotesFragment.Callbacks
+      NotesFragment.Callbacks,
+      ScripturePickerFragment.Callbacks
 {
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
@@ -74,7 +75,8 @@ public class MNIActivity extends TAPActivity
   @InjectView(R.id.nav_view)
   NavigationView mNavigationView;
 
-  private IDualLayout mDualLayout;
+  @InjectView(R.id.pane_animating_layout)
+  AnimatingPaneLayout mDualLayout;
 
   private String mProgramId;
   private String mCurrentTalkId;
@@ -112,15 +114,19 @@ public class MNIActivity extends TAPActivity
     super.onCreate(savedInstanceState);
     // setContentView() handled in super.onCreate()
     mProgramId = getProgramId(savedInstanceState);
-    findViews();
+    ButterKnife.inject(this);
 
     setupDrawer();
-    commitNotesFragment(null, null, null); //blank
+    commitNotesPlaceholder(); //blank
     commitProgramFragment(mProgramId); //blank
-    commitEditorFragment();  //blank
+    // commitEditorFragment when real NotesFragment is created
   }
 
-
+  @Override
+  protected void onDestroy() {
+    ButterKnife.reset(this);
+    super.onDestroy();
+  }
 
   // ---------------------------------------------------
   // MENU
@@ -146,9 +152,6 @@ public class MNIActivity extends TAPActivity
         return true;
       case R.id.action_settings:
         startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
-        return true;
-      case R.id.action_scripture_activity:
-        startActivity(new Intent(getActivity(), ScriptureTestingActivity.class));
         return true;
     }
 
@@ -186,13 +189,6 @@ public class MNIActivity extends TAPActivity
         "Did you use the static factory to create the MNIActivity intent?");
   }
 
-  private void findViews() {
-    mDualLayout = (IDualLayout) findViewById(R.id.pane_animating_layout);
-    if (mDualLayout == null) {
-      throw new IllegalStateException("mDualLayout cannot be null.");
-    }
-  }
-
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
@@ -205,39 +201,79 @@ public class MNIActivity extends TAPActivity
     setupDrawerContent(mNavigationView);
   }
 
+  private static final String TAG_NOTES = "notes";
+  private static final String TAG_PROGRAM = "program";
+  private static final String TAG_EDITOR = "editor";
+  private static final String TAG_SCRIPTURE_PICKER = "scripturepicker";
+
+  private void commitNotesPlaceholder() {
+    final String tag = TAG_NOTES;
+    removeFragment(tag);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.notes_container,
+            NotesPlaceholderFragment.create(), tag)
+        .commit();
+  }
+
   private void commitNotesFragment(final String talkId, final String toolbarTitle, final String imageUrl) {
-    // TODO consider replacing the default NOTES with explanatory fragment
-    final String tag = "notes";
+    final String tag = TAG_NOTES;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.notes_container,
             NotesFragment.create(toolbarTitle, talkId, imageUrl), tag)
         .commit();
     mCurrentTalkId = talkId;
+
+    // if editor isn't open, open it
+    final IEditHandler editorFragment = getEditorFragment();
+    if (editorFragment == null) {
+      commitEditorFragment();  //blank
+    }
   }
 
   private INoteHandler getNotesFragment() {
-    return (INoteHandler) getSupportFragmentManager().findFragmentByTag("notes");
+    final Fragment fragmentByTag = getSupportFragmentManager()
+        .findFragmentByTag(TAG_NOTES);
+    if (fragmentByTag != null) {
+      return (INoteHandler) fragmentByTag;
+    }
+    return null;
   }
 
   private void commitProgramFragment(final String programId) {
-    final String tag = "program";
+    final String tag = TAG_PROGRAM;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.program_container, ProgramFragment.create(programId), tag)
+        .replace(R.id.program_container,
+            ProgramFragment.create(programId), tag)
         .commit();
   }
 
   private void commitEditorFragment() {
-    final String tag = "editor";
+    final String tag = TAG_EDITOR;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.editor_container, EditorFragment.create(), tag)
+        .replace(R.id.editor_container,
+            EditorFragment.create(), tag)
         .commit();
   }
 
   private IEditHandler getEditorFragment() {
-    return (IEditHandler) getSupportFragmentManager().findFragmentByTag("editor");
+    final Fragment fragmentByTag = getSupportFragmentManager()
+        .findFragmentByTag(TAG_EDITOR);
+    if (fragmentByTag != null) {
+      return (IEditHandler) fragmentByTag;
+    }
+    return null;
+  }
+
+  private void commitNewScripturePickerFragment() {
+    final String tag = TAG_SCRIPTURE_PICKER;
+    removeFragment(tag);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.scripture_picker_container,
+            ScripturePickerFragment.create(), tag)
+        .commit();
   }
 
   private void removeFragment(final String tag) {
@@ -338,5 +374,17 @@ public class MNIActivity extends TAPActivity
 
     Commands.Local.saveEventuallyNote(note);
     getNotesFragment().notesChanged(listify(note));
+  }
+
+  @Override
+  public void openScripturePicker() {
+    commitNewScripturePickerFragment();
+  }
+
+  @Override
+  public void scripturePrepared(IScripture scripture) {
+    // TODO scripture picker generated scripture
+    final String tag = TAG_SCRIPTURE_PICKER;
+    removeFragment(tag);
   }
 }

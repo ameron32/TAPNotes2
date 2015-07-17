@@ -24,6 +24,7 @@
   <color name="teal_program_container_background">@color/OffWhite</color>
   <color name="teal_program_nav_bar_background">@color/Charcoal</color>
   <color name="teal_editor_container_background">@color/OffWhite</color>
+  <color name="teal_scripture_picker_container_background">@color/OffWhite</color>
   <color name="teal_default_background">@color/White</color>
 
 

@@ -4,7 +4,7 @@ import dagger.ObjectGraph;
 
 public enum Injector
 {
-  INSTANCE;
+  INSTANCE, ButterKnife;
 
   private ObjectGraph objectGraph = null;
 

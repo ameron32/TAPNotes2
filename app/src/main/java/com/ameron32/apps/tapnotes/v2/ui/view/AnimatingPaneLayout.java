@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.frmk.IDualLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +27,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by klemeilleur on 6/12/2015.
  */
 public class AnimatingPaneLayout
-    extends FrameLayout
-    implements IDualLayout {
+    extends FrameLayout {
 
   /*
    * TODO Improve animation when isDisplacement = true [AKA Tablet devices]
@@ -249,7 +247,6 @@ public class AnimatingPaneLayout
     mMainToTopOptions = null;
   }
 
-  @Override
   public void toggleLayout() {
     if (isAnimating() || !isLayoutEnabled()) {
       return;

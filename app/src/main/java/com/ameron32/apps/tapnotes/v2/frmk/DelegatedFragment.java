@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.R;
+
 /**
  * Created by klemeilleur on 7/6/2015.
  *
@@ -140,9 +142,37 @@ public abstract class DelegatedFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View superView = super.onCreateView(inflater, container, savedInstanceState);
-    final View delegateView = getDelegate().onCreateView(inflater, container, savedInstanceState);
-    storeView = (delegateView == null) ? superView : delegateView;
+    View delegateView;
+    if (useDelegateView()) {
+      if (replaceWithDelegateView()) {
+        delegateView = getDelegate().onCreateView(inflater, container, savedInstanceState);
+        storeView = (delegateView == null) ? superView : delegateView;
+      } else {
+        final View view = superView.findViewById(R.id.delegate_container);
+        if (view != null && view instanceof ViewGroup) {
+          final ViewGroup parent = (ViewGroup) view;
+          delegateView = getDelegate().onCreateView(inflater, parent, savedInstanceState);
+          parent.addView(delegateView);
+        } else {
+          throw new IllegalStateException("fragment must contain " +
+              "a ViewGroup with id:delegate_container to inflate " +
+              "delegate into unless replaceWithDelegateView = true");
+        }
+        storeView = superView;
+      }
+    } else {
+      storeView = superView;
+    }
+
     return storeView;
+  }
+
+  protected boolean useDelegateView() {
+    return true;
+  }
+
+  protected boolean replaceWithDelegateView() {
+    return true;
   }
 
   /**
