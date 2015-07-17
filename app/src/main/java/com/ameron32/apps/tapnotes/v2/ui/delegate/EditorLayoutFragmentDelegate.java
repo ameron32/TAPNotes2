@@ -4,6 +4,8 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -13,6 +15,8 @@ import android.widget.Spinner;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -21,8 +25,7 @@ import butterknife.InjectView;
  * Created by klemeilleur on 7/6/2015.
  */
 public class EditorLayoutFragmentDelegate extends FragmentDelegate
-    implements IEditorDelegate
-{
+    implements IEditorDelegate{
 
   // *********************************************
   // MICAH: You must
@@ -38,7 +41,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   }
 
   private static final IEditorDelegate.IEditorDelegateCallbacks stubCallbacks
-      = new IEditorDelegate.IEditorDelegateCallbacks() {
+          = new IEditorDelegate.IEditorDelegateCallbacks() {
 
     @Override
     public void onSubmitClicked(String editorText,
@@ -50,7 +53,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
   private IEditorDelegate.IEditorDelegateCallbacks mCallbacks;
 
-  protected EditorLayoutFragmentDelegate() {}
+  protected EditorLayoutFragmentDelegate() {
+  }
 
   @InjectView(R.id.spinner_note_type)
   Spinner spinner;
@@ -59,6 +63,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   @InjectView(R.id.edittext_note_editor)
   EditText noteText;
 
+  private ScriptureWatcher watcher;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -67,6 +72,9 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     ButterKnife.inject(this, view);
     setupSpinner();
     setOnClicks();
+    watcher = new ScriptureWatcher();
+    noteText.addTextChangedListener(watcher);
+
   }
 
   @Override
@@ -81,11 +89,10 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       mCallbacks = ((IEditorDelegate.IEditorDelegateCallbacks) getFragment());
     } else {
       throw new IllegalStateException("host fragment " +
-          "should implement " + IEditorDelegate.IEditorDelegateCallbacks.class.getSimpleName() +
-          "to support callback methods.");
+              "should implement " + IEditorDelegate.IEditorDelegateCallbacks.class.getSimpleName() +
+              "to support callback methods.");
     }
   }
-
 
 
   @Override
@@ -102,14 +109,14 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
   }
 
-  private void setOnClicks(){
+  private void setOnClicks() {
 
     submitButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
 
-        if (noteText.getTag() != null)
-        {mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote)noteText.getTag());
+        if (noteText.getTag() != null) {
+          mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote) noteText.getTag());
         } else {
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
         }
@@ -122,7 +129,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     });
   }
 
-  private void setupSpinner(){
+  private void setupSpinner() {
     // Create an ArrayAdapter using the string array and a default spinner layout
     ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getContext(),
             R.array.spinner_options, android.R.layout.simple_spinner_item);
@@ -132,15 +139,102 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     spinner.setAdapter(adapter);
   }
 
-  private INote.NoteType getNoteType(){
-    switch(spinner.getSelectedItemPosition()){
+  private INote.NoteType getNoteType() {
+    switch (spinner.getSelectedItemPosition()) {
 
-      case 4: return INote.NoteType.BAPTISM_COUNT;
-      case 3: return INote.NoteType.ATTENDANCE_COUNT;
-      case 2: return INote.NoteType.SCRIPTURE_ONLY;
-      case 1: return INote.NoteType.SPEAKER;
-      case 0: default: return INote.NoteType.STANDARD;
+      case 3:
+        return INote.NoteType.BAPTISM_COUNT;
+      case 2:
+        return INote.NoteType.ATTENDANCE_COUNT;
+      case 1:
+        return INote.NoteType.SPEAKER;
+      case 0:
+      default:
+        return INote.NoteType.STANDARD;
 
+    }
+  }
+
+
+  public class ScriptureWatcher implements TextWatcher, ISanitizer.ISanitizerCallbacks  {
+
+    String string = "";
+    String alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    String nums = "0123456789";
+    boolean replacing = false;
+    char last;
+    char ntl;
+    char ntntl;
+
+    public ScriptureWatcher(){}
+
+
+    //TODO: Kris, not sure how best to populate this...
+    ISanitizer sanitizer;
+
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+      string = s.toString();
+      if (string.contains("@")) {
+        if (!replacing) {
+          if (endofnumberstring(string)) {
+            //Run sanitizer.testForScriptures(String s) here.
+          }
+        }
+      }
+
+
+    }
+
+
+    private boolean endofnumberstring(String s) {
+      int len = s.length();
+
+      if (len < 3) return false;
+
+      last = s.toUpperCase().charAt(len - 1);
+      ntl = s.toUpperCase().charAt(len - 2);
+      ntntl = s.toUpperCase().charAt((len - 3));
+
+      //Ends with #.
+      if ((last == '.') && (nums.indexOf(ntl) != -1)) return true;
+
+      //Ends with # and two spaces
+      if ((last == ' ') && (ntl == ' ') && (nums.indexOf(ntntl) != -1)) return true;
+
+      //Ends with #,
+      if ((last == ',') && (nums.indexOf(ntl) != -1)) return true;
+
+      //Ends with # space letter
+      if ((alpha.indexOf(last) != -1) && (ntl == ' ') && (nums.indexOf(ntntl) != -1)) return true;
+
+      //Ends with # letter
+      if ((alpha.indexOf(last) != -1) && (nums.indexOf(ntl) != -1)) return true;
+
+      return false;
+
+    }
+
+
+    @Override
+    public void onSanitizerResults(WrappedScripture scripture) {
+      if (scripture!=null){
+        replacing = true;
+        //TODO: Replace old text with correct scripture name.
+
+
+      }
     }
   }
 

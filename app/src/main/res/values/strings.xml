@@ -15,7 +15,6 @@
   <string-array name="spinner_options">
     <item>Standard</item>
     <item>Speaker</item>
-    <item>Scripture</item>
     <item>Attendance</item>
     <item>Baptism</item>
     </string-array>

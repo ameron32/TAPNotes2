@@ -13,8 +13,6 @@ import com.ameron32.apps.tapnotes.v2.R;
  */
 public class NotesRecycler extends RecyclerView {
 
-    private int lastY;
-
     public NotesRecycler(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

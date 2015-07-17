@@ -162,27 +162,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                     NotesRecycler nr = ((NotesRecycler) v.getParent());
                     nr.itemClicked(v);
                     popup.setVisibility(View.VISIBLE);
-
                 }
-
-
-
-
-/*
-
-                final Dialog dialog = new Dialog(mContext, R.style.CustomDialog);
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-                lp.dimAmount=0.0f;
-                lp.gravity = Gravity.CENTER_HORIZONTAL;
-                lp.y = lastY;   //y position
-                dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
-                dialog.getWindow().setAttributes(lp);
-                dialog.setContentView(R.layout.context_menu_layout);
-                ButterKnife.inject(this, v);
-
-                dialog.show();*/
-
 
                 return false;
             }
