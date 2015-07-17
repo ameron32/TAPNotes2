@@ -1,17 +1,15 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.adapter.ScripturePickerAdapter;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -20,8 +18,9 @@ import butterknife.InjectView;
  * Created by klemeilleur on 7/6/2015.
  */
 public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
-    implements IScripturePickerDelegate
-{
+    implements
+      IScripturePickerDelegate,
+      ScripturePickerAdapter.OnPageNextClickedListener {
 
   public static ScripturePickerLayoutFragmentDelegate create(Fragment fragment) {
     final ScripturePickerLayoutFragmentDelegate delegate = new ScripturePickerLayoutFragmentDelegate();
@@ -31,7 +30,10 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
 
   private static final IScripturePickerDelegateCallbacks stubCallbacks
       = new IScripturePickerDelegate.IScripturePickerDelegateCallbacks() {
-
+    @Override
+    public void scriptureComplete(IScripture scripture) {
+      // stub
+    }
   };
 
   private IScripturePickerDelegateCallbacks mCallbacks;
@@ -39,13 +41,23 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   protected ScripturePickerLayoutFragmentDelegate() {}
 
 
+  @InjectView(R.id.view_pager)
+  ViewPager mPager;
+
+  private ScripturePickerAdapter mAdapter;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
+
+    mAdapter = new ScripturePickerAdapter(getContext());
+    mPager.setAdapter(mAdapter);
+    mAdapter.setOnPageNextClickedListener(this);
   }
+
+
 
   @Override
   public void onDestroyView() {
@@ -63,4 +75,16 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
           "to support callback methods.");
     }
   }
+
+
+  public static final int NUM_OF_PAGES = 3;
+
+  @Override
+  public void onPageNextClicked(int page) {
+    if (page == NUM_OF_PAGES) {
+      mCallbacks.scriptureComplete(Scripture.generate(0, 0, new int[]{0, 1, 2}));
+    }
+    mPager.setCurrentItem(page +1);
+  }
+
 }

@@ -99,7 +99,12 @@ public class ScripturePickerFragment extends TAPFragment
 
   @OnClick(R.id.button_done)
   void buttonClicked() {
-    mCallbacks.scripturePrepared(Scripture.generate( 0, 0, new int[] { 0, 1, 2 }));
+    scriptureComplete(Scripture.generate( 0, 0, new int[] { 0, 1, 2 }));
+  }
+
+  @Override
+  public void scriptureComplete(IScripture scripture) {
+    mCallbacks.scripturePrepared(scripture);
   }
 
   private void confirmDelegateHasInterface() {
