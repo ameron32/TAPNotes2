@@ -1,22 +1,11 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.opengl.GLException;
-
-import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.util.List;
-import java.util.Locale;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.IVerseVerifier;
 
 /**
  * Created by Micah on 6/24/2015.
  */
-public class ScriptureFinder {
+public class ScriptureFinder implements IVerseVerifier {
 
   public String[] getVerses(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
 
@@ -62,6 +51,11 @@ public class ScriptureFinder {
       }
     }
 
+  }
+
+  @Override
+  public boolean verseValid(int book, int chapter, int verse) {
+    return false;
   }
 
   public class ScriptureNotFoundException extends Exception{
