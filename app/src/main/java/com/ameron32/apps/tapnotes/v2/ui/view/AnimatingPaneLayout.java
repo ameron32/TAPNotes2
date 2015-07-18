@@ -29,10 +29,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class AnimatingPaneLayout
     extends FrameLayout {
 
-  /*
-   * TODO Improve animation when isDisplacement = true [AKA Tablet devices]
-   */
-
   @Nullable private View mLeftPane;
   @Nullable private View mMainPane;
   private @AnimatorRes int mZoomAnimatorStart;
@@ -53,7 +49,7 @@ public class AnimatingPaneLayout
   @NonNull  private AnimationOptions mMainToTopOptions;
 
   private int mDefaultPaddingLeft;
-//  private int mOffsetPaddingLeft;
+  private int mMaxOffsetPaddingLeft;
   private int mAnimatedOffsetPaddingLeft;
 
   @Nullable private PanelListener mDefaultPanelListener;
@@ -65,6 +61,7 @@ public class AnimatingPaneLayout
 
   public AnimatingPaneLayout(Context context) {
     super(context);
+    initAttrs(context, null);
   }
 
   public AnimatingPaneLayout(Context context, AttributeSet attrs) {
@@ -97,28 +94,37 @@ public class AnimatingPaneLayout
   }
 
   @Override
-  protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-    if (isLayoutEnabled()) {
-      int leftPad = mDefaultPaddingLeft;
-      final int topPad = mMainPane.getPaddingTop();
-      final int rightPad = mMainPane.getPaddingRight();
-      final int bottomPad = mMainPane.getPaddingBottom();
-      if (isAnimating()) {
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    if (isLayoutEnabled() && isAnimating()) {
+      padding[0] = mDefaultPaddingLeft;
+      padding[1] = mMainPane.getPaddingTop();
+      padding[2] = mMainPane.getPaddingRight();
+      padding[3] = mMainPane.getPaddingBottom();
+      mMainPane.setPadding(
+              padding[0] + mAnimatedOffsetPaddingLeft,
+              padding[1], padding[2], padding[3]);
+    }
+    if (isLayoutEnabled() && !isAnimating()
+            && mMainPane.getPaddingLeft() > mDefaultPaddingLeft
+            && mMainPane.getPaddingLeft() < mMaxOffsetPaddingLeft) {
+      if (isLeftPaneOnTop()) {
         mMainPane.setPadding(
-            leftPad + mAnimatedOffsetPaddingLeft,
-            topPad, rightPad, bottomPad);
+                padding[0] + mMaxOffsetPaddingLeft,
+                padding[1], padding[2], padding[3]);
       } else {
-        if (isLeftPaneOnTop()) {
-          mMainPane.setPadding(
-              leftPad + getOffsetPaddingLeft(),
-              topPad, rightPad, bottomPad);
-        } else {
-          mMainPane.setPadding(
-              leftPad,
-              topPad, rightPad, bottomPad);
-        }
+        mMainPane.setPadding(
+                padding[0],
+                padding[1], padding[2], padding[3]);
       }
     }
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+  }
+
+  private final int[] padding = new int[4];
+
+  @Override
+  protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+
     super.onLayout(changed, left, top, right, bottom);
   }
 
@@ -137,7 +143,7 @@ public class AnimatingPaneLayout
     mListeners = new ArrayList<>();
 
     mDefaultPaddingLeft = mMainPane.getPaddingLeft();
-//    mOffsetPaddingLeft = getOffsetPaddingLeft();
+    mMaxOffsetPaddingLeft = Math.round(getContext().getResources().getDimension(R.dimen.program_bar_width));
     mAnimatedOffsetPaddingLeft = mDefaultPaddingLeft;
 
     if (isLayoutDisplacement()) {
@@ -183,6 +189,7 @@ public class AnimatingPaneLayout
         }
       };
     }
+    requestLayout();
   }
 
   private int getOffsetPaddingLeft() {
@@ -300,13 +307,13 @@ prepareUpdateListener(options.start2);
           if (position == Position.Top) {
             // shrinking if it *was* on top
 //            options.start2 = AnimatorInflater.loadAnimator(getContext(), mScaleExpandAnimator);
-            options.start2 = ValueAnimator.ofFloat(getContext().getResources().getDimension(R.dimen.program_bar_width));
+            options.start2 = ValueAnimator.ofFloat(mMaxOffsetPaddingLeft);
             options.start2.setDuration(400);
 prepareUpdateListener(options.start2);
           } else if (position == Position.Bottom) {
             // expanding if it *was* on bottom
 //            options.start2 = AnimatorInflater.loadAnimator(getContext(), mScaleContractAnimator);
-            options.start2 = ValueAnimator.ofFloat(getContext().getResources().getDimension(R.dimen.program_bar_width));
+            options.start2 = ValueAnimator.ofFloat(mMaxOffsetPaddingLeft);
             options.start2.setDuration(400);
 prepareUpdateListener2(options.start2);
           }

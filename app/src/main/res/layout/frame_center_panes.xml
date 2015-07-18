@@ -17,7 +17,7 @@
   </FrameLayout>
 
   <FrameLayout
-      android:id="@+id/notes_container"
+      android:id="@+id/notes_xcontainer"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 

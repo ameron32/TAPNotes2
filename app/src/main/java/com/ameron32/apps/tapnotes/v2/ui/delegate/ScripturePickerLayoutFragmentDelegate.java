@@ -81,7 +81,7 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void onPageNextClicked(int page) {
-    if (page == NUM_OF_PAGES) {
+    if (page == NUM_OF_PAGES - 1) {
       mCallbacks.scriptureComplete(Scripture.generate(0, 0, new int[]{0, 1, 2}));
     }
     mPager.setCurrentItem(page +1);

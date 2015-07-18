@@ -210,7 +210,7 @@ public class MNIActivity extends TAPActivity
     final String tag = TAG_NOTES;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.notes_container,
+        .replace(R.id.notes_xcontainer,
             NotesPlaceholderFragment.create(), tag)
         .commit();
   }
@@ -219,7 +219,7 @@ public class MNIActivity extends TAPActivity
     final String tag = TAG_NOTES;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
-        .replace(R.id.notes_container,
+        .replace(R.id.notes_xcontainer,
             NotesFragment.create(toolbarTitle, talkId, imageUrl), tag)
         .commit();
     mCurrentTalkId = talkId;
