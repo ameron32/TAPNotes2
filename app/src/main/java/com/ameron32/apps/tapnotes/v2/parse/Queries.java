@@ -95,6 +95,15 @@ public class Queries {
       return notes;
     }
 
+public static int countPrograms()
+      throws ParseException {
+  Log.d(TAG, "countPrograms");
+  final List<Program> programs = ParseQuery.getQuery(Program.class)
+          .fromLocalDatastore()
+          .find();
+  return programs.size();
+}
+
     public static Program getProgram(String programId)
         throws ParseException {
       Log.d(TAG, "getProgram " + programId);

@@ -117,7 +117,7 @@ public class ProgramSelectionActivity
     if (progress.failed) {
       fail();
     }
-    snackBarController.toast(progress.item + " of " + progress.total);
+    snackBarController.toast("Step " + progress.item + " of " + progress.total + " complete.");
   }
 
   void onLoaded() {
@@ -148,21 +148,27 @@ public class ProgramSelectionActivity
       public void call(Subscriber<? super Progress> subscriber) {
         try {
           // PRECACHE TALKS AND NOTES
-          Thread.sleep(200);
 
-          final Program program = Queries.Live.pinProgram(mProgramId);
+          // TODO KRIS is program already pinned? switch to local and delay network query
+          // possibly never (aka OFFLINE ONLY)
+          final int numberOfPrograms = Queries.Local.countPrograms();
+          if (numberOfPrograms > 0) {
+              // TODO KRIS temporarily skip to test local datastore... FIXME
+              subscriber.onCompleted();
+              return;
+          }
+
+          Program program = Queries.Live.pinProgram(mProgramId);
           subscriber.onNext(new Progress(1, 3, false));
-          Thread.sleep(200);
 
+          // TODO KRIS are the talks already here? switch to local and delay network query
           Queries.Live.pinAllProgramTalksFor(program);
           subscriber.onNext(new Progress(2, 3, false));
-          Thread.sleep(200);
 
+          // TODO KRIS did we local the program and talks? delay network query and restrict to new only
           Queries.Live.pinAllClientOwnedNotesFor(program);
           subscriber.onNext(new Progress(3, 3, false));
           subscriber.onCompleted();
-        } catch (InterruptedException e) {
-          subscriber.onError(e);
         } catch (ParseException e) {
           e.printStackTrace();
           subscriber.onNext(new Progress(0, 0, true));
