@@ -16,6 +16,8 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.IVerseVerifier;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
 
 import butterknife.ButterKnife;
@@ -72,6 +74,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     ButterKnife.inject(this, view);
     setupSpinner();
     setOnClicks();
+
     watcher = new ScriptureWatcher();
     noteText.addTextChangedListener(watcher);
 
@@ -166,6 +169,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     char ntl;
     char ntntl;
 
+    //ADDED parameter to the otherwise empty constructor
     public ScriptureWatcher(){}
 
 
@@ -189,7 +193,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       if (string.contains("@")) {
         if (!replacing) {
           if (endofnumberstring(string)) {
-            //Run sanitizer.testForScriptures(String s) here.
+            sanitizer.testForScriptures(string);
           }
         }
       }

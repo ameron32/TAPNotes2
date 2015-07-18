@@ -13,8 +13,8 @@ import java.util.regex.Pattern;
  */
 public class Sanitizer implements ISanitizer{
 
-    String[] validNames = Resources.getSystem().getStringArray(R.array.bible_books);
-    int[] chapterAmts = Resources.getSystem().getIntArray(R.array.chapter_quantities);
+    String[] validNames;
+    int[] chapterAmts;
 
     String book;
     int bookNumber;
@@ -33,6 +33,13 @@ public class Sanitizer implements ISanitizer{
         vv = v;
     }
     public void setCallback(ISanitizerCallbacks callback){mCallback = callback;};
+
+
+    public Sanitizer(Resources r){
+        validNames = r.getStringArray(R.array.bible_books);
+        chapterAmts = r.getIntArray(R.array.chapter_quantities);
+    }
+
 
 
     @Override
