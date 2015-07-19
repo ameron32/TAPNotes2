@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public interface ISanitizer {
 
     public void testForScriptures(String s);
+    public void setCallbacks(ISanitizerCallbacks callback);
 
     public interface ISanitizerCallbacks{
         public void onSanitizerResults(WrappedScripture scripture);

@@ -1,11 +1,19 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -76,15 +84,17 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     setupSpinner();
     setOnClicks();
 
-    watcher = new ScriptureWatcher();
-    noteText.addTextChangedListener(watcher);
+
 
   }
 
   @Override
   public void onSanitizerCreated(ISanitizer sanitizer) {
+    Log.i("Sanitizer", "Sanitizer created");
     this.sanitizer = sanitizer;
     mCallbacks.setSanitizerCallbacks(watcher); // call after Sanitizer initialization
+    watcher = new ScriptureWatcher(sanitizer);
+    noteText.addTextChangedListener(watcher);
   }
 
   @Override
@@ -176,17 +186,20 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     char ntl;
     char ntntl;
 
-    //ADDED parameter to the otherwise empty constructor
-    public ScriptureWatcher(){}
+    boolean added = true;
 
-
-    //TODO: Kris, not sure how best to populate this...
+    public ScriptureWatcher(ISanitizer s){
+      sanitizer = s;
+      sanitizer.setCallbacks(this);
+    }
     ISanitizer sanitizer;
-
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+      if (count>after){
+        added = false;
+      }else
+        added = true;
     }
 
     @Override
@@ -194,18 +207,20 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
     }
 
+
     @Override
     public void afterTextChanged(Editable s) {
-      string = s.toString();
-      if (string.contains("@")) {
-        if (!replacing) {
-          if (endofnumberstring(string)) {
-            sanitizer.testForScriptures(string);
+
+      if (added) {
+        string = s.toString();
+        if (string.contains("@")) {
+          if (!replacing) {
+            if (endofnumberstring(string)) {
+              sanitizer.testForScriptures(string);
+            }
           }
         }
       }
-
-
     }
 
 
@@ -240,10 +255,27 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
     @Override
     public void onSanitizerResults(WrappedScripture scripture) {
+
+
       if (scripture!=null){
         replacing = true;
         //TODO: Replace old text with correct scripture name.
+        String oldText = noteText.getText().toString();
+        String subToReplace = scripture.replacedText.substring(0,scripture.replacedText.length()-2);
+        String newText = scripture.newText;
+        oldText = oldText.replace(subToReplace, newText);
 
+        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(255, 43, 0));
+
+        Spannable textSpan = new SpannableString(oldText);
+        textSpan.setSpan(fcs, 0, oldText.length()-2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+
+        noteText.setText(textSpan);
+
+        int position = noteText.length();
+        Editable etext = noteText.getText();
+        Selection.setSelection(etext, position);
+        replacing=false;
 
       }
     }

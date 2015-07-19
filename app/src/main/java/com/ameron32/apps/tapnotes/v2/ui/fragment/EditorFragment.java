@@ -177,7 +177,7 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks) {
-    s.setCallback(callbacks);
+    s.setCallbacks(callbacks);
   }
 
   private void editNote(String editorText, INote.NoteType type, Note note) {
