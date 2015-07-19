@@ -257,7 +257,7 @@ public class NotesFragment extends TAPFragment
   @Override
   public void onRequestComplete(int requestCode) {
     switch(requestCode) {
-      case Queries.Live.REQUEST_NOTES_REFRESH:
+      case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
         try {
           final Talk talk = Queries.Local.getTalk(mTalkId);
           List<Note> talkNotes = Queries.Local.findClientOwnedNotesFor(talk);

@@ -7,6 +7,7 @@ import android.support.annotation.LayoutRes;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
@@ -15,6 +16,7 @@ import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.parse.ParseException;
@@ -33,7 +35,7 @@ import static rx.android.lifecycle.LifecycleEvent.*;
 public class ProgramSelectionActivity
     extends TAPActivity
     implements ProgramSelectionFragment.TestCallbacks,
-      Observer<ProgramSelectionActivity.Progress>
+      Observer<Progress>
 {
 
   @Inject
@@ -129,7 +131,7 @@ public class ProgramSelectionActivity
 
 
 
-  String mProgramId;
+  private String mProgramId;
 
   @Override
   public void startMNIActivity(final String programId) {
@@ -140,42 +142,10 @@ public class ProgramSelectionActivity
     cache.subscribe(ProgramSelectionActivity.this);
   }
 
-  private Observable<ProgramSelectionActivity.Progress> cache;
+  private Observable<Progress> cache;
 
-  private Observable<ProgramSelectionActivity.Progress> getProgressObservable() {
-    return Observable.create(new Observable.OnSubscribe<Progress>() {
-      @Override
-      public void call(Subscriber<? super Progress> subscriber) {
-        try {
-          // PRECACHE TALKS AND NOTES
-
-          // TODO KRIS is program already pinned? switch to local and delay network query
-          // possibly never (aka OFFLINE ONLY)
-          final int numberOfPrograms = Queries.Local.countPrograms();
-          if (numberOfPrograms > 0) {
-              // TODO KRIS temporarily skip to test local datastore... FIXME
-              subscriber.onCompleted();
-              return;
-          }
-
-          Program program = Queries.Live.pinProgram(mProgramId);
-          subscriber.onNext(new Progress(1, 3, false));
-
-          // TODO KRIS are the talks already here? switch to local and delay network query
-          Queries.Live.pinAllProgramTalksFor(program);
-          subscriber.onNext(new Progress(2, 3, false));
-
-          // TODO KRIS did we local the program and talks? delay network query and restrict to new only
-          Queries.Live.pinAllClientOwnedNotesFor(program);
-          subscriber.onNext(new Progress(3, 3, false));
-          subscriber.onCompleted();
-        } catch (ParseException e) {
-          e.printStackTrace();
-          subscriber.onNext(new Progress(0, 0, true));
-          subscriber.onCompleted();
-        }
-      }
-    }).subscribeOn(Schedulers.io());
+  private Observable<Progress> getProgressObservable() {
+    return Rx.pinProgramWithTalksAndNotes(mProgramId);
   }
 
 
@@ -216,15 +186,4 @@ public class ProgramSelectionActivity
     onProgress(progress);
   }
 
-  public static class Progress {
-    public int item;
-    public int total;
-    public boolean failed;
-
-    public Progress(int item, int total, boolean failed) {
-      this.item = item;
-      this.total = total;
-      this.failed = failed;
-    }
-  }
 }
