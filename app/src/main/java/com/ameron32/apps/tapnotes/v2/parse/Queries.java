@@ -26,6 +26,10 @@ public class Queries {
 
   public static class Live {
 
+    public static final int REQUEST_NOTES_REFRESH = 1;
+    public static final int REQUEST_TALKS_REFRESH = 2;
+    public static final int REQUEST_PROGRAM_REFRESH = 3;
+
     // CURRENT LIMIT = 10000
     public static List<Note> pinAllClientOwnedNotesFor(Program program)
         throws ParseException {
@@ -34,7 +38,7 @@ public class Queries {
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
@@ -47,14 +51,37 @@ public class Queries {
       return notes;
     }
 
-    private static List<Note> queryClientOwnedNotesFor(Program program, int page)
+  public static List<Note> pinAllClientOwnedNotesFor(Program program, Talk talk)
+          throws ParseException {
+      Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
+      int currentPage = 0;
+      int notesPinned = 0;
+      final List<Note> notes = new ArrayList<>();
+      do {
+          final List<Note> moreNotes = queryClientOwnedNotesFor(program, talk, currentPage);
+          final int size = moreNotes.size();
+          notesPinned = notesPinned + size;
+          notes.addAll(moreNotes);
+          currentPage++;
+          Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
+                  currentPage + " notesPinned: " + notesPinned);
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
+              notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      Note.pinAll(notes);
+      return notes;
+  }
+
+    private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, int page)
         throws ParseException {
-      final List<Note> notes = ParseQuery.getQuery(Note.class)
-          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
-              Commands.Local.getClientUser())
-          .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
-          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED)
-          .find();
+      ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
+                .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+                        Commands.Local.getClientUser())
+                .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+                .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+        if (talk != null) {
+            query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
+        }
+        final List<Note> notes = query.find();
       return notes;
     }
 

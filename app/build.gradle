@@ -60,10 +60,13 @@ android {
 }
 
 dependencies {
+
   //compile fileTree(dir: 'libs', include: ['*.jar'])
   compile('com.crashlytics.sdk.android:crashlytics:2.2.3@aar') { transitive = true; }
   retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.0.0'
   debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3'
+  compile files('libs/Parse-1.9.2.jar')
+  compile files('libs/ParseCrashReporting-1.9.2.jar')
   compile fileTree(include: ['Parse-1.9.2.jar'], dir: 'libs')
   compile fileTree(include: ['ParseCrashReporting-1.9.2.jar'], dir: 'libs')
   provided 'com.squareup.dagger:dagger-compiler:1.2.2'

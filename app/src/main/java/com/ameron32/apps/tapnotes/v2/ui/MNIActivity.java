@@ -15,6 +15,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
+import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
@@ -24,6 +25,7 @@ import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
@@ -32,6 +34,7 @@ import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
 import com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout;
 import com.parse.ParseException;
+import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,9 +112,13 @@ public class MNIActivity extends TAPActivity
     return themeController.getTheme();
   }
 
+  @Inject
+  Bus bus;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    bus.register(this);
     // setContentView() handled in super.onCreate()
     mProgramId = getProgramId(savedInstanceState);
     ButterKnife.inject(this);
@@ -124,6 +131,7 @@ public class MNIActivity extends TAPActivity
 
   @Override
   protected void onDestroy() {
+    bus.unregister(this);
     ButterKnife.reset(this);
     super.onDestroy();
   }
@@ -297,6 +305,10 @@ public class MNIActivity extends TAPActivity
         });
   }
 
+  private void postLiveUpdateEvent(int requestCode) {
+    bus.post(new ParseRequestLiveUpdateEvent(requestCode));
+  }
+
 
 
   private void openNavigationDrawer() {
@@ -324,6 +336,17 @@ public class MNIActivity extends TAPActivity
     final String talkName = talk.getTalkTitle();
     final String imageUrl = ""; // TODO update
     commitNotesFragment(talkId, talkName, imageUrl);
+
+    try {
+      if (talk instanceof Talk) {
+        final Program program = Queries.Local.getProgram(mProgramId);
+        Queries.Live.pinAllClientOwnedNotesFor(program, (Talk) talk);
+        // as soon as request is complete
+        postLiveUpdateEvent(Queries.Live.REQUEST_NOTES_REFRESH);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
