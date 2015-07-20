@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer;
 
 import android.support.annotation.Nullable;
 
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ import java.util.ArrayList;
  */
 public interface ISanitizer {
 
-    public void testForScriptures(String s);
+    public void testForScriptures(Bible b, String s);
+    public void setCallbacks(ISanitizerCallbacks callback);
 
     public interface ISanitizerCallbacks{
         public void onSanitizerResults(WrappedScripture scripture);

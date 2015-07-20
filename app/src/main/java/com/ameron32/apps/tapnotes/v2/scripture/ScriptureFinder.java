@@ -1,11 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.IVerseVerifier;
 
 /**
  * Created by Micah on 6/24/2015.
  */
-public class ScriptureFinder implements IVerseVerifier {
+public class ScriptureFinder  {
 
   public String[] getVerses(Bible b, int bookNumber, int chapter, int[]verses) throws ScriptureNotFoundException{
 
@@ -53,10 +52,6 @@ public class ScriptureFinder implements IVerseVerifier {
 
   }
 
-  @Override
-  public boolean verseValid(int book, int chapter, int verse) {
-    return false;
-  }
 
   public class ScriptureNotFoundException extends Exception{
 

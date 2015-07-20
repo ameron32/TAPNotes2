@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -21,13 +23,14 @@ public class Sanitizer implements ISanitizer{
     int bookNumber;
     int chapter;
     int[] verses;
+    String verseString;
 
     String[] words;
 
     Pattern digitP = Pattern.compile("\\d+");
     Pattern digitV = Pattern.compile("[\\d+]|[-]");
 
-    IVerseVerifier vv;
+//    IVerseVerifier vv;
     ISanitizerCallbacks mCallback;
 
     public Sanitizer(Context context) {
@@ -37,20 +40,26 @@ public class Sanitizer implements ISanitizer{
         chapterAmts = context.getResources().getIntArray(R.array.chapter_quantities);
     }
 
-    public void setVerseVerifier(IVerseVerifier v){
-        vv = v;
-    }
+//    public void setVerseVerifier(IVerseVerifier v){
+//        vv = v;
+//    }
 
-    public void setCallback(ISanitizerCallbacks callback){mCallback = callback;};
+
 
     @Override
-    public void testForScriptures(String s) {
+    public void testForScriptures(Bible b, String s) {
+        verseString = "";
 
         String[] subs = s.split("@");
         if (subs.length ==1) mCallback.onSanitizerResults(null);
        else{
             reallyCheck(s, subs);
         }
+    }
+
+    @Override
+    public void setCallbacks(ISanitizerCallbacks callback) {
+        mCallback = callback;
     }
 
     private WrappedScripture reallyCheck(String s, String[] subs){
@@ -76,7 +85,7 @@ public class Sanitizer implements ISanitizer{
                     if (verses == null)
                         mCallback.onSanitizerResults(null);
                     else{
-                        //Actually found a scripture, return it.
+                        mCallback.onSanitizerResults(getWrappedScrip(s, sub));
                     }
                 }
 
@@ -95,7 +104,7 @@ public class Sanitizer implements ISanitizer{
 
         String name = words[0];
 
-        if (((name == "1") || (name == "2") || (name == "3")) && (wCount>1)){
+        if (((name.equals("1")) || (name.equals("2")) || (name.equals("3"))) && (wCount>1)){
             name = words[0] + " " + words[1];
         }
 
@@ -107,7 +116,7 @@ public class Sanitizer implements ISanitizer{
             if (vName.startsWith(name)){
                 bookNumber = i;
                 wordsWOName = words.clone();
-                for (int j=0; j<3; j++){
+                for (int j=0; j<Math.min(3, wordsWOName.length-1); j++){
                     if (vName.contains(wordsWOName[j])){
                         wordsWOName[j]="";
                     }
@@ -155,11 +164,15 @@ public class Sanitizer implements ISanitizer{
         for (int j=0; j<verses.length; j++){
             if (verses[j]>0){
                 actualVerses.add(verses[j]);
+                    verseString = verseString + String.valueOf(verses[j] + " ");
+
+
             }
             else{
                 if ((verses[j]==-2)&&(j>0) && (j<verses.length-2)){
                     int lower = verses[j-1];
                     int upper = verses[j+1];
+                    verseString = verseString + String.valueOf(lower)+ "-"+String.valueOf(upper);
                     if (lower<upper){
                         for (int k=lower; k<=upper; k++){
                             actualVerses.add(k);
@@ -168,12 +181,12 @@ public class Sanitizer implements ISanitizer{
                 }
             }
         }
-
-        for (int m=actualVerses.size()-1; m>=0; m--){
-            if (!vv.verseValid(bookNumber, chapter, actualVerses.get(m))){
-                actualVerses.remove(m); //TODO: Concurrent mod exception here?  We'll see. - MC
-            }
-        }
+//
+//        for (int m=actualVerses.size()-1; m>=0; m--){
+//            if (!vv.verseValid(bookNumber, chapter, actualVerses.get(m))){
+//                actualVerses.remove(m); //TODO: Concurrent mod exception here?  We'll see. - MC
+//            }
+//        }
 
         return verses;
     }
@@ -193,20 +206,36 @@ public class Sanitizer implements ISanitizer{
 
     private int pullOutInt(String s) {
         Matcher m = digitV.matcher(s);
-        m.find();
-        String x = m.group();
-        if (x == "-") return -2;
-        else
-            try {
-                int val = Integer.valueOf(m.group());
-                return val;
+        if(m.find()){
+            String x = m.group();
+            if (x == "-") return -2;
+            else
+                try {
+                    int val = Integer.valueOf(x);
+                    return val;
 
-            } catch (NumberFormatException e) {
-                return -1;
-            }
+                } catch (NumberFormatException e) {
+                    return -1;
+                }
+        }
+        return -1;
     }
 
-   // SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
+    private WrappedScripture getWrappedScrip(String s, String sub){
 
+        WrappedScripture ws = new WrappedScripture();
+        ws.indexStart= s.indexOf(sub);
+        ws.indexEnd = ws.indexStart + sub.length()-1;
+        ws.replacedText = sub;
+        Scripture scrip = Scripture.generate(bookNumber, chapter, verses);
+        ws.scripture = scrip;
+        String name = validNames[ws.scripture.getBook()];
+        name = org.apache.commons.lang3.text.WordUtils.capitalizeFully(name);
+        verseString = verseString.replace("null", "");
+        name = name+ " " + String.valueOf(chapter) + ":" + verseString;
+        ws.newText = name;
+
+        return ws;
+    }
 
 }

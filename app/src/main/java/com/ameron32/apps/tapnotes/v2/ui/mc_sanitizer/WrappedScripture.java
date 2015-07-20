@@ -7,6 +7,7 @@ import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
  */
 public class WrappedScripture {
 
+    public String newText;
     public Scripture scripture;
     public int indexStart;
     public int indexEnd;
