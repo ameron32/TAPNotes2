@@ -28,7 +28,6 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -43,7 +42,6 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.android.lifecycle.LifecycleObservable;
 
 import static rx.android.lifecycle.LifecycleEvent.*;
 
@@ -188,10 +186,7 @@ public class NotesFragment extends TAPFragment
   private Observable<Progress> cache;
 
   private void giveNotesToDelegate() {
-    // TODO hand-off received data to delegate for UI update
-
-    // TODO consider moving off UI-Thread
-    cache = bindLifecycle(getObservable(), DESTROY).cache();
+    cache = bindLifecycle(getLocalNotesObservable(), DESTROY).cache();
     cache.subscribe(noteObserver);
   }
 
@@ -223,7 +218,7 @@ public class NotesFragment extends TAPFragment
     }
   };
 
-  private Observable<Progress> getObservable() {
+  private Observable<Progress> getLocalNotesObservable() {
     return Observable.create(new Observable.OnSubscribe<Progress>() {
 
       @Override
@@ -312,19 +307,7 @@ public class NotesFragment extends TAPFragment
   public void onRequestComplete(int requestCode) {
     switch(requestCode) {
       case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
-        try {
-          final Talk talk = Queries.Local.getTalk(mTalkId);
-          List<Note> talkNotes = Queries.Local.findClientOwnedNotesFor(talk);
-          List<INote> talkINotes = new ArrayList<>(talkNotes.size());
-          talkINotes.addAll(talkNotes);
-          // TODO replace with more precise updates
-          mNotesDelegate.synchronizeNotes(talkINotes);
-          final String log = "refresh notification received. sent to notes delegate.";
-          Log.d(NotesFragment.class.getSimpleName(), log);
-          mSnackBar.toast(log);
-        } catch (ParseException e) {
-          e.printStackTrace();
-        }
+        giveNotesToDelegate();
         break;
       default:
         // do nothing

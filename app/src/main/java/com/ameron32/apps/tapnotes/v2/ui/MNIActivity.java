@@ -434,6 +434,7 @@ public class MNIActivity extends TAPActivity
   };
 
   private Observable<Progress> cache;
+
   private Observer<Progress> observer = new Observer<Progress>() {
 
     @Override

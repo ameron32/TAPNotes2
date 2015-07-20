@@ -108,7 +108,6 @@ public class ProgramSelectionFragment extends TAPFragment
   void onClick() {
     if (!programSaved(mProgramId)) {
       getCallbacks().downloadProgram(mProgramId);
-//      getCallbacks().startActivity(mProgramId);
     } else {
       getCallbacks().startActivity(mProgramId);
     }
