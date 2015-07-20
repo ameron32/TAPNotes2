@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
@@ -47,7 +48,7 @@ public class Sanitizer implements ISanitizer{
 
 
     @Override
-    public void testForScriptures(Bible b, String s) {
+    public void testForScriptures(IBible b, String s) {
         verseString = "";
 
         String[] subs = s.split("@");
