@@ -127,6 +127,7 @@ public class EditorFragment extends TAPFragment
     BibleBuilder bb = new BibleBuilder();
     try {
       mBible = bb.getBible(getContext());
+      mDelegate.onBibleCreated(mBible);
     } catch (BibleResourceNotFoundException e) {
       e.printStackTrace();
     }

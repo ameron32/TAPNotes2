@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.support.annotation.Nullable;
 
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 
@@ -13,6 +14,8 @@ public interface IEditorDelegate {
   void updateEditorText(String newEditorText, @Nullable INote note);
 
   void onSanitizerCreated(ISanitizer sanitizer);
+
+  void onBibleCreated(IBible bible);
 
 
 
