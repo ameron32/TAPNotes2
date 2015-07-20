@@ -423,7 +423,7 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.pinAllClientOwnedNotesFor(program, (Talk) talk), DESTROY).cache();
+          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }
@@ -459,25 +459,25 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void createNote(String editorText, INote.NoteType type) {
-      Note prevNote = null;
-      try {
-        final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-        prevNote = Queries.Local.findLastClientOwnedNoteFor(talk);
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
+//      Note prevNote = null;
+//      try {
+//        final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+//        prevNote = Queries.Local.findLastClientOwnedNoteFor(talk);
+//      } catch (ParseException e) {
+//        e.printStackTrace();
+//      }
       final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
-      final Note lastNote = prevNote;
-
-      if (lastNote != null) {
-        lastNote.setNext(note);
-        Commands.Local.saveEventuallyNote(lastNote);
-      }
+//      final Note lastNote = prevNote;
+//
+//      if (lastNote != null) {
+//        lastNote.setNext(note);
+//        Commands.Local.saveEventuallyNote(lastNote);
+//      }
 
       if (note != null) {
         // TODO replace with Observable!!!
         Commands.Local.saveEventuallyNote(note);
-        getNotesFragment().notesChanged(listify(lastNote));
+//        getNotesFragment().notesChanged(listify(lastNote));
         getNotesFragment().notesAdded(listify(note));
       }
     }

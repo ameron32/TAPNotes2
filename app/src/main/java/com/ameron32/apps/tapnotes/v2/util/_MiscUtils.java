@@ -53,31 +53,31 @@ public class _MiscUtils {
 
   public static void _saveFakeNotes(List<Talk> talks, Program program) {
 
-//    List<Note> notes = new ArrayList<>(talks.size());
-//    List<Note> notes2 = new ArrayList<>();
-    for (int i = 0; i < talks.size(); i++) {
-      Talk talk = talks.get(i);
-      if (talk.getEventType() == EventType.TALK ||
-          talk.getEventType() == EventType.SYMPOSIUMTALK) {
-        Note last = null;
-        try {
-          last = Queries.Local.findLastClientOwnedNoteFor(talk);
-          Log.d("_MiscUtils", "last = " + last.toString());
-        } catch (ParseException e) {
-          e.printStackTrace();
-        }
-        Note note = Note.create("test3", program, talk, Commands.Local.getClientUser());
-        Commands.Local.saveEventuallyNote(note);
-        if (last != null) {
-          last.setNextNote(note);
-          Commands.Local.saveEventuallyNote(last);
-//          notes2.add(last);
-        }
-//        notes.add(note);
-      }
-    }
-//    Commands.Live.saveNotesNow(notes);
-//    Commands.Live.saveNotesNow(notes2);
+////  List<Note> notes = new ArrayList<>(talks.size());
+////  List<Note> notes2 = new ArrayList<>();
+//    for (int i = 0; i < talks.size(); i++) {
+//      Talk talk = talks.get(i);
+//      if (talk.getEventType() == EventType.TALK ||
+//          talk.getEventType() == EventType.SYMPOSIUMTALK) {
+//        Note last = null;
+//        try {
+//          last = Queries.Local.findLastClientOwnedNoteFor(talk);
+//          Log.d("_MiscUtils", "last = " + last.toString());
+//        } catch (ParseException e) {
+//          e.printStackTrace();
+//        }
+//        Note note = Note.create("test3", program, talk, Commands.Local.getClientUser());
+//        Commands.Local.saveEventuallyNote(note);
+//        if (last != null) {
+//          last.setNextNote(note);
+//          Commands.Local.saveEventuallyNote(last);
+////          notes2.add(last);
+//        }
+////        notes.add(note);
+//      }
+//    }
+////  Commands.Live.saveNotesNow(notes);
+////  Commands.Live.saveNotesNow(notes2);
   }
 
   public static void _generate1001Notes(Talk talk, Program program)

@@ -27,6 +27,9 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
@@ -108,8 +111,9 @@ public class EditorFragment extends TAPFragment
     return view;
   }
 
-  Sanitizer s;
-  ScriptureFinder f;
+  private Sanitizer s;
+  private ScriptureFinder f;
+  private Bible mBible;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -118,10 +122,18 @@ public class EditorFragment extends TAPFragment
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     mToolbar.setOnMenuItemClickListener(this);
 
-//    s = new Sanitizer(getContext());
-//    f = new ScriptureFinder();
-//    s.setVerseVerifier(f);
-//    mDelegate.onSanitizerCreated(s);
+    // TODO move off UI-THREAD
+    mBible = null;
+    BibleBuilder bb = new BibleBuilder();
+    try {
+      mBible = bb.getBible(getContext());
+    } catch (BibleResourceNotFoundException e) {
+      e.printStackTrace();
+    }
+
+    s = new Sanitizer(getContext());
+    f = new ScriptureFinder();
+    mDelegate.onSanitizerCreated(s);
   }
 
   private void confirmDelegateHasInterface() {

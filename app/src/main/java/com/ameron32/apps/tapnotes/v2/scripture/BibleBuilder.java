@@ -7,11 +7,9 @@ import android.util.Log;
 import com.ameron32.apps.tapnotes.v2.R;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -19,7 +17,7 @@ import java.util.regex.Pattern;
 
 public class BibleBuilder {
 
-    String defaultLangage;
+    String defaultLanguage;
     Resources r;
     Context c;
 
@@ -29,12 +27,13 @@ public class BibleBuilder {
     //    See http://developer.android.com/reference/java/util/Locale.html for the list.
     //3.  Call getBible(Context c) to get the Bible.
 
-    private int[] chapterQuantities = Resources.getSystem().getIntArray(R.array.chapter_quantities);
+    private int[] chapterQuantities;
     public Bible getBible(Context c) throws BibleResourceNotFoundException{
 
-        defaultLangage = Locale.getDefault().getLanguage();
+        defaultLanguage = Locale.getDefault().getLanguage();
         this.c = c;
         r = c.getResources();
+        chapterQuantities = r.getIntArray(R.array.chapter_quantities);
         return initializeNewBible();
     }
 
@@ -57,7 +56,7 @@ public class BibleBuilder {
 
     public void setLanguage(String localeCode){
         if (isValidLocale(localeCode)){
-            defaultLangage = localeCode;
+            defaultLanguage = localeCode;
         }
     }
 
@@ -247,7 +246,7 @@ public class BibleBuilder {
 
         StringBuilder filename = new StringBuilder();
 
-        if (defaultLangage.equals("es")){
+        if (defaultLanguage.equals("es")){
             //Spanish Language
             if (chapter==0){
                 filename

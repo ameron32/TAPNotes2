@@ -145,7 +145,7 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache;
 
   private Observable<Progress> getProgressObservable() {
-    return Rx.pinProgramWithTalksAndNotes(mProgramId);
+    return Rx.Live.pinProgramWithTalksAndNotes(mProgramId);
   }
 
 

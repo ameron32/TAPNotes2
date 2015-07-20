@@ -2,7 +2,6 @@ package com.ameron32.apps.tapnotes.v2.parse;
 
 import android.util.Log;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
@@ -12,17 +11,13 @@ import com.parse.ParseQuery;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.schedulers.Schedulers;
-
 /**
  * Created by klemeilleur on 7/7/2015.
  */
 public class Queries {
 
   private static final String TAG = Queries.class.getSimpleName();
-  private static final int FIRST_OR_ONLY = 0;
+//  private static final int FIRST_OR_ONLY = 0;
 
   private static final int LIMIT_QUERY_MAXIMUM_ALLOWED = 100;
   private static final int LIMIT_SKIP_MAXIMUM_ALLOWED = 10000;
@@ -35,7 +30,7 @@ public class Queries {
   public static class Live {
 
     // CURRENT LIMIT = 10000
-    public static List<Note> pinAllClientOwnedNotesFor(Program program)
+    static List<Note> pinAllClientOwnedNotesFor(Program program)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
       int currentPage = 0;
@@ -69,8 +64,8 @@ public class Queries {
         currentPage++;
         Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
             currentPage + " notesPinned: " + notesPinned);
-      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
-          notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
+          && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(notes);
       return notes;
     }
@@ -78,19 +73,19 @@ public class Queries {
     private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, int page)
         throws ParseException {
       ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
-                .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
-                        Commands.Local.getClientUser())
-                .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
-                .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
-        if (talk != null) {
-            query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
-        }
-        final List<Note> notes = query.find();
+          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+              Commands.Local.getClientUser())
+          .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+      if (talk != null) {
+        query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
+      }
+      final List<Note> notes = query.find();
       return notes;
     }
 
     // CURRENT LIMIT = 1000
-    public static List<Talk> pinAllProgramTalksFor(Program program)
+    static List<Talk> pinAllProgramTalksFor(Program program)
         throws ParseException {
       Log.d(TAG, "pinAllProgramTalksFor " + program.getObjectId());
       final List<Talk> talks = ParseQuery.getQuery(Talk.class)
@@ -101,7 +96,7 @@ public class Queries {
       return talks;
     }
 
-    public static Program pinProgram(String programId)
+    static Program pinProgram(String programId)
         throws ParseException {
       Log.d(TAG, "pinProgram " + programId);
       final Program program = ParseQuery.getQuery(Program.class)
@@ -126,14 +121,14 @@ public class Queries {
       return notes;
     }
 
-public static int countPrograms()
-      throws ParseException {
-  Log.d(TAG, "countPrograms");
-  final List<Program> programs = ParseQuery.getQuery(Program.class)
+    public static int countPrograms()
+        throws ParseException {
+      Log.d(TAG, "countPrograms");
+      final List<Program> programs = ParseQuery.getQuery(Program.class)
           .fromLocalDatastore()
           .find();
-  return programs.size();
-}
+      return programs.size();
+    }
 
     public static Program getProgram(String programId)
         throws ParseException {
@@ -166,18 +161,18 @@ public static int countPrograms()
       return notes;
     }
 
-    public static Note findLastClientOwnedNoteFor(Talk talk)
-        throws ParseException {
-      final List<Note> notes = ParseQuery.getQuery(Note.class)
-          .fromLocalDatastore()
-          .whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY,
-              talk)
-          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
-              Commands.Local.getClientUser())
-          .whereDoesNotExist(Constants.NOTE_NEXTNOTE_OBJECT_KEY)
-          .find();
-      return notes.get(FIRST_OR_ONLY);
-    }
+//    public static Note findLastClientOwnedNoteFor(Talk talk)
+//        throws ParseException {
+//      final List<Note> notes = ParseQuery.getQuery(Note.class)
+//          .fromLocalDatastore()
+//          .whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY,
+//              talk)
+//          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+//              Commands.Local.getClientUser())
+//          .whereDoesNotExist(Constants.NOTE_NEXTNOTE_OBJECT_KEY)
+//          .find();
+//      return notes.get(FIRST_OR_ONLY);
+//    }
 
     public static List<Talk> findAllProgramTalks(Program program)
         throws ParseException {

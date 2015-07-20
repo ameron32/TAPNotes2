@@ -178,24 +178,24 @@ public class NotesFragment extends TAPFragment
 
   private void giveNotesToDelegate() {
     // TODO hand-off received data to delegate for UI update
-//    try {
+    try {
       // TODO consider moving off UI-Thread
-//      final Talk talk = Queries.Local.getTalk(mTalkId);
-//      mSymposiumTitle = talk.getSymposiumTitle();
-//      mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
-//      final List<Note> notes = Queries.Local.findClientOwnedNotesFor(talk);
-//      final int size = notes.size();
-      final List<INote> iNotes = new ArrayList<>();
-//      iNotes.addAll(notes);
+      final Talk talk = Queries.Local.getTalk(mTalkId);
+      mSymposiumTitle = talk.getSymposiumTitle();
+      mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
+      final List<Note> notes = Queries.Local.findClientOwnedNotesFor(talk);
+      final int size = notes.size();
+      final List<INote> iNotes = new ArrayList<>(size);
+      iNotes.addAll(notes);
 
       Log.d(NotesFragment.class.getSimpleName(),
           "iNotes.size() : " + iNotes.size());
 
       // TODO give Notes to Delegate
       mNotesDelegate.synchronizeNotes(iNotes);
-//    } catch (ParseException e) {
-//      e.printStackTrace();
-//    }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
