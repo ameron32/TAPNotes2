@@ -118,10 +118,10 @@ public class EditorFragment extends TAPFragment
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     mToolbar.setOnMenuItemClickListener(this);
 
-    s = new Sanitizer(getContext());
-    f = new ScriptureFinder();
-    s.setVerseVerifier(f);
-    mDelegate.onSanitizerCreated(s);
+//    s = new Sanitizer(getContext());
+//    f = new ScriptureFinder();
+//    s.setVerseVerifier(f);
+//    mDelegate.onSanitizerCreated(s);
   }
 
   private void confirmDelegateHasInterface() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class Sanitizer implements ISanitizer{
     Pattern digitP = Pattern.compile("\\d+");
     Pattern digitV = Pattern.compile("[\\d+]|[-]");
 
-    IVerseVerifier vv;
+//    IVerseVerifier vv;
     ISanitizerCallbacks mCallback;
 
     public Sanitizer(Context context) {
@@ -39,14 +40,14 @@ public class Sanitizer implements ISanitizer{
         chapterAmts = context.getResources().getIntArray(R.array.chapter_quantities);
     }
 
-    public void setVerseVerifier(IVerseVerifier v){
-        vv = v;
-    }
+//    public void setVerseVerifier(IVerseVerifier v){
+//        vv = v;
+//    }
 
 
 
     @Override
-    public void testForScriptures(String s) {
+    public void testForScriptures(Bible b, String s) {
         verseString = "";
 
         String[] subs = s.split("@");
@@ -180,12 +181,12 @@ public class Sanitizer implements ISanitizer{
                 }
             }
         }
-
-        for (int m=actualVerses.size()-1; m>=0; m--){
-            if (!vv.verseValid(bookNumber, chapter, actualVerses.get(m))){
-                actualVerses.remove(m); //TODO: Concurrent mod exception here?  We'll see. - MC
-            }
-        }
+//
+//        for (int m=actualVerses.size()-1; m>=0; m--){
+//            if (!vv.verseValid(bookNumber, chapter, actualVerses.get(m))){
+//                actualVerses.remove(m); //TODO: Concurrent mod exception here?  We'll see. - MC
+//            }
+//        }
 
         return verses;
     }

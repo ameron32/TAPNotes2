@@ -1,29 +1,24 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
+import com.ameron32.apps.tapnotes.v2.ui.renderer.MentionSpanRenderer;
+import com.jmpergar.awesometext.AwesomeTextHandler;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 
@@ -75,6 +70,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         return holder;
     }
 
+    private static final String SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
+
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
@@ -84,6 +81,9 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
 
+        AwesomeTextHandler ath = new AwesomeTextHandler();
+        ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
+            .setView(holder.notesTextView);
     }
 
     @Override

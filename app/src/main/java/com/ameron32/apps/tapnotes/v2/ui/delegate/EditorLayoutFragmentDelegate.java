@@ -1,7 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.graphics.Color;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +8,6 @@ import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
@@ -24,9 +22,9 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
-import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.IVerseVerifier;
-import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
+import com.ameron32.apps.tapnotes.v2.ui.renderer.MentionSpanRenderer;
+import com.jmpergar.awesometext.AwesomeTextHandler;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,6 +73,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   private ScriptureWatcher watcher;
   private ISanitizer sanitizer;
 
+  private static final String SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
+
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     // during super.onViewCreated()--Sanitizer is instantiated
@@ -85,7 +85,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     setOnClicks();
 
 
-
+//    AwesomeTextHandler awesomeTextViewHandler = new AwesomeTextHandler();
+//    awesomeTextViewHandler
+//            .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
+//            .addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
+//            .setView(noteText);
   }
 
   @Override
@@ -216,7 +220,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
         if (string.contains("@")) {
           if (!replacing) {
             if (endofnumberstring(string)) {
-              sanitizer.testForScriptures(string);
+              //sanitizer.testForScriptures(string);
             }
           }
         }
@@ -271,6 +275,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
         textSpan.setSpan(fcs, 0, oldText.length()-2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
         noteText.setText(textSpan);
+
 
         int position = noteText.length();
         Editable etext = noteText.getText();
