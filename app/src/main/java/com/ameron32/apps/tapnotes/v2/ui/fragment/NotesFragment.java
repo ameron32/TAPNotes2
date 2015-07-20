@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.R;
@@ -20,12 +21,16 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.frmk.ParseLiveReceiver;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +47,9 @@ public class NotesFragment extends TAPFragment
     implements
       INoteHandler,
       IToolbarHeaderDelegate.IToolbarHeaderCallbacks,
-      INotesDelegate.INotesDelegateCallbacks {
+      INotesDelegate.INotesDelegateCallbacks,
+      ParseLiveReceiver
+{
 
   private static final String TITLE_ARG = "TITLE_ARG";
   private static final String TALK_ID_ARG = "TALK_ID_ARG";
@@ -111,12 +118,19 @@ public class NotesFragment extends TAPFragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    bus.register(this);
     final Bundle args = getArguments();
     if (args != null) {
       mTalkId = args.getString(TALK_ID_ARG);
       mToolbarTitle = args.getString(TITLE_ARG);
       mImageUrl = args.getString(IMAGEURL_ARG);
     }
+  }
+
+  @Override
+  public void onDestroy() {
+    bus.unregister(this);
+    super.onDestroy();
   }
 
   @Nullable
@@ -227,6 +241,40 @@ public class NotesFragment extends TAPFragment
   public void onNextPressed() {
     // TODO: KRIS delegate callback
     mSnackBar.toast("onNextPressed() to be implemented.");
+  }
+
+
+
+  @Inject
+  Bus bus;
+
+  @Subscribe
+  public void onRequestComplete(ParseRequestLiveUpdateEvent event) {
+    final int requestCode = event.getRequestType();
+    onRequestComplete(requestCode);
+  }
+
+  @Override
+  public void onRequestComplete(int requestCode) {
+    switch(requestCode) {
+      case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
+        try {
+          final Talk talk = Queries.Local.getTalk(mTalkId);
+          List<Note> talkNotes = Queries.Local.findClientOwnedNotesFor(talk);
+          List<INote> talkINotes = new ArrayList<>(talkNotes.size());
+          talkINotes.addAll(talkNotes);
+          // TODO replace with more precise updates
+          mNotesDelegate.synchronizeNotes(talkINotes);
+          final String log = "refresh notification received. sent to notes delegate.";
+          Log.d(NotesFragment.class.getSimpleName(), log);
+          mSnackBar.toast(log);
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
+        break;
+      default:
+        // do nothing
+    }
   }
 
 

@@ -8,30 +8,38 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
+import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
+import com.ameron32.apps.tapnotes.v2.frmk.IProgressHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgressFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
 import com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout;
 import com.parse.ParseException;
+import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +48,10 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.Observer;
+
+import static rx.android.lifecycle.LifecycleEvent.*;
 
 /**
  * Activity -- Main Notetaking Interface.
@@ -53,6 +65,8 @@ public class MNIActivity extends TAPActivity
       NotesFragment.Callbacks,
       ScripturePickerFragment.Callbacks
 {
+
+
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
 
@@ -109,21 +123,27 @@ public class MNIActivity extends TAPActivity
     return themeController.getTheme();
   }
 
+  @Inject
+  Bus bus;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    bus.register(this);
     // setContentView() handled in super.onCreate()
     mProgramId = getProgramId(savedInstanceState);
     ButterKnife.inject(this);
 
     setupDrawer();
     commitNotesPlaceholder(); //blank
-    commitProgramFragment(mProgramId); //blank
+    commitProgramFragment(mProgramId);
+    commitProgressFragment();
     // commitEditorFragment when real NotesFragment is created
   }
 
   @Override
   protected void onDestroy() {
+    bus.unregister(this);
     ButterKnife.reset(this);
     super.onDestroy();
   }
@@ -201,10 +221,29 @@ public class MNIActivity extends TAPActivity
     setupDrawerContent(mNavigationView);
   }
 
+  private static final String TAG_PROGRESS = "progress";
   private static final String TAG_NOTES = "notes";
   private static final String TAG_PROGRAM = "program";
   private static final String TAG_EDITOR = "editor";
   private static final String TAG_SCRIPTURE_PICKER = "scripturepicker";
+
+  private void commitProgressFragment() {
+    final String tag = TAG_PROGRESS;
+    removeFragment(tag);
+    getSupportFragmentManager().beginTransaction()
+        .replace(R.id.progress_container,
+            ProgressFragment.create(), tag)
+        .commit();
+  }
+
+  private IProgressHandler getProgressFragment() {
+    final Fragment fragmentByTag = getSupportFragmentManager()
+        .findFragmentByTag(TAG_PROGRESS);
+    if (fragmentByTag != null) {
+      return (IProgressHandler) fragmentByTag;
+    }
+    return null;
+  }
 
   private void commitNotesPlaceholder() {
     final String tag = TAG_NOTES;
@@ -287,14 +326,18 @@ public class MNIActivity extends TAPActivity
 
   private void setupDrawerContent(NavigationView navigationView) {
     navigationView.setNavigationItemSelectedListener(
-        new NavigationView.OnNavigationItemSelectedListener() {
-          @Override
-          public boolean onNavigationItemSelected(MenuItem menuItem) {
-            menuItem.setChecked(true);
-            mDrawerLayout.closeDrawers();
-            return true;
-          }
-        });
+            new NavigationView.OnNavigationItemSelectedListener() {
+              @Override
+              public boolean onNavigationItemSelected(MenuItem menuItem) {
+                menuItem.setChecked(true);
+                mDrawerLayout.closeDrawers();
+                return true;
+              }
+            });
+  }
+
+  private void postLiveUpdateEvent(int requestCode) {
+    bus.post(new ParseRequestLiveUpdateEvent(requestCode));
   }
 
 
@@ -307,50 +350,6 @@ public class MNIActivity extends TAPActivity
     mDualLayout.toggleLayout();
   }
 
-  @Override
-  public void toggleProgramPane() {
-    toggleAnimatingLayout();
-  }
-
-  @Override
-  public void changeNotesFragmentTo(ITalk talk) {
-    if (talk == null) {
-      // do nothing
-      return;
-    }
-
-    // TODO add an imageUrl
-    final String talkId = talk.getId();
-    final String talkName = talk.getTalkTitle();
-    final String imageUrl = ""; // TODO update
-    commitNotesFragment(talkId, talkName, imageUrl);
-  }
-
-  @Override
-  public void createNote(String editorText, INote.NoteType type) {
-    Note prevNote = null;
-    try {
-      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-      prevNote = Queries.Local.findLastClientOwnedNoteFor(talk);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
-    final Note lastNote = prevNote;
-
-    if (lastNote != null) {
-      lastNote.setNext(note);
-      Commands.Local.saveEventuallyNote(lastNote);
-    }
-
-    if (note != null) {
-      // TODO replace with Observable!!!
-      Commands.Local.saveEventuallyNote(note);
-      getNotesFragment().notesChanged(listify(lastNote));
-      getNotesFragment().notesAdded(listify(note));
-    }
-  }
-
   private List<INote> listify(INote... notes) {
     final ArrayList<INote> list = new ArrayList<>(notes.length);
     for (int i = 0; i < notes.length; i++) {
@@ -360,31 +359,161 @@ public class MNIActivity extends TAPActivity
     return list;
   }
 
+
+
+  // ---------------------------------------------------
+  // CALLBACKS -- DISTRIBUTE
+  // ---------------------------------------------------
+
   @Override
-  public void dispatchEditorOn(INote note) {
-    getEditorFragment().displayNoteToEdit(note);
+  public void createNote(String editorText, INote.NoteType type) {
+    mECallbacks.createNote(editorText, type);
   }
 
   @Override
   public void editNote(String editorText, INote.NoteType type, Note note) {
-    if (type != note.getNoteType()) {
-      note.changeNoteType(type);
-    }
-    note.setNoteText(editorText);
-
-    Commands.Local.saveEventuallyNote(note);
-    getNotesFragment().notesChanged(listify(note));
+    mECallbacks.editNote(editorText, type, note);
   }
 
   @Override
   public void openScripturePicker() {
-    commitNewScripturePickerFragment();
+    mECallbacks.openScripturePicker();
+  }
+
+  @Override
+  public void toggleProgramPane() {
+    mPCallbacks.toggleProgramPane();
+  }
+
+  @Override
+  public void changeNotesFragmentTo(ITalk talk) {
+    mPCallbacks.changeNotesFragmentTo(talk);
+  }
+
+  @Override
+  public void dispatchEditorOn(INote note) {
+    mNCallbacks.dispatchEditorOn(note);
   }
 
   @Override
   public void scripturePrepared(IScripture scripture) {
-    // TODO scripture picker generated scripture
-    final String tag = TAG_SCRIPTURE_PICKER;
-    removeFragment(tag);
+    mSCallbacks.scripturePrepared(scripture);
   }
+
+  private ProgramFragment.Callbacks mPCallbacks = new ProgramFragment.Callbacks() {
+
+    @Override
+    public void toggleProgramPane() {
+      toggleAnimatingLayout();
+    }
+
+    @Override
+    public void changeNotesFragmentTo(ITalk talk) {
+      if (talk == null) {
+        // do nothing
+        return;
+      }
+
+      // TODO add an imageUrl
+      final String talkId = talk.getId();
+      final String talkName = talk.getTalkTitle();
+      final String imageUrl = ""; // TODO update
+      commitNotesFragment(talkId, talkName, imageUrl);
+
+      try {
+        if (talk instanceof Talk) {
+          final Program program = Queries.Local.getProgram(mProgramId);
+          cache = bindLifecycle(Rx.pinAllClientOwnedNotesFor(program, (Talk) talk), DESTROY).cache();
+          cache.subscribe(observer);
+          // see Observer for callbacks
+        }
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+    }
+  };
+
+  private Observable<Progress> cache;
+  private Observer<Progress> observer = new Observer<Progress>() {
+
+    @Override
+    public void onCompleted() {
+      // as soon as request is complete
+      postLiveUpdateEvent(ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH);
+    }
+
+    @Override
+    public void onError(Throwable e) {
+      e.printStackTrace();
+    }
+
+    @Override
+    public void onNext(Progress progress) {
+      Log.d("MNI:observer", progress.item + " of " + progress.total + " with status " +
+          ((progress.failed) ? "FAILED" : "good"));
+      getProgressFragment().setProgress(progress);
+    }
+  };
+
+  private EditorFragment.Callbacks mECallbacks = new EditorFragment.Callbacks() {
+
+    @Override
+    public void createNote(String editorText, INote.NoteType type) {
+      Note prevNote = null;
+      try {
+        final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+        prevNote = Queries.Local.findLastClientOwnedNoteFor(talk);
+      } catch (ParseException e) {
+        e.printStackTrace();
+      }
+      final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
+      final Note lastNote = prevNote;
+
+      if (lastNote != null) {
+        lastNote.setNext(note);
+        Commands.Local.saveEventuallyNote(lastNote);
+      }
+
+      if (note != null) {
+        // TODO replace with Observable!!!
+        Commands.Local.saveEventuallyNote(note);
+        getNotesFragment().notesChanged(listify(lastNote));
+        getNotesFragment().notesAdded(listify(note));
+      }
+    }
+
+    @Override
+    public void editNote(String editorText, INote.NoteType type, Note note) {
+      if (type != note.getNoteType()) {
+        note.changeNoteType(type);
+      }
+      note.setNoteText(editorText);
+
+      Commands.Local.saveEventuallyNote(note);
+      getNotesFragment().notesChanged(listify(note));
+    }
+
+    @Override
+    public void openScripturePicker() {
+      commitNewScripturePickerFragment();
+    }
+  };
+
+  private NotesFragment.Callbacks mNCallbacks = new NotesFragment.Callbacks() {
+
+    @Override
+    public void dispatchEditorOn(INote note) {
+      getEditorFragment().displayNoteToEdit(note);
+    }
+  };
+
+  private ScripturePickerFragment.Callbacks mSCallbacks = new ScripturePickerFragment.Callbacks() {
+
+    @Override
+    public void scripturePrepared(IScripture scripture) {
+      // TODO scripture picker generated scripture
+      final String tag = TAG_SCRIPTURE_PICKER;
+      removeFragment(tag);
+    }
+  };
 }

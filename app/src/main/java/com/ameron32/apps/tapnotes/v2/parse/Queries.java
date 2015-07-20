@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.parse;
 
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
@@ -10,6 +11,10 @@ import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by klemeilleur on 7/7/2015.
@@ -24,6 +29,9 @@ public class Queries {
 
 
 
+  /**
+   * ALL ACTIONS ARE THREAD-BLOCKING. Best not to access on UI-THREAD
+   */
   public static class Live {
 
     // CURRENT LIMIT = 10000
@@ -34,7 +42,7 @@ public class Queries {
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryClientOwnedNotesFor(program, currentPage);
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
@@ -47,14 +55,37 @@ public class Queries {
       return notes;
     }
 
-    private static List<Note> queryClientOwnedNotesFor(Program program, int page)
+    static List<Note> pinAllClientOwnedNotesFor(Program program, Talk talk)
         throws ParseException {
-      final List<Note> notes = ParseQuery.getQuery(Note.class)
-          .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
-              Commands.Local.getClientUser())
-          .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
-          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED)
-          .find();
+      Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
+      int currentPage = 0;
+      int notesPinned = 0;
+      final List<Note> notes = new ArrayList<>();
+      do {
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, talk, currentPage);
+        final int size = moreNotes.size();
+        notesPinned = notesPinned + size;
+        notes.addAll(moreNotes);
+        currentPage++;
+        Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
+            currentPage + " notesPinned: " + notesPinned);
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED &&
+          notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      Note.pinAll(notes);
+      return notes;
+    }
+
+    private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, int page)
+        throws ParseException {
+      ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
+                .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
+                        Commands.Local.getClientUser())
+                .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+                .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+        if (talk != null) {
+            query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
+        }
+        final List<Note> notes = query.find();
       return notes;
     }
 
