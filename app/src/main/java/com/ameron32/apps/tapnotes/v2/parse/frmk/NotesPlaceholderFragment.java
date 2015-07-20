@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui.fragment;
+package com.ameron32.apps.tapnotes.v2.parse.frmk;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
-import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 
 import java.util.List;
 

@@ -23,6 +23,11 @@ import android.view.LayoutInflater;
 import com.ameron32.apps.tapnotes.v2.TAPApplication;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.squareup.otto.Bus;
 import com.squareup.otto.ThreadEnforcer;
 
@@ -84,5 +89,31 @@ public class ApplicationModule {
   @Singleton
   ApplicationThemeController provideThemeController() {
     return new ApplicationThemeController(mApplication);
+  }
+
+
+
+
+
+  @Provides @Singleton
+  Bible provideBible() {
+    try {
+      return new BibleBuilder().getBible(mApplication);
+    } catch (BibleResourceNotFoundException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Provides @Singleton
+  Sanitizer provideSanitizer() {
+    // TODO update to Bible instead of Context as soon as Sanitizer is repaired
+    return new Sanitizer(mApplication);
+  }
+
+  @Provides @Singleton
+  ScriptureFinder provideScriptureFinder() {
+    // TODO update parameters if needed
+    return new ScriptureFinder();
   }
 }

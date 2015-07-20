@@ -4,6 +4,7 @@
   android:id="@+id/main_content"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="?notes_container_background"
   android:fitsSystemWindows="true">
 
   <android.support.design.widget.AppBarLayout
@@ -34,10 +35,15 @@
       <!-- -->
 
       <!-- TODO replace android:text with @string -->
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" >
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:text="Information about the current talk found here." />
+      </RelativeLayout>
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -58,8 +64,8 @@
 
   <!-- -->
 
-  <android.support.v4.widget.NestedScrollView
-    android:id="@+id/placeholder_scroll_view"
+  <RelativeLayout
+    android:id="@+id/placeholder_relative_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?notes_container_background">
@@ -67,42 +73,55 @@
     <!-- TODO replace android:text with @string -->
 
     <LinearLayout
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
       android:orientation="vertical">
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
         android:text="--Press the hamburger button in the top left corner to show the program menu." />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  Choose a talk from the list to begin taking notes." />
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
+        android:text="-  -Choose a talk from the list to begin taking notes." />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  Then, you will see the note editor at the bottom of the screen." />
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
+        android:text="-  -Then, you will see the note editor at the bottom of the screen." />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  It works just like a chat application." />
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
+        android:text="-  -It works just like a chat application." />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
         android:text="--Slide from the left side of the screen for the options menu." />
 
       <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/navigation_padding_bottom"
+        android:paddingTop="@dimen/navigation_padding_top_default"
         android:text="--Press the overflow button in the top right corner to access Settings." />
 
     </LinearLayout>
-  </android.support.v4.widget.NestedScrollView>
+  </RelativeLayout>
 </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
 

@@ -33,7 +33,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
+import com.ameron32.apps.tapnotes.v2.parse.frmk.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgressFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;

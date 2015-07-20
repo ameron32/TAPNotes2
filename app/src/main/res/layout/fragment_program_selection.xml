@@ -11,10 +11,16 @@
 
   <ImageButton
       style="?attr/borderlessButtonStyle"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:id="@+id/testing_button_mni"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"/>
+      android:layout_centerInParent="true"/>
+
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/status_image"
+      android:layout_alignBottom="@+id/testing_button_mni"
+      android:layout_alignRight="@+id/testing_button_mni"/>
 
 </RelativeLayout>

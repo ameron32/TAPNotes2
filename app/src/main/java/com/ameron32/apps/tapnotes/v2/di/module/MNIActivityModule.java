@@ -26,12 +26,16 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivityLoggingController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityTitleController;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 
 import javax.inject.Singleton;
 

@@ -2,21 +2,14 @@ package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
@@ -25,19 +18,14 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
-import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
-import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.EditorLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IEditorDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
-import com.parse.ParseException;
+import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;
 
 import javax.inject.Inject;
 
@@ -105,15 +93,15 @@ public class EditorFragment extends TAPFragment
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View view = inflater.inflate(R.layout.fragment_mni_editor, container, false);
     ButterKnife.inject(this, view);
-    final Drawable d = DrawableCompat.wrap(mSubmitButton.getDrawable());
-    int color = getColorFromAttribute(R.attr.colorAccent, R.color.teal_colorAccent);
-    DrawableCompat.setTint(d, color);
+    ColoredDrawableUtil.setDrawableColor(getActivity(),
+        mSubmitButton.getDrawable(), R.attr.colorAccent,
+        R.color.teal_colorAccent);
     return view;
   }
 
-  private Sanitizer s;
-  private ScriptureFinder f;
-  private Bible mBible;
+  @Inject Sanitizer mSanitizer;
+  @Inject ScriptureFinder mFinder;
+  @Inject Bible mBible;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -122,19 +110,9 @@ public class EditorFragment extends TAPFragment
     mToolbar.inflateMenu(R.menu.editor_overflow_menu);
     mToolbar.setOnMenuItemClickListener(this);
 
-    // TODO move off UI-THREAD
-    mBible = null;
-    BibleBuilder bb = new BibleBuilder();
-    try {
-      mBible = bb.getBible(getContext());
-      mDelegate.onBibleCreated(mBible);
-    } catch (BibleResourceNotFoundException e) {
-      e.printStackTrace();
-    }
-
-    s = new Sanitizer(getContext());
-    f = new ScriptureFinder();
-    mDelegate.onSanitizerCreated(s);
+    if (mBible != null) { mDelegate.onBibleCreated(mBible); }
+    if (mSanitizer != null) { mDelegate.onSanitizerCreated(mSanitizer); }
+    if (mFinder != null) { /* TODO: KRIS does EditorDelegate need finder? */ }
   }
 
   private void confirmDelegateHasInterface() {
@@ -147,26 +125,13 @@ public class EditorFragment extends TAPFragment
     }
   }
 
-
-  private int getColorFromAttribute(@AttrRes int attr, @ColorRes int defaultColor) {
-    final TypedValue typedValue = new TypedValue();
-    getActivity().getTheme()
-            .resolveAttribute(attr, typedValue, true);
-    final int[] accentColor = new int[] { attr };
-    final int indexOfAttrColor = 0;
-    final TypedArray a = getContext()
-            .obtainStyledAttributes(typedValue.data, accentColor);
-    final int color = a.getColor(indexOfAttrColor, defaultColor);
-    a.recycle();
-    return color;
-  }
-
   @Override
   public void onDestroyView() {
     mDelegate = null;
     ButterKnife.reset(this);
     super.onDestroyView();
   }
+
 
 
   @Override
@@ -190,7 +155,7 @@ public class EditorFragment extends TAPFragment
 
   @Override
   public void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks) {
-    s.setCallbacks(callbacks);
+    mSanitizer.setCallbacks(callbacks);
   }
 
   private void editNote(String editorText, INote.NoteType type, Note note) {

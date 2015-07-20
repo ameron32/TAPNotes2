@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.parse;
 
+import android.util.Log;
+
 import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -17,38 +19,53 @@ import rx.schedulers.Schedulers;
  */
 public class Rx {
 
+  public static Observable<Progress> instantComplete() {
+    return Observable.create(new Observable.OnSubscribe<Progress>() {
+      @Override
+      public void call(Subscriber<? super Progress> subscriber) {
+        Log.d(Rx.class.getSimpleName(), "instantComplete called");
+        subscriber.onNext(new Progress(1, 1, false));
+        subscriber.onCompleted();
+      }
+    }).subscribeOn(Schedulers.io());
+  }
+
   public static class Live {
 
-    public static Observable<Progress> pinProgramWithTalksAndNotes(final String programId) {
+    public static Observable<Progress> pinProgramWithTalks(final String programId) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
-            // PRECACHE TALKS AND NOTES
-
-            // TODO KRIS is program already pinned? switch to local and delay network query
-            // possibly never (aka OFFLINE ONLY)
-            final int numberOfPrograms = Queries.Local.countPrograms();
-//            if (numberOfPrograms > 0) {
-//              // TODO KRIS temporarily skip to test local datastore... FIXME
-//              subscriber.onCompleted();
-//              return;
-//            }
-
             final Program program = Queries.Live.pinProgram(programId);
-            subscriber.onNext(new Progress(1, 3, false));
+            subscriber.onNext(new Progress(1, 2, false));
 
             // TODO KRIS are the talks already here? switch to local and delay network query
             final List<Talk> talks = Queries.Live.pinAllProgramTalksFor(program);
-            subscriber.onNext(new Progress(2, 3, false));
-
-            // TODO KRIS did we local the program and talks? delay network query and restrict to new only
-            final List<Note> notes = Queries.Live.pinAllClientOwnedNotesFor(program);
-            subscriber.onNext(new Progress(3, 3, false));
+            subscriber.onNext(new Progress(2, 2, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
             e.printStackTrace();
-            subscriber.onNext(new Progress(0, 0, true));
+            subscriber.onNext(new Progress(0, 2, true));
+            subscriber.onCompleted();
+          }
+        }
+      }).subscribeOn(Schedulers.io());
+    }
+
+    public static Observable<Progress> pinProgramNotes(final String programId) {
+      return Observable.create(new Observable.OnSubscribe<Progress>() {
+        @Override
+        public void call(Subscriber<? super Progress> subscriber) {
+          try {
+            final Program program = Queries.Local.getProgram(programId);
+            // TODO KRIS did we local the program and talks? delay network query and restrict to new only
+            final List<Note> notes = Queries.Live.pinAllClientOwnedNotesFor(program);
+            subscriber.onNext(new Progress(1, 1, false));
+            subscriber.onCompleted();
+          } catch (ParseException e) {
+            e.printStackTrace();
+            subscriber.onNext(new Progress(0, 1, true));
             subscriber.onCompleted();
           }
         }

@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
@@ -39,6 +40,12 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.lifecycle.LifecycleObservable;
+
+import static rx.android.lifecycle.LifecycleEvent.*;
 
 /**
  * Created by klemeilleur on 6/15/2015.
@@ -176,26 +183,71 @@ public class NotesFragment extends TAPFragment
     }
   }
 
+  private Talk mTalk;
+  private List<INote> mNotes = new ArrayList<>();
+  private Observable<Progress> cache;
+
   private void giveNotesToDelegate() {
     // TODO hand-off received data to delegate for UI update
-    try {
-      // TODO consider moving off UI-Thread
-      final Talk talk = Queries.Local.getTalk(mTalkId);
-      mSymposiumTitle = talk.getSymposiumTitle();
-      mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
-      final List<Note> notes = Queries.Local.findClientOwnedNotesFor(talk);
-      final int size = notes.size();
-      final List<INote> iNotes = new ArrayList<>(size);
-      iNotes.addAll(notes);
 
-      Log.d(NotesFragment.class.getSimpleName(),
-          "iNotes.size() : " + iNotes.size());
+    // TODO consider moving off UI-Thread
+    cache = bindLifecycle(getObservable(), DESTROY).cache();
+    cache.subscribe(noteObserver);
+  }
 
-      // TODO give Notes to Delegate
-      mNotesDelegate.synchronizeNotes(iNotes);
-    } catch (ParseException e) {
+  private final Observer<Progress> noteObserver = new Observer<Progress>() {
+
+    private Progress mostRecentProgress;
+
+    @Override
+    public void onCompleted() {
+      if (mostRecentProgress != null) {
+        if (mostRecentProgress.failed) {
+          // failed to load notes locally... that's weird
+
+          return;
+        }
+      }
+
+      mNotesDelegate.synchronizeNotes(mNotes);
+    }
+
+    @Override
+    public void onError(Throwable e) {
       e.printStackTrace();
     }
+
+    @Override
+    public void onNext(Progress progress) {
+      mostRecentProgress = progress;
+    }
+  };
+
+  private Observable<Progress> getObservable() {
+    return Observable.create(new Observable.OnSubscribe<Progress>() {
+
+      @Override
+      public void call(Subscriber<? super Progress> subscriber) {
+        try {
+          subscriber.onNext(new Progress(0, 1, false));
+          mTalk = Queries.Local.getTalk(mTalkId);
+          mSymposiumTitle = mTalk.getSymposiumTitle();
+          mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
+          final List<Note> notes = Queries.Local.findClientOwnedNotesFor(mTalk);
+          mNotes.clear();
+          mNotes.addAll(notes);
+
+          Log.d(NotesFragment.class.getSimpleName(),
+              "mNotes.size() : " + mNotes.size());
+          subscriber.onNext(new Progress(1, 1, false));
+          subscriber.onCompleted();
+        } catch (ParseException e) {
+          e.printStackTrace();
+          subscriber.onNext(new Progress(0, 1, true));
+          subscriber.onCompleted();
+        }
+      }
+    });
   }
 
   @Override

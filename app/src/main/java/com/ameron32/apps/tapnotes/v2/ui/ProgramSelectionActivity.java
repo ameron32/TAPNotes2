@@ -4,27 +4,32 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
+import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.Rx;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.parse.Status;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
-import com.parse.ParseException;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
+import dagger.Lazy;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -34,18 +39,57 @@ import static rx.android.lifecycle.LifecycleEvent.*;
 
 public class ProgramSelectionActivity
     extends TAPActivity
-    implements ProgramSelectionFragment.TestCallbacks,
-      Observer<Progress>
+    implements ProgramSelectionFragment.Callbacks
 {
 
   @Inject
   ApplicationThemeController themeController;
+
+  private IProgramList programList;
+  private ActivityAlertDialogController dialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // setContentView() handled in super.onCreate()
     snackBarController = new ActivitySnackBarController(this);
+    dialog = new ActivityAlertDialogController(this);
+
+    bindLifecycle(buildBibleObservable(), DESTROY).subscribe(bibleLoadingObserver);
+  }
+
+  private final Observer<Progress> bibleLoadingObserver = new Observer<Progress>() {
+
+    @Override
+    public void onCompleted() {
+      snackBarController.toast("Bible loaded.");
+    }
+
+    @Override
+    public void onError(Throwable e) {
+      e.printStackTrace();
+    }
+
+    @Override
+    public void onNext(Progress progress) {
+
+    }
+  };
+
+  @Inject Lazy<Bible> mBible;
+  @Inject Lazy<Sanitizer> mSanitizer;
+  @Inject Lazy<ScriptureFinder> mFinder;
+
+  private Observable<Progress> buildBibleObservable() {
+    return Observable.create(new Observable.OnSubscribe<Progress>() {
+      @Override
+      public void call(Subscriber<? super Progress> subscriber) {
+        mBible.get();
+        mSanitizer.get();
+        mFinder.get();
+        subscriber.onCompleted();
+      }
+    }).subscribeOn(Schedulers.io());
   }
 
   @Override
@@ -59,6 +103,15 @@ public class ProgramSelectionActivity
   protected void onDestroy() {
     snackBarController = null;
     super.onDestroy();
+  }
+
+  @Override
+  public void onAttachFragment(Fragment fragment) {
+    super.onAttachFragment(fragment);
+    final Fragment f = getSupportFragmentManager().findFragmentById(R.id.fragment);
+    if (f != null && f instanceof IProgramList) {
+      programList = (IProgramList) f;
+    }
   }
 
   @Override
@@ -112,40 +165,51 @@ public class ProgramSelectionActivity
   }
 
   void onLoading() {
-    snackBarController.toast("Starting...");
+    snackBarController.toast("Downloading Program...");
   }
 
   void onProgress(Progress progress) {
-    if (progress.failed) {
-      fail();
-    }
     snackBarController.toast("Step " + progress.item + " of " + progress.total + " complete.");
   }
 
   void onLoaded() {
     snackBarController.toast("Complete!");
+    if (programList != null) {
+      programList.setProgramDownloaded(mProgramId);
+    }
   }
 
 
 
-
-
-
+  private Observable<Progress> cache;
   private String mProgramId;
 
   @Override
-  public void startMNIActivity(final String programId) {
-    // TODO precache Talks and Notes from Parse
+  public void startActivity(final String programId) {
     mProgramId = programId;
-    onLoading();
-    cache = bindLifecycle(getProgressObservable(), DESTROY).cache();
-    cache.subscribe(ProgramSelectionActivity.this);
+    Observable<Progress> observable;
+    if (Status.isConnectionToServerAvailable(getActivity())) {
+      observable = Rx.Live.pinProgramNotes(mProgramId);
+    } else {
+      observable = Rx.instantComplete();
+    }
+    cache = bindLifecycle(observable, DESTROY).cache();
+    cache.subscribe(downloadNotesObserver);
   }
 
-  private Observable<Progress> cache;
+  @Override
+  public void downloadProgram(String programId) {
+    if (!Status.isConnectionToServerAvailable(getActivity())) {
+      final String message = "Server connection failed. Please check that you have an internet connection. Also, you must be logged into TAP Notes.";
+      snackBarController.toast(message);
+      dialog.showInformationDialog("Connection Unavailable", message);
+      return;
+    }
 
-  private Observable<Progress> getProgressObservable() {
-    return Rx.Live.pinProgramWithTalksAndNotes(mProgramId);
+    mProgramId = programId;
+    onLoading();
+    cache = bindLifecycle(Rx.Live.pinProgramWithTalks(mProgramId), DESTROY).cache();
+    cache.subscribe(downloadProgramObserver);
   }
 
 
@@ -154,36 +218,59 @@ public class ProgramSelectionActivity
   @ForApplication
   Resources mResources;
 
-  @Override
-  public void onCompleted() {
-    // proceed to activity
-    onLoaded();
-    if (mProgramId == null || failed.get()) {
-      snackBarController.toast(mResources.getString(R.string.program_failed_to_load));
-      return;
+  private final Observer<Progress> downloadProgramObserver = new Observer<Progress>() {
+
+    @Override
+    public void onCompleted() {
+      // proceed to activity
+      if (mProgramId == null || failed.get()) {
+        snackBarController.toast(mResources.getString(R.string.program_failed_to_load));
+        return;
+      } else {
+        onLoaded();
+      }
     }
 
-    startActivity(MNIActivity.makeIntent(getContext(), mProgramId));
-  }
+    @Override
+    public void onError(Throwable e) {
+      // error running task
+      // notify user of failure to process to activity
+      fail();
+      e.printStackTrace();
+    }
 
-  @Override
-  public void onError(Throwable e) {
-    // error running task
-    // notify user of failure to process to activity
-    fail();
-  }
+    public void fail() {
+      // FAIL
+      failed.set(true);
+    }
 
-  public void fail() {
-    // FAIL
-    failed.set(true);
-  }
+    final AtomicBoolean failed = new AtomicBoolean(false);
 
-  final AtomicBoolean failed = new AtomicBoolean(false);
+    @Override
+    public void onNext(Progress progress) {
+      if (progress.failed) {
+        fail();
+      }
+      // task complete OR piece of task complete
+      onProgress(progress);
+    }
+  };
 
-  @Override
-  public void onNext(Progress progress) {
-    // task complete OR piece of task complete
-    onProgress(progress);
-  }
+  private final Observer<Progress> downloadNotesObserver = new Observer<Progress>() {
 
+    @Override
+    public void onCompleted() {
+      startActivity(MNIActivity.makeIntent(getContext(), mProgramId));
+    }
+
+    @Override
+    public void onError(Throwable e) {
+      e.printStackTrace();
+    }
+
+    @Override
+    public void onNext(Progress progress) {
+
+    }
+  };
 }
