@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
@@ -72,12 +73,14 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
   private ScriptureWatcher watcher;
   private ISanitizer sanitizer;
+  private IBible bible;
+
 
   private static final String SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
-    // during super.onViewCreated()--Sanitizer is instantiated
+    //during super.onViewCreated()--Sanitizer is instantiated
     super.onViewCreated(view, savedInstanceState);
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
@@ -85,11 +88,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     setOnClicks();
 
 
-//    AwesomeTextHandler awesomeTextViewHandler = new AwesomeTextHandler();
-//    awesomeTextViewHandler
-//            .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
-//            .addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
-//            .setView(noteText);
+/*    AwesomeTextHandler awesomeTextViewHandler = new AwesomeTextHandler();
+    awesomeTextViewHandler
+            .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
+            .addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
+            .setView(noteText);*/
   }
 
   @Override
@@ -98,8 +101,15 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     this.sanitizer = sanitizer;
     mCallbacks.setSanitizerCallbacks(watcher); // call after Sanitizer initialization
     watcher = new ScriptureWatcher(sanitizer);
+    watcher.setBible(bible);
     noteText.addTextChangedListener(watcher);
   }
+
+  @Override
+  public void onBibleCreated(IBible bible) {
+      this.bible = bible;
+    }
+
 
   @Override
   public void onDestroyView() {
@@ -192,6 +202,12 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
     boolean added = true;
 
+    private IBible bible;
+
+    private void setBible(IBible b){
+      bible = b;
+    }
+
     public ScriptureWatcher(ISanitizer s){
       sanitizer = s;
       sanitizer.setCallbacks(this);
@@ -220,7 +236,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
         if (string.contains("@")) {
           if (!replacing) {
             if (endofnumberstring(string)) {
-              //sanitizer.testForScriptures(string);
+              if (bible!=null)
+              sanitizer.testForScriptures(this.bible, string);
             }
           }
         }
