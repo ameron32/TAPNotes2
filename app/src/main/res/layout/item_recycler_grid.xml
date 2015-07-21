@@ -10,7 +10,7 @@
         android:id="@+id/button_forward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="NEXT" />
+        android:text="@string/scripture_picker_button_proceed" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

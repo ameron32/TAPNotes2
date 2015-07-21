@@ -33,7 +33,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
-import com.ameron32.apps.tapnotes.v2.parse.frmk.NotesPlaceholderFragment;
+import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgressFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
@@ -515,6 +515,9 @@ public class MNIActivity extends TAPActivity
       // TODO scripture picker generated scripture
       final String tag = TAG_SCRIPTURE_PICKER;
       removeFragment(tag);
+
+      // TODO scripture to editor
+//      getEditorFragment().provideScriptureToEditor();
     }
   };
 }

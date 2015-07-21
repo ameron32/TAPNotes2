@@ -28,5 +28,6 @@
   <string name="notes_placeholder_note_area_4">--It works just like a chat application.</string>
   <string name="notes_placeholder_note_area_5">--Slide from the left side of the screen for the options menu.</string>
   <string name="notes_placeholder_note_area_6">--Press the overflow button in the top right corner to access Settings.</string>
+  <string name="scripture_picker_button_proceed">SUBMIT</string>
 
 </resources>

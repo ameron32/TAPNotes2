@@ -98,5 +98,6 @@ dependencies {
   compile 'com.h6ah4i.android.widget.advrecyclerview:advrecyclerview:0.7.2'
   compile 'org.apache.commons:commons-lang3:3.4'
   compile 'com.jmpergar:AwesomeText:1.0.0'
+  compile 'com.h6ah4i.android.materialshadowninepatch:materialshadowninepatch:0.6.3'
 }
 

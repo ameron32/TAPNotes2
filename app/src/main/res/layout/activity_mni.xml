@@ -12,40 +12,54 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-    <include layout="@layout/frame_center_panes"
+    <include
+        layout="@layout/frame_center_panes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/editor_container"/>
 
     <FrameLayout
         android:id="@+id/editor_container"
-        android:background="?editor_container_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:background="?editor_container_background">
 
       <!-- COMMIT FRAGMENT -->
 
     </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/scripture_picker_container"
-        android:background="?scripture_picker_container_background"
+    <com.h6ah4i.android.materialshadowninepatch.MaterialShadowContainerView
+        android:id="@+id/scripture_picker_container_shadow"
+        style="@style/ms9_DefaultShadowStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true" >
+        android:layout_centerInParent="true"
+        app:ms9_shadowElevation="8dp"
+        app:ms9_shadowTranslationZ="4dp">
 
-      <!-- COMMIT FRAGMENT -->
+      <FrameLayout
+          android:id="@+id/scripture_picker_container"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="32dp"
+          android:layout_marginLeft="16dp"
+          android:layout_marginRight="16dp"
+          android:layout_marginTop="16dp"
+          android:background="?scripture_picker_container_background">
 
-    </FrameLayout>
+        <!-- COMMIT FRAGMENT -->
+
+      </FrameLayout>
+    </com.h6ah4i.android.materialshadowninepatch.MaterialShadowContainerView>
 
     <FrameLayout
-      android:id="@+id/progress_container"
-      android:layout_alignParentBottom="true"
-      android:layout_alignParentLeft="true"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+        android:id="@+id/progress_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true">
 
       <!-- COMMIT FRAGMENT -->
 
@@ -56,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/editor_container"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"/>
 
   </RelativeLayout>
 
