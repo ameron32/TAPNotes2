@@ -261,7 +261,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       if ((last == ' ') && (ntl == ' ') && (nums.indexOf(ntntl) != -1)) return true;
 
       //Ends with #,
-      if ((last == ',') && (nums.indexOf(ntl) != -1)) return true;
+      //if ((last == ',') && (nums.indexOf(ntl) != -1)) return true;
 
       //Ends with # space letter
       if ((alpha.indexOf(last) != -1) && (ntl == ' ') && (nums.indexOf(ntntl) != -1)) return true;
