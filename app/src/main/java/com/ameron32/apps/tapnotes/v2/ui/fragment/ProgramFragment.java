@@ -1,9 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -11,32 +8,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
-import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.parse.Commands;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
+import com.parse.ParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
+
+import static rx.android.lifecycle.LifecycleEvent.*;
 
 /**
  * Created by klemeilleur on 6/15/2015.
@@ -111,58 +106,64 @@ public class ProgramFragment extends TAPFragment
   }
 
   private void giveTalksToDelegate() {
-    try {
-      // TODO consider moving off UI-Thread
-      final Program program = Queries.Local.getProgram(mProgramId);
-      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
-      final List<ITalk> iTalks = new ArrayList<>(talks.size());
-      iTalks.addAll(talks);
+    cache = bindLifecycle(getLocalTalksObservable(), DESTROY).cache();
+    cache.subscribe(notesObserver);
+  }
 
+  private final Observer<Progress> notesObserver = new Observer<Progress>() {
 
-      // TODO remove fake note method
-/*      Picasso.with(getContext())
-          .load("http://i.imgur.com/KUBBuRw.png")
-          .into(new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-              try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] data = baos.toByteArray();
-                ParseFile file = new ParseFile("CO-pgm15_E.png", data);
-                final Program program1 = ParseQuery.getQuery(Program.class)
-                    .find()
-                    .get(0);
-                program1.put(
-                    Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY,
-                    file);
-                program1.save();
-              } catch (ParseException e) {
-                e.printStackTrace();
-              }
-            }
+    private Progress mostRecentProgress;
 
-            @Override public void onBitmapFailed(Drawable errorDrawable) {}
-            @Override public void onPrepareLoad(Drawable placeHolderDrawable) {}
-          });*/
-/*      new AsyncTask() {
-        @Override
-        protected Object doInBackground(Object[] params) {
-          try {
-            _MiscUtils._generate1001Notes(Queries.Local.getTalk("O9zHLdnag2"), program);
-          } catch (ParseException e) {
-            e.printStackTrace();
-          }
-          return null;
+    @Override
+    public void onCompleted() {
+      if (mostRecentProgress != null) {
+        if (mostRecentProgress.failed) {
+          // failed to load talks locally... that's weird
+
+          return;
         }
-      }.execute();*/
+      }
 
+      mDelegate.loadProgramTalks(mTalks);
+    }
 
-      // TODO give Talks to Delegate
-      mDelegate.loadProgramTalks(iTalks);
-    } catch (ParseException e) {
+    @Override
+    public void onError(Throwable e) {
       e.printStackTrace();
     }
+
+    @Override
+    public void onNext(Progress progress) {
+      mostRecentProgress = progress;
+    }
+  };
+
+  private final List<ITalk> mTalks = new ArrayList<>();
+  private Observable<Progress> cache;
+
+  private Observable<Progress> getLocalTalksObservable() {
+    return Observable.create(new Observable.OnSubscribe<Progress>() {
+      @Override
+      public void call(Subscriber<? super Progress> subscriber) {
+        try {
+          subscriber.onNext(new Progress(0, 1, false));
+          final Program program = Queries.Local.getProgram(mProgramId);
+          final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+          mTalks.clear();
+          mTalks.addAll(talks);
+
+          // TODO remove false method
+
+
+          subscriber.onNext(new Progress(1, 1, false));
+          subscriber.onCompleted();
+        } catch (ParseException e) {
+          e.printStackTrace();
+          subscriber.onNext(new Progress(0, 1, true));
+          subscriber.onCompleted();
+        }
+      }
+    }).subscribeOn(Schedulers.io());
   }
 
   private void setNavigation() {
@@ -209,13 +210,15 @@ public class ProgramFragment extends TAPFragment
 
   @Override
   public void onTalkClicked(ITalk talk) {
-    // TODO callbacks
     if (mCallbacks != null) {
       mCallbacks.changeNotesFragmentTo(talk);
     }
   }
 
+
+
   public interface Callbacks {
+
     void toggleProgramPane();
     void changeNotesFragmentTo(ITalk talk);
   }

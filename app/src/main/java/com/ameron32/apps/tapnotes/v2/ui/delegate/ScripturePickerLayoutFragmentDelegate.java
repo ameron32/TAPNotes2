@@ -1,8 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.R;
@@ -28,6 +30,11 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
     return delegate;
   }
 
+  public static final int NUM_OF_PAGES = 3;
+  public static final int SCREEN_BOOKS = 0;
+  public static final int SCREEN_CHAPTERS = 1;
+  public static final int SCREEN_VERSES = 2;
+
   private static final IScripturePickerDelegateCallbacks stubCallbacks
       = new IScripturePickerDelegate.IScripturePickerDelegateCallbacks() {
     @Override
@@ -40,7 +47,6 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
 
   protected ScripturePickerLayoutFragmentDelegate() {}
 
-
   @InjectView(R.id.view_pager)
   ViewPager mPager;
 
@@ -52,9 +58,9 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
 
-    mAdapter = new ScripturePickerAdapter(getContext());
-    mPager.setAdapter(mAdapter);
+    mAdapter = new ScripturePickerAdapter();
     mAdapter.setOnPageNextClickedListener(this);
+    mPager.setAdapter(mAdapter);
   }
 
 
@@ -77,14 +83,28 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   }
 
 
-  public static final int NUM_OF_PAGES = 3;
 
   @Override
-  public void onPageNextClicked(int page) {
-    if (page == NUM_OF_PAGES - 1) {
-      mCallbacks.scriptureComplete(Scripture.generate(0, 0, new int[]{0, 1, 2}));
+  public void onPageNextClicked(int page, @Nullable IScripture scripture) {
+    if (page == SCREEN_VERSES) {
+      if (scripture != null) {
+        Log.d("onPageNextClicked()", scripture.getBook() + " " + scripture.getChapter() + " " + stringFrom(scripture.getVerses()));
+        mCallbacks.scriptureComplete(scripture);
+      }
+    } else {
+      mPager.setCurrentItem(page + 1);
+      mAdapter.focusPage(page + 1);
     }
-    mPager.setCurrentItem(page +1);
   }
 
+  private String stringFrom(int[] verses) {
+    final StringBuilder bs = new StringBuilder();
+    for (int i = 0; i < verses.length; i++) {
+      if (i != 0) {
+        bs.append(",");
+      }
+      bs.append(verses[i]);
+    }
+    return bs.toString();
+  }
 }

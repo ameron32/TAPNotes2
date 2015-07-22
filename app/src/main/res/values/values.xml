@@ -10,4 +10,9 @@
   <integer name="default_padding_closed_distance">0</integer>
   <integer name="default_translation_start">0</integer>
 
+
+
+  <!-- Scripture Picker -->
+  <integer name="number_of_items_per_row">7</integer>
+
 </resources>

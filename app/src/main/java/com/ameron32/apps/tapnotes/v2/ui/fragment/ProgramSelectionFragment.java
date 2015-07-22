@@ -11,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -61,8 +64,10 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
+  public View onCreateView(
+      LayoutInflater inflater,
+      ViewGroup container,
+      Bundle savedInstanceState) {
     return inflater.inflate(R.layout.fragment_program_selection, container, false);
   }
 
@@ -72,6 +77,7 @@ public class ProgramSelectionFragment extends TAPFragment
     ButterKnife.inject(this, view);
     setStatusImage();
 
+    loadPlaceholderView();
     getImageFromParseProgram(mProgramId);
   }
 
@@ -99,16 +105,23 @@ public class ProgramSelectionFragment extends TAPFragment
     programButton.setImageBitmap(bitmap);
   }
 
+  private void loadPlaceholderView() {
+    programButton.setImageResource(R.mipmap.ic_launcher);
+  }
+
   @InjectView(R.id.testing_button_mni)
   ImageButton programButton;
   @InjectView(R.id.status_image)
   ImageView statusImage;
+  @InjectView(R.id.program_progress_bar)
+  ProgressBar programProgress;
+  @InjectView(R.id.program_progress_bar_text)
+  TextView programProgressText;
 
   @OnClick(R.id.testing_button_mni)
   void onClick() {
     if (!programSaved(mProgramId)) {
       getCallbacks().downloadProgram(mProgramId);
-//      getCallbacks().startActivity(mProgramId);
     } else {
       getCallbacks().startActivity(mProgramId);
     }
@@ -141,6 +154,26 @@ public class ProgramSelectionFragment extends TAPFragment
   public void setProgramDownloaded(String programId) {
     mProgramId = programId;
     setStatusImage();
+  }
+
+  @Override
+  public void setProgramProgress(String programId, Progress progress) {
+    if (programId != null) {
+      mProgramId = programId;
+    }
+    setProgress(progress);
+  }
+
+  private void setProgress(Progress progress) {
+    if (progress.item >= 0) {
+      programProgress.setVisibility(View.VISIBLE);
+      programProgressText.setVisibility(View.VISIBLE);
+      programProgressText.setText(progress.note);
+    }
+    if (progress.item == progress.total) {
+      programProgress.setVisibility(View.INVISIBLE);
+      programProgressText.setVisibility(View.INVISIBLE);
+    }
   }
 
   @Override

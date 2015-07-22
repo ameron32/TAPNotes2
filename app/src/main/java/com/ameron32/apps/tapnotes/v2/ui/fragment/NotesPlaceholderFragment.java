@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.parse.frmk;
+package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

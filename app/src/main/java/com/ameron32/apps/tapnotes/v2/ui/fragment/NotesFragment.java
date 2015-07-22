@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
@@ -28,7 +28,6 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -43,7 +42,6 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.android.lifecycle.LifecycleObservable;
 
 import static rx.android.lifecycle.LifecycleEvent.*;
 
@@ -188,10 +186,7 @@ public class NotesFragment extends TAPFragment
   private Observable<Progress> cache;
 
   private void giveNotesToDelegate() {
-    // TODO hand-off received data to delegate for UI update
-
-    // TODO consider moving off UI-Thread
-    cache = bindLifecycle(getObservable(), DESTROY).cache();
+    cache = bindLifecycle(getLocalNotesObservable(), DESTROY).cache();
     cache.subscribe(noteObserver);
   }
 
@@ -223,7 +218,7 @@ public class NotesFragment extends TAPFragment
     }
   };
 
-  private Observable<Progress> getObservable() {
+  private Observable<Progress> getLocalNotesObservable() {
     return Observable.create(new Observable.OnSubscribe<Progress>() {
 
       @Override
@@ -233,9 +228,11 @@ public class NotesFragment extends TAPFragment
           mTalk = Queries.Local.getTalk(mTalkId);
           mSymposiumTitle = mTalk.getSymposiumTitle();
           mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
-          final List<Note> notes = Queries.Local.findClientOwnedNotesFor(mTalk);
+          final List<Note> genericNotes = Queries.Local.findGenericNotesFor(mTalk);
+          final List<Note> clientNotes = Queries.Local.findClientOwnedNotesFor(mTalk);
           mNotes.clear();
-          mNotes.addAll(notes);
+          mNotes.addAll(genericNotes);
+          mNotes.addAll(clientNotes);
 
           Log.d(NotesFragment.class.getSimpleName(),
               "mNotes.size() : " + mNotes.size());
@@ -312,19 +309,8 @@ public class NotesFragment extends TAPFragment
   public void onRequestComplete(int requestCode) {
     switch(requestCode) {
       case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
-        try {
-          final Talk talk = Queries.Local.getTalk(mTalkId);
-          List<Note> talkNotes = Queries.Local.findClientOwnedNotesFor(talk);
-          List<INote> talkINotes = new ArrayList<>(talkNotes.size());
-          talkINotes.addAll(talkNotes);
-          // TODO replace with more precise updates
-          mNotesDelegate.synchronizeNotes(talkINotes);
-          final String log = "refresh notification received. sent to notes delegate.";
-          Log.d(NotesFragment.class.getSimpleName(), log);
-          mSnackBar.toast(log);
-        } catch (ParseException e) {
-          e.printStackTrace();
-        }
+        Log.d(NotesFragment.class.getSimpleName(), "notes refreshed.");
+        giveNotesToDelegate();
         break;
       default:
         // do nothing
@@ -365,38 +351,7 @@ public class NotesFragment extends TAPFragment
       INote repositionedNote,
       INote noteBeforeOriginOfRepositionedNote,
       INote noteBeforeTargetOfRepositionedNote) {
-    INoteEditable mover = null;
-    INoteEditable beforeOrigin = null;
-    INoteEditable beforeTarget = null;
-    if (repositionedNote instanceof INoteEditable) {
-      mover = (INoteEditable) repositionedNote;
-    }
-    if (beforeOrigin instanceof INoteEditable) {
-      beforeOrigin = (INoteEditable) noteBeforeOriginOfRepositionedNote;
-    }
-    if (beforeTarget instanceof INoteEditable) {
-      beforeTarget = (INoteEditable) noteBeforeTargetOfRepositionedNote;
-    }
-    final INote afterTarget = beforeTarget.getNextNote();
-    final INote afterMover = mover.getNextNote();
-
-    if (mover == null ||
-        beforeOrigin == null || beforeTarget == null ||
-        afterTarget == null || afterMover == null) {
-      // fail out
-      return;
-    }
-    // proceed with all five notes
-    // attach mover to new location
-    mover.setNextNote(afterTarget);
-    beforeTarget.setNextNote(mover);
-
-    // connect gap left by mover
-    beforeOrigin.setNextNote(afterMover);
-
-    final List<INote> updates = listify(mover, beforeOrigin, beforeTarget);
-    mNotesDelegate.replaceNotes(updates);
-    Commands.Local.saveEventuallyParseNotes(updates);
+    // TODO entire move process needs reworking
   }
 
   private List<INote> listify(INote... notes) {

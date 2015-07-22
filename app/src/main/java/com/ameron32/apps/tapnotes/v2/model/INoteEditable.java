@@ -10,6 +10,6 @@ public interface INoteEditable extends INote {
   boolean toggleImportantNote();
   boolean toggleBoldNote();
   void setNoteText(String noteText);
-  void setNextNote(INote note);
   void changeNoteType(NoteType newType);
+  boolean isNoteOwnedByClient();
 }

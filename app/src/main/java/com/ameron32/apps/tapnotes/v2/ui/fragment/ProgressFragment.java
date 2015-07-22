@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgressHandler;
 
@@ -62,8 +62,8 @@ public class ProgressFragment extends Fragment
   ProgressBar progressBar;
 
   private void resetProgressView() {
-    progressBar.setMax(100);
-    progressBar.setIndeterminate(false);
+//    progressBar.setMax(100);
+    progressBar.setIndeterminate(true);
     hideProgressView();
   }
 
@@ -74,11 +74,11 @@ public class ProgressFragment extends Fragment
       return;
     }
 
-    if (progress.total > 0) {
-      float percent = ((Integer) progress.item).floatValue() / ((Integer) progress.total).floatValue();
-      final int value = Math.round(percent * 100);
-      progressBar.setProgress(value);
-    }
+//    if (progress.total > 0) {
+//      float percent = ((Integer) progress.item).floatValue() / ((Integer) progress.total).floatValue();
+//      final int value = Math.round(percent * 100);
+//      progressBar.setProgress(value);
+//    }
   }
 
   public void setComplete() {

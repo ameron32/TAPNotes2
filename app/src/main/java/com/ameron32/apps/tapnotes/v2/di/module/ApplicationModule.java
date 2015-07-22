@@ -98,6 +98,7 @@ public class ApplicationModule {
   @Provides @Singleton
   Bible provideBible() {
     try {
+      // TODO consider caching/serializing Bible
       return new BibleBuilder().getBible(mApplication);
     } catch (BibleResourceNotFoundException e) {
       e.printStackTrace();

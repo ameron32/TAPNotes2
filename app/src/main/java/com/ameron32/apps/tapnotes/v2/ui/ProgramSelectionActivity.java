@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
@@ -55,14 +55,15 @@ public class ProgramSelectionActivity
     snackBarController = new ActivitySnackBarController(this);
     dialog = new ActivityAlertDialogController(this);
 
-    bindLifecycle(buildBibleObservable(), DESTROY).subscribe(bibleLoadingObserver);
+    bindLifecycle(buildBibleObservable(), DESTROY)
+        .subscribe(bibleLoadingObserver);
   }
 
   private final Observer<Progress> bibleLoadingObserver = new Observer<Progress>() {
 
     @Override
     public void onCompleted() {
-      snackBarController.toast("Bible loaded.");
+//      snackBarController.toast("Bible loaded.");
     }
 
     @Override
@@ -72,7 +73,8 @@ public class ProgramSelectionActivity
 
     @Override
     public void onNext(Progress progress) {
-
+      // TODO inform user of status?
+      onProgress(progress);
     }
   };
 
@@ -84,9 +86,13 @@ public class ProgramSelectionActivity
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
+        subscriber.onNext(new Progress(0, 3, false, "Loading Bible", "Loading Bible..."));
         mBible.get();
+        subscriber.onNext(new Progress(1, 3, false, "Loading Bible", "Bible complete. Loading user input module..."));
         mSanitizer.get();
+        subscriber.onNext(new Progress(2, 3, false, "Loading Bible", "Input module complete. Loading reference lookup..."));
         mFinder.get();
+        subscriber.onNext(new Progress(3, 3, false, "Loading Bible", "Complete!"));
         subscriber.onCompleted();
       }
     }).subscribeOn(Schedulers.io());
@@ -165,15 +171,16 @@ public class ProgramSelectionActivity
   }
 
   void onLoading() {
-    snackBarController.toast("Downloading Program...");
+//    snackBarController.toast("Downloading Program...");
   }
 
   void onProgress(Progress progress) {
-    snackBarController.toast("Step " + progress.item + " of " + progress.total + " complete.");
+    programList.setProgramProgress(mProgramId, progress);
+//    snackBarController.toast("Step " + progress.item + " of " + progress.total + " complete.");
   }
 
   void onLoaded() {
-    snackBarController.toast("Complete!");
+//    snackBarController.toast("Complete!");
     if (programList != null) {
       programList.setProgramDownloaded(mProgramId);
     }
@@ -201,7 +208,7 @@ public class ProgramSelectionActivity
   public void downloadProgram(String programId) {
     if (!Status.isConnectionToServerAvailable(getActivity())) {
       final String message = "Server connection failed. Please check that you have an internet connection. Also, you must be logged into TAP Notes.";
-      snackBarController.toast(message);
+//      snackBarController.toast(message);
       dialog.showInformationDialog("Connection Unavailable", message);
       return;
     }
@@ -260,17 +267,33 @@ public class ProgramSelectionActivity
 
     @Override
     public void onCompleted() {
-      startActivity(MNIActivity.makeIntent(getContext(), mProgramId));
+      if (mProgramId == null || failed.get()) {
+        snackBarController.toast(mResources.getString(R.string.program_failed_to_load));
+        return;
+      } else {
+        startActivity(MNIActivity.makeIntent(getContext(), mProgramId));
+      }
     }
 
     @Override
     public void onError(Throwable e) {
+      fail();
       e.printStackTrace();
     }
 
+    public void fail() {
+      // FAIL
+      failed.set(true);
+    }
+
+    final AtomicBoolean failed = new AtomicBoolean(false);
+
     @Override
     public void onNext(Progress progress) {
-
+      if (progress.failed) {
+        fail();
+      }
+      onProgress(progress);
     }
   };
 }
