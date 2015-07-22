@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ScripturePickerLayoutFragmentDelegate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -34,8 +36,10 @@ public class ScripturePickerAdapter extends PagerAdapter
   public static final int SCREEN_CHAPTERS = 1;
   public static final int SCREEN_VERSES = 2;
 
-  public ScripturePickerAdapter() {
+  private IBible bible;
 
+  public ScripturePickerAdapter(IBible bible) {
+    this.bible = bible;
   }
 
   private int book = -1;
@@ -53,17 +57,40 @@ public class ScripturePickerAdapter extends PagerAdapter
   public void bookSelected(int bookNumber) {
     book = bookNumber;
     mListener.onPageNextClicked(SCREEN_BOOKS, scripture);
+    holders[SCREEN_BOOKS].gridView.getAdapter().notifyItemChanged(bookNumber);
   }
 
   @Override
   public void chapterSelected(int chapterNumber) {
     chapter = chapterNumber;
     mListener.onPageNextClicked(SCREEN_CHAPTERS, scripture);
+    holders[SCREEN_CHAPTERS].gridView.getAdapter().notifyItemChanged(chapterNumber);
   }
 
   @Override
   public void verseSelected(int verseNumber) {
-    verses.add(verseNumber);
+    final Integer[] vs = new Integer[] { verseNumber };
+    if (verses.contains(verseNumber)) {
+      verses.removeAll(Arrays.asList(vs));
+    } else {
+      verses.addAll(Arrays.asList(vs));
+    }
+    holders[SCREEN_VERSES].gridView.getAdapter().notifyItemChanged(verseNumber);
+  }
+
+  @Override
+  public int getCurrentBook() {
+    return book;
+  }
+
+  @Override
+  public int getCurrentChapter() {
+    return chapter;
+  }
+
+  @Override
+  public List<Integer> getCurrentVerses() {
+    return verses;
   }
 
   public Scripture attemptMakeScripture() {
@@ -127,7 +154,7 @@ public class ScripturePickerAdapter extends PagerAdapter
   }
 
   private void bindHolder(int position) {
-    PageHolder holder = holders[position];
+    final PageHolder holder = holders[position];
     bindHolder(holder, position);
   }
 
@@ -149,6 +176,7 @@ public class ScripturePickerAdapter extends PagerAdapter
           }
         });
 
+    holder.gridView.setAdapter(null);
     holder.gridView.setLayoutManager(
         new GridLayoutManager(holder.gridView.getContext(), NUM_OF_ITEMS_PER_ROW));
 
@@ -156,7 +184,7 @@ public class ScripturePickerAdapter extends PagerAdapter
       case SCREEN_BOOKS:
         holder.buttonNext.setVisibility(View.GONE);
         holder.gridView.setAdapter(
-            new ScreenGridAdapter(SCREEN_BOOKS)
+            new ScreenGridAdapter(SCREEN_BOOKS, bible)
                 .setCallbacks(this));
         break;
       case SCREEN_CHAPTERS:
@@ -165,7 +193,7 @@ public class ScripturePickerAdapter extends PagerAdapter
           holder.gridView.setAdapter(null);
         } else {
           holder.gridView.setAdapter(
-              new ScreenGridAdapter(SCREEN_CHAPTERS, book)
+              new ScreenGridAdapter(SCREEN_CHAPTERS, bible, book)
                   .setCallbacks(this));
         }
         break;
@@ -175,7 +203,7 @@ public class ScripturePickerAdapter extends PagerAdapter
           holder.gridView.setAdapter(null);
         } else {
           holder.gridView.setAdapter(
-              new ScreenGridAdapter(SCREEN_VERSES, book, chapter)
+              new ScreenGridAdapter(SCREEN_VERSES, bible, book, chapter)
                   .setCallbacks(this));
         }
         break;
@@ -197,6 +225,8 @@ public class ScripturePickerAdapter extends PagerAdapter
   public boolean isViewFromObject(View view, Object object) {
     return view == object;
   }
+
+
 
 
 

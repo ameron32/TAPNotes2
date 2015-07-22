@@ -30,29 +30,16 @@
 
     </FrameLayout>
 
-    <com.h6ah4i.android.materialshadowninepatch.MaterialShadowContainerView
-        android:id="@+id/scripture_picker_container_shadow"
-        style="@style/ms9_DefaultShadowStyle"
+    <FrameLayout
+        android:id="@+id/scripture_picker_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        app:ms9_shadowElevation="8dp"
-        app:ms9_shadowTranslationZ="4dp">
+        android:background="?scripture_picker_container_background">
 
-      <FrameLayout
-          android:id="@+id/scripture_picker_container"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginBottom="32dp"
-          android:layout_marginLeft="16dp"
-          android:layout_marginRight="16dp"
-          android:layout_marginTop="16dp"
-          android:background="?scripture_picker_container_background">
+      <!-- COMMIT FRAGMENT -->
 
-        <!-- COMMIT FRAGMENT -->
-
-      </FrameLayout>
-    </com.h6ah4i.android.materialshadowninepatch.MaterialShadowContainerView>
+    </FrameLayout>
 
     <FrameLayout
         android:id="@+id/progress_container"

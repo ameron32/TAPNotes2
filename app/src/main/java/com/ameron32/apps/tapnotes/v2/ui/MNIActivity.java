@@ -136,7 +136,6 @@ public class MNIActivity extends TAPActivity
     ButterKnife.inject(this);
 
     setupDrawer();
-    showScripturePickerShadow(false);
     commitNotesPlaceholder(); //blank
     commitProgramFragment(mProgramId);
     commitProgressFragment();
@@ -310,22 +309,13 @@ public class MNIActivity extends TAPActivity
   }
 
   private void commitNewScripturePickerFragment() {
-    showScripturePickerShadow(true);
     final String tag = TAG_SCRIPTURE_PICKER;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.scripture_picker_container,
             ScripturePickerFragment.create(), tag)
+        .addToBackStack(tag)
         .commit();
-  }
-
-  private void showScripturePickerShadow(boolean state) {
-    final View shadow = findViewById(R.id.scripture_picker_container_shadow);
-    if (state) {
-      shadow.setVisibility(View.VISIBLE);
-    } else {
-      shadow.setVisibility(View.GONE);
-    }
   }
 
   private void removeFragment(final String tag) {
@@ -531,7 +521,6 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void scripturePrepared(IScripture scripture) {
-      showScripturePickerShadow(false);
       // TODO scripture picker generated scripture
       final String tag = TAG_SCRIPTURE_PICKER;
       removeFragment(tag);

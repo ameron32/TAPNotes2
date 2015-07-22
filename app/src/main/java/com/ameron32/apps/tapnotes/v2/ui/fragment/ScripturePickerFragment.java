@@ -24,6 +24,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IScripturePickerDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IScripturePickerDelegate.IScripturePickerDelegateCallbacks;
@@ -57,6 +58,8 @@ public class ScripturePickerFragment extends TAPFragment
 
   @Inject
   ActivitySnackBarController mSnackBar;
+  @Inject
+  Bible bible;
 
 
 
@@ -95,6 +98,7 @@ public class ScripturePickerFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     confirmDelegateHasInterface();
+    mDelegate.onBibleCreated(bible);
   }
 
   @Override
