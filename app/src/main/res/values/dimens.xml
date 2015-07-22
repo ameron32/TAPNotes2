@@ -19,4 +19,6 @@
   <dimen name="scripture_picker_width">288dp</dimen>
   <dimen name="scripture_picker_box_padding">4dp</dimen>
 
+  <dimen name="placeholder_text_padding">8dp</dimen>
+
 </resources>

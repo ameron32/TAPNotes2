@@ -11,8 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
@@ -432,7 +432,7 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk), DESTROY).cache();
+          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk, notesController.incrementLastChecked()), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }
@@ -441,6 +441,9 @@ public class MNIActivity extends TAPActivity
       }
     }
   };
+
+  @Inject
+  ParseNotesController notesController;
 
   private Observable<Progress> cache;
 
