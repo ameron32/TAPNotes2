@@ -82,14 +82,9 @@ public class _MiscUtils {
 
   public static void _generate1001Notes(Talk talk, Program program)
       throws ParseException {
-    Note lastNote = null;
     for (int i = 0; i < 1001; i++) {
       final Note note = Note.create("spam note " + (i+1), program, talk, Commands.Local.getClientUser());
-      if (lastNote != null) {
-        note.setNext(lastNote);
-      }
       note.save();
-      lastNote = note;
     }
   }
 

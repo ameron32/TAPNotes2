@@ -8,6 +8,7 @@ import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
+import com.parse.ParseACL;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -67,11 +68,6 @@ public class Note
   @Override
   public String getId() {
     return this.getObjectId();
-  }
-
-  @Override
-  public INote getNextNote() {
-    return getNextParseNote();
   }
 
   @Override
@@ -136,23 +132,11 @@ public class Note
   }
 
   @Override
-  public void setNextNote(INote note) {
-    if (note instanceof Note) {
-      setNextNote((Note) note);
-    }
-  }
-
-  @Override
   public synchronized void changeNoteType(NoteType newType) {
     if (newType != getNoteType()) {
       setNoteType(newType);
     }
     Commands.Local.saveEventuallyNote(this);
-  }
-
-
-  private Note getNextParseNote() {
-    return (Note) this.get(NOTE_NEXTNOTE_OBJECT_KEY);
   }
 
   private List<Integer> getTags() {
@@ -197,7 +181,10 @@ public class Note
     return NoteType.STANDARD;
   }
 
-  public void setNext(Note note) {
-    this.put(NOTE_NEXTNOTE_OBJECT_KEY, note);
+  @Override
+  public boolean isNoteOwnedByClient() {
+    final ParseACL acl = getACL();
+    return acl.getWriteAccess(Commands.Local.getClientUser());
   }
+
 }

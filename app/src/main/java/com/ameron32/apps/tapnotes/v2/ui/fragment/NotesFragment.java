@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
@@ -228,9 +228,11 @@ public class NotesFragment extends TAPFragment
           mTalk = Queries.Local.getTalk(mTalkId);
           mSymposiumTitle = mTalk.getSymposiumTitle();
           mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
-          final List<Note> notes = Queries.Local.findClientOwnedNotesFor(mTalk);
+          final List<Note> genericNotes = Queries.Local.findGenericNotesFor(mTalk);
+          final List<Note> clientNotes = Queries.Local.findClientOwnedNotesFor(mTalk);
           mNotes.clear();
-          mNotes.addAll(notes);
+          mNotes.addAll(genericNotes);
+          mNotes.addAll(clientNotes);
 
           Log.d(NotesFragment.class.getSimpleName(),
               "mNotes.size() : " + mNotes.size());
@@ -348,38 +350,7 @@ public class NotesFragment extends TAPFragment
       INote repositionedNote,
       INote noteBeforeOriginOfRepositionedNote,
       INote noteBeforeTargetOfRepositionedNote) {
-    INoteEditable mover = null;
-    INoteEditable beforeOrigin = null;
-    INoteEditable beforeTarget = null;
-    if (repositionedNote instanceof INoteEditable) {
-      mover = (INoteEditable) repositionedNote;
-    }
-    if (beforeOrigin instanceof INoteEditable) {
-      beforeOrigin = (INoteEditable) noteBeforeOriginOfRepositionedNote;
-    }
-    if (beforeTarget instanceof INoteEditable) {
-      beforeTarget = (INoteEditable) noteBeforeTargetOfRepositionedNote;
-    }
-    final INote afterTarget = beforeTarget.getNextNote();
-    final INote afterMover = mover.getNextNote();
-
-    if (mover == null ||
-        beforeOrigin == null || beforeTarget == null ||
-        afterTarget == null || afterMover == null) {
-      // fail out
-      return;
-    }
-    // proceed with all five notes
-    // attach mover to new location
-    mover.setNextNote(afterTarget);
-    beforeTarget.setNextNote(mover);
-
-    // connect gap left by mover
-    beforeOrigin.setNextNote(afterMover);
-
-    final List<INote> updates = listify(mover, beforeOrigin, beforeTarget);
-    mNotesDelegate.replaceNotes(updates);
-    Commands.Local.saveEventuallyParseNotes(updates);
+    // TODO entire move process needs reworking
   }
 
   private List<INote> listify(INote... notes) {

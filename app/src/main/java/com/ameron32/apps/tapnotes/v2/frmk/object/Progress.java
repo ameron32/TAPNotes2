@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2;
+package com.ameron32.apps.tapnotes.v2.frmk.object;
 
 /**
  * Created by kris on 7/19/2015.

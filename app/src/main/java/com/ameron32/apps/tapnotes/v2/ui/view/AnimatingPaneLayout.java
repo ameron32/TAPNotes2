@@ -262,6 +262,12 @@ public class AnimatingPaneLayout
     performAnimation();
   }
 
+  public void displayMainPane() {
+    if (!isLayoutDisplacement() && isLeftPaneOnTop()) {
+      toggleLayout();
+    }
+  }
+
   private void performAnimation() {
     setAnimating(true);
     if (!isLeftPaneOnTop()) {

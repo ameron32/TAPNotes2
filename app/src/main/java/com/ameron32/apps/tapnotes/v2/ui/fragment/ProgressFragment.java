@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgressHandler;
 

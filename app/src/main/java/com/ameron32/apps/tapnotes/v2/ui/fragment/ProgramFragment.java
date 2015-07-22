@@ -1,9 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -11,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;

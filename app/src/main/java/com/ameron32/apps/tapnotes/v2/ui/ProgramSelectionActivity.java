@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;

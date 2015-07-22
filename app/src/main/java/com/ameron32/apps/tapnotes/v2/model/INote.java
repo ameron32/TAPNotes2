@@ -30,6 +30,5 @@ public interface INote extends IObject {
   String getNoteText();
   boolean isImportantNote();
   boolean isBoldNote();
-  INote getNextNote();
   NoteType getNoteType();
 }

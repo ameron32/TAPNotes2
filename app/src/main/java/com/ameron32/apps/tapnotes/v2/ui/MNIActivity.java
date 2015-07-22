@@ -11,8 +11,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.ameron32.apps.tapnotes.v2.Progress;
+import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
@@ -90,7 +91,7 @@ public class MNIActivity extends TAPActivity
   NavigationView mNavigationView;
 
   @InjectView(R.id.pane_animating_layout)
-  AnimatingPaneLayout mDualLayout;
+  AnimatingPaneLayout mAnimatingPane;
 
   private String mProgramId;
   private String mCurrentTalkId;
@@ -135,6 +136,7 @@ public class MNIActivity extends TAPActivity
     ButterKnife.inject(this);
 
     setupDrawer();
+    showScripturePickerShadow(false);
     commitNotesPlaceholder(); //blank
     commitProgramFragment(mProgramId);
     commitProgressFragment();
@@ -258,6 +260,7 @@ public class MNIActivity extends TAPActivity
     final String tag = TAG_NOTES;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
+        .addToBackStack(talkId)
         .replace(R.id.notes_xcontainer,
             NotesFragment.create(toolbarTitle, talkId, imageUrl), tag)
         .commit();
@@ -307,12 +310,22 @@ public class MNIActivity extends TAPActivity
   }
 
   private void commitNewScripturePickerFragment() {
+    showScripturePickerShadow(true);
     final String tag = TAG_SCRIPTURE_PICKER;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.scripture_picker_container,
             ScripturePickerFragment.create(), tag)
         .commit();
+  }
+
+  private void showScripturePickerShadow(boolean state) {
+    final View shadow = findViewById(R.id.scripture_picker_container_shadow);
+    if (state) {
+      shadow.setVisibility(View.VISIBLE);
+    } else {
+      shadow.setVisibility(View.GONE);
+    }
   }
 
   private void removeFragment(final String tag) {
@@ -347,7 +360,11 @@ public class MNIActivity extends TAPActivity
   }
 
   private void toggleAnimatingLayout() {
-    mDualLayout.toggleLayout();
+    mAnimatingPane.toggleLayout();
+  }
+
+  private void displayNotesFragment() {
+    mAnimatingPane.displayMainPane();
   }
 
   private List<INote> listify(INote... notes) {
@@ -419,6 +436,8 @@ public class MNIActivity extends TAPActivity
       final String talkName = talk.getTalkTitle();
       final String imageUrl = ""; // TODO update
       commitNotesFragment(talkId, talkName, imageUrl);
+
+      displayNotesFragment();
 
       try {
         if (talk instanceof Talk) {
@@ -512,6 +531,7 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void scripturePrepared(IScripture scripture) {
+      showScripturePickerShadow(false);
       // TODO scripture picker generated scripture
       final String tag = TAG_SCRIPTURE_PICKER;
       removeFragment(tag);

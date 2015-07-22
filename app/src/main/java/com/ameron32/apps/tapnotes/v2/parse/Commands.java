@@ -86,6 +86,11 @@ public class Commands {
 
     public static void deleteEventuallyNote(Note note) {
       Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
+      if (!note.isNoteOwnedByClient()) {
+        // do not delete notes that are not owned by the client
+        Log.d(TAG, "note was not owned by client. not deleting.");
+        return;
+      }
       note.deleteEventually();
     }
 
