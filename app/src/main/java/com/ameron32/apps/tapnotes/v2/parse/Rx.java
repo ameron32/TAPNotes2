@@ -38,15 +38,15 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             final Program program = Queries.Live.pinProgram(programId);
-            subscriber.onNext(new Progress(1, 2, false));
+            subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Saving notes"));
 
             // TODO KRIS are the talks already here? switch to local and delay network query
             final List<Talk> talks = Queries.Live.pinAllProgramTalksFor(program);
-            subscriber.onNext(new Progress(2, 2, false));
+            subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Notes saved"));
             subscriber.onCompleted();
           } catch (ParseException e) {
             e.printStackTrace();
-            subscriber.onNext(new Progress(0, 2, true));
+            subscriber.onNext(new Progress(0, 2, true, "Download Program Notes", "Failed"));
             subscriber.onCompleted();
           }
         }
@@ -58,13 +58,13 @@ public class Rx {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
-            subscriber.onNext(new Progress(0, 2, false));
+            subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Downloading Notes (1/2)"));
             final Program program = Queries.Local.getProgram(programId);
             // TODO KRIS did we local the program and talks? delay network query and restrict to new only
             final List<Note> genericNotes = Queries.Live.pinAllGenericNotesFor(program);
-            subscriber.onNext(new Progress(1, 2, false));
+            subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
             final List<Note> clientNotes = Queries.Live.pinAllClientOwnedNotesFor(program);
-            subscriber.onNext(new Progress(2, 2, false));
+            subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Done!"));
             subscriber.onCompleted();
           } catch (ParseException e) {
             e.printStackTrace();

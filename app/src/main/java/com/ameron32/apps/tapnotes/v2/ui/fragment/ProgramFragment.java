@@ -152,6 +152,9 @@ public class ProgramFragment extends TAPFragment
           mTalks.clear();
           mTalks.addAll(talks);
 
+          // TODO remove false method
+
+
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();
         } catch (ParseException e) {

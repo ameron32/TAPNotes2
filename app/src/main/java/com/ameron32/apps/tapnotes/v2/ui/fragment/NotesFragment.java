@@ -309,6 +309,7 @@ public class NotesFragment extends TAPFragment
   public void onRequestComplete(int requestCode) {
     switch(requestCode) {
       case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
+        Log.d(NotesFragment.class.getSimpleName(), "notes refreshed.");
         giveNotesToDelegate();
         break;
       default:
