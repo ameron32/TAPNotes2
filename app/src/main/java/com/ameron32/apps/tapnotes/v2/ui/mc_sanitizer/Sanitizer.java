@@ -9,6 +9,7 @@ import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,7 @@ public class Sanitizer implements ISanitizer{
 
     String book;
     int bookNumber;
+    int nameWordCount;
     int chapter;
     int[] verses;
     String verseString;
@@ -34,18 +36,17 @@ public class Sanitizer implements ISanitizer{
 //    IVerseVerifier vv;
     ISanitizerCallbacks mCallback;
 
+
+    String[] namePart;
+    String[] chapterPart;
+    String[] versePart;
+
     public Sanitizer(Context context) {
         // TODO: MICAH CONSIDER MERGING bible_books & book_names
         // SEE strings_biblebooks.xml & strings_bible_book_reference.xml
         validNames = context.getResources().getStringArray(R.array.bible_books);
         chapterAmts = context.getResources().getIntArray(R.array.chapter_quantities);
     }
-
-//    public void setVerseVerifier(IVerseVerifier v){
-//        vv = v;
-//    }
-
-
 
     @Override
     public void testForScriptures(IBible b, String s) {
@@ -67,7 +68,8 @@ public class Sanitizer implements ISanitizer{
 
         //We are only interested in the last one.
         String sub = subs[subs.length-1];
-        words = sub.toUpperCase().split(" ");
+        words = sub.toUpperCase().split("\\:|\\s+|,");
+
 
 
         book = "";
@@ -116,13 +118,7 @@ public class Sanitizer implements ISanitizer{
             String vName = validNames[i];
             if (vName.startsWith(name)){
                 bookNumber = i;
-                wordsWOName = words.clone();
-                for (int j=0; j<Math.min(3, wordsWOName.length-1); j++){
-                    if (vName.contains(wordsWOName[j])){
-                        wordsWOName[j]="";
-                    }
-                }
-                words = wordsWOName;
+                nameWordCount = vName.split(" ").length;
                 return vName;
             }
         }
@@ -133,8 +129,7 @@ public class Sanitizer implements ISanitizer{
 
     private int getChapter(){
 
-        for (int i=0; i<words.length; i++){
-            if (words[i]!=""){
+        for (int i=nameWordCount; i<words.length; i++){
                 Matcher m = digitP.matcher(words[i]);
                 try{
                     if (m.find()){
@@ -147,15 +142,22 @@ public class Sanitizer implements ISanitizer{
                 }catch (NumberFormatException e){
                     return -1;
                 }
-            }
+
         }
         return -1;
 
     }
 
     private int[] getVerses(){
+
+
+
+
+
+
+
         int[] verses = new int[words.length];
-        for (int i=0; i<words.length; i++){
+        for (int i=nameWordCount + 1; i<words.length; i++){
             if (words[i]!=""){
                 verses[i]= pullOutInt(words[i]);
             }
@@ -182,14 +184,9 @@ public class Sanitizer implements ISanitizer{
                 }
             }
         }
-//
-//        for (int m=actualVerses.size()-1; m>=0; m--){
-//            if (!vv.verseValid(bookNumber, chapter, actualVerses.get(m))){
-//                actualVerses.remove(m); //TODO: Concurrent mod exception here?  We'll see. - MC
-//            }
-//        }
 
         return verses;
+
     }
 
     private boolean uniqueNameStart(String s){
@@ -238,5 +235,24 @@ public class Sanitizer implements ISanitizer{
 
         return ws;
     }
+
+/*
+    private String[] getNamePart (String s){
+        String digits = "0123456789";
+        for (int i=0; i<s.length(); i++){
+
+            char c = s.charAt(i);
+
+
+        }
+    }
+
+    private String[] getChapterPart(String s){
+
+    }
+
+    private String[] getVersePart(String s){
+
+    }*/
 
 }
