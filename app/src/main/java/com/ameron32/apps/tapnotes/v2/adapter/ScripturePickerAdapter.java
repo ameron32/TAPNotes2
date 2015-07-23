@@ -65,6 +65,8 @@ public class ScripturePickerAdapter extends PagerAdapter
     chapter = chapterNumber;
     mListener.onPageNextClicked(SCREEN_CHAPTERS, scripture);
     holders[SCREEN_CHAPTERS].gridView.getAdapter().notifyItemChanged(chapterNumber);
+    verses.clear();
+    holders[SCREEN_CHAPTERS].gridView.getAdapter().notifyDataSetChanged();
   }
 
   @Override
