@@ -1,6 +1,5 @@
-package com.ameron32.apps.tapnotes.v2.adapter;
+package com.ameron32.apps.tapnotes.v2.ui.adapter;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,7 +13,6 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
-import com.ameron32.apps.tapnotes.v2.ui.delegate.ScripturePickerLayoutFragmentDelegate;
 
 import java.util.ArrayList;
 import java.util.Arrays;

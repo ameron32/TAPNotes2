@@ -20,6 +20,7 @@ import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 
 import com.parse.ParseException;
+import com.parse.ParseFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +153,7 @@ public class ProgramFragment extends TAPFragment
           mTalks.clear();
           mTalks.addAll(talks);
 
-          // TODO remove false method
+          // TODO remove fake insert
 
 
           subscriber.onNext(new Progress(1, 1, false));
