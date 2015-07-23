@@ -432,7 +432,8 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk, notesController.incrementLastChecked()), DESTROY).cache();
+          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program,
+              (Talk) talk, notesController.getLastCheckedThenUpdateToNow()), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }
