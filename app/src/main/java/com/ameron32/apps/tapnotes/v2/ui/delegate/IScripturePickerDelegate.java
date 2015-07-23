@@ -1,5 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 
 /**
@@ -7,7 +8,7 @@ import com.ameron32.apps.tapnotes.v2.model.IScripture;
  */
 public interface IScripturePickerDelegate {
 
-
+  void onBibleCreated(IBible bible);
 
 
 

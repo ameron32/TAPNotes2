@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -17,9 +21,9 @@ import butterknife.InjectView;
  */
 public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.ViewHolder> {
 
-  private static final int BOOK_COUNT = 66;
-  private static final int FAKE_CHAPTER_COUNT = 5;
-  private static final int FAKE_VERSE_COUNT = 10;
+  private int BOOK_COUNT = 0;
+  private int CHAPTER_COUNT = 0;
+  private int VERSE_COUNT = 0;
 
   public static final int SCREEN_BOOKS = 0;
   public static final int SCREEN_CHAPTERS = 1;
@@ -27,34 +31,51 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
 
   private final int screenType;
 
-  public ScreenGridAdapter(int screen) {
-    // TODO needs book/chapter/verse information from outside
+  public ScreenGridAdapter(int screen, IBible bible) {
+    this.bible = bible;
     if (screen != SCREEN_BOOKS) {
       throw new IllegalStateException("wrong constructor used for that screen");
     }
     screenType = SCREEN_BOOKS;
 
-
+    initBooks();
   }
 
-  public ScreenGridAdapter(int screen, int bookNumber) {
-    // TODO needs book/chapter/verse information from outside
+  public ScreenGridAdapter(int screen, IBible bible, int bookNumber) {
+    this.bible = bible;
     if (screen != SCREEN_CHAPTERS) {
       throw new IllegalStateException("wrong constructor used for that screen");
     }
     screenType = SCREEN_CHAPTERS;
 
-
+    initBooks();
+    initChapters(bookNumber);
   }
 
-  public ScreenGridAdapter(int screen, int bookNumber, int chapterNumber) {
-    // TODO needs book/chapter/verse information from outside
+  public ScreenGridAdapter(int screen, IBible bible, int bookNumber, int chapterNumber) {
+    this.bible = bible;
     if (screen != SCREEN_VERSES) {
       throw new IllegalStateException("wrong constructor used for that screen");
     }
     screenType = SCREEN_VERSES;
 
+    initBooks();
+    initChapters(bookNumber);
+    initVerses(bookNumber, chapterNumber);
+  }
 
+  private IBible bible;
+
+  private void initBooks() {
+    BOOK_COUNT = bible.getBookCount();
+  }
+
+  private void initChapters(int bookNumber) {
+    CHAPTER_COUNT = bible.getChapterCount(bookNumber);
+  }
+
+  private void initVerses(int bookNumber, int chapterNumber) {
+    VERSE_COUNT = bible.getVerseCount(bookNumber, chapterNumber);
   }
 
   private Callbacks mCallbacks;
@@ -73,10 +94,48 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
 
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
-    holder.textButton.setText("" + position);
+    if (isPositionSelected(position)) {
+      holder.itemView.setSelected(true);
+    } else {
+      holder.itemView.setSelected(false);
+    }
+    holder.itemView.invalidate();
+
+    if (screenType == SCREEN_BOOKS) {
+      final String abbr = bible.getChapterAbbrev(position);
+      Log.d("onBind", "abbr: " + abbr);
+      holder.textButton.setText(abbr);
+    } else {
+      holder.textButton.setText(Integer.toString(position + 1));
+    }
+
     holder.textButton.setOnClickListener(
         new PositionListener(screenType, position)
             .setCallbacks(mCallbacks));
+  }
+
+  private boolean isPositionSelected(int position) {
+    switch(screenType) {
+      case SCREEN_BOOKS:
+        final int book = mCallbacks.getCurrentBook();
+        if (position == book) {
+          return true;
+        }
+        break;
+      case SCREEN_CHAPTERS:
+        final int chapter = mCallbacks.getCurrentChapter();
+        if (chapter == position) {
+          return true;
+        }
+        break;
+      case SCREEN_VERSES:
+        if (mCallbacks.getCurrentVerses().contains(position)) {
+          return true;
+        }
+      default:
+        // do nothing
+    }
+    return false;
   }
 
   @Override
@@ -85,9 +144,9 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
       case SCREEN_BOOKS:
         return BOOK_COUNT;
       case SCREEN_CHAPTERS:
-        return FAKE_CHAPTER_COUNT;
+        return CHAPTER_COUNT;
       case SCREEN_VERSES:
-        return FAKE_VERSE_COUNT;
+        return VERSE_COUNT;
     }
     return 0;
   }
@@ -144,5 +203,8 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
     void bookSelected(int bookNumber);
     void chapterSelected(int chapterNumber);
     void verseSelected(int verseNumber);
+    int getCurrentBook();
+    int getCurrentChapter();
+    List<Integer> getCurrentVerses();
   }
 }

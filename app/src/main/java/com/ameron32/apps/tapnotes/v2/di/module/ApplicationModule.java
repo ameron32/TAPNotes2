@@ -22,6 +22,7 @@ import android.view.LayoutInflater;
 
 import com.ameron32.apps.tapnotes.v2.TAPApplication;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
@@ -93,7 +94,10 @@ public class ApplicationModule {
 
 
 
-
+  @Provides @Singleton
+  ParseNotesController provideNotesController() {
+    return new ParseNotesController();
+  }
 
   @Provides @Singleton
   Bible provideBible() {

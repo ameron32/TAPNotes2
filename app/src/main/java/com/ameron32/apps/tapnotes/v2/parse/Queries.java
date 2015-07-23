@@ -9,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +38,7 @@ public class Queries {
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, currentPage);
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, null, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
@@ -70,20 +71,20 @@ public class Queries {
       return notes;
     }
 
-    static List<Note> pinAllClientOwnedNotesFor(Program program, Talk talk)
+    static List<Note> pinAllClientOwnedNotesFor(Program program, Talk talk, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryClientOwnedNotesFor(program, talk, currentPage);
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, talk, date, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
         currentPage++;
         Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
-            currentPage + " notesPinned: " + notesPinned);
+            currentPage + " notesPinned: " + notesPinned + ((date == null) ? "" : " @ " + date.getTime()));
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(notes);
@@ -110,13 +111,17 @@ public class Queries {
       return notes;
     }
 
-    private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, int page)
+    private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, Date date, int page)
         throws ParseException {
       ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
           .whereEqualTo(Constants.NOTE_uOWNER_USER_KEY,
               Commands.Local.getClientUser())
           .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
           .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+      if (date != null) {
+        query = query.whereGreaterThanOrEqualTo(Constants.NOTE_UPDATEDAT_DATE_KEY,
+            date);
+      }
       if (talk != null) {
         query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
       }

@@ -10,8 +10,9 @@ import android.view.View;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.adapter.ScripturePickerAdapter;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
-import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -51,6 +52,7 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   ViewPager mPager;
 
   private ScripturePickerAdapter mAdapter;
+  private IBible mBible;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -58,12 +60,18 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
     confirmHostFragmentHasNecessaryCallbacks();
     ButterKnife.inject(this, view);
 
-    mAdapter = new ScripturePickerAdapter();
+    // adapter creation delayed until Bible provided
+  }
+
+  @Override
+  public void onBibleCreated(IBible bible) {
+    this.mBible = bible;
+
+    mAdapter = new ScripturePickerAdapter(mBible);
+    mPager.setOffscreenPageLimit(2);
     mAdapter.setOnPageNextClickedListener(this);
     mPager.setAdapter(mAdapter);
   }
-
-
 
   @Override
   public void onDestroyView() {

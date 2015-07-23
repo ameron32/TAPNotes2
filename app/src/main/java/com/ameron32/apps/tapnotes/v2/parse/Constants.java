@@ -35,5 +35,6 @@ public class Constants {
   public static final String NOTE_TEXT_STRING_KEY = "text";
   public static final String NOTE_TAGS_ARRAY_KEY = "tags";
   public static final String NOTE_CREATEDAT_DATE_KEY = "createdAt";
+  public static final String NOTE_UPDATEDAT_DATE_KEY = "updatedAt";
 
 }

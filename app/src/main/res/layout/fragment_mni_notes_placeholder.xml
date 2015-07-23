@@ -69,6 +69,10 @@
         android:id="@+id/placeholder_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/placeholder_text_padding"
+        android:paddingTop="@dimen/placeholder_text_padding"
+        android:paddingRight="@dimen/placeholder_text_padding"
+        android:paddingLeft="@dimen/placeholder_text_padding"
         android:background="?notes_container_background">
 
       <LinearLayout

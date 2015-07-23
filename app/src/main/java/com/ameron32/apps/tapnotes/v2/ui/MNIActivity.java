@@ -11,8 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
@@ -136,7 +136,6 @@ public class MNIActivity extends TAPActivity
     ButterKnife.inject(this);
 
     setupDrawer();
-    showScripturePickerShadow(false);
     commitNotesPlaceholder(); //blank
     commitProgramFragment(mProgramId);
     commitProgressFragment();
@@ -310,22 +309,13 @@ public class MNIActivity extends TAPActivity
   }
 
   private void commitNewScripturePickerFragment() {
-    showScripturePickerShadow(true);
     final String tag = TAG_SCRIPTURE_PICKER;
     removeFragment(tag);
     getSupportFragmentManager().beginTransaction()
         .replace(R.id.scripture_picker_container,
             ScripturePickerFragment.create(), tag)
+        .addToBackStack(tag)
         .commit();
-  }
-
-  private void showScripturePickerShadow(boolean state) {
-    final View shadow = findViewById(R.id.scripture_picker_container_shadow);
-    if (state) {
-      shadow.setVisibility(View.VISIBLE);
-    } else {
-      shadow.setVisibility(View.GONE);
-    }
   }
 
   private void removeFragment(final String tag) {
@@ -442,7 +432,7 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk), DESTROY).cache();
+          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program, (Talk) talk, notesController.incrementLastChecked()), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }
@@ -451,6 +441,9 @@ public class MNIActivity extends TAPActivity
       }
     }
   };
+
+  @Inject
+  ParseNotesController notesController;
 
   private Observable<Progress> cache;
 
@@ -531,7 +524,6 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void scripturePrepared(IScripture scripture) {
-      showScripturePickerShadow(false);
       // TODO scripture picker generated scripture
       final String tag = TAG_SCRIPTURE_PICKER;
       removeFragment(tag);
