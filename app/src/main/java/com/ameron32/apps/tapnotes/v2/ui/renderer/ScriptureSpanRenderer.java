@@ -12,14 +12,20 @@ import com.jmpergar.awesometext.AwesomeTextHandler;
 /**
  * Created by Micah on 7/19/2015.
  */
-public class MentionSpanRenderer implements AwesomeTextHandler.ViewSpanRenderer, AwesomeTextHandler.ViewSpanClickListener {
+public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRenderer, AwesomeTextHandler.ViewSpanClickListener {
+
+    private static final String SCRIPTURE_START_TAG = "<<!<";
+    private static final String SCRIPTURE_END_TAG = ">!>>";
 
     @Override
     public View getView(String text, Context context) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        TextView mentionView = (TextView) inflater.inflate(R.layout.span_scripture_layout, null);
-        mentionView.setText(text);
-        return mentionView;
+        TextView scripView = (TextView) inflater.inflate(R.layout.span_scripture_layout, null);
+
+        text = text.replace(SCRIPTURE_START_TAG, "").replace(SCRIPTURE_END_TAG, "").replace("@", "");
+        scripView.setText(text);
+
+        return scripView;
     }
 
     @Override

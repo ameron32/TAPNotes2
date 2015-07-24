@@ -7,13 +7,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
-import com.ameron32.apps.tapnotes.v2.ui.renderer.MentionSpanRenderer;
+import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
 import com.jmpergar.awesometext.AwesomeTextHandler;
 
 import java.util.LinkedList;
@@ -82,7 +80,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         setOnClickListener(holder.noteLayout);
 
         AwesomeTextHandler ath = new AwesomeTextHandler();
-        ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
+        ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
             .setView(holder.notesTextView);
     }
 

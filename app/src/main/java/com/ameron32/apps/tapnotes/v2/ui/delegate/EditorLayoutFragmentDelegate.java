@@ -24,7 +24,7 @@ import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
-import com.ameron32.apps.tapnotes.v2.ui.renderer.MentionSpanRenderer;
+import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
 import com.jmpergar.awesometext.AwesomeTextHandler;
 
 import butterknife.ButterKnife;
@@ -76,7 +76,10 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   private IBible bible;
 
 
-  private static final String SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
+  private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
+  private static final String SCRIPTURE_START_TAG = "<<!<";
+  private static final String SCRIPTURE_END_TAG = ">!>>";
+  AwesomeTextHandler awesomeTextViewHandler;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -88,11 +91,10 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     setOnClicks();
 
 
-/*    AwesomeTextHandler awesomeTextViewHandler = new AwesomeTextHandler();
+    awesomeTextViewHandler = new AwesomeTextHandler();
     awesomeTextViewHandler
-            .addViewSpanRenderer(HASHTAG_PATTERN, new HashtagsSpanRenderer())
-            .addViewSpanRenderer(SCRIPTURE_PATTERN, new MentionSpanRenderer())
-            .setView(noteText);*/
+            .addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
+            .setView(noteText);
   }
 
   @Override
@@ -277,21 +279,21 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     @Override
     public void onSanitizerResults(WrappedScripture scripture) {
 
-
       if (scripture!=null){
         replacing = true;
         //TODO: Replace old text with correct scripture name.
         String oldText = noteText.getText().toString();
         String subToReplace = scripture.replacedText.substring(0,scripture.replacedText.length()-2);
-        String newText = scripture.newText;
+        String newText = SCRIPTURE_START_TAG + scripture.newText + SCRIPTURE_END_TAG;
         oldText = oldText.replace(subToReplace, newText);
+        awesomeTextViewHandler.setText(oldText);
+        //noteText.setText(noteText.getText().toString().replace(SCRIPTURE_START_TAG, "").replace(SCRIPTURE_END_TAG, ""));
 
-        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(255, 43, 0));
-
+/*        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(255, 43, 0));
         Spannable textSpan = new SpannableString(oldText);
         textSpan.setSpan(fcs, 0, oldText.length()-2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
 
-        noteText.setText(textSpan);
+        noteText.setText(textSpan);*/
 
 
         int position = noteText.length();
