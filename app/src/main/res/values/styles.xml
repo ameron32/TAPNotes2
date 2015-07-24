@@ -45,6 +45,8 @@
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
     <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
     <item name="ic_bible_icon">@drawable/bible</item>
+
+    <item name="span_scripture_background">@drawable/teal_span_scripture_background</item>
   </style>
 
 
@@ -87,6 +89,8 @@
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
     <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
     <item name="ic_bible_icon">@drawable/bible</item>
+
+    <item name="span_scripture_background">@drawable/ultrablack_span_scripture_background</item>
   </style>
 
   <style name="MaterialDarkTheme" parent="AppDarkTheme">
@@ -126,6 +130,8 @@
     <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
     <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
     <item name="ic_bible_icon">@drawable/bible</item>
+
+    <item name="span_scripture_background">@drawable/materialdark_span_scripture_background</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
