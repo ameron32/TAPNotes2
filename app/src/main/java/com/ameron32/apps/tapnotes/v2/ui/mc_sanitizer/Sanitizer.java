@@ -249,6 +249,11 @@ public class Sanitizer implements ISanitizer{
         name = name+ " " + String.valueOf(chapter) + ":" + verseString;
         ws.newText = name;
 
+        ws.scriptureParsedInfo = String.valueOf(bookNumber)+ " " + String.valueOf(chapter)+" ";
+        for (int i=0; i<verses.length; i++){
+            ws.scriptureParsedInfo = ws.scriptureParsedInfo + String.valueOf(verses[i])+" ";
+        }
+
         return ws;
     }
 

@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:background="@drawable/span_scripture_background"
     tools:text="TEST"
-    android:textColor=""
+
     android:textSize="18sp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"

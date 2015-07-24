@@ -2,22 +2,27 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import com.ameron32.apps.tapnotes.v2.model.INote;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NoteDataProvider extends AbstractDataProvider {
     private List<INote> mData;
     private INote mLastRemovedData;
     private int mLastRemovedPosition = -1;
 
+
     public NoteDataProvider() {
         final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
         mData = new LinkedList<>();
-
     }
 
     public void addNote(INote note){
+
+
+
         mData.add(note);
     }
 
@@ -97,4 +102,6 @@ public class NoteDataProvider extends AbstractDataProvider {
             }
         }
     }
+
+
 }
