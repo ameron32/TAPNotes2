@@ -14,6 +14,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 public class ApplicationThemeController extends AbsApplicationController {
 
   public static final int THEME_NOT_FOUND = -2;
+  public static final String THEME_MISSING = "Theme Missing";
 
   private static final String SHARED_PREFERENCES_KEY = "SharedPreferencesKey";
   private static final String THEME_PREF_KEY = "ThemePreferencesKey";
