@@ -39,4 +39,6 @@
   <attr name="ic_videocam_icon" format="reference" />
   <attr name="ic_bible_icon" format="reference" />
 
+  <attr name="span_scripture_background" format="reference" />
+
 </resources>

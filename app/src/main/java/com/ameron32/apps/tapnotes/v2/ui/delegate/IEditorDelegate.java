@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 
 /**
@@ -16,6 +17,8 @@ public interface IEditorDelegate {
   void onSanitizerCreated(ISanitizer sanitizer);
 
   void onBibleCreated(IBible bible);
+
+  void onInjectScriptureFromPicker(IScripture scripture);
 
 
 

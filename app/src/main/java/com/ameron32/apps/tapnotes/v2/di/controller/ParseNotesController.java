@@ -35,7 +35,7 @@ public class ParseNotesController {
     Rx.Live.pinAllClientOwnedNotesFor(program, talk, lastChecked.toDate());
   }
 
-  public Date incrementLastChecked() {
+  public Date getLastCheckedThenUpdateToNow() {
     Date value = null;
     if (lastChecked != null) {
       value = lastChecked.toDate();

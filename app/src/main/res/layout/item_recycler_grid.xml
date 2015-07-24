@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- TODO replace android:text with @string -->
     <Button
         android:id="@+id/button_forward"
         android:layout_width="wrap_content"

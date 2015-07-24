@@ -2,17 +2,13 @@ package com.ameron32.apps.tapnotes.v2;
 
 import android.app.Application;
 import android.content.res.Resources;
-import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.di.Injector;
 import com.ameron32.apps.tapnotes.v2.di.module.ApplicationModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidApplicationModule;
-import com.ameron32.apps.tapnotes.v2.di.module.DemoApplicationModule;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object._NoteObject;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
-import com.ameron32.apps.tapnotes.v2.parse.object._TestObject;
 import com.crashlytics.android.Crashlytics;
 import com.parse.Parse;
 import com.parse.ParseCrashReporting;
@@ -53,10 +49,8 @@ public class TAPApplication extends Application {
   }
 
   private void initializeAppModules_Dagger1(Application app) {
-//    Injector.INSTANCE.init(new RootModule());
     Injector.INSTANCE.init(new DefaultAndroidApplicationModule(app));
     Injector.INSTANCE.init(new ApplicationModule(app));
-    Injector.INSTANCE.init(new DemoApplicationModule());
     Injector.INSTANCE.inject(app);
   }
 
@@ -72,9 +66,6 @@ public class TAPApplication extends Application {
     final Resources r = app.getResources();
 
     // Register Custom ParseObjects
-    ParseObject.registerSubclass(_TestObject.class);
-    ParseObject.registerSubclass(_NoteObject.class);
-
     ParseObject.registerSubclass(Program.class);
     ParseObject.registerSubclass(Talk.class);
     ParseObject.registerSubclass(Note.class);

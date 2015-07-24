@@ -48,6 +48,7 @@ public class BibleBuilder {
     bible.books = new BibleBook[66];
     bible.setChapterNames(bookNames);
     bible.setAbbrevs(bookAbbreviations);
+    int chaptersComplete = 0;
     for (int i = 0; i < 66; i++) {
 
       bible.books[i] = new BibleBook(i, chapterQuantities[i]);
@@ -55,6 +56,7 @@ public class BibleBuilder {
         Log.i("SF", "Book " + String.valueOf(i + 1) + " Chapter " + String.valueOf(j + 1));
         bible.books[i].chapters[j] = new BibleChapter();
         bible.books[i].chapters[j].verses = loadChapterVerses(i, j);
+        chaptersComplete++;
       }
     }
 
@@ -140,57 +142,59 @@ public class BibleBuilder {
     return verses1;
   }
 
-  private ArrayList<TagPair> tags2 = new ArrayList<>();
+  private ArrayList<TagPair> tags2 = new ArrayList<>(1024);
   private int i2, j2, k2a, k2b, start2, end2;
   private TagPair tp2;
+  private int length2;
 
   private String cleanString(String s) {
 
     if (s != null) {
       tags2.clear();
+      length2 = s.length();
 
       //Check for front tags
-      for (i2 = 0; i2 < s.length(); i2++) {
+      for (i2 = 0; i2 < length2; i2++) {
         if (s.charAt(i2) == '<') {
-          i2 = s.length();
+          i2 = length2;
         } else {
           if (s.charAt(i2) == '>') {
             tp2 = new TagPair();
             tp2.start = 0;
             tp2.end = i2;
             tags2.add(tp2);
-            i2 = s.length();
+            i2 = length2;
           }
         }
       }
 
 
       //Check for other tags;
-      for (j2 = 0; j2 < s.length(); j2++) {
+      for (j2 = 0; j2 < length2; j2++) {
         if (s.charAt(j2) == '<') {
           start2 = j2;
-          for (k2a = j2; k2a < s.length(); k2a++) {
+          for (k2a = j2; k2a < length2; k2a++) {
             if (s.charAt(k2a) == '>') {
               end2 = k2a;
               tp2 = new TagPair();
               tp2.start = start2;
               tp2.end = end2;
               tags2.add(tp2);
-              k2a = s.length();
+              k2a = length2;
             }
           }
         }
       }
 
       //Check for end tags;
-      for (k2b = s.length() - 1; k2b >= 0; k2b--) {
+      for (k2b = length2 - 1; k2b >= 0; k2b--) {
         if (s.charAt(k2b) == '>') {
           k2b = -1;
         } else {
           if (s.charAt(k2b) == '<') {
             tp2 = new TagPair();
             tp2.start = k2b;
-            tp2.end = s.length() - 1;
+            tp2.end = length2 - 1;
             tags2.add(tp2);
           }
         }
@@ -212,16 +216,21 @@ public class BibleBuilder {
   private String tag3;
   private StringBuilder sb3;
   private boolean footnote3;
+  private int length3;
+  private int tagsSize3;
+  private int sb3length3;
 
   private String removeBadTags(String s, ArrayList<TagPair> tags) {
 
     allowedTags3 = r.getStringArray(R.array.allowed_tags);
-    remove3 = new boolean[tags.size()];
-    for (a3 = 0; a3 < remove3.length; a3++) {
+    tagsSize3 = tags.size();
+    remove3 = new boolean[tagsSize3];
+    length3 = remove3.length;
+    for (a3 = 0; a3 < length3; a3++) {
       remove3[a3] = true;
     }
 
-    for (i3 = 0; i3 < tags.size(); i3++) {
+    for (i3 = 0; i3 < tagsSize3; i3++) {
       tagP3 = tags.get(i3);
       tag3 = s.substring(tagP3.start, tagP3.end + 1);
       for (j3 = 0; j3 < allowedTags3.length; j3++) {
@@ -232,7 +241,7 @@ public class BibleBuilder {
     }
 
     sb3 = new StringBuilder(s);
-    for (k3 = tags.size() - 1; k3 >= 0; k3--) {
+    for (k3 = tagsSize3 - 1; k3 >= 0; k3--) {
       if (remove3[k3]) {
         sb3.replace(tags.get(k3).start, tags.get(k3).end + 1, "");
       }
@@ -241,12 +250,13 @@ public class BibleBuilder {
     //Remove footnotes
     start3 = -1;
     footnote3 = false;
+    sb3length3 = sb3.length();
 
-    for (m3 = 0; m3 < sb3.length(); m3++) {
+    for (m3 = 0; m3 < sb3length3; m3++) {
       if (sb3.charAt(m3) == '^') {
         start3 = m3;
         footnote3 = true;
-        m3 = sb3.length();
+        m3 = sb3length3;
       }
     }
 

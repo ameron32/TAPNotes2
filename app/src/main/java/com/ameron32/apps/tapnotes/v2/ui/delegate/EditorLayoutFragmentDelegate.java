@@ -22,6 +22,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
@@ -105,6 +106,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     watcher = new ScriptureWatcher(sanitizer);
     watcher.setBible(bible);
     noteText.addTextChangedListener(watcher);
+  }
+
+  @Override
+  public void onInjectScriptureFromPicker(IScripture scripture) {
+    // TODO MICAH complete delegate interface method
   }
 
   @Override

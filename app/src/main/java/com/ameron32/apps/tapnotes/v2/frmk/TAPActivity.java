@@ -36,7 +36,6 @@ public abstract class TAPActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Injector.INSTANCE.inject(this);
     initializeActivityModules_Dagger1();
     setTheme(provideThemeResource());
     super.onCreate(savedInstanceState);
@@ -52,6 +51,7 @@ public abstract class TAPActivity extends AppCompatActivity {
       Object module = modules[i];
       Injector.INSTANCE.init(module);
     }
+    Injector.INSTANCE.inject(this);
   }
 
   protected abstract Object[] getModules();

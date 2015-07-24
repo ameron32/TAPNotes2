@@ -1,8 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -25,10 +23,10 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;
 import com.parse.GetCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
+import com.squareup.picasso.Picasso;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -78,31 +76,23 @@ public class ProgramSelectionFragment extends TAPFragment
     setStatusImage();
 
     loadPlaceholderView();
-    getImageFromParseProgram(mProgramId);
+    getImageFromProgram(mProgramId);
   }
 
-  private void getImageFromParseProgram(String programId) {
+  private void getImageFromProgram(String programId) {
     ParseQuery.getQuery(Program.class)
-        .getInBackground(programId,
-            new GetCallback<Program>() {
-              @Override
-              public void done(Program program, ParseException e) {
-                final ParseFile parseFile = (ParseFile) program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
-                parseFile.getDataInBackground(new GetDataCallback() {
-                  @Override
-                  public void done(byte[] bytes, ParseException e) {
-                    if (e == null) {
-                      putBytesIntoView(bytes);
-                    }
-                  }
-                });
+        .getInBackground(programId, new GetCallback<Program>() {
+          @Override
+          public void done(Program program, ParseException e) {
+            if (e == null && program != null) {
+              Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
+              if (o != null && o instanceof ParseFile) {
+                final ParseFile file = (ParseFile) o;
+                Picasso.with(getContext()).load(file.getUrl()).into(programButton);
               }
-            });
-  }
-
-  private void putBytesIntoView(byte[] bytes) {
-    final Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    programButton.setImageBitmap(bitmap);
+            }
+          }
+        });
   }
 
   private void loadPlaceholderView() {

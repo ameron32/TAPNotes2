@@ -8,11 +8,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.adapter.ScripturePickerAdapter;
+import com.ameron32.apps.tapnotes.v2.ui.adapter.ScripturePickerAdapter;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
-import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -1,6 +1,8 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -10,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
@@ -21,16 +24,23 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ParseLiveReceiver;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,6 +155,9 @@ public class NotesFragment extends TAPFragment
     return rootView;
   }
 
+  @InjectView(R.id.image_toolbar_header_background)
+  ImageView mToolbarImage;
+
   @Override
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
@@ -155,10 +168,33 @@ public class NotesFragment extends TAPFragment
     confirmNotesDelegateHasInterface();
     mHeaderDelegate.onToolbarViewCreated(mToolbar);
     setTitles();
+    displayToolbarImage();
 
     if (isStringUsable(mTalkId)) {
       giveNotesToDelegate();
     }
+  }
+
+  private void displayToolbarImage() {
+
+  }
+
+  private void getImageFromProgram(String programId) {
+    ParseQuery.getQuery(Talk.class)
+        .fromLocalDatastore()
+        .getInBackground(programId, new GetCallback<Talk>() {
+          @Override
+          public void done(Talk program, ParseException e) {
+            if (e == null) {
+              final Object o = program.get(Constants.TALK_HEADERIMAGE_FILE_KEY);
+              if (o != null && o instanceof ParseFile) {
+                final ParseFile file = (ParseFile) o;
+                Picasso.with(getContext()).load(file.getUrl())
+                    .into(mToolbarImage);
+              }
+            }
+          }
+        });
   }
 
   private void confirmToolbarDelegateHasInterface() {
