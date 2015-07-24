@@ -530,7 +530,7 @@ public class MNIActivity extends TAPActivity
       removeFragment(tag);
 
       // TODO scripture to editor
-//      getEditorFragment().provideScriptureToEditor();
+      getEditorFragment().provideScriptureToEditor(scripture);
     }
   };
 }

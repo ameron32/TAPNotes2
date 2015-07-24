@@ -18,6 +18,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
@@ -198,7 +199,10 @@ public class EditorFragment extends TAPFragment
     }
   }
 
-
+  @Override
+  public void provideScriptureToEditor(IScripture scripture) {
+    mDelegate.onInjectScriptureFromPicker(scripture);
+  }
 
   public interface Callbacks {
 
