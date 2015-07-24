@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecycler;
@@ -187,7 +188,10 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   }
 
-
+  @Override
+  public void onBibleCreated(IBible bible) {
+    // TODO MICAH use the bible
+  }
 
   @Override
   public void setImage(String imageUrl) {

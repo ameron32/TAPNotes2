@@ -30,6 +30,7 @@ import com.ameron32.apps.tapnotes.v2.parse.frmk.ParseLiveReceiver;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
@@ -78,6 +79,9 @@ public class NotesFragment extends TAPFragment
   RecyclerView mRecyclerView;
   @Inject
   ActivitySnackBarController mSnackBar;
+
+  @Inject
+  Bible bible;
 
   private Callbacks mCallbacks;
 
@@ -171,18 +175,20 @@ public class NotesFragment extends TAPFragment
     displayToolbarImage();
 
     if (isStringUsable(mTalkId)) {
+      mNotesDelegate.onBibleCreated(bible);
       giveNotesToDelegate();
     }
   }
 
   private void displayToolbarImage() {
-
+    // TODO KRIS enable toolbar imagery
+//    getImageFromProgram(mTalkId);
   }
 
-  private void getImageFromProgram(String programId) {
+  private void getImageFromProgram(String talkId) {
     ParseQuery.getQuery(Talk.class)
         .fromLocalDatastore()
-        .getInBackground(programId, new GetCallback<Talk>() {
+        .getInBackground(talkId, new GetCallback<Talk>() {
           @Override
           public void done(Talk program, ParseException e) {
             if (e == null) {
