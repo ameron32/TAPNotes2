@@ -23,6 +23,10 @@ public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRendere
         TextView scripView = (TextView) inflater.inflate(R.layout.span_scripture_layout, null);
 
         text = text.replace(SCRIPTURE_START_TAG, "").replace(SCRIPTURE_END_TAG, "").replace("@", "");
+        String info = text.substring(0, text.indexOf("<"));
+        text = text.replace(info, "").replace("<", "");
+
+
         scripView.setText(text);
 
         return scripView;

@@ -68,13 +68,13 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         return holder;
     }
 
-    private static final String SCRIPTURE_PATTERN = "(@)([0-9,A-Z])\\w+(\\s)(\\d)+([\\s,:])([\\d-,])+";
+    private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
         INote note = mProvider.getItem(position);
-        holder.notesTextView.setText(note.getNoteText());
+        //holder.notesTextView.setText(note.getNoteText());
         holder.noteLayout.setTag(R.string.holdertag, holder);
         holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
@@ -82,6 +82,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         AwesomeTextHandler ath = new AwesomeTextHandler();
         ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
             .setView(holder.notesTextView);
+        ath.setText(note.getNoteText());
     }
 
     @Override

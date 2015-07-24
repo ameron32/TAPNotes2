@@ -12,5 +12,6 @@ public class WrappedScripture {
     public int indexStart;
     public int indexEnd;
     public String replacedText;
+    public String scriptureParsedInfo;
 
 }

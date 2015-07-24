@@ -77,8 +77,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   private IBible bible;
 
 
-  private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
-  private static final String SCRIPTURE_START_TAG = "<<!<";
+  private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[0-9| ]+\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
+  private static final String SCRIPTURE_START_TAG = "<<!<I<";
   private static final String SCRIPTURE_END_TAG = ">!>>";
   AwesomeTextHandler awesomeTextViewHandler;
 
@@ -271,6 +271,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       //Ends with #,
       //if ((last == ',') && (nums.indexOf(ntl) != -1)) return true;
 
+
       //Ends with # space letter
       if ((alpha.indexOf(last) != -1) && (ntl == ' ') && (nums.indexOf(ntntl) != -1)) return true;
 
@@ -289,18 +290,11 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
         replacing = true;
         //TODO: Replace old text with correct scripture name.
         String oldText = noteText.getText().toString();
-        String subToReplace = scripture.replacedText.substring(0,scripture.replacedText.length()-2);
-        String newText = SCRIPTURE_START_TAG + scripture.newText + SCRIPTURE_END_TAG;
+        String subToReplace = scripture.replacedText.substring(0, scripture.replacedText.length() - 2);
+        String adjStartTag = SCRIPTURE_START_TAG.replace("I", scripture.scriptureParsedInfo);
+        String newText = adjStartTag + scripture.newText + SCRIPTURE_END_TAG;
         oldText = oldText.replace(subToReplace, newText);
         awesomeTextViewHandler.setText(oldText);
-        //noteText.setText(noteText.getText().toString().replace(SCRIPTURE_START_TAG, "").replace(SCRIPTURE_END_TAG, ""));
-
-/*        ForegroundColorSpan fcs = new ForegroundColorSpan(Color.rgb(255, 43, 0));
-        Spannable textSpan = new SpannableString(oldText);
-        textSpan.setSpan(fcs, 0, oldText.length()-2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-
-        noteText.setText(textSpan);*/
-
 
         int position = noteText.length();
         Editable etext = noteText.getText();
