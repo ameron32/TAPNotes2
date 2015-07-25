@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
@@ -34,6 +35,11 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     private INotesDelegateCallbacks mCallback;
 
     private NoteDataProvider mProvider;
+
+    @Override
+    public void onBibleCreated(IBible bible) {
+
+    }
 
     public NotesRecyclerAdapter(Context context) {
         this.mContext = context;
