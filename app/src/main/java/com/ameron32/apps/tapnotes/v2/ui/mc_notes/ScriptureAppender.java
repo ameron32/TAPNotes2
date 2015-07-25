@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.content.Context;
 
+import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
@@ -24,15 +25,16 @@ public class ScriptureAppender {
     String[] validNames;
     private static final String digits = "0123456789";
 
-    public ScriptureAppender(Bible b, String[] validNames) {
+    public ScriptureAppender(Bible b, Context c) {
         bible = b;
-        this.validNames = validNames;
+        this.validNames = c.getResources().getStringArray(R.array.bible_books);
         finder = new ScriptureFinder();
 
     }
 
-    public INote appendScriptures (INote note) {
+    public String appendScriptures (INote note) {
         String text = note.getNoteText();
+        String appendText = "";
 
         //First, get the location of all scriptures in the note.
         ArrayList<Integer>scriptureTagIndices = new ArrayList<>();
@@ -81,15 +83,15 @@ public class ScriptureAppender {
             try {
                 String[] verseTexts = finder.getVerses(bible, book, chapter, verses);
                 if (verseTexts.length > 0) {
-                    text = text + "\n\n" + name + "\n";
+                    appendText = appendText + "\n\n" + name + "\n";
                     for (int k = 0; k < verseTexts.length; k++) {
                         if (k == 0) {
-                            text = text + verseTexts[k];
+                            appendText = appendText + verseTexts[k];
                         } else {
                             if (areTextsContiguous(verseTexts[k - 1], verseTexts[k])) {
-                                text = text + verseTexts[k];
+                                appendText = appendText + verseTexts[k];
                             } else {
-                                text = text + "\n" + verseTexts[k];
+                                appendText = appendText + "\n" + verseTexts[k];
                             }
                         }
                     }
@@ -100,7 +102,7 @@ public class ScriptureAppender {
 
 
         }
-        return note;
+        return appendText;
     }
 
     private boolean areTextsContiguous(String first, String next){

@@ -10,12 +10,16 @@ import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
 import com.jmpergar.awesometext.AwesomeTextHandler;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.InjectView;
 
@@ -30,15 +34,21 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     private final Context mContext;
     int lastX;
     int lastY;
+    HashMap<INote, String> appendedStrings;
+
+    ScriptureAppender appender;
 
     private INotesDelegateCallbacks mCallback;
 
     private NoteDataProvider mProvider;
 
+
+
     public NotesRecyclerAdapter(Context context) {
         this.mContext = context;
         mProvider = new NoteDataProvider();
         setHasStableIds(true);
+        appender = new ScriptureAppender(b, context);
     }
 
     public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback) {
@@ -83,6 +93,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
             .setView(holder.notesTextView);
         ath.setText(note.getNoteText());
+
+        holder.appendTextView.setText(appendedStrings.get(note));
     }
 
     @Override
@@ -96,14 +108,20 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void synchronizeNotes(List<INote> allNotes) {
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
+        appendedStrings.clear();
+        for (INote n:allNotes){
+            setAppendedStrings(n);
+        }
         notifyDataSetChanged();
 
     }
 
     @Override
     public void addNotes(List<INote> notesToAdd) {
-        for (INote note : notesToAdd)
+        for (INote note : notesToAdd) {
             mProvider.addNote(note);
+            setAppendedStrings(note);
+        }
         notifyDataSetChanged();
 
     }
@@ -113,6 +131,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         for (INote note : notesToRemove) {
             mProvider.removeItem(note);
+            appendedStrings.remove(note);
             notifyDataSetChanged();
         }
 
@@ -157,7 +176,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             @Override
             public boolean onLongClick(View v) {
 
-                if (v.getParent() instanceof NotesRecycler){
+                if (v.getParent() instanceof NotesRecycler) {
                     NotesRecycler nr = ((NotesRecycler) v.getParent());
                     nr.itemClicked(v);
                     popup.setVisibility(View.VISIBLE);
@@ -175,17 +194,21 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                 final int action = ev.getAction();
                 switch (action & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN: {
-                        int y=0;
-                        if (v.getParent() instanceof NotesRecycler){
-                            NotesRecycler nr = (NotesRecycler)v.getParent();
-                            y=nr.indexOfChild(v)* (int)(mContext.getResources().getDimension(R.dimen.note_row_height_min));
+                        int y = 0;
+                        if (v.getParent() instanceof NotesRecycler) {
+                            NotesRecycler nr = (NotesRecycler) v.getParent();
+                            y = nr.indexOfChild(v) * (int) (mContext.getResources().getDimension(R.dimen.note_row_height_min));
                         }
-                            lastY = y-200;
+                        lastY = y - 200;
                         break;
                     }
                 }
                 return false;
             }
         });
+    }
+
+    private void setAppendedStrings(INote note){
+        appendedStrings.put(note, appender.appendScriptures(note));
     }
 }

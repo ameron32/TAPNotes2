@@ -1,6 +1,9 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
+import android.content.Context;
+
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,6 +17,7 @@ public class NoteDataProvider extends AbstractDataProvider {
     private int mLastRemovedPosition = -1;
 
 
+
     public NoteDataProvider() {
         final String atoz = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         mData = new LinkedList<>();
@@ -21,14 +25,11 @@ public class NoteDataProvider extends AbstractDataProvider {
 
     public void addNote(INote note){
 
-
-
         mData.add(note);
     }
 
     public void populateWithExistingNotes(LinkedList<INote> notes){
         mData = notes;
-        //TODO - Make sure Kris hands a list of notes with the appropriate data.
     }
 
     @Override
