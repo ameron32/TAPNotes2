@@ -2,6 +2,8 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.content.Context;
 
+import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
@@ -24,15 +26,16 @@ public class ScriptureAppender {
     String[] validNames;
     private static final String digits = "0123456789";
 
-    public ScriptureAppender(Bible b, String[] validNames) {
+    public ScriptureAppender(Bible b, Context c) {
         bible = b;
-        this.validNames = validNames;
+        this.validNames = c.getResources().getStringArray(R.array.bible_books);
         finder = new ScriptureFinder();
 
     }
 
-    public INote appendScriptures (INote note) {
+    public String appendScriptures (INote note) {
         String text = note.getNoteText();
+        StringBuilder appendBuilder = new StringBuilder();
 
         //First, get the location of all scriptures in the note.
         ArrayList<Integer>scriptureTagIndices = new ArrayList<>();
@@ -56,10 +59,10 @@ public class ScriptureAppender {
 
             start = scriptureTagIndices.get(i) + 4; //Because the opening part of the tag is 4 chars long.
             stop = text.substring(start).indexOf("<");
-            String info = text.substring(start, stop);
-            String name = text.substring(stop + 1, text.indexOf(">"));
+            String info = text.substring(start, start+stop);
+            String name = text.substring(start+stop + 1, start+stop+1+text.substring(start+stop+1).indexOf(">"));
             String[] vals = info.split(" ");
-            verses = new int[vals.length - 2];
+            verses = new int[vals.length-2];
             try {
                 for (int j = 0; j < vals.length; j++) {
                     if (j == 0) {
@@ -81,15 +84,21 @@ public class ScriptureAppender {
             try {
                 String[] verseTexts = finder.getVerses(bible, book, chapter, verses);
                 if (verseTexts.length > 0) {
-                    text = text + "\n\n" + name + "\n";
+                    String startTag = SCRIPTURE_START_TAG + String.valueOf(book) + " " + String.valueOf(chapter) + " ";
+                    for (int y=0; y<verses.length; y++){
+                        startTag = startTag + String.valueOf(verses[y])+" ";
+                    }
+                    startTag = startTag + "<";
+
+                    appendBuilder.append("<br><br>").append(name).append("<br>");
                     for (int k = 0; k < verseTexts.length; k++) {
                         if (k == 0) {
-                            text = text + verseTexts[k];
+                            appendBuilder.append(verseTexts[k]);
                         } else {
                             if (areTextsContiguous(verseTexts[k - 1], verseTexts[k])) {
-                                text = text + verseTexts[k];
+                                appendBuilder.append(verseTexts[k]);
                             } else {
-                                text = text + "\n" + verseTexts[k];
+                                appendBuilder.append("<br>").append(verseTexts[k]);
                             }
                         }
                     }
@@ -100,7 +109,7 @@ public class ScriptureAppender {
 
 
         }
-        return note;
+        return appendBuilder.toString();
     }
 
     private boolean areTextsContiguous(String first, String next){
@@ -116,7 +125,7 @@ public class ScriptureAppender {
                 for (int j=0; j<text.length(); j++){
                     if (!digits.contains(text.substring(j, j+1))){
                         try{
-                            return Integer.valueOf(text.substring(i, j));
+                            return Integer.valueOf(text.substring(i, i+j+1));
                         }catch (NumberFormatException e){
                             //Do nothing.
                         }

@@ -111,6 +111,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   @Override
   public void onInjectScriptureFromPicker(IScripture scripture) {
     // TODO MICAH complete delegate interface method
+
+
   }
 
   @Override

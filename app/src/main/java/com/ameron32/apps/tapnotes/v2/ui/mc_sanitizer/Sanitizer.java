@@ -118,8 +118,8 @@ public class Sanitizer implements ISanitizer{
         int ch;
         try {
             ch = Integer.valueOf(chapterPart);
-            if ((ch>0) && (ch<chapterAmts[bookNumber])){
-                return ch;
+            if ((ch>0) && (ch<=chapterAmts[bookNumber])){
+                return ch-1;  //Add the -1 to offset correctly for array indices.
             }
         }catch (NumberFormatException e){
             return -1;
@@ -173,11 +173,11 @@ public class Sanitizer implements ISanitizer{
                                     (lower<upper) && //(Yes, we will require them to put them in the correct order... 11-5 is not valid, but 5-11 is.
                                             (lower>0) &&  //(Can't start at a negative verse number)
                                             (lower<bible.getVerseCount(bookNumber, chapter)-1) &&  //Has to start below the total number of verses in the chapter.
-                                            (upper<bible.getVerseCount(bookNumber, chapter))  //Has to end at or below the total number of verses in the chapter.
+                                            (upper<=bible.getVerseCount(bookNumber, chapter))  //Has to end at or below the total number of verses in the chapter.
                                     ){
                                 //Now its validated, so we just need to add the range to the verse list.
                                 for (int l=lower; l<=upper; l++){
-                                    verses.add(l);
+                                    verses.add(l-1);//Add the -1 to offset correctly for array indices.
                                 }
                                 verseString = verseString + String.valueOf(lower) + "-" + String.valueOf(upper)+", ";
                             }
@@ -188,8 +188,8 @@ public class Sanitizer implements ISanitizer{
                     }else{ //If no "-" it must just be a single integer, so try to parse it, validate it, and add it as a verse to the list.
                         try{
                             int val = Integer.valueOf(subblock); //parse it...
-                            if ((val>0) && (val<bible.getVerseCount(bookNumber, chapter))) //... validate it...
-                            verses.add(val); //... add it.
+                            if ((val>0) && (val<=bible.getVerseCount(bookNumber, chapter))) //... validate it...
+                            verses.add(val-1); //... add it.  Add the -1 to offset correctly for array indices.
                             verseString = verseString + String.valueOf(val)+", ";
                         }catch (NumberFormatException e){
                             //Do nothing.
@@ -206,8 +206,8 @@ public class Sanitizer implements ISanitizer{
                     subblock.trim();
                     try{
                         int val = Integer.valueOf(subblock); //parse it...
-                        if ((val>0) && (val<bible.getVerseCount(bookNumber, chapter))) //... validate it...
-                            verses.add(val); //... add it.
+                        if ((val>0) && (val<=bible.getVerseCount(bookNumber, chapter))) //... validate it...
+                            verses.add(val-1); //... add it. Add the -1 to offset correctly for array indices.
                             verseString = verseString + String.valueOf(val)+", ";
                     }catch (NumberFormatException e){
                         //Do nothing.
@@ -246,7 +246,7 @@ public class Sanitizer implements ISanitizer{
         if (verseString.endsWith(", ")){
             verseString = verseString.substring(0, verseString.length()-2);
         }
-        name = name+ " " + String.valueOf(chapter) + ":" + verseString;
+        name = name+ " " + String.valueOf(chapter+1) + ":" + verseString;
         ws.newText = name;
 
         ws.scriptureParsedInfo = String.valueOf(bookNumber)+ " " + String.valueOf(chapter)+" ";

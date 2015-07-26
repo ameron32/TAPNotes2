@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,10 +12,13 @@ import android.widget.ImageView;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
+
 import com.jmpergar.awesometext.AwesomeTextHandler;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,20 +35,31 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     private final Context mContext;
     int lastX;
     int lastY;
+    Bible bible;
+    private HashMap<INote, String> appendedScriptures;
 
     private INotesDelegateCallbacks mCallback;
 
     private NoteDataProvider mProvider;
 
+    private ScriptureAppender appender;
+    AwesomeTextHandler noteTextHandler;
+
     @Override
     public void onBibleCreated(IBible bible) {
-
+        if (bible instanceof Bible){
+            Bible mBible = (Bible)bible;
+            this.bible = mBible;
+            appender = new ScriptureAppender(mBible, mContext);
+        }
     }
 
     public NotesRecyclerAdapter(Context context) {
         this.mContext = context;
         mProvider = new NoteDataProvider();
         setHasStableIds(true);
+        appendedScriptures = new HashMap<>();
+
     }
 
     public void addINotesDelegateCallbacks(INotesDelegateCallbacks callback) {
@@ -74,7 +89,8 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         return holder;
     }
 
-    private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
+    private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[0-9| ]+\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
+
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
@@ -85,10 +101,19 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
 
-        AwesomeTextHandler ath = new AwesomeTextHandler();
-        ath.addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
+        if (noteTextHandler ==null)
+        noteTextHandler = new AwesomeTextHandler();
+
+        noteTextHandler
+                .addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
+
             .setView(holder.notesTextView);
-        ath.setText(note.getNoteText());
+        noteTextHandler.setText(note.getNoteText());
+        String appendedText = appendedScriptures.get(note);
+        if (appendedText!=null)
+        holder.appendTextView.setText(Html.fromHtml(appendedText));
+
+
     }
 
     @Override
@@ -102,14 +127,23 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void synchronizeNotes(List<INote> allNotes) {
         LinkedList<INote> ll = new LinkedList<INote>(allNotes);
         mProvider.populateWithExistingNotes(ll);
+        for (INote note : allNotes) {
+            if (appender != null) {
+                appendedScriptures.put(note, appender.appendScriptures(note));
+            }
+        }
         notifyDataSetChanged();
 
     }
 
     @Override
     public void addNotes(List<INote> notesToAdd) {
-        for (INote note : notesToAdd)
+        for (INote note : notesToAdd) {
             mProvider.addNote(note);
+            if (appender != null) {
+                appendedScriptures.put(note, appender.appendScriptures(note));
+            }
+        }
         notifyDataSetChanged();
 
     }
@@ -119,6 +153,9 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
         for (INote note : notesToRemove) {
             mProvider.removeItem(note);
+            if (appender != null) {
+                appendedScriptures.remove(note);
+            }
             notifyDataSetChanged();
         }
 
@@ -128,6 +165,14 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     @Override
     public void replaceNotes(List<INote> notesToReplace) {
         mProvider.replaceNotes(notesToReplace);
+        if (appender!=null){
+            for(INote note:notesToReplace){
+                if (appendedScriptures.containsKey(note)){
+                    appendedScriptures.remove(note);
+                    appendedScriptures.put(note, appender.appendScriptures(note));
+                }
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -163,7 +208,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             @Override
             public boolean onLongClick(View v) {
 
-                if (v.getParent() instanceof NotesRecycler){
+                if (v.getParent() instanceof NotesRecycler) {
                     NotesRecycler nr = ((NotesRecycler) v.getParent());
                     nr.itemClicked(v);
                     popup.setVisibility(View.VISIBLE);
@@ -181,12 +226,12 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                 final int action = ev.getAction();
                 switch (action & MotionEvent.ACTION_MASK) {
                     case MotionEvent.ACTION_DOWN: {
-                        int y=0;
-                        if (v.getParent() instanceof NotesRecycler){
-                            NotesRecycler nr = (NotesRecycler)v.getParent();
-                            y=nr.indexOfChild(v)* (int)(mContext.getResources().getDimension(R.dimen.note_row_height_min));
+                        int y = 0;
+                        if (v.getParent() instanceof NotesRecycler) {
+                            NotesRecycler nr = (NotesRecycler) v.getParent();
+                            y = nr.indexOfChild(v) * (int) (mContext.getResources().getDimension(R.dimen.note_row_height_min));
                         }
-                            lastY = y-200;
+                        lastY = y - 200;
                         break;
                     }
                 }

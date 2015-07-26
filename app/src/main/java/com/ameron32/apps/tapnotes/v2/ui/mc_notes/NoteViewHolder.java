@@ -44,6 +44,9 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
     @InjectView(R.id.delete_button)
     public ImageView deleteButton;
 
+    @InjectView(R.id.appendTextView)
+    public TextView appendTextView;
+
 
     public NoteViewHolder(View itemView) {
         super(itemView);
