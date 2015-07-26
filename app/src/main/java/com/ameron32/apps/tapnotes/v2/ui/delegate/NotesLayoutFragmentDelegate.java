@@ -190,7 +190,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void onBibleCreated(IBible bible) {
-    // TODO MICAH use the bible
+    adapter.onBibleCreated(bible);
   }
 
   @Override
