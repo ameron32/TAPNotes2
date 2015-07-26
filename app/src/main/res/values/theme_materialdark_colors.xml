@@ -4,7 +4,7 @@
   <color name="materialdark_navBar_upper">#455a64</color>
   <color name="materialdark_navBar_lower">#607d8b</color>
   <color name="materialdark_listItem_dark">#111111</color>
-  <drawable name="materialdark_listItem_selected">#820f0f</drawable>
+  <drawable name="materialdark_listItem_selected">@color/DarkRedGrey</drawable>
   <drawable name="materialdark_listItem">#212121</drawable>
   <color name="materialdark_text_bright">#e1e1e1</color>
   <color name="materialdark_text_dimmed">#757575</color>
@@ -24,8 +24,8 @@
   <color name="materialdark_notes_container_background">@color/SmoothGrey</color>
   <color name="materialdark_program_container_background">@color/AlmostBlack</color>
   <color name="materialdark_program_nav_bar_background">@color/DarkBlueGrey</color>
-  <color name="materialdark_editor_container_background">@color/SilentGrey</color>
-  <color name="materialdark_scripture_picker_container_background">@color/SilentGrey</color>
+  <color name="materialdark_editor_container_background">@color/AlmostBlack</color>
+  <color name="materialdark_scripture_picker_container_background">@color/AlmostBlack</color>
   <color name="materialdark_default_background">@color/AMOLEDBlack</color>
 
 

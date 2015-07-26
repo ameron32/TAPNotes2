@@ -188,7 +188,10 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   }
 
-
+  @Override
+  public void onBibleCreated(IBible bible) {
+    // TODO MICAH use the bible
+  }
 
   @Override
   public void setImage(String imageUrl) {

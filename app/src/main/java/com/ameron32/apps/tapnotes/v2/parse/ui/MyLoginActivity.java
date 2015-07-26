@@ -37,7 +37,9 @@ import butterknife.Optional;
 /**
  * Created by klemeilleur on 6/18/2015.
  */
-public abstract class MyLoginActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public abstract class MyLoginActivity
+    extends Activity
+    implements LoaderManager.LoaderCallbacks<Cursor> {
 
   // UI references.
   @InjectView(R.id.email)
