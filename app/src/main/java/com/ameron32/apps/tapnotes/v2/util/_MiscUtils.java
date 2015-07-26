@@ -94,28 +94,36 @@ public class _MiscUtils {
     try {
 
       final Program program = Queries.Local.getProgram(programId);
-//      Talk talk = getTalk(5);
-//
-//      Note.create("1. What love Jehovah showed,", program, talk, null).save();
-//      Note.create("What blessings from him flowed,", program, talk, null).save();
-//      Note.create("When for all mankind he gave his dear Son.", program, talk, null).save();
-//      Note.create("Christ then became our bread,", program, talk, null).save();
-//      Note.create("That we might all be fed,", program, talk, null).save();
-//      Note.create("And life eternal in peace might be won.", program, talk, null).save();
-//      Note.create("2. Christ taught us ev’ry day", program, talk, null).save();
-//      Note.create("For God’s great name to pray,", program, talk, null).save();
-//      Note.create("The name Jehovah to be sanctified.", program, talk, null).save();
-//      Note.create("Pray that his Kingdom come", program, talk, null).save();
-//      Note.create("And that his will be done.", program, talk, null).save();
-//      Note.create("Pray that he daily our bread will provide.", program, talk, null).save();
-//      Note.create("3. God’s truth Christ Jesus taught", program, talk, null).save();
-//      Note.create("And tender comfort brought", program, talk, null).save();
-//      Note.create("To those who followed as his faithful sheep.", program, talk, null).save();
-//      Note.create("May seeds of Kingdom praise", program, talk, null).save();
-//      Note.create("Be sown through all our days.", program, talk, null).save();
-//      Note.create("Then satisfaction and joy we will reap.", program, talk, null).save();
+      Talk talk;
 
-
+//      talk = getTalk(120);
+//      Note.create("1. If we have listened to Christ, will we show it?", program, talk, null).save();
+//      Note.create("His teaching shines as it shows us the way.", program, talk, null).save();
+//      Note.create("It makes us happy to hear and to know it,", program, talk, null).save();
+//      Note.create("But we'll be blessed if we know and obey.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
+//      Note.create("2. Our way of life, like a house, gives protection", program, talk, null).save();
+//      Note.create("When it is built on the rock, not on sand.", program, talk, null).save();
+//      Note.create("If we apply Jesus' loving direction,", program, talk, null).save();
+//      Note.create("We'll build a life which on bedrock will stand.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
+//      Note.create("3. Just as a tree rooted deep by the waters", program, talk, null).save();
+//      Note.create("Gives of its fruit when each season arrives,", program, talk, null).save();
+//      Note.create("If we obey as God's own sons and daughters,", program, talk, null).save();
+//      Note.create("We'll all be blessed and enjoy endless lives.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
 
     } catch (ParseException e) {
       e.printStackTrace();
