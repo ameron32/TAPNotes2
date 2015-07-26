@@ -31,14 +31,15 @@ public class Queries {
   public static class Live {
 
     // CURRENT LIMIT = 10000
-    static List<Note> pinAllClientOwnedNotesFor(Program program)
+    static List<Note> pinAllClientOwnedNotesFor(Program program, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, null, currentPage);
+        // use private complex method for specific query details
+        final List<Note> moreNotes = queryClientOwnedNotesFor(program, null, date, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);

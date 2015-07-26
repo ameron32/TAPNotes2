@@ -19,6 +19,7 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 
+import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 
@@ -154,7 +155,7 @@ public class ProgramFragment extends TAPFragment
           mTalks.addAll(talks);
 
           // TODO remove fake insert
-
+//          _MiscUtils._saveSongNotes(mProgramId);
 
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();

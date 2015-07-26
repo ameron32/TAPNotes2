@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -86,6 +87,43 @@ public class _MiscUtils {
       final Note note = Note.create("spam note " + (i+1), program, talk, Commands.Local.getClientUser());
       note.save();
     }
+  }
+
+  public static void _saveSongNotes(String programId) {
+
+    try {
+
+      final Program program = Queries.Local.getProgram(programId);
+//      Talk talk = getTalk(5);
+//
+//      Note.create("1. What love Jehovah showed,", program, talk, null).save();
+//      Note.create("What blessings from him flowed,", program, talk, null).save();
+//      Note.create("When for all mankind he gave his dear Son.", program, talk, null).save();
+//      Note.create("Christ then became our bread,", program, talk, null).save();
+//      Note.create("That we might all be fed,", program, talk, null).save();
+//      Note.create("And life eternal in peace might be won.", program, talk, null).save();
+//      Note.create("2. Christ taught us ev’ry day", program, talk, null).save();
+//      Note.create("For God’s great name to pray,", program, talk, null).save();
+//      Note.create("The name Jehovah to be sanctified.", program, talk, null).save();
+//      Note.create("Pray that his Kingdom come", program, talk, null).save();
+//      Note.create("And that his will be done.", program, talk, null).save();
+//      Note.create("Pray that he daily our bread will provide.", program, talk, null).save();
+//      Note.create("3. God’s truth Christ Jesus taught", program, talk, null).save();
+//      Note.create("And tender comfort brought", program, talk, null).save();
+//      Note.create("To those who followed as his faithful sheep.", program, talk, null).save();
+//      Note.create("May seeds of Kingdom praise", program, talk, null).save();
+//      Note.create("Be sown through all our days.", program, talk, null).save();
+//      Note.create("Then satisfaction and joy we will reap.", program, talk, null).save();
+
+
+
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private static Talk getTalk(int number) throws ParseException {
+    return ParseQuery.getQuery(Talk.class).whereEqualTo(Constants.TALK_METADATA_STRING_KEY, "#" + number).getFirst();
   }
 
 

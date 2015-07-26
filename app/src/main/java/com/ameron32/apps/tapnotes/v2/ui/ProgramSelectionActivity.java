@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
@@ -191,12 +192,15 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache;
   private String mProgramId;
 
+  @Inject ParseNotesController notesController;
+
   @Override
   public void startActivity(final String programId) {
     mProgramId = programId;
     Observable<Progress> observable;
     if (Status.isConnectionToServerAvailable(getActivity())) {
-      observable = Rx.Live.pinProgramNotes(mProgramId);
+      observable = Rx.Live.pinAllProgramNotes(mProgramId);
+//      notesController.pinAllNewClientOwnedNotesFor(mProgramId);
     } else {
       observable = Rx.instantComplete();
     }

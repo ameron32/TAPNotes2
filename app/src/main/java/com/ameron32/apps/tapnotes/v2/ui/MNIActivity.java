@@ -28,7 +28,6 @@ import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
@@ -70,6 +69,7 @@ public class MNIActivity extends TAPActivity
 
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
+  private static final String EXTRA_KEY_CURRENT_TALK_ID = "EXTRA_KEY_CURRENT_TALK_ID";
 
   /**
    * @param context
@@ -133,13 +133,18 @@ public class MNIActivity extends TAPActivity
     bus.register(this);
     // setContentView() handled in super.onCreate()
     mProgramId = getProgramId(savedInstanceState);
+    mCurrentTalkId = getCurrentTalkId(savedInstanceState);
     ButterKnife.inject(this);
 
     setupDrawer();
-    commitNotesPlaceholder(); //blank
+    if (mCurrentTalkId == null) {
+      commitNotesPlaceholder(); //blank
+    } else {
+      commitNotesFragmentFromTalkId(mCurrentTalkId);
+    }
     commitProgramFragment(mProgramId);
     commitProgressFragment();
-    // commitEditorFragment when real NotesFragment is created
+    // commitEditorFragment() when real NotesFragment is created
   }
 
   @Override
@@ -210,11 +215,22 @@ public class MNIActivity extends TAPActivity
         "Did you use the static factory to create the MNIActivity intent?");
   }
 
+  private String getCurrentTalkId(final Bundle savedInstanceState) {
+    if (savedInstanceState != null) {
+      final String savedTalkId = savedInstanceState.getString(EXTRA_KEY_CURRENT_TALK_ID);
+      if (savedTalkId != null) {
+        return savedTalkId;
+      }
+    }
+    return null;
+  }
+
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     if (mProgramId != null) {
       outState.putString(EXTRA_KEY_PROGRAM_ID, mProgramId);
+      outState.putString(EXTRA_KEY_CURRENT_TALK_ID, mCurrentTalkId);
     }
   }
 
@@ -253,6 +269,19 @@ public class MNIActivity extends TAPActivity
         .replace(R.id.notes_xcontainer,
             NotesPlaceholderFragment.create(), tag)
         .commit();
+  }
+
+  private void commitNotesFragmentFromTalkId(final String talkId) {
+    try {
+      final Talk talk = Queries.Local.getTalk(talkId);
+      if (talk != null) {
+        final String talkName = talk.getTalkTitle();
+        final String imageUrl = ""; // TODO update
+        commitNotesFragment(talkId, talkName, imageUrl);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   private void commitNotesFragment(final String talkId, final String toolbarTitle, final String imageUrl) {
@@ -432,8 +461,8 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program,
-              (Talk) talk, notesController.getLastCheckedThenUpdateToNow()), DESTROY).cache();
+          cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor(program,
+              (Talk) talk), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }

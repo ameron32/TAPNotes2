@@ -35,7 +35,9 @@ public class Note
     note.setNoteText(text);
     note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
     note.put(NOTE_oTALK_OBJECT_KEY, talk);
-    note.put(NOTE_uOWNER_USER_KEY, owner);
+    if (owner != null) {
+      note.put(NOTE_uOWNER_USER_KEY, owner);
+    }
     return note;
   }
 

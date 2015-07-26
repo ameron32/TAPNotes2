@@ -58,7 +58,7 @@ public class Rx {
       }).subscribeOn(Schedulers.io());
     }
 
-    public static Observable<Progress> pinProgramNotes(final String programId) {
+    public static Observable<Progress> pinAllProgramNotes(final String programId) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
@@ -68,7 +68,7 @@ public class Rx {
             // TODO KRIS did we local the program and talks? delay network query and restrict to new only
             Queries.Live.pinAllGenericNotesFor(program);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
-            Queries.Live.pinAllClientOwnedNotesFor(program);
+            Queries.Live.pinAllClientOwnedNotesFor(program, null);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Done!"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -80,13 +80,30 @@ public class Rx {
       }).subscribeOn(Schedulers.io());
     }
 
-    public static Observable<Progress> pinAllClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
+    public static Observable<Progress> pinRecentClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           subscriber.onNext(new Progress(0, 1, false));
           try {
             Queries.Live.pinAllClientOwnedNotesFor(program, talk, date);
+            subscriber.onNext(new Progress(1, 1, false));
+            subscriber.onCompleted();
+          } catch (ParseException e) {
+            subscriber.onNext(new Progress(0, 1, true));
+            subscriber.onCompleted();
+          }
+        }
+      }).subscribeOn(Schedulers.io());
+    }
+
+    public static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
+      return Observable.create(new Observable.OnSubscribe<Progress>() {
+        @Override
+        public void call(Subscriber<? super Progress> subscriber) {
+          subscriber.onNext(new Progress(0, 1, false));
+          try {
+            Queries.Live.pinAllClientOwnedNotesFor(program, date);
             subscriber.onNext(new Progress(1, 1, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
