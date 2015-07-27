@@ -160,8 +160,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     // onSubmitClicked(text, type, noteId) TO NOTIFY APP TO MODIFY
     // EXISTING NOTE.
     // TODO: MICAH delegate method
-    noteText.setText(newEditorText);
-    noteText.setTag(note);
+      awesomeTextViewHandler.setText(note.getNoteText());
+      noteText.setTag(note);
 
 
   }
@@ -173,8 +173,10 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       public void onClick(View v) {
 
         if (noteText.getTag() != null) {
+          sanitizer.testForScriptures(bible, noteText.getText().toString());
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote) noteText.getTag());
         } else {
+          sanitizer.testForScriptures(bible, noteText.getText().toString());
           mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
         }
 
