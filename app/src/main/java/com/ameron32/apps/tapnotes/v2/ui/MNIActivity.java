@@ -436,6 +436,11 @@ public class MNIActivity extends TAPActivity
     mSCallbacks.scripturePrepared(scripture);
   }
 
+  @Override
+  public void scriptureCancelled() {
+    mSCallbacks.scriptureCancelled();
+  }
+
   private ProgramFragment.Callbacks mPCallbacks = new ProgramFragment.Callbacks() {
 
     @Override
@@ -554,12 +559,20 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void scripturePrepared(IScripture scripture) {
-      // TODO scripture picker generated scripture
-      final String tag = TAG_SCRIPTURE_PICKER;
-      removeFragment(tag);
+      closeScripturePicker();
 
       // TODO scripture to editor
       getEditorFragment().provideScriptureToEditor(scripture);
+    }
+
+    @Override
+    public void scriptureCancelled() {
+      closeScripturePicker();
+    }
+
+    private void closeScripturePicker() {
+      final String tag = TAG_SCRIPTURE_PICKER;
+      removeFragment(tag);
     }
   };
 }

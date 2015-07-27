@@ -45,9 +45,9 @@ public class ScripturePickerAdapter extends PagerAdapter
   private List<Integer> verses = new ArrayList<>(1);
   private Scripture scripture;
 
-  private OnPageNextClickedListener mListener;
+  private OnButtonClickedListener mListener;
 
-  public void setOnPageNextClickedListener(OnPageNextClickedListener listener) {
+  public void setOnPageNextClickedListener(OnButtonClickedListener listener) {
     this.mListener = listener;
   }
 
@@ -112,6 +112,8 @@ public class ScripturePickerAdapter extends PagerAdapter
 
     @InjectView(R.id.button_forward)
     Button buttonNext;
+    @InjectView(R.id.button_cancel)
+    Button buttonCancel;
     @InjectView(R.id.recycler_view)
     RecyclerView gridView;
 
@@ -230,8 +232,9 @@ public class ScripturePickerAdapter extends PagerAdapter
 
 
 
-  public interface OnPageNextClickedListener {
+  public interface OnButtonClickedListener {
 
     void onPageNextClicked(int page, @Nullable IScripture scripture);
+    void onCancelClicked();
   }
 }

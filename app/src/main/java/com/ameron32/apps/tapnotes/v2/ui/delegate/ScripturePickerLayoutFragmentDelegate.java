@@ -22,7 +22,7 @@ import butterknife.InjectView;
 public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
     implements
       IScripturePickerDelegate,
-      ScripturePickerAdapter.OnPageNextClickedListener {
+    ScripturePickerAdapter.OnButtonClickedListener {
 
   public static ScripturePickerLayoutFragmentDelegate create(Fragment fragment) {
     final ScripturePickerLayoutFragmentDelegate delegate = new ScripturePickerLayoutFragmentDelegate();
@@ -38,7 +38,7 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   private static final IScripturePickerDelegateCallbacks stubCallbacks
       = new IScripturePickerDelegate.IScripturePickerDelegateCallbacks() {
     @Override
-    public void scriptureComplete(IScripture scripture) {
+    public void scripturePickerDone(IScripture scripture) {
       // stub
     }
   };
@@ -96,12 +96,17 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
     if (page == SCREEN_VERSES) {
       if (scripture != null) {
         Log.d("onPageNextClicked()", scripture.getBook() + " " + scripture.getChapter() + " " + stringFrom(scripture.getVerses()));
-        mCallbacks.scriptureComplete(scripture);
+        mCallbacks.scripturePickerDone(scripture);
       }
     } else {
       mPager.setCurrentItem(page + 1);
       mAdapter.focusPage(page + 1);
     }
+  }
+
+  @Override
+  public void onCancelClicked() {
+    mCallbacks.scripturePickerDone(null);
   }
 
   private String stringFrom(int[] verses) {

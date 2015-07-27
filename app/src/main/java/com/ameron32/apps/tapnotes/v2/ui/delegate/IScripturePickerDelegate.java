@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
+import android.support.annotation.Nullable;
+
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 
@@ -14,6 +16,6 @@ public interface IScripturePickerDelegate {
 
   public interface IScripturePickerDelegateCallbacks {
 
-    void scriptureComplete(IScripture scripture);
+    void scripturePickerDone(@Nullable IScripture scripture);
   }
 }
