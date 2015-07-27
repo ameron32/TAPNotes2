@@ -16,6 +16,8 @@ import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -101,11 +103,11 @@ public class ScripturePickerAdapter extends PagerAdapter
   }
 
   private int[] fromVerses() {
-    final int[] vs = new int[verses.size()];
-    for (int i = 0; i < vs.length; i++) {
-      vs[i] = verses.get(i);
-    }
-    return vs;
+    Collections.sort(verses);
+    final int[] ret = new int[verses.size()];
+    for(int i = 0; i < ret.length; i++)
+      ret[i] = verses.get(i);
+    return ret;
   }
 
   public static class PageHolder {

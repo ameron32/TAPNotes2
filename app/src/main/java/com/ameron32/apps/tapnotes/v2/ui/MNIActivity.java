@@ -407,7 +407,7 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void editNote(String editorText, INote.NoteType type, Note note) {
+  public void editNote(String editorText, INote.NoteType type, INote note) {
     mECallbacks.editNote(editorText, type, note);
   }
 
@@ -531,14 +531,17 @@ public class MNIActivity extends TAPActivity
     }
 
     @Override
-    public void editNote(String editorText, INote.NoteType type, Note note) {
-      if (type != note.getNoteType()) {
-        note.changeNoteType(type);
-      }
-      note.setNoteText(editorText);
+    public void editNote(String editorText, INote.NoteType type, INote iNote) {
+      if (iNote instanceof Note) {
+        Note note = (Note) iNote;
+        if (type != note.getNoteType()) {
+          note.changeNoteType(type);
+        }
+        note.setNoteText(editorText);
 
-      Commands.Local.saveEventuallyNote(note);
-      getNotesFragment().notesChanged(listify(note));
+        Commands.Local.saveEventuallyNote(note);
+        getNotesFragment().notesChanged(listify(note));
+      }
     }
 
     @Override

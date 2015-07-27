@@ -17,7 +17,7 @@
     <item>Speaker</item>
     <item>Attendance</item>
     <item>Baptism</item>
-    </string-array>
+  </string-array>
 
   <string name="holdertag">holder</string>
   <string name="notetag">note</string>

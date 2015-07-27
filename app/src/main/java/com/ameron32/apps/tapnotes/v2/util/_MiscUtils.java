@@ -89,6 +89,10 @@ public class _MiscUtils {
     }
   }
 
+  public static void _saveProgramScriptures(Program program) {
+
+  }
+
   public static void _saveSongNotes(String programId) {
 
     try {

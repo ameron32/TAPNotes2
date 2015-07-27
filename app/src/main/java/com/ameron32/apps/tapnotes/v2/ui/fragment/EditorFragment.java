@@ -205,7 +205,7 @@ public class EditorFragment extends TAPFragment
   public interface Callbacks {
 
     void createNote(String editorText, INote.NoteType type);
-    void editNote(String editorText, INote.NoteType type, Note note);
+    void editNote(String editorText, INote.NoteType type, INote note);
     void openScripturePicker();
   }
 }

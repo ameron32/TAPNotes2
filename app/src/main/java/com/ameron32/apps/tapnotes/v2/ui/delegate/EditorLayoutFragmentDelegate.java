@@ -125,7 +125,6 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     tagBuilder.append("<").append(getNiceName(scripture)).append(SCRIPTURE_END_TAG);
 
     awesomeTextViewHandler.setText(noteText.getText()+tagBuilder.toString());
-
   }
 
   @Override
@@ -146,8 +145,8 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       mCallbacks = ((IEditorDelegate.IEditorDelegateCallbacks) getFragment());
     } else {
       throw new IllegalStateException("host fragment " +
-              "should implement " + IEditorDelegate.IEditorDelegateCallbacks.class.getSimpleName() +
-              "to support callback methods.");
+          "should implement " + IEditorDelegate.IEditorDelegateCallbacks.class.getSimpleName() +
+          "to support callback methods.");
     }
   }
 

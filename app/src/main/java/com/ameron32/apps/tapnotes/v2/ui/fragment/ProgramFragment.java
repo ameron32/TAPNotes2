@@ -155,7 +155,7 @@ public class ProgramFragment extends TAPFragment
           mTalks.addAll(talks);
 
           // TODO remove fake insert
-//          _MiscUtils._saveSongNotes(mProgramId);
+//          _MiscUtils._saveProgamScriptures(program);
 
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();
