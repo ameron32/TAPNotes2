@@ -23,6 +23,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
@@ -110,8 +111,20 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void onInjectScriptureFromPicker(IScripture scripture) {
-    // TODO MICAH complete delegate interface method
+    int book = scripture.getBook();
+    int chapter = scripture.getChapter();
+    int[]verses = scripture.getVerses();
 
+    String startTag = "@"+SCRIPTURE_START_TAG;
+    startTag = startTag.replace("I<", String.valueOf(book) + " " + String.valueOf(chapter) + " ");
+    StringBuilder tagBuilder = new StringBuilder(startTag);
+
+    for (int i=0; i<verses.length; i++){
+      tagBuilder.append(String.valueOf(verses[i])+" ");
+    }
+    tagBuilder.append("<").append(getNiceName(scripture)).append(SCRIPTURE_END_TAG);
+
+    awesomeTextViewHandler.setText(noteText.getText()+tagBuilder.toString());
 
   }
 
@@ -199,6 +212,71 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     }
   }
 
+  private String getNiceName(IScripture s){
+
+    String name = org.apache.commons.lang3.text.WordUtils.capitalizeFully(getContext().getResources().getStringArray(R.array.bible_books)[s.getBook()]);
+    String ch = String.valueOf(s.getChapter()+1);
+    StringBuilder versePart = new StringBuilder();
+
+    int[] vArray = s.getVerses();
+    int size = s.getVerses().length;
+
+    if (size==1){
+      versePart.append(s.getVerses()[0]+1);
+    }else {
+
+      boolean inRange = false;
+      boolean startRange = false;
+
+      for (int i=0; i<size; i++){
+        //Are we in a range?
+        if (inRange){
+          //If we are at the end of the array, go ahead and end it.
+          if (i==size-1){
+            versePart.append((vArray[i]+1));
+            inRange = false;
+          }else{ // If we are still in the middle of the array, check and see if we are now at the end of our range.  If so, end it.
+            if (!threeContiguous(vArray[i-1], vArray[i], vArray[i+1])){
+              versePart.append((vArray[i]+1)+ ", ");
+              inRange = false;
+            }
+          }
+        }
+        else //If not, should we start one?
+        {
+          if (i<size-2){ //Are we far enough from the end of the array that a new range might be possible? If so, we check for one.
+            //Go ahead and check if we should start a new range.
+            if (threeContiguous(vArray[i], vArray[i+1], vArray[i+2])) {
+            versePart.append((vArray[i]+1)+"-");
+              inRange = true;
+            }else{ //If we are not at the start of a new range, just append the single verse.
+              versePart.append((vArray[i]+1)+", ");
+            }
+          }else ////If we are too close to the end of the array to worry about starting a new range, just append single verses as normal.
+          {
+            //If we are on the last one, lets just append the verse.  Otherwise, add a trailing comma.
+            if (i == size-1){
+              versePart.append((vArray[i]+1));
+            }else{
+              versePart.append((vArray[i]+1)+", " );
+            }
+
+          }
+        }
+
+      }
+
+
+
+      }
+
+
+    return name+" "+ch+":"+versePart.toString();
+  }
+
+  private boolean threeContiguous(int x, int y, int z){
+    return ((y==x+1) && (z==y+1));
+  }
 
   public class ScriptureWatcher implements TextWatcher, ISanitizer.ISanitizerCallbacks  {
 
@@ -306,5 +384,4 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
       }
     }
   }
-
 }
