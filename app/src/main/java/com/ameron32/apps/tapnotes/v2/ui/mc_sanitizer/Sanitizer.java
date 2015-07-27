@@ -77,7 +77,12 @@ public class Sanitizer implements ISanitizer{
 
         namePart = sub.substring(0, chStart-1);
         chapterPart = sub.substring(chStart, chEnd);
-        versePart = sub.substring(chEnd, sub.length()-1);
+
+        if ( digits.contains(sub.substring(sub.length()-1))){
+           sub = sub+"  ";
+            s = s+ "  ";
+        }
+            versePart = sub.substring(chEnd, sub.length() - 1);
 
         book = getBookName();
         if (book == null){
