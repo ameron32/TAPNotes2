@@ -39,4 +39,7 @@ public class Constants {
   public static final String NOTE_UPDATEDAT_DATE_KEY = "updatedAt";
 
   public static final String CONFIG_MINIMUM_VERSION = "minimumVersion";
+
+  public static final String ROLE_NAME_KEY = "name";
+  public static final String ROLE_ADMINISTRATOR = "administrator";
 }

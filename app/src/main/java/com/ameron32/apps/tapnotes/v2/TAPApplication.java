@@ -68,7 +68,7 @@ public class TAPApplication extends Application {
     // Register Custom ParseObjects
     ParseObject.registerSubclass(Program.class);
     ParseObject.registerSubclass(Talk.class);
-    ParseObject.registerSubclass(Note.class);
+    ParseObject.registerSubclass(Note.class);//
 
     // Enable Local Data Store
     Parse.enableLocalDatastore(app);

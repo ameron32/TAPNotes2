@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseACL;
@@ -37,8 +38,22 @@ public class Note
     note.put(NOTE_oTALK_OBJECT_KEY, talk);
     if (owner != null) {
       note.put(NOTE_uOWNER_USER_KEY, owner);
+      note.setACL(getClientNoteACL(owner));
+    } else {
+      note.setACL(getClientNoteACL(null));
     }
     return note;
+  }
+
+  public static ParseACL getClientNoteACL(ParseUser user) {
+    final ParseACL acl = new ParseACL();
+    acl.setPublicWriteAccess(false);
+    if (user != null) {
+      acl.setWriteAccess(user, true);
+    }
+    acl.setRoleWriteAccess(Constants.ROLE_ADMINISTRATOR, true);
+    acl.setPublicReadAccess(true);
+    return acl;
   }
 
   @Nullable

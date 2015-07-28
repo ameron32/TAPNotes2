@@ -20,5 +20,6 @@
   <dimen name="scripture_picker_box_padding">4dp</dimen>
 
   <dimen name="placeholder_text_padding">8dp</dimen>
+  <dimen name="frame_border_size">1dp</dimen>
 
 </resources>
