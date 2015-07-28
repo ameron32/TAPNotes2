@@ -31,6 +31,8 @@
   <color name="ultrablack_scripture_picker_container_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_default_background">@color/AlmostBlack</color>
 
+  <color name="ultrablack_fragment_frame_border">@color/AMOLEDWhite</color>
+
 
 
   <style name="listItem_ultrablack">

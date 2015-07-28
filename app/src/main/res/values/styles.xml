@@ -47,6 +47,7 @@
     <item name="ic_bible_icon">@drawable/bible</item>
 
     <item name="span_scripture_background">@drawable/teal_span_scripture_background</item>
+    <item name="fragment_frame_border">@color/teal_fragment_frame_border</item>
   </style>
 
 
@@ -91,6 +92,7 @@
     <item name="ic_bible_icon">@drawable/bible</item>
 
     <item name="span_scripture_background">@drawable/ultrablack_span_scripture_background</item>
+    <item name="fragment_frame_border">@color/ultrablack_fragment_frame_border</item>
   </style>
 
   <style name="MaterialDarkTheme" parent="AppDarkTheme">
@@ -132,6 +134,7 @@
     <item name="ic_bible_icon">@drawable/bible</item>
 
     <item name="span_scripture_background">@drawable/materialdark_span_scripture_background</item>
+    <item name="fragment_frame_border">@color/materialdark_fragment_frame_border</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

@@ -27,6 +27,8 @@
   <color name="teal_scripture_picker_container_background">@color/OffWhite</color>
   <color name="teal_default_background">@color/White</color>
 
+  <color name="teal_fragment_frame_border">@color/Black</color>
+
 
   <style name="listItem_teal">
     <item name="android:background">@drawable/listitem_selector_teal</item>
