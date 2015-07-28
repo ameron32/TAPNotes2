@@ -1,27 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/pane_animating_layout"
-    android:layout_above="@+id/editor_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  android:id="@+id/pane_animating_layout"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:layout_above="@+id/editor_container">
 
   <FrameLayout
+    android:id="@+id/left_pane"
+    android:layout_width="@dimen/program_bar_width"
+    android:layout_height="match_parent"
+    android:background="?fragment_frame_border">
+
+    <FrameLayout
+      android:layout_margin="2dp"
       android:id="@+id/program_container"
-      android:layout_width="@dimen/program_bar_width"
+      android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:background="?program_container_background">
 
-    <!-- COMMIT FRAGMENT -->
+      <!-- COMMIT FRAGMENT -->
 
+    </FrameLayout>
   </FrameLayout>
 
   <FrameLayout
+    android:id="@+id/main_pane"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?fragment_frame_border">
+
+    <FrameLayout
+      android:layout_margin="2dp"
       android:id="@+id/notes_xcontainer"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-    <!-- COMMIT FRAGMENT -->
+      <!-- COMMIT FRAGMENT -->
 
+    </FrameLayout>
   </FrameLayout>
 </com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout>

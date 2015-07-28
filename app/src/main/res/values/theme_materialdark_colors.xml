@@ -28,6 +28,8 @@
   <color name="materialdark_scripture_picker_container_background">@color/AlmostBlack</color>
   <color name="materialdark_default_background">@color/AMOLEDBlack</color>
 
+  <color name="materialdark_fragment_frame_border">@color/Black</color>
+
 
 
   <style name="listItem_materialdark">
