@@ -38,4 +38,5 @@ public class Constants {
   public static final String NOTE_CREATEDAT_DATE_KEY = "createdAt";
   public static final String NOTE_UPDATEDAT_DATE_KEY = "updatedAt";
 
+  public static final String CONFIG_MINIMUM_VERSION = "minimumVersion";
 }

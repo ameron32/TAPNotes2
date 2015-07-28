@@ -25,6 +25,8 @@ import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.parse.Parse;
+import com.parse.ParseConfig;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

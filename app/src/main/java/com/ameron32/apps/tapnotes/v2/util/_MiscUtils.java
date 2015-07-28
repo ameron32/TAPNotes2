@@ -12,10 +12,15 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 
 import org.eclipse.mat.parser.index.IndexManager;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -129,8 +134,49 @@ public class _MiscUtils {
 //      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
 //      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
 
+//      ParseACL roleAdminACL = new ParseACL();
+//      roleAdminACL.setPublicReadAccess(true);
+//      roleAdminACL.setPublicWriteAccess(true);
+//      ParseRole roleAdmin = new ParseRole("administrator", roleAdminACL);
+//      roleAdmin.save();
+//
+//      final List<ParseRole> parseRoles = ParseRole.getQuery().whereEqualTo("name", "administrator").find();
+//      ParseRole roleAdmin = parseRoles.get(0);
+//      roleAdmin.getUsers().add(Commands.Local.getClientUser());
+//      roleAdmin.save();
+
+//      _loop(roleAdmin);
+
     } catch (ParseException e) {
       e.printStackTrace();
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+    }
+  }
+
+  private static void _loop(ParseRole roleAdmin) throws ParseException, InterruptedException {
+    final List<Note> notes = ParseQuery.getQuery(Note.class)
+        .whereDoesNotExist(Constants.NOTE_uOWNER_USER_KEY)
+        .whereLessThan(Constants.NOTE_UPDATEDAT_DATE_KEY, DateTime.parse("20150727", DateTimeFormat.forPattern("yyyyMMdd")).toDate())
+        .find();
+    ParseACL acl = new ParseACL();
+    acl.setPublicReadAccess(true);
+    acl.setPublicWriteAccess(false);
+    acl.setRoleWriteAccess(roleAdmin, true);
+    int i = 0;
+    String text;
+    for (Note note : notes) {
+      text = note.getString(Constants.NOTE_TEXT_STRING_KEY);
+      Log.d("_updateNote", note.getId() + ": " + ((text.length() > 14) ? text.substring(0, 14) : text));
+      note.setACL(acl);
+      note.save();
+      if (i % 100 == 0) {
+        Thread.sleep(1000);
+      } else if (i % 30 == 0) {
+        Thread.sleep(100);
+      }
+
+      i++;
     }
   }
 
