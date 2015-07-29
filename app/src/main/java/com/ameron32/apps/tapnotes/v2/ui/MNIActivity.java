@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
