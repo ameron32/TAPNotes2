@@ -31,7 +31,7 @@
 
     <EditText
       tools:ignore="MissingPrefix"
-      fontPath="fonts/LiberationSans-Regular.ttf"
+      fontPath="@string/font_sans_regular_liberation"
       android:layout_toLeftOf="@+id/button_submit_note"
       android:layout_toRightOf="@+id/spinner_note_type"
       android:layout_toStartOf="@+id/button_submit_note"

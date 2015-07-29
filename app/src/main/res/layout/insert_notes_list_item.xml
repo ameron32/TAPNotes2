@@ -36,9 +36,10 @@
       android:layout_centerInParent="true"
       tools:visibility="gone"/>
 
+    <!--fontPath="fonts/LiberationSerif-Regular.ttf"-->
     <TextView
       android:id="@+id/appendTextView"
-      fontPath="fonts/LiberationSerif-Regular.ttf"
+      fontPath="@string/font_serif_italic_liberation"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"

@@ -28,6 +28,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
  */
 public class TAPApplication extends Application {
 
+
+
   @Override
   public void onCreate() {
     super.onCreate();
@@ -57,9 +59,14 @@ public class TAPApplication extends Application {
   private void initializeCalligraphy() {
     CalligraphyConfig.initDefault(
         new CalligraphyConfig.Builder()
-            .setDefaultFontPath("fonts/LiberationSans-Regular.ttf")
+            .setDefaultFontPath(getDefaultFontPath())
             .setFontAttrId(R.attr.fontPath)
             .build());
+  }
+
+  private String getDefaultFontPath() {
+    // "fonts/LiberationSans-Regular.ttf"
+    return getApplicationContext().getResources().getString(R.string.font_sans_regular_liberation);
   }
 
   public void initializeParse(Application app) {

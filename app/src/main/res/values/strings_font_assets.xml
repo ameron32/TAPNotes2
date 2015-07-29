@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="font_sans_regular_liberation">fonts/LiberationSans-Regular.ttf</string>
+  <string name="font_serif_italic_liberation">fonts/LiberationSerif-Italic.ttf</string>
 </resources>
