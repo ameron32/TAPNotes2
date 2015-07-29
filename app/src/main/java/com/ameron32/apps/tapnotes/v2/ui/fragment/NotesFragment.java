@@ -363,29 +363,47 @@ public class NotesFragment extends TAPFragment
 
   @Override
   public void onUserClickBoldNote(INote note) {
-    if (note instanceof INoteEditable) {
-      ((INoteEditable) note).toggleBoldNote();
+    if (isUserPermitted(note)) {
+      if (note instanceof INoteEditable) {
+        ((INoteEditable) note).toggleBoldNote();
+      }
     }
   }
 
   @Override
   public void onUserClickImportantNote(INote note) {
-    if (note instanceof INoteEditable) {
-      ((INoteEditable) note).toggleImportantNote();
+    if (isUserPermitted(note)) {
+      if (note instanceof INoteEditable) {
+        ((INoteEditable) note).toggleImportantNote();
+      }
     }
   }
 
   @Override
   public void onUserClickEditNote(INote note) {
-    mCallbacks.dispatchEditorOn(note);
+    if (isUserPermitted(note)) {
+      mCallbacks.dispatchEditorOn(note);
+    }
   }
 
   @Override
   public void onUserClickDeleteNote(INote note) {
-    mNotesDelegate.removeNotes(listify(note));
-    if (note instanceof Note) {
-      Commands.Local.deleteEventuallyNote((Note) note);
+    if (isUserPermitted(note)) {
+      mNotesDelegate.removeNotes(listify(note));
+      if (note instanceof Note) {
+        Commands.Local.deleteEventuallyNote((Note) note);
+      }
     }
+  }
+
+  private boolean isUserPermitted(INote note) {
+    if (note instanceof INoteEditable) {
+      INoteEditable eNote = (INoteEditable) note;
+      if (eNote.isNoteOwnedByClient() && eNote.isNoteEditableByClient()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @Override

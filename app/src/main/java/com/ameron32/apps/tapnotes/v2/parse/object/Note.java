@@ -200,6 +200,25 @@ public class Note
 
   @Override
   public boolean isNoteOwnedByClient() {
+    final ParseUser owner = this.getOwner();
+    if (owner == null) {
+      return false;
+    }
+
+    return (Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
+  }
+
+  private ParseUser getOwner() {
+    Object o = this.get(NOTE_uOWNER_USER_KEY);
+    if (o != null) {
+      ParseUser user = (ParseUser) o;
+      return user;
+    }
+    return null;
+  }
+
+  @Override
+  public boolean isNoteEditableByClient() {
     final ParseACL acl = getACL();
     return acl.getWriteAccess(Commands.Local.getClientUser());
   }

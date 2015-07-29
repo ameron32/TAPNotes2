@@ -28,6 +28,7 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -384,6 +385,7 @@ public class MNIActivity extends TAPActivity
                 return true;
               }
             });
+    mUsernameTextView.setText(Commands.Local.getClientUser().getUsername());
   }
 
   private void postLiveUpdateEvent(int requestCode) {

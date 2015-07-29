@@ -48,7 +48,7 @@ public class Queries {
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
-      Note.pinAll(notes);
+      Note.pinAll(Constants.NOTE_PIN_NAME, notes);
       return notes;
     }
 
@@ -68,7 +68,7 @@ public class Queries {
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
-      Note.pinAll(notes);
+      Note.pinAll(Constants.NOTE_PIN_NAME, notes);
       return notes;
     }
 
@@ -88,7 +88,7 @@ public class Queries {
             currentPage + " notesPinned: " + notesPinned + ((date == null) ? "" : " @ " + date.getTime()));
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
-      Note.pinAll(notes);
+      Note.pinAll(Constants.NOTE_PIN_NAME, notes);
       return notes;
     }
 
@@ -108,10 +108,11 @@ public class Queries {
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
-      Note.pinAll(notes);
+      Note.pinAll(Constants.NOTE_PIN_NAME, notes);
       return notes;
     }
 
+    // PRIVATE UNIFIED USAGE METHOD
     private static List<Note> queryClientOwnedNotesFor(Program program, Talk talk, Date date, int page)
         throws ParseException {
       ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
@@ -151,7 +152,7 @@ public class Queries {
           .whereEqualTo(Constants.TALK_oPROGRAM_OBJECT_KEY, program)
           .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED)
           .find();
-      Talk.pinAll(talks);
+      Talk.pinAll(Constants.TALK_PIN_NAME, talks);
       return talks;
     }
 
@@ -160,7 +161,7 @@ public class Queries {
       Log.d(TAG, "pinProgram " + programId);
       final Program program = ParseQuery.getQuery(Program.class)
           .get(programId);
-      program.pin();
+      program.pin(Constants.PROGRAM_PIN_NAME);
       return program;
     }
   }
@@ -168,6 +169,18 @@ public class Queries {
 
 
   public static class Local {
+
+    public static void unpinNotes() throws ParseException {
+      Note.unpinAll(Constants.NOTE_PIN_NAME);
+    }
+
+    public static void unpinTalks() throws ParseException {
+      Talk.unpinAll(Constants.TALK_PIN_NAME);
+    }
+
+    public static void unpinPrograms() throws ParseException {
+      Program.unpinAll(Constants.PROGRAM_PIN_NAME);
+    }
 
     public static List<Note> findAllClientOwnedNotes()
         throws ParseException {

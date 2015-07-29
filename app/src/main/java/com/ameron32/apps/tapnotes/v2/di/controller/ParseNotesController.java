@@ -3,6 +3,7 @@ package com.ameron32.apps.tapnotes.v2.di.controller;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.Rx;
+import com.ameron32.apps.tapnotes.v2.parse.Status;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.ParseException;

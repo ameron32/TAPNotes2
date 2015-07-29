@@ -73,52 +73,5 @@ public class ApplicationModule {
 //    return (LocationManager) mApplication.getSystemService(LOCATION_SERVICE);
 //  }
 
-  @Provides
-  @Singleton
-  @ForApplication
-  LayoutInflater provideLayoutInflater() {
-    return (LayoutInflater) mApplication.getSystemService(LAYOUT_INFLATER_SERVICE);
-  }
 
-  @Provides
-  @Singleton
-  Bus provideOttoEventBusOnUIThread() {
-    return new Bus(ThreadEnforcer.MAIN);
-  }
-
-  @Provides
-  @Singleton
-  ApplicationThemeController provideThemeController() {
-    return new ApplicationThemeController(mApplication);
-  }
-
-
-
-  @Provides @Singleton
-  ParseNotesController provideNotesController() {
-    return new ParseNotesController();
-  }
-
-  @Provides @Singleton
-  Bible provideBible() {
-    try {
-      // TODO consider caching/serializing Bible
-      return new BibleBuilder().getBible(mApplication);
-    } catch (BibleResourceNotFoundException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
-
-  @Provides @Singleton
-  Sanitizer provideSanitizer() {
-    // TODO update to Bible instead of Context as soon as Sanitizer is repaired
-    return new Sanitizer(mApplication);
-  }
-
-  @Provides @Singleton
-  ScriptureFinder provideScriptureFinder() {
-    // TODO update parameters if needed
-    return new ScriptureFinder();
-  }
 }

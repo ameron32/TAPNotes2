@@ -12,4 +12,5 @@ public interface INoteEditable extends INote {
   void setNoteText(String noteText);
   void changeNoteType(NoteType newType);
   boolean isNoteOwnedByClient();
+  boolean isNoteEditableByClient();
 }

@@ -12,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -38,6 +39,8 @@ import butterknife.InjectView;
 public class EditorLayoutFragmentDelegate extends FragmentDelegate
     implements IEditorDelegate
 {
+
+  private static final String TAG = EditorLayoutFragmentDelegate.class.getSimpleName();
 
   public static EditorLayoutFragmentDelegate create(Fragment fragment) {
     final EditorLayoutFragmentDelegate delegate = new EditorLayoutFragmentDelegate();
@@ -74,6 +77,38 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   EditText noteText;
 
   private ScriptureWatcher watcher;
+  private final View.OnKeyListener keyListener = new View.OnKeyListener() {
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+      if (event != null && v.getId() == R.id.edittext_note_editor) {
+        // if shift key is down, then we want to insert the '\n' char in the
+        // TextView;
+        // otherwise, the default action is to send the message.
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+          Log.d(TAG, "keyCode is " + keyCode);
+          if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            if (!event.isShiftPressed()) {
+              performSubmitClick();
+              return true;
+            }
+          }
+          if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+            if (event.isShiftPressed()) {
+              // TODO shift RIGHT pressed
+              return true;
+            }
+          }
+          if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+            if (event.isShiftPressed()) {
+              // TODO shift LEFT pressed
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+  };
   private ISanitizer sanitizer;
   private IBible bible;
 
@@ -81,7 +116,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[0-9| ]+\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
   private static final String SCRIPTURE_START_TAG = "<<!<I<";
   private static final String SCRIPTURE_END_TAG = ">!>>";
-  AwesomeTextHandler awesomeTextViewHandler;
+  private AwesomeTextHandler awesomeTextViewHandler;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -107,6 +142,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     watcher = new ScriptureWatcher(sanitizer);
     watcher.setBible(bible);
     noteText.addTextChangedListener(watcher);
+    noteText.setOnKeyListener(keyListener);
   }
 
   @Override
@@ -124,13 +160,13 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     }
     tagBuilder.append("<").append(getNiceName(scripture)).append(SCRIPTURE_END_TAG);
 
-    awesomeTextViewHandler.setText(noteText.getText()+tagBuilder.toString());
+    awesomeTextViewHandler.setText(noteText.getText() + tagBuilder.toString());
   }
 
   @Override
   public void onBibleCreated(IBible bible) {
-      this.bible = bible;
-    }
+    this.bible = bible;
+  }
 
 
   @Override
@@ -170,21 +206,22 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     submitButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-
-        if (noteText.getTag() != null) {
-          sanitizer.testForScriptures(bible, noteText.getText().toString());
-          mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote) noteText.getTag());
-        } else {
-          sanitizer.testForScriptures(bible, noteText.getText().toString());
-          mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
-        }
-
-        noteText.setText("");
-        noteText.setTag(null);
-
-
+        performSubmitClick();
       }
     });
+  }
+
+  private void performSubmitClick() {
+    if (noteText.getTag() != null) {
+      sanitizer.testForScriptures(bible, noteText.getText().toString());
+      mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), (INote) noteText.getTag());
+    } else {
+      sanitizer.testForScriptures(bible, noteText.getText().toString());
+      mCallbacks.onSubmitClicked(noteText.getText().toString(), getNoteType(), null);
+    }
+
+    noteText.setText("");
+    noteText.setTag(null);
   }
 
   private void setupSpinner() {

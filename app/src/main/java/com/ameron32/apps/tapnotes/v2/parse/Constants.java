@@ -43,10 +43,13 @@ public class Constants {
   public static final String ROLE_NAME_KEY = "name";
   public static final String ROLE_ADMINISTRATOR = "administrator";
 
+  public static final String NOTE_PIN_NAME = "note";
+  public static final String TALK_PIN_NAME = "talk";
+  public static final String PROGRAM_PIN_NAME = "program";
+
+
   // NOT PARSE
   public static final String ACTIVITY_JW_LIBRARY = "org.jw.jwlibrary.mobile.MainActivity";
   public static final String ACTIVITY_JW_LANGUAGE = "org.jw.jwlanguage.activities.MainActivity";
   public static final String LINK_WATCHTOWER_ONLINE_LIBARY = "http://wol.jw.org";
-
-
 }

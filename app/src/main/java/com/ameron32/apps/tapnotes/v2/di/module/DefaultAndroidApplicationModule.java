@@ -41,13 +41,25 @@ import android.os.Vibrator;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
+import android.view.LayoutInflater;
 
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
+import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
+import com.ameron32.apps.tapnotes.v2.scripture.Bible;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
+import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
+import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.squareup.otto.Bus;
+import com.squareup.otto.ThreadEnforcer;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * Default application module which provides standard android classes.
@@ -223,6 +235,57 @@ public class DefaultAndroidApplicationModule {
   @Singleton
   WifiManager provideWifiManager(final Application application) {
     return getSystemService(application, Context.WIFI_SERVICE);
+  }
+
+  //
+
+  @Provides
+  @Singleton
+  @ForApplication
+  LayoutInflater provideLayoutInflater() {
+    return (LayoutInflater) mApplication.getSystemService(LAYOUT_INFLATER_SERVICE);
+  }
+
+  @Provides
+  @Singleton
+  Bus provideOttoEventBusOnUIThread() {
+    return new Bus(ThreadEnforcer.MAIN);
+  }
+
+  @Provides
+  @Singleton
+  ApplicationThemeController provideThemeController() {
+    return new ApplicationThemeController(mApplication);
+  }
+
+  //
+
+  @Provides @Singleton
+  ParseNotesController provideNotesController() {
+    return new ParseNotesController();
+  }
+
+  @Provides @Singleton
+  Bible provideBible(final Application application) {
+    try {
+      // TODO consider caching/serializing Bible
+      return new BibleBuilder(application).getBible();
+    } catch (BibleResourceNotFoundException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  @Provides @Singleton
+  Sanitizer provideSanitizer() {
+    // TODO update to Bible instead of Context as soon as Sanitizer is repaired
+    return new Sanitizer(mApplication);
+  }
+
+  @Provides @Singleton
+  ScriptureFinder provideScriptureFinder() {
+    // TODO update parameters if needed
+    return new ScriptureFinder();
   }
 
   // ==========================================================================================================================

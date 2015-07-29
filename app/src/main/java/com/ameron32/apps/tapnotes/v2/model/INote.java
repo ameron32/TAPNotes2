@@ -31,4 +31,5 @@ public interface INote extends IObject {
   boolean isImportantNote();
   boolean isBoldNote();
   NoteType getNoteType();
+
 }

@@ -1,21 +1,32 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BibleBuilder {
+
+  private static final String TAG = BibleBuilder.class.getSimpleName();
 
   private String defaultLanguage;
   private Resources r;
@@ -31,24 +42,114 @@ public class BibleBuilder {
   private String[] bookNames;
   private String[] bookAbbreviations;
 
-  public Bible getBible(Context c) throws BibleResourceNotFoundException {
-
+  public BibleBuilder(final Context c) {
     defaultLanguage = Locale.getDefault().getLanguage();
+//    final String applicationVersionNumber = getAppVersionLabel();
+//    if (applicationVersionNumber != null) {
+      // e.g. "bible-ENGLISH.bible"
+      programFilename = BIBLE_FILE_PREFIX + defaultLanguage +
+//          applicationVersionNumber +
+          FILE_EXTENSION;
+//    } else {
+      // if applicationVersion cannot be determined, generate the bible every time (to be safe)
+//      programFilename = null;
+//    }
     this.c = c;
     r = c.getResources();
     chapterQuantities = r.getIntArray(R.array.chapter_quantities);
     bookNames = r.getStringArray(R.array.bible_books);
     bookAbbreviations = r.getStringArray(R.array.book_abbr);
-    return initializeNewBible();
+  }
+
+  private String getAppVersionLabel() {
+    try {
+      final PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+      return "-" + pInfo.versionName + "-" + pInfo.versionCode;
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+    } catch (NullPointerException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public Bible getBible() throws BibleResourceNotFoundException {
+    // attempt to recover a serialized copy of this bible in this language
+    Bible bible;
+    bible = loadSerializedBible();
+    if (bible != null) {
+      return bible;
+    }
+
+    // if no copy can be found, initialize a new copy
+    bible = initializeNewBible();
+
+    // serialize the new copy for future recovery
+    storeSerializedBible(bible);
+
+    // then return the new copy of the Bible
+    return bible;
+  }
+
+  private static final String FILE_EXTENSION = ".bible";
+  private static final String BIBLE_FILE_PREFIX = "bible-";
+
+  private final String programFilename;
+
+  private Bible loadSerializedBible() {
+    if (programFilename == null) {
+      return null;
+    }
+
+    try {
+      final FileInputStream fis = c.openFileInput(programFilename);
+      final ObjectInputStream ois = new ObjectInputStream(fis);
+      final Object readObject = ois.readObject();
+      final Bible bible = (Bible) readObject;
+      Log.d(TAG, "bible loaded as: " + programFilename);
+      return bible;
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } catch (OptionalDataException e) {
+      e.printStackTrace();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (StreamCorruptedException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  private boolean storeSerializedBible(final Bible bible) {
+    if (programFilename == null) {
+      return false;
+    }
+
+    FileOutputStream fos = null;
+    ObjectOutputStream oos = null;
+    try {
+      fos = c.openFileOutput(programFilename, Context.MODE_PRIVATE);
+      oos = new ObjectOutputStream(fos);
+      oos.writeObject(bible);
+      oos.close();
+      Log.d(TAG, "bible serialized as: " + programFilename);
+      return true;
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   private Bible initializeNewBible() {
 
-    Bible bible = new Bible();
+    final Bible bible = new Bible();
     bible.books = new BibleBook[66];
     bible.setChapterNames(bookNames);
     bible.setAbbrevs(bookAbbreviations);
-    int chaptersComplete = 0;
     for (int i = 0; i < 66; i++) {
 
       bible.books[i] = new BibleBook(i, chapterQuantities[i]);
@@ -56,14 +157,13 @@ public class BibleBuilder {
         Log.i("SF", "Book " + String.valueOf(i + 1) + " Chapter " + String.valueOf(j + 1));
         bible.books[i].chapters[j] = new BibleChapter();
         bible.books[i].chapters[j].verses = loadChapterVerses(i, j);
-        chaptersComplete++;
       }
     }
 
     return bible;
   }
 
-  public void setLanguage(String localeCode) {
+  public void setLanguage(final String localeCode) {
 
     if (isValidLocale(localeCode)) {
       defaultLanguage = localeCode;
@@ -77,7 +177,7 @@ public class BibleBuilder {
   private BufferedReader br;
   private String[] versesText;
 
-  public String[] loadChapterVerses(int bookNumber, int chapter) {
+  public String[] loadChapterVerses(final int bookNumber, final int chapter) {
 
     filename = getFileName(bookNumber, chapter);
     fileID = r.getIdentifier(filename, "raw", c.getPackageName());
@@ -92,7 +192,7 @@ public class BibleBuilder {
   private StringBuilder sb;
   private String line;
 
-  private StringBuilder readChapterFile(BufferedReader br) {
+  private StringBuilder readChapterFile(final BufferedReader br) {
 
     sb = new StringBuilder();
     //  line = null;
@@ -115,7 +215,7 @@ public class BibleBuilder {
   private String[] verses1;
   private int i1, j1, start1, end1;
 
-  private String[] cleanupChapter(StringBuilder sb, int chapterNumber) {
+  private String[] cleanupChapter(final StringBuilder sb, final int chapterNumber) {
 
     verseDelimiter1 = "chapter" + String.valueOf(chapterNumber + 1) + "_verse";
     verseCount1 = countSubstring(verseDelimiter1, sb.toString());
@@ -142,23 +242,26 @@ public class BibleBuilder {
     return verses1;
   }
 
-  private ArrayList<TagPair> tags2 = new ArrayList<>(1024);
+  private final ArrayList<TagPair> tags2 = new ArrayList<>(1024);
   private int i2, j2, k2a, k2b, start2, end2;
   private TagPair tp2;
   private int length2;
+  private String string2;
 
-  private String cleanString(String s) {
+  private String cleanString(final String str) {
 
-    if (s != null) {
+    string2 = str;
+
+    if (string2 != null) {
       tags2.clear();
-      length2 = s.length();
+      length2 = string2.length();
 
       //Check for front tags
       for (i2 = 0; i2 < length2; i2++) {
-        if (s.charAt(i2) == '<') {
+        if (string2.charAt(i2) == '<') {
           i2 = length2;
         } else {
-          if (s.charAt(i2) == '>') {
+          if (string2.charAt(i2) == '>') {
             tp2 = new TagPair();
             tp2.start = 0;
             tp2.end = i2;
@@ -171,10 +274,10 @@ public class BibleBuilder {
 
       //Check for other tags;
       for (j2 = 0; j2 < length2; j2++) {
-        if (s.charAt(j2) == '<') {
+        if (string2.charAt(j2) == '<') {
           start2 = j2;
           for (k2a = j2; k2a < length2; k2a++) {
-            if (s.charAt(k2a) == '>') {
+            if (string2.charAt(k2a) == '>') {
               end2 = k2a;
               tp2 = new TagPair();
               tp2.start = start2;
@@ -188,10 +291,10 @@ public class BibleBuilder {
 
       //Check for end tags;
       for (k2b = length2 - 1; k2b >= 0; k2b--) {
-        if (s.charAt(k2b) == '>') {
+        if (string2.charAt(k2b) == '>') {
           k2b = -1;
         } else {
-          if (s.charAt(k2b) == '<') {
+          if (string2.charAt(k2b) == '<') {
             tp2 = new TagPair();
             tp2.start = k2b;
             tp2.end = length2 - 1;
@@ -200,12 +303,14 @@ public class BibleBuilder {
         }
       }
 
-      s = removeBadTags(s, tags2);
+      string2 = removeBadTags(string2, tags2);
+      string2 = alterSupToSupSmallA(string2);
+      string2 = alterSupToSupSmallB(string2);
 
     }
 
 
-    return s;
+    return string2;
 
   }
 
@@ -220,7 +325,7 @@ public class BibleBuilder {
   private int tagsSize3;
   private int sb3length3;
 
-  private String removeBadTags(String s, ArrayList<TagPair> tags) {
+  private String removeBadTags(final String s, final ArrayList<TagPair> tags) {
 
     allowedTags3 = r.getStringArray(R.array.allowed_tags);
     tagsSize3 = tags.size();
@@ -267,6 +372,18 @@ public class BibleBuilder {
 
 
     return sb3.toString();
+  }
+
+
+  private static final String r01 = "<sup>";
+  private static final String r02 = "</sup>";
+  private static final String w01 = "<sup><small>";
+  private static final String w02 = "</small></sup>";
+  private String alterSupToSupSmallA(final String string) {
+    return string.replaceAll(r01, w01);
+  }
+  private String alterSupToSupSmallB(final String string) {
+    return string.replaceAll(r02, w02);
   }
 
   private Pattern p4;
