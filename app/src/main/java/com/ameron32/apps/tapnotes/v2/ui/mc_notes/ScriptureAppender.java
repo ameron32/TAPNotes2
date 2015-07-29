@@ -90,7 +90,10 @@ public class ScriptureAppender {
                     }
                     startTag = startTag + "<";
 
-                    appendBuilder.append("<br><br>").append(name).append("<br>");
+                    if (i != 0) {
+                        appendBuilder.append("<br><br>");
+                    }
+                    appendBuilder.append(name).append("<br>");
                     for (int k = 0; k < verseTexts.length; k++) {
                         if (k == 0) {
                             appendBuilder.append(verseTexts[k]);

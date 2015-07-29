@@ -1,10 +1,14 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +17,7 @@ import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
@@ -39,7 +44,7 @@ import static rx.android.lifecycle.LifecycleEvent.*;
  * Created by klemeilleur on 6/15/2015.
  */
 public class ProgramFragment extends TAPFragment
-    implements IProgramDelegate.IProgramDelegateCallbacks {
+    implements IProgramDelegate.IProgramDelegateCallbacks, Toolbar.OnMenuItemClickListener {
 
   private static final String PROGRAM_OBJECT_ID_ARG = "PROGRAM_OBJECT_ID_ARG";
 
@@ -92,9 +97,48 @@ public class ProgramFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     confirmDelegateHasInterface();
     ButterKnife.inject(this, view);
+    inflateMenu();
     setNavigation();
 
     giveTalksToDelegate();
+  }
+
+  private void inflateMenu() {
+    mToolbar.inflateMenu(R.menu.program_overflow_menu);
+    mToolbar.setOnMenuItemClickListener(this);
+  }
+
+  @Override
+  public boolean onMenuItemClick(MenuItem item) {
+    switch(item.getItemId()) {
+      case R.id.program_item_jw_library:
+        try {
+          final Intent jwlibrary;
+          jwlibrary = new Intent(getContext(), Class.forName(Constants.ACTIVITY_JW_LIBRARY));
+          if (jwlibrary != null) {
+            startActivity(jwlibrary);
+          }
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        return true;
+      case R.id.program_item_wol:
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_WATCHTOWER_ONLINE_LIBARY));
+        startActivity(browserIntent);
+        return true;
+      case R.id.program_item_jw_language:
+        try {
+          final Intent jwlanguage;
+          jwlanguage = new Intent(getContext(), Class.forName(Constants.ACTIVITY_JW_LANGUAGE));
+          if (jwlanguage != null) {
+            startActivity(jwlanguage);
+          }
+        } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+        }
+        return true;
+    }
+    return false;
   }
 
   private void confirmDelegateHasInterface() {

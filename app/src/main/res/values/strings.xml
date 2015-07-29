@@ -30,5 +30,8 @@
   <string name="notes_placeholder_note_area_6">--Press the overflow button in the top right corner to access Settings.</string>
   <string name="scripture_picker_button_proceed">SUBMIT</string>
   <string name="scripture_picker_button_cancel">CANCEL</string>
+  <string name="program_menu_jw_library">JW Library</string>
+  <string name="program_menu_jw_language">JW Language</string>
+  <string name="program_menu_wol">Watchtower Online Library</string>
 
 </resources>

@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -31,6 +32,7 @@ import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.parse.ui.MyDispatchMainActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
@@ -89,6 +91,8 @@ public class MNIActivity extends TAPActivity
   DrawerLayout mDrawerLayout;
   @InjectView(R.id.nav_view)
   NavigationView mNavigationView;
+  @InjectView(R.id.nav_header_username_text)
+  TextView mUsernameTextView;
 
   @InjectView(R.id.pane_animating_layout)
   AnimatingPaneLayout mAnimatingPane;
@@ -361,6 +365,20 @@ public class MNIActivity extends TAPActivity
             new NavigationView.OnNavigationItemSelectedListener() {
               @Override
               public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                  case R.id.nav_home:
+                    // go to dispatch, then straight thru to ProgramSelectionActivity
+                    startActivity(MyDispatchMainActivity.makeIntent(getContext()));
+                    finish();
+                    return true;
+                  case R.id.nav_logout:
+                    // logout then...
+                    Commands.Local.logoutClientUser();
+                    // go to dispatch, then straight thru to MyDispatchLoginActivity
+                    startActivity(MyDispatchMainActivity.makeIntent(getContext()));
+                    finish();
+                    return true;
+                }
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 return true;

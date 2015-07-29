@@ -29,7 +29,7 @@ public class Rx {
         subscriber.onNext(new Progress(1, 1, false));
         subscriber.onCompleted();
       }
-    }).subscribeOn(Schedulers.io());
+    }).subscribeOn(Schedulers.computation());
   }
 
 
@@ -55,7 +55,7 @@ public class Rx {
             subscriber.onCompleted();
           }
         }
-      }).subscribeOn(Schedulers.io());
+      }).subscribeOn(Schedulers.computation());
     }
 
     public static Observable<Progress> pinAllProgramNotes(final String programId) {
@@ -77,7 +77,7 @@ public class Rx {
             subscriber.onCompleted();
           }
         }
-      }).subscribeOn(Schedulers.io());
+      }).subscribeOn(Schedulers.computation());
     }
 
     public static Observable<Progress> pinRecentClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
@@ -94,7 +94,7 @@ public class Rx {
             subscriber.onCompleted();
           }
         }
-      }).subscribeOn(Schedulers.io());
+      }).subscribeOn(Schedulers.computation());
     }
 
     public static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
@@ -111,7 +111,7 @@ public class Rx {
             subscriber.onCompleted();
           }
         }
-      }).subscribeOn(Schedulers.io());
+      }).subscribeOn(Schedulers.computation());
     }
   }
 
@@ -127,7 +127,7 @@ public class Rx {
 
             }
           }
-      ).subscribeOn(Schedulers.io());
+      ).subscribeOn(Schedulers.computation());
     }
   }
 }

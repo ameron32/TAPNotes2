@@ -104,5 +104,9 @@ public class Commands {
         deleteEventuallyNote(note);
       }
     }
+
+    public static void logoutClientUser() {
+      ParseUser.logOut();
+    }
   }
 }

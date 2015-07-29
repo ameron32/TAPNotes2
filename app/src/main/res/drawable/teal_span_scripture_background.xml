@@ -4,10 +4,10 @@
     android:shape="rectangle">
     <!-- TODO don't leave this like this -->
     <!--<solid android:color="@color/teal_colorPrimary" />-->
-    <corners android:radius="6dp" />
+    <corners android:radius="@dimen/scripture_span_rounded_corner_dp" />
     <padding
-        android:bottom="2dp"
-        android:left="2dp"
-        android:right="2dp"
-        android:top="2dp" />
+        android:bottom="@dimen/scripture_span_padding_dp"
+        android:left="@dimen/scripture_span_padding_dp"
+        android:right="@dimen/scripture_span_padding_dp"
+        android:top="@dimen/scripture_span_padding_dp" />
 </shape>

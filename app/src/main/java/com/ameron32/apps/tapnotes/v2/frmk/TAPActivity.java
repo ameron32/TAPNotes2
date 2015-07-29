@@ -47,9 +47,13 @@ public abstract class TAPActivity extends AppCompatActivity {
 
   private void initializeActivityModules_Dagger1() {
     Object[] modules = getModules();
-    for (int i = 0; i < modules.length; i++) {
-      Object module = modules[i];
-      Injector.INSTANCE.init(module);
+    if (modules != null) {
+      if (modules.length > 0) {
+        for (int i = 0; i < modules.length; i++) {
+          Object module = modules[i];
+          Injector.INSTANCE.init(module);
+        }
+      }
     }
     Injector.INSTANCE.inject(this);
   }

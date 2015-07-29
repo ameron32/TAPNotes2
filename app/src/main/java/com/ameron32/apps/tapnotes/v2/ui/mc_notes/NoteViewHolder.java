@@ -24,7 +24,7 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
     public RelativeLayout popup;
     
     @InjectView(R.id.noteLayout)
-    public RelativeLayout noteLayout;
+    public FrameLayout noteLayout;
 
     @InjectView(R.id.notesTextView)
     public TextView notesTextView;

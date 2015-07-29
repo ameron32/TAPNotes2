@@ -180,6 +180,17 @@ public class ScripturePickerAdapter extends PagerAdapter
           }
         });
 
+    holder.buttonCancel.setOnClickListener(
+        new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mListener != null) {
+          attemptMakeScripture();
+          mListener.onCancelClicked();
+        }
+      }
+    });
+
     holder.gridView.setAdapter(null);
     holder.gridView.setLayoutManager(
         new GridLayoutManager(holder.gridView.getContext(), NUM_OF_ITEMS_PER_ROW));

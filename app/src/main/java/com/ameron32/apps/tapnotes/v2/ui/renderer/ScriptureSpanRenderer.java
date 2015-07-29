@@ -14,6 +14,8 @@ import com.jmpergar.awesometext.AwesomeTextHandler;
  */
 public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRenderer, AwesomeTextHandler.ViewSpanClickListener {
 
+    private final static int textSizeInDips = 14;
+
     private static final String SCRIPTURE_START_TAG = "<<!<";
     private static final String SCRIPTURE_END_TAG = ">!>>";
 
@@ -28,12 +30,20 @@ public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRendere
 
 
         scripView.setText(text);
+        scripView.setTextSize(dipsToPixels(context, textSizeInDips));
 
         return scripView;
     }
 
+    public static int dipsToPixels(Context ctx, float dips) {
+        final float scale = ctx.getResources().getDisplayMetrics().density;
+        int px = (int) (dips * scale + 0.5f);
+        return px;
+    }
+
     @Override
     public void onClick(String text, Context context) {
-        Toast.makeText(context, "Hello " + text, Toast.LENGTH_SHORT).show();
+        // TODO KRIS handle editor scripture click according to UX
+//        Toast.makeText(context, "Hello " + text, Toast.LENGTH_SHORT).show();
     }
 }

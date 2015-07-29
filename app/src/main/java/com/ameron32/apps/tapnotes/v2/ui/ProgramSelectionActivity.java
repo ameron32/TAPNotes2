@@ -19,6 +19,7 @@ import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.Status;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
@@ -27,6 +28,8 @@ import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.parse.Parse;
 import com.parse.ParseConfig;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -89,6 +92,11 @@ public class ProgramSelectionActivity
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
+        try {
+          ParseObject.unpinAll(); // TODO add tags to Notes
+        } catch (ParseException e) {
+          e.printStackTrace();
+        }
         subscriber.onNext(new Progress(0, 3, false, "Loading Bible", "Loading Bible..."));
         mBible.get();
         subscriber.onNext(new Progress(1, 3, false, "Loading Bible", "Bible complete. Loading user input module..."));
