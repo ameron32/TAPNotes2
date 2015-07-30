@@ -254,21 +254,20 @@ public class DefaultAndroidApplicationModule {
 
   @Provides
   @Singleton
-  ApplicationThemeController provideThemeController() {
-    return new ApplicationThemeController(mApplication);
+  ApplicationThemeController provideThemeController(final Application application) {
+    return new ApplicationThemeController(application);
   }
 
   //
 
   @Provides @Singleton
-  ParseNotesController provideNotesController() {
-    return new ParseNotesController();
+  ParseNotesController provideNotesController(final Application application) {
+    return new ParseNotesController(application);
   }
 
   @Provides @Singleton
   Bible provideBible(final Application application) {
     try {
-      // TODO consider caching/serializing Bible
       return new BibleBuilder(application).getBible();
     } catch (BibleResourceNotFoundException e) {
       e.printStackTrace();
@@ -277,9 +276,9 @@ public class DefaultAndroidApplicationModule {
   }
 
   @Provides @Singleton
-  Sanitizer provideSanitizer() {
+  Sanitizer provideSanitizer(final Application application) {
     // TODO update to Bible instead of Context as soon as Sanitizer is repaired
-    return new Sanitizer(mApplication);
+    return new Sanitizer(application);
   }
 
   @Provides @Singleton

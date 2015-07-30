@@ -29,7 +29,7 @@ import butterknife.InjectView;
 public class ScripturePickerAdapter extends PagerAdapter
     implements ScreenGridAdapter.Callbacks {
 
-  private int NUM_OF_ITEMS_PER_ROW = 5;
+  private int NUM_OF_ITEMS_PER_ROW = 5; // default
 
   public static final int NUM_OF_PAGES = 3;
   public static final int SCREEN_BOOKS = 0;

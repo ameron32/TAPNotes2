@@ -23,6 +23,7 @@
 
   <color name="ultrablack_windowBackground">@color/AMOLEDBlack</color>
   <color name="ultrablack_textColorPrimary">@color/AMOLEDWhite</color>
+  <color name="ultrablack_colorPrimaryText">@color/AMOLEDWhite</color>
 
   <color name="ultrablack_notes_container_background">@color/AMOLEDBlack</color>
   <color name="ultrablack_program_container_background">@color/AMOLEDBlack</color>

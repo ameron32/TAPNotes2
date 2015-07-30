@@ -210,12 +210,7 @@ public class ProgramSelectionActivity
   public void startActivity(final String programId) {
     mProgramId = programId;
     Observable<Progress> observable;
-    if (Status.isConnectionToServerAvailable(getActivity())) {
-      observable = Rx.Live.pinAllProgramNotes(mProgramId);
-//      notesController.pinAllNewClientOwnedNotesFor(mProgramId);
-    } else {
-      observable = Rx.instantComplete();
-    }
+    observable = notesController.pinAllNewClientOwnedNotesFor(mProgramId);
     cache = bindLifecycle(observable, DESTROY).cache();
     cache.subscribe(downloadNotesObserver);
   }
@@ -231,7 +226,7 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache = bindLifecycle(Rx.Live.pinProgramWithTalks(mProgramId), DESTROY).cache();
+    cache = bindLifecycle(notesController.pinProgramAndTalks(mProgramId), DESTROY).cache();
     cache.subscribe(downloadProgramObserver);
   }
 

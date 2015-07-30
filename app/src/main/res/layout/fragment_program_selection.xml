@@ -49,4 +49,12 @@
       android:visibility="invisible"
       tools:text="Progress Text"/>
 
+  <TextView
+      android:id="@+id/program_app_version"
+      style="?android:textAppearanceSmall"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:gravity="right"
+      tools:text="version 0.91"/>
+
 </RelativeLayout>

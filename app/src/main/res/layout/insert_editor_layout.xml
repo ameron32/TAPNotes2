@@ -16,10 +16,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+  <!-- TODO KRIS re-enable spinner when options are available -->
   <Spinner
       android:id="@+id/spinner_note_type"
       android:layout_width="48dp"
       android:layout_height="48dp"
+      android:visibility="invisible"
       android:layout_alignParentLeft="true"
       android:layout_centerVertical="true"/>
 

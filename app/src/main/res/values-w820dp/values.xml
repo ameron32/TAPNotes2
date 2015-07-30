@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- AnimatingPaneLayout configuration options -->
+  <bool name="dual_layout_uses_displacement">true</bool>
+
+  <!-- Scripture Picker -->
+  <integer name="number_of_items_per_row">10</integer>
+</resources>

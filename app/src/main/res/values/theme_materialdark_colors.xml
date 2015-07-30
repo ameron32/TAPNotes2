@@ -20,6 +20,7 @@
   <color name="materialdark_colorAccent">@color/DarkRedGrey</color>
 
   <color name="materialdark_textColorPrimary">@color/AMOLEDWhite</color>
+  <color name="materialdark_colorPrimaryText">@color/DarkBlueGrey</color>
 
   <color name="materialdark_notes_container_background">@color/SmoothGrey</color>
   <color name="materialdark_program_container_background">@color/AlmostBlack</color>

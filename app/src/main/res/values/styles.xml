@@ -34,6 +34,7 @@
 
     <!--<item name="android:windowBackground">@color/teal_windowBackground</item>-->
     <item name="android:textColorPrimary">@color/teal_textColorPrimary</item>
+    <item name="colorPrimaryText">@color/teal_colorPrimaryText</item>
 
     <item name="editor_container_background">@color/teal_editor_container_background</item>
     <item name="scripture_picker_container_background">@color/teal_editor_container_background</item>
@@ -78,6 +79,7 @@
 
     <item name="android:windowBackground">@color/ultrablack_windowBackground</item>
     <item name="android:textColorPrimary">@color/ultrablack_textColorPrimary</item>
+    <item name="colorPrimaryText">@color/ultrablack_colorPrimaryText</item>
 
     <item name="editor_container_background">@color/ultrablack_editor_container_background</item>
     <item name="scripture_picker_container_background">@color/ultrablack_editor_container_background</item>
@@ -120,6 +122,8 @@
 
     <!--<item name="android:windowBackground">@color/materialdark_windowBackground</item>-->
     <item name="android:textColorPrimary">@color/materialdark_textColorPrimary</item>
+    <item name="colorPrimaryText">@color/materialdark_colorPrimaryText</item>
+
 
     <item name="editor_container_background">@color/materialdark_editor_container_background</item>
     <item name="scripture_picker_container_background">@color/materialdark_editor_container_background</item>

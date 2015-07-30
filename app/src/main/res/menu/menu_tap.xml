@@ -1,10 +1,32 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context=".TAPActivity">
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  tools:context=".TAPActivity">
 
-  <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never"/>
+  <item
+    android:id="@+id/action_prev_talk"
+    android:title="@string/action_prev_talk"
+    android:icon="@drawable/ic_arrow_back_black_48dp"
+    android:orderInCategory="97"
+    app:showAsAction="always"/>
+
+  <item
+    android:id="@+id/action_next_talk"
+    android:title="@string/action_prev_talk"
+    android:icon="@drawable/ic_arrow_forward_black_48dp"
+    android:orderInCategory="98"
+    app:showAsAction="always"/>
+
+  <item
+    android:id="@+id/action_submit_feedback"
+    android:title="@string/action_submit_feedback"
+    android:orderInCategory="99"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/action_settings"
+    android:title="@string/action_settings"
+    android:orderInCategory="100"
+    app:showAsAction="never" />
 </menu>

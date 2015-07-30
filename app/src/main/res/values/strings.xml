@@ -33,5 +33,7 @@
   <string name="program_menu_jw_library">JW Library</string>
   <string name="program_menu_jw_language">JW Language</string>
   <string name="program_menu_wol">Watchtower Online Library</string>
+  <string name="action_submit_feedback">Submit Feedback</string>
+  <string name="action_prev_talk">Previous Talk</string>
 
 </resources>

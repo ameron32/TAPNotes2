@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.util.Serializer;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -19,6 +20,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -41,6 +43,7 @@ public class BibleBuilder {
   private int[] chapterQuantities;
   private String[] bookNames;
   private String[] bookAbbreviations;
+  private final Serializer<Bible> serializer;
 
   public BibleBuilder(final Context c) {
     defaultLanguage = Locale.getDefault().getLanguage();
@@ -59,6 +62,11 @@ public class BibleBuilder {
     chapterQuantities = r.getIntArray(R.array.chapter_quantities);
     bookNames = r.getStringArray(R.array.bible_books);
     bookAbbreviations = r.getStringArray(R.array.book_abbr);
+
+    serializer = new Serializer<>(Bible.class);
+
+    // from removeBadTags(), single initialization
+    allowedTags3 = r.getStringArray(R.array.allowed_tags);
   }
 
   private String getAppVersionLabel() {
@@ -102,19 +110,10 @@ public class BibleBuilder {
     }
 
     try {
-      final FileInputStream fis = c.openFileInput(programFilename);
-      final ObjectInputStream ois = new ObjectInputStream(fis);
-      final Object readObject = ois.readObject();
-      final Bible bible = (Bible) readObject;
+      final Bible bible = serializer.load(c, programFilename);
       Log.d(TAG, "bible loaded as: " + programFilename);
       return bible;
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
-    } catch (OptionalDataException e) {
-      e.printStackTrace();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (StreamCorruptedException e) {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
@@ -127,15 +126,10 @@ public class BibleBuilder {
       return false;
     }
 
-    FileOutputStream fos = null;
-    ObjectOutputStream oos = null;
     try {
-      fos = c.openFileOutput(programFilename, Context.MODE_PRIVATE);
-      oos = new ObjectOutputStream(fos);
-      oos.writeObject(bible);
-      oos.close();
+      boolean result = serializer.save(c, programFilename, bible);
       Log.d(TAG, "bible serialized as: " + programFilename);
-      return true;
+      return result;
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {
@@ -325,9 +319,18 @@ public class BibleBuilder {
   private int tagsSize3;
   private int sb3length3;
 
+  // FIXME CODE DISABLED, RELATED TO CODE IN removeBadTags()
+//  private static final String startP3 = "<p id";
+//  private static final String endP3 = "</p>";
+
   private String removeBadTags(final String s, final ArrayList<TagPair> tags) {
 
-    allowedTags3 = r.getStringArray(R.array.allowed_tags);
+    // moved to INITIALIZATION, only 1 time needed
+    // allowedTags3 = r.getStringArray(R.array.allowed_tags);
+
+    sb3 = new StringBuilder(s);
+
+
     tagsSize3 = tags.size();
     remove3 = new boolean[tagsSize3];
     length3 = remove3.length;
@@ -338,21 +341,37 @@ public class BibleBuilder {
     for (i3 = 0; i3 < tagsSize3; i3++) {
       tagP3 = tags.get(i3);
       tag3 = s.substring(tagP3.start, tagP3.end + 1);
+
+      // iterate through possible allowed tags
       for (j3 = 0; j3 < allowedTags3.length; j3++) {
         if (tag3.equals(allowedTags3[j3])) {
           remove3[i3] = false;
         }
       }
+
+      // TODO check the usefulness of this code
+      // if the tag is not yet allowed, do a check for <p>
+      // FIXME CODE DISABLED BECAUSE IT INTRODUCED A ">" IN THE LAST VERSE OF EVERY CHAPTER
+//      if (remove3[i3] == true) {
+//        if (tag3.equals(endP3)) {
+//          remove3[i3] = false;
+//        }
+//      }
+//
+//      if (remove3[i3] == true) {
+//        if (tag3.startsWith(startP3)) {
+//          remove3[i3] = false;
+//        }
+//      }
+      // end useful code
     }
 
-    sb3 = new StringBuilder(s);
     for (k3 = tagsSize3 - 1; k3 >= 0; k3--) {
       if (remove3[k3]) {
         sb3.replace(tags.get(k3).start, tags.get(k3).end + 1, "");
       }
     }
 
-    //Remove footnotes
     start3 = -1;
     footnote3 = false;
     sb3length3 = sb3.length();
@@ -369,7 +388,6 @@ public class BibleBuilder {
 
       sb3.replace(start3, sb3.toString().length() - 1, "");
     }
-
 
     return sb3.toString();
   }

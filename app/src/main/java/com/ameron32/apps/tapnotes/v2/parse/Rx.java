@@ -21,7 +21,7 @@ import rx.schedulers.Schedulers;
  */
 public class Rx {
 
-  public static Observable<Progress> instantComplete() {
+  static Observable<Progress> instantComplete() {
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
@@ -36,7 +36,7 @@ public class Rx {
 
   public static class Live {
 
-    public static Observable<Progress> pinProgramWithTalks(final String programId) {
+    static Observable<Progress> pinProgramWithTalks(final String programId) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
@@ -58,13 +58,13 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    public static Observable<Progress> pinAllProgramNotes(final String programId) {
+    static Observable<Progress> pinAllProgramNotes(final Program program) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Downloading Notes (1/2)"));
-            final Program program = Queries.Local.getProgram(programId);
+
             // TODO KRIS did we local the program and talks? delay network query and restrict to new only
             Queries.Live.pinAllGenericNotesFor(program);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
@@ -80,7 +80,7 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    public static Observable<Progress> pinRecentClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
+    static Observable<Progress> pinRecentClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
@@ -97,7 +97,7 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    public static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
+    static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
@@ -119,7 +119,7 @@ public class Rx {
 
   public static class Local {
 
-    public static Observable<Progress> empty(final String programId) {
+    static Observable<Progress> empty(final String programId) {
       return Observable.create(
           new Observable.OnSubscribe<Progress>() {
             @Override

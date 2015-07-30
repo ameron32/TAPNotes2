@@ -52,4 +52,5 @@ public class Constants {
   public static final String ACTIVITY_JW_LIBRARY = "org.jw.jwlibrary.mobile.MainActivity";
   public static final String ACTIVITY_JW_LANGUAGE = "org.jw.jwlanguage.activities.MainActivity";
   public static final String LINK_WATCHTOWER_ONLINE_LIBARY = "http://wol.jw.org";
+  public static final String LINK_SUBMIT_FEEDBACK_GOOGLE_FORMS = "http://goo.gl/forms/8WLLGdcYUf";
 }

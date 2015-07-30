@@ -47,6 +47,8 @@ public class ProgramSelectionFragment extends TAPFragment
   Callbacks mCallbacks;
   private String mProgramId;
 
+  private String mAppVersion;
+
   public ProgramSelectionFragment() {}
 
   @Override
@@ -57,6 +59,9 @@ public class ProgramSelectionFragment extends TAPFragment
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    // TODO update app version to dynamic
+    mAppVersion = "version 0.91";
 
     mProgramId = Constants.CONVENTION2015_PROGRAM_OBJECT_ID;
   }
@@ -74,6 +79,7 @@ public class ProgramSelectionFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     setStatusImage();
+    setAppVersion();
 
     loadPlaceholderView();
     getImageFromProgram(mProgramId);
@@ -108,6 +114,9 @@ public class ProgramSelectionFragment extends TAPFragment
   @InjectView(R.id.program_progress_bar_text)
   TextView programProgressText;
 
+  @InjectView(R.id.program_app_version)
+  TextView appVersionText;
+
   @OnClick(R.id.testing_button_mni)
   void onClick() {
     if (!programSaved(mProgramId)) {
@@ -126,6 +135,10 @@ public class ProgramSelectionFragment extends TAPFragment
     ColoredDrawableUtil.setDrawableColor(getActivity(),
         statusImage.getDrawable(),
         R.attr.colorAccent, R.color.teal_colorAccent);
+  }
+
+  private void setAppVersion() {
+    appVersionText.setText(mAppVersion);
   }
 
   private boolean programSaved(String programId) {

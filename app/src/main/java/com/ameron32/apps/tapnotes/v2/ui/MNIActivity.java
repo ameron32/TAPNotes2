@@ -2,6 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.design.widget.NavigationView;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
@@ -182,6 +184,18 @@ public class MNIActivity extends TAPActivity
       case android.R.id.home:
         toggleProgramPane();
         return true;
+      case R.id.action_submit_feedback:
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_SUBMIT_FEEDBACK_GOOGLE_FORMS));
+        startActivity(browserIntent);
+        return true;
+      case R.id.action_next_talk:
+// TODO next talk
+        new ActivitySnackBarController(this).toast("BETA: Almost ready... but not quite there.");
+        return true;
+      case R.id.action_prev_talk:
+// TODO prev talk
+        new ActivitySnackBarController(this).toast("BETA: Almost ready... but not quite there.");
+        return true;
       case R.id.action_settings:
         startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
         return true;
@@ -196,7 +210,8 @@ public class MNIActivity extends TAPActivity
   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == SETTINGS_REQUEST_CODE && resultCode == RESULT_OK) {
-      // Settings
+      // from Settings, we rebuild the activity just in case the theme was changed.
+      // better safe then sorry.
       this.recreate();
     }
   }
@@ -503,6 +518,8 @@ public class MNIActivity extends TAPActivity
 
   private Observable<Progress> cache;
 
+  // SUBSCRIBE THIS OBSERVER TO ALL OPERATIONS
+  // THAT SYNCHRONIZE Live.Notes (server) INTO Local.Notes (local datastore)
   private Observer<Progress> observer = new Observer<Progress>() {
 
     @Override
