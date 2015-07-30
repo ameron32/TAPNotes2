@@ -40,8 +40,8 @@ android {
     applicationId 'com.ameron32.apps.tapnotes.v2'
     minSdkVersion 16
     targetSdkVersion 22
-    versionCode 2
-    versionName "0.91" // alpha2 // versionName MUST BE A FLOAT
+    versionCode 4
+    versionName "0.92" // alpha2 // versionName MUST BE A FLOAT
   }
   packagingOptions {
     exclude 'META-INF/services/javax.annotation.processing.Processor'
