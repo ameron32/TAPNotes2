@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
@@ -18,12 +19,18 @@ import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.Status;
+import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.parse.Parse;
+import com.parse.ParseConfig;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -86,7 +93,13 @@ public class ProgramSelectionActivity
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
-        subscriber.onNext(new Progress(0, 3, false, "Loading Bible", "Loading Bible..."));
+        // TODO re-evaluate unpinning notes and redownloading
+//        try {
+//          Note.unpinAll(Constants.NOTE_PIN_NAME); // TODO add tags to Notes
+//        } catch (ParseException e) {
+//          e.printStackTrace();
+//        }
+        subscriber.onNext(new Progress(0, 3, false, "Loading Bible", "Loading Bible... (may take several minutes)"));
         mBible.get();
         subscriber.onNext(new Progress(1, 3, false, "Loading Bible", "Bible complete. Loading user input module..."));
         mSanitizer.get();
@@ -191,12 +204,15 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache;
   private String mProgramId;
 
+  @Inject ParseNotesController notesController;
+
   @Override
   public void startActivity(final String programId) {
     mProgramId = programId;
     Observable<Progress> observable;
     if (Status.isConnectionToServerAvailable(getActivity())) {
-      observable = Rx.Live.pinProgramNotes(mProgramId);
+      observable = Rx.Live.pinAllProgramNotes(mProgramId);
+//      notesController.pinAllNewClientOwnedNotesFor(mProgramId);
     } else {
       observable = Rx.instantComplete();
     }

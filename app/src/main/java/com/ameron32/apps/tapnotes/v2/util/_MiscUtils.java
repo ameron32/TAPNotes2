@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
@@ -11,10 +12,15 @@ import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
+import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseRole;
 
 import org.eclipse.mat.parser.index.IndexManager;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.List;
 
@@ -86,6 +92,96 @@ public class _MiscUtils {
       final Note note = Note.create("spam note " + (i+1), program, talk, Commands.Local.getClientUser());
       note.save();
     }
+  }
+
+  public static void _saveProgramScriptures(Program program) {
+
+  }
+
+  public static void _saveSongNotes(String programId) {
+
+    try {
+
+      final Program program = Queries.Local.getProgram(programId);
+      Talk talk;
+
+//      talk = getTalk(120);
+//      Note.create("1. If we have listened to Christ, will we show it?", program, talk, null).save();
+//      Note.create("His teaching shines as it shows us the way.", program, talk, null).save();
+//      Note.create("It makes us happy to hear and to know it,", program, talk, null).save();
+//      Note.create("But we'll be blessed if we know and obey.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
+//      Note.create("2. Our way of life, like a house, gives protection", program, talk, null).save();
+//      Note.create("When it is built on the rock, not on sand.", program, talk, null).save();
+//      Note.create("If we apply Jesus' loving direction,", program, talk, null).save();
+//      Note.create("We'll build a life which on bedrock will stand.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
+//      Note.create("3. Just as a tree rooted deep by the waters", program, talk, null).save();
+//      Note.create("Gives of its fruit when each season arrives,", program, talk, null).save();
+//      Note.create("If we obey as God's own sons and daughters,", program, talk, null).save();
+//      Note.create("We'll all be blessed and enjoy endless lives.", program, talk, null).save();
+//      Note.create("(CHORUS)", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed", program, talk, null).save();
+//      Note.create("When you hear God's will expressed.", program, talk, null).save();
+//      Note.create("If you'd be happy and enter his rest,", program, talk, null).save();
+//      Note.create("Listen, obey, and be blessed.", program, talk, null).save();
+
+//      ParseACL roleAdminACL = new ParseACL();
+//      roleAdminACL.setPublicReadAccess(true);
+//      roleAdminACL.setPublicWriteAccess(true);
+//      ParseRole roleAdmin = new ParseRole("administrator", roleAdminACL);
+//      roleAdmin.save();
+//
+//      final List<ParseRole> parseRoles = ParseRole.getQuery().whereEqualTo("name", "administrator").find();
+//      ParseRole roleAdmin = parseRoles.get(0);
+//      roleAdmin.getUsers().add(Commands.Local.getClientUser());
+//      roleAdmin.save();
+
+//      _loop(roleAdmin);
+
+    } catch (ParseException e) {
+      e.printStackTrace();
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+    }
+  }
+
+  private static void _loop(ParseRole roleAdmin) throws ParseException, InterruptedException {
+    final List<Note> notes = ParseQuery.getQuery(Note.class)
+        .whereDoesNotExist(Constants.NOTE_uOWNER_USER_KEY)
+        .whereLessThan(Constants.NOTE_UPDATEDAT_DATE_KEY, DateTime.parse("20150727", DateTimeFormat.forPattern("yyyyMMdd")).toDate())
+        .find();
+    ParseACL acl = new ParseACL();
+    acl.setPublicReadAccess(true);
+    acl.setPublicWriteAccess(false);
+    acl.setRoleWriteAccess(roleAdmin, true);
+    int i = 0;
+    String text;
+    for (Note note : notes) {
+      text = note.getString(Constants.NOTE_TEXT_STRING_KEY);
+      Log.d("_updateNote", note.getId() + ": " + ((text.length() > 14) ? text.substring(0, 14) : text));
+      note.setACL(acl);
+      note.save();
+      if (i % 100 == 0) {
+        Thread.sleep(1000);
+      } else if (i % 30 == 0) {
+        Thread.sleep(100);
+      }
+
+      i++;
+    }
+  }
+
+  private static Talk getTalk(int number) throws ParseException {
+    return ParseQuery.getQuery(Talk.class).whereEqualTo(Constants.TALK_METADATA_STRING_KEY, "#" + number).getFirst();
   }
 
 

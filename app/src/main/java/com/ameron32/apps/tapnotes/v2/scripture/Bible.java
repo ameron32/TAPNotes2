@@ -6,6 +6,10 @@ import java.io.Serializable;
 
 public class Bible implements IBible, Serializable {
 
+  // CHANGE THIS WHEN CHANGES MAKE THE BIBLE INCOMPATIBLE
+  private static final long serialVersionUID = 0L;
+
+
   private static final int NUMBER_OF_BOOKS = 66;
   public BibleBook[] books;
   private String[] chapterNames;

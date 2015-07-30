@@ -55,13 +55,17 @@ public class Commands {
     }
 
     public static Note saveEventuallyNote(Note note) {
-      Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
-      note.saveEventually();
+      saveEventuallyNote(note, null);
       return note;
     }
 
     public static Note saveEventuallyNote(Note note, SaveCallback callback) {
       Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
+      if (!note.isNoteOwnedByClient()) {
+        // do not delete notes that are not owned by the client
+        Log.d(TAG, "note was not owned by client. not saving.");
+        return note;
+      }
       note.saveEventually(callback);
       return note;
     }
@@ -99,6 +103,10 @@ public class Commands {
       for (Note note : notes) {
         deleteEventuallyNote(note);
       }
+    }
+
+    public static void logoutClientUser() {
+      ParseUser.logOut();
     }
   }
 }

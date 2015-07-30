@@ -41,10 +41,10 @@ public class ScriptureTestingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mBible = null;
-        BibleBuilder bb = new BibleBuilder();
+        BibleBuilder bb = new BibleBuilder(this);
 //        bb.buildDefaultBible(this);
         try {
-            mBible = bb.getBible(this);
+            mBible = bb.getBible();
         } catch (BibleResourceNotFoundException e) {
             e.printStackTrace();
         }

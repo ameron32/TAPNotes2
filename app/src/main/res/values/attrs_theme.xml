@@ -40,5 +40,6 @@
   <attr name="ic_bible_icon" format="reference" />
 
   <attr name="span_scripture_background" format="reference" />
+  <attr name="fragment_frame_border" format="reference|color" />
 
 </resources>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="?listItem"
     android:orientation="vertical"
-    android:layout_width="320dp"
-    android:layout_height="70dp"
-
-    >
+    android:layout_width="match_parent"
+    android:layout_height="70dp" >
 
     <TextView
         style="?listItem"
@@ -28,7 +28,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="5dp"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:visibility="gone">
 
         <LinearLayout
             android:orientation="vertical"
@@ -41,8 +42,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/attendance"
                 android:id="@+id/attendanceTextView"
-                android:layout_margin="5dp"
-                />
+                android:layout_margin="5dp" />
 
             <TextView
                 style="?listItem"
@@ -50,8 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/baptized"
                 android:id="@+id/textView5"
-                android:layout_margin="5dp"
-               />
+                android:layout_margin="5dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,10 +77,9 @@
     </LinearLayout>
 
     <TextView
-        style="?listItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        tools:text="New Text"
         android:id="@+id/dateTextView"
         android:layout_below="@+id/weekdayTextView"
         android:layout_alignLeft="@+id/weekdayTextView"

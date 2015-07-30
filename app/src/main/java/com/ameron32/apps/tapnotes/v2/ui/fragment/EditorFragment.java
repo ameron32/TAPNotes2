@@ -167,8 +167,6 @@ public class EditorFragment extends TAPFragment
   public boolean onMenuItemClick(MenuItem item) {
     switch(item.getItemId()) {
       case R.id.editor_item_scripture:
-        // TODO KRIS push to scripture picker
-        mSnackBar.toast("Scripture--to be implemented.");
         mCallbacks.openScripturePicker();
         return true;
       case R.id.editor_item_picture:
@@ -207,7 +205,7 @@ public class EditorFragment extends TAPFragment
   public interface Callbacks {
 
     void createNote(String editorText, INote.NoteType type);
-    void editNote(String editorText, INote.NoteType type, Note note);
+    void editNote(String editorText, INote.NoteType type, INote note);
     void openScripturePicker();
   }
 }

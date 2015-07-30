@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  android:id="@+id/noteLayout"
+  style="?listItem"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content">
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="?listItem"
+  <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/noteLayout">
+    android:layout_marginBottom="@dimen/note_row_vertical_margin"
+    android:layout_marginLeft="@dimen/note_row_horizontal_margin"
+    android:layout_marginRight="@dimen/note_row_horizontal_margin"
+    android:layout_marginTop="@dimen/note_row_vertical_margin">
 
     <TextView
-        style="?listItem"
-        android:id="@+id/notesTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="left|center"
-        tools:ignore="RtlHardcoded"
-        android:minHeight="@dimen/note_row_height_min"
-        android:layout_margin="10dp" />
-    <include layout = "@layout/context_menu_layout"/>
+      android:id="@+id/notesTextView"
+      style="?listItem"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentTop="true"
+      android:gravity="left|center"
+      android:minHeight="@dimen/note_text_height_min"
+      tools:ignore="RtlHardcoded"
+      tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."/>
 
+    <include
+      layout="@layout/context_menu_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_alignBottom="@+id/notesTextView"
+      android:layout_alignTop="@+id/notesTextView"
+      android:layout_centerInParent="true"
+      tools:visibility="gone"/>
+
+    <!--fontPath="fonts/LiberationSerif-Regular.ttf"-->
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/appendTextView"
-        android:layout_below="@+id/notesTextView"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="75dp"
-        android:layout_marginRight="50dp"
-        />
+      android:id="@+id/appendTextView"
+      fontPath="@string/font_serif_italic_liberation"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentStart="true"
+      android:layout_below="@+id/notesTextView"
+      android:layout_marginLeft="75dp"
+      android:layout_marginRight="50dp"
+      android:layout_marginTop="@dimen/note_text_vertical_margin"
+      tools:ignore="MissingPrefix"
+      tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."
+      />
 
-</RelativeLayout>
-
+  </RelativeLayout>
+</FrameLayout>
 

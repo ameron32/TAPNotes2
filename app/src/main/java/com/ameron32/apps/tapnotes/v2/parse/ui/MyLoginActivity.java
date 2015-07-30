@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ import butterknife.Optional;
  * Created by klemeilleur on 6/18/2015.
  */
 public abstract class MyLoginActivity
-    extends Activity
+    extends TAPActivity
     implements LoaderManager.LoaderCallbacks<Cursor> {
 
   // UI references.

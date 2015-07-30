@@ -6,6 +6,7 @@ import android.util.Log;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.parse.ParseACL;
@@ -35,8 +36,24 @@ public class Note
     note.setNoteText(text);
     note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
     note.put(NOTE_oTALK_OBJECT_KEY, talk);
-    note.put(NOTE_uOWNER_USER_KEY, owner);
+    if (owner != null) {
+      note.put(NOTE_uOWNER_USER_KEY, owner);
+      note.setACL(getClientNoteACL(owner));
+    } else {
+      note.setACL(getClientNoteACL(null));
+    }
     return note;
+  }
+
+  public static ParseACL getClientNoteACL(ParseUser user) {
+    final ParseACL acl = new ParseACL();
+    acl.setPublicWriteAccess(false);
+    if (user != null) {
+      acl.setWriteAccess(user, true);
+    }
+    acl.setRoleWriteAccess(Constants.ROLE_ADMINISTRATOR, true);
+    acl.setPublicReadAccess(true);
+    return acl;
   }
 
   @Nullable
@@ -183,6 +200,25 @@ public class Note
 
   @Override
   public boolean isNoteOwnedByClient() {
+    final ParseUser owner = this.getOwner();
+    if (owner == null) {
+      return false;
+    }
+
+    return (Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
+  }
+
+  private ParseUser getOwner() {
+    Object o = this.get(NOTE_uOWNER_USER_KEY);
+    if (o != null) {
+      ParseUser user = (ParseUser) o;
+      return user;
+    }
+    return null;
+  }
+
+  @Override
+  public boolean isNoteEditableByClient() {
     final ParseACL acl = getACL();
     return acl.getWriteAccess(Commands.Local.getClientUser());
   }

@@ -102,8 +102,12 @@ public class ScripturePickerFragment extends TAPFragment
   }
 
   @Override
-  public void scriptureComplete(IScripture scripture) {
-    mCallbacks.scripturePrepared(scripture);
+  public void scripturePickerDone(@Nullable IScripture scripture) {
+    if (scripture == null) {
+      mCallbacks.scriptureCancelled();
+    } else {
+      mCallbacks.scripturePrepared(scripture);
+    }
   }
 
   private void confirmDelegateHasInterface() {
@@ -142,5 +146,6 @@ public class ScripturePickerFragment extends TAPFragment
   public interface Callbacks {
 
     void scripturePrepared(IScripture scripture);
+    void scriptureCancelled();
   }
 }

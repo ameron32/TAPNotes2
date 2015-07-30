@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?notes_container_background"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_behavior="com.ameron32.apps.tapnotes.v2.common.PatchedScrollingViewBehavior">
 
         <include layout="@layout/insert_notes_layout" />
 

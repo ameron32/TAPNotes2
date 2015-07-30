@@ -15,7 +15,6 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
-
 import com.jmpergar.awesometext.AwesomeTextHandler;
 
 import java.util.HashMap;
@@ -101,19 +100,24 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
 
-        if (noteTextHandler ==null)
-        noteTextHandler = new AwesomeTextHandler();
+        if (noteTextHandler == null)
+            noteTextHandler = new AwesomeTextHandler();
 
         noteTextHandler
-                .addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
+            .addViewSpanRenderer(SCRIPTURE_PATTERN, new ScriptureSpanRenderer())
 
             .setView(holder.notesTextView);
         noteTextHandler.setText(note.getNoteText());
         String appendedText = appendedScriptures.get(note);
-        if (appendedText!=null)
-        holder.appendTextView.setText(Html.fromHtml(appendedText));
-
-
+        if (appendedText != null) {
+            appendedText = appendedText.trim();
+            if (!appendedText.isEmpty() && appendedText.length() > 0) {
+                holder.appendTextView.setVisibility(View.VISIBLE);
+                holder.appendTextView.setText(Html.fromHtml(appendedText));
+            } else {
+                holder.appendTextView.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override

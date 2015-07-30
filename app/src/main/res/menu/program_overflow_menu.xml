@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+  <item
+    android:id="@+id/program_item_jw_library"
+    android:orderInCategory="1"
+    android:title="@string/program_menu_jw_library"
+    app:showAsAction="never"/>
+  <item
+    android:id="@+id/program_item_wol"
+    android:orderInCategory="2"
+    android:title="@string/program_menu_wol"
+    app:showAsAction="never"/>
+  <item
+    android:id="@+id/program_item_jw_language"
+    android:orderInCategory="3"
+    android:title="@string/program_menu_jw_language"
+    app:showAsAction="never"/>
+</menu>

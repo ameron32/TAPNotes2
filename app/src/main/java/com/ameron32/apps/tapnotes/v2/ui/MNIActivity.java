@@ -11,6 +11,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -27,11 +29,12 @@ import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.Rx;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.parse.ui.MyDispatchMainActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
@@ -70,6 +73,7 @@ public class MNIActivity extends TAPActivity
 
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
+  private static final String EXTRA_KEY_CURRENT_TALK_ID = "EXTRA_KEY_CURRENT_TALK_ID";
 
   /**
    * @param context
@@ -89,6 +93,8 @@ public class MNIActivity extends TAPActivity
   DrawerLayout mDrawerLayout;
   @InjectView(R.id.nav_view)
   NavigationView mNavigationView;
+  @InjectView(R.id.nav_header_username_text)
+  TextView mUsernameTextView;
 
   @InjectView(R.id.pane_animating_layout)
   AnimatingPaneLayout mAnimatingPane;
@@ -133,13 +139,18 @@ public class MNIActivity extends TAPActivity
     bus.register(this);
     // setContentView() handled in super.onCreate()
     mProgramId = getProgramId(savedInstanceState);
+    mCurrentTalkId = getCurrentTalkId(savedInstanceState);
     ButterKnife.inject(this);
 
     setupDrawer();
-    commitNotesPlaceholder(); //blank
+    if (mCurrentTalkId == null) {
+      commitNotesPlaceholder(); //blank
+    } else {
+      commitNotesFragmentFromTalkId(mCurrentTalkId);
+    }
     commitProgramFragment(mProgramId);
     commitProgressFragment();
-    // commitEditorFragment when real NotesFragment is created
+    // commitEditorFragment() when real NotesFragment is created
   }
 
   @Override
@@ -210,11 +221,22 @@ public class MNIActivity extends TAPActivity
         "Did you use the static factory to create the MNIActivity intent?");
   }
 
+  private String getCurrentTalkId(final Bundle savedInstanceState) {
+    if (savedInstanceState != null) {
+      final String savedTalkId = savedInstanceState.getString(EXTRA_KEY_CURRENT_TALK_ID);
+      if (savedTalkId != null) {
+        return savedTalkId;
+      }
+    }
+    return null;
+  }
+
   @Override
   protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     if (mProgramId != null) {
       outState.putString(EXTRA_KEY_PROGRAM_ID, mProgramId);
+      outState.putString(EXTRA_KEY_CURRENT_TALK_ID, mCurrentTalkId);
     }
   }
 
@@ -253,6 +275,19 @@ public class MNIActivity extends TAPActivity
         .replace(R.id.notes_xcontainer,
             NotesPlaceholderFragment.create(), tag)
         .commit();
+  }
+
+  private void commitNotesFragmentFromTalkId(final String talkId) {
+    try {
+      final Talk talk = Queries.Local.getTalk(talkId);
+      if (talk != null) {
+        final String talkName = talk.getTalkTitle();
+        final String imageUrl = ""; // TODO update
+        commitNotesFragment(talkId, talkName, imageUrl);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   private void commitNotesFragment(final String talkId, final String toolbarTitle, final String imageUrl) {
@@ -332,11 +367,26 @@ public class MNIActivity extends TAPActivity
             new NavigationView.OnNavigationItemSelectedListener() {
               @Override
               public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch(menuItem.getItemId()) {
+                  case R.id.nav_home:
+                    // go to dispatch, then straight thru to ProgramSelectionActivity
+                    startActivity(MyDispatchMainActivity.makeIntent(getContext()));
+                    finish();
+                    return true;
+                  case R.id.nav_logout:
+                    // logout then...
+                    Commands.Local.logoutClientUser();
+                    // go to dispatch, then straight thru to MyDispatchLoginActivity
+                    startActivity(MyDispatchMainActivity.makeIntent(getContext()));
+                    finish();
+                    return true;
+                }
                 menuItem.setChecked(true);
                 mDrawerLayout.closeDrawers();
                 return true;
               }
             });
+    mUsernameTextView.setText(Commands.Local.getClientUser().getUsername());
   }
 
   private void postLiveUpdateEvent(int requestCode) {
@@ -378,7 +428,7 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void editNote(String editorText, INote.NoteType type, Note note) {
+  public void editNote(String editorText, INote.NoteType type, INote note) {
     mECallbacks.editNote(editorText, type, note);
   }
 
@@ -407,6 +457,11 @@ public class MNIActivity extends TAPActivity
     mSCallbacks.scripturePrepared(scripture);
   }
 
+  @Override
+  public void scriptureCancelled() {
+    mSCallbacks.scriptureCancelled();
+  }
+
   private ProgramFragment.Callbacks mPCallbacks = new ProgramFragment.Callbacks() {
 
     @Override
@@ -432,8 +487,8 @@ public class MNIActivity extends TAPActivity
       try {
         if (talk instanceof Talk) {
           final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(Rx.Live.pinAllClientOwnedNotesFor(program,
-              (Talk) talk, notesController.getLastCheckedThenUpdateToNow()), DESTROY).cache();
+          cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor(program,
+              (Talk) talk), DESTROY).cache();
           cache.subscribe(observer);
           // see Observer for callbacks
         }
@@ -497,14 +552,17 @@ public class MNIActivity extends TAPActivity
     }
 
     @Override
-    public void editNote(String editorText, INote.NoteType type, Note note) {
-      if (type != note.getNoteType()) {
-        note.changeNoteType(type);
-      }
-      note.setNoteText(editorText);
+    public void editNote(String editorText, INote.NoteType type, INote iNote) {
+      if (iNote instanceof Note) {
+        Note note = (Note) iNote;
+        if (type != note.getNoteType()) {
+          note.changeNoteType(type);
+        }
+        note.setNoteText(editorText);
 
-      Commands.Local.saveEventuallyNote(note);
-      getNotesFragment().notesChanged(listify(note));
+        Commands.Local.saveEventuallyNote(note);
+        getNotesFragment().notesChanged(listify(note));
+      }
     }
 
     @Override
@@ -525,12 +583,20 @@ public class MNIActivity extends TAPActivity
 
     @Override
     public void scripturePrepared(IScripture scripture) {
-      // TODO scripture picker generated scripture
-      final String tag = TAG_SCRIPTURE_PICKER;
-      removeFragment(tag);
+      closeScripturePicker();
 
       // TODO scripture to editor
       getEditorFragment().provideScriptureToEditor(scripture);
+    }
+
+    @Override
+    public void scriptureCancelled() {
+      closeScripturePicker();
+    }
+
+    private void closeScripturePicker() {
+      final String tag = TAG_SCRIPTURE_PICKER;
+      removeFragment(tag);
     }
   };
 }

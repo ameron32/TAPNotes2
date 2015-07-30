@@ -9,6 +9,8 @@
   <color name="OffWhite">#fafafa</color>
   <color name="Charcoal">#333333</color>
 
+  <color name="Clear">#00000000</color>
+
   <color name="AMOLEDBlack">#000000</color>
   <color name="UltraBlack">#000000</color>
   <color name="Black">#000000</color>

@@ -17,7 +17,7 @@
     <item>Speaker</item>
     <item>Attendance</item>
     <item>Baptism</item>
-    </string-array>
+  </string-array>
 
   <string name="holdertag">holder</string>
   <string name="notetag">note</string>
@@ -28,6 +28,10 @@
   <string name="notes_placeholder_note_area_4">--It works just like a chat application.</string>
   <string name="notes_placeholder_note_area_5">--Slide from the left side of the screen for the options menu.</string>
   <string name="notes_placeholder_note_area_6">--Press the overflow button in the top right corner to access Settings.</string>
-  <string name="scripture_picker_button_proceed">SUBMIT</string>
+  <string name="scripture_picker_button_proceed">INSERT</string>
+  <string name="scripture_picker_button_cancel">CANCEL</string>
+  <string name="program_menu_jw_library">JW Library</string>
+  <string name="program_menu_jw_language">JW Language</string>
+  <string name="program_menu_wol">Watchtower Online Library</string>
 
 </resources>

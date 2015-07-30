@@ -4,7 +4,7 @@
   <dimen name="activity_vertical_margin">16dp</dimen>
 
   <!-- TAP Activity dimensions -->
-  <dimen name="detail_backdrop_height">256dp</dimen>
+  <dimen name="detail_backdrop_height">128dp</dimen>
   <dimen name="fab_margin">16dp</dimen>
   <dimen name="nav_header_height">100dp</dimen>
   <dimen name="program_bar_width">320dp</dimen>
@@ -13,6 +13,11 @@
   <dimen name="login_column_width">240dp</dimen>
 
   <dimen name="note_row_height_min">50dp</dimen>
+  <dimen name="note_row_vertical_margin">16dp</dimen>
+  <dimen name="note_row_horizontal_margin">8dp</dimen>
+  <dimen name="note_text_height_min">32dp</dimen>
+  <dimen name="note_text_vertical_margin">16dp</dimen>
+
 
   <dimen name="item_margin">16dp</dimen>
   <dimen name="scripture_picker_height">360dp</dimen>
@@ -20,5 +25,10 @@
   <dimen name="scripture_picker_box_padding">4dp</dimen>
 
   <dimen name="placeholder_text_padding">8dp</dimen>
+  <dimen name="frame_border_size">1dp</dimen>
+
+  <!-- ScriptureSpanRenderer -->
+  <dimen name="scripture_span_rounded_corner_dp">2dp</dimen>
+  <dimen name="scripture_span_padding_dp">2dp</dimen>
 
 </resources>

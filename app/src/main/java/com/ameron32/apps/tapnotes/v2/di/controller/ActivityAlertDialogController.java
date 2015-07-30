@@ -56,4 +56,26 @@ public class ActivityAlertDialogController extends AbsActivityController {
 //        .create()
 //        .show();
   }
+
+  public void showInterruptDialog(final String title, final String message, final Runnable runnable) {
+    final Resources r = getActivity().getResources();
+    final AlertDialog informationDialog = new AlertDialog.Builder(getActivity())
+        .setTitle(title)
+        .setMessage(message)
+        .setPositiveButton(r.getString(R.string.dialog_ok),
+            (dialog, which) -> {
+          switch (which) {
+            case DialogInterface.BUTTON_POSITIVE:
+              break;
+            case DialogInterface.BUTTON_NEGATIVE:
+              break;
+            case DialogInterface.BUTTON_NEUTRAL:
+            default:
+          }
+          dialog.dismiss();
+          runnable.run();
+        })
+        .create();
+    informationDialog.show();
+  }
 }
