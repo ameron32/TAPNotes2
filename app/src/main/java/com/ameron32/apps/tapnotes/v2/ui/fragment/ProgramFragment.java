@@ -1,7 +1,9 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -112,33 +114,38 @@ public class ProgramFragment extends TAPFragment
   public boolean onMenuItemClick(MenuItem item) {
     switch(item.getItemId()) {
       case R.id.program_item_jw_library:
-        try {
-          final Intent jwlibrary;
-          jwlibrary = new Intent(getContext(), Class.forName(Constants.ACTIVITY_JW_LIBRARY));
-          if (jwlibrary != null) {
-            startActivity(jwlibrary);
-          }
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
+        openApp(getContext(), Constants.PACKAGE_JW_LIBRARY);
         return true;
       case R.id.program_item_wol:
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_WATCHTOWER_ONLINE_LIBARY));
         startActivity(browserIntent);
         return true;
       case R.id.program_item_jw_language:
-        try {
-          final Intent jwlanguage;
-          jwlanguage = new Intent(getContext(), Class.forName(Constants.ACTIVITY_JW_LANGUAGE));
-          if (jwlanguage != null) {
-            startActivity(jwlanguage);
-          }
-        } catch (ClassNotFoundException e) {
-          e.printStackTrace();
-        }
+        openApp(getContext(), Constants.PACKAGE_JW_LANGUAGE);
         return true;
     }
     return false;
+  }
+
+  /** Open another app.
+   * @param context current Context, like Activity, App, or Service
+   * @param packageName the full package name of the app to open
+   * @return true if likely successful, false if unsuccessful
+   */
+  private boolean openApp(Context context, String packageName) {
+    PackageManager manager = context.getPackageManager();
+    try {
+      Intent i = manager.getLaunchIntentForPackage(packageName);
+      if (i == null) {
+        throw new PackageManager.NameNotFoundException();
+      }
+      i.addCategory(Intent.CATEGORY_LAUNCHER);
+      context.startActivity(i);
+      return true;
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+      return false;
+    }
   }
 
   private void confirmDelegateHasInterface() {
@@ -199,7 +206,7 @@ public class ProgramFragment extends TAPFragment
           mTalks.addAll(talks);
 
           // TODO remove fake insert
-//          _MiscUtils._saveSongNotes(mProgramId);
+//          _MiscUtils._modifySymposiumTalkTitles(mProgramId);
 
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();

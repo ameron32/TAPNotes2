@@ -75,6 +75,12 @@ public class Talk
     return "";
   }
 
+  public void setSymposiumTitle(String title) {
+    if (getEventType() == EventType.SYMPOSIUMTALK) {
+      setMetadata(title);
+    }
+  }
+
   @Override
   public int getSongNumber() {
     if (getEventType() == EventType.SONG) {
@@ -98,6 +104,10 @@ public class Talk
 
   private String getMetadata() {
     return this.getString(TALK_METADATA_STRING_KEY);
+  }
+
+  private void setMetadata(String metadata) {
+    this.put(TALK_METADATA_STRING_KEY, metadata);
   }
 
   @Override

@@ -49,8 +49,13 @@ public class Constants {
 
 
   // NOT PARSE
-  public static final String ACTIVITY_JW_LIBRARY = "org.jw.jwlibrary.mobile.MainActivity";
-  public static final String ACTIVITY_JW_LANGUAGE = "org.jw.jwlanguage.activities.MainActivity";
+  public static final String PACKAGE_JW_LIBRARY = "org.jw.jwlibrary.mobile";
+  public static final String PACKAGE_JW_LANGUAGE = "org.jw.jwlanguage";
   public static final String LINK_WATCHTOWER_ONLINE_LIBARY = "http://wol.jw.org";
   public static final String LINK_SUBMIT_FEEDBACK_GOOGLE_FORMS = "http://goo.gl/forms/8WLLGdcYUf";
+
+
+  // SERIALIZER
+  public static final String SERIALIZER_FILE_BIBLE_PREFIX = "bible-";
+  public static final String SERIALIZER_FILE_BIBLE_EXTENSION = ".bible";
 }
