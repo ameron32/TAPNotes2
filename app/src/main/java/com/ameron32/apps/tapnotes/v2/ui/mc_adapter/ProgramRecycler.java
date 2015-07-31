@@ -9,21 +9,25 @@ import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 /**
  * Created by Micah on 7/13/2015.
  */
-public class ProgramRecycler extends ExpandableRecyclerView {
+public class ProgramRecycler extends MicahExpandableRecyclerView {
 
 
     public ProgramRecycler(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+
+
     }
 
-    public void itemClicked(View view){
+
+    public void itemClicked(View view) {
 
         int size = this.getChildCount();
-        for (int i=0; i<size; i++){
-                getChildAt(i).setSelected(false);
-            }
+        for (int i = 0; i < size; i++) {
+            getChildAt(i).setSelected(false);
+        }
         view.setSelected(true);
+
 
     }
 
