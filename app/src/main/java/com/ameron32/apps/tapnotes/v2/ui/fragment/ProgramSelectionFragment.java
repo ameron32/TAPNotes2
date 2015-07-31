@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.ameron32.apps.tapnotes.v2.BuildConfig;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
@@ -61,7 +62,7 @@ public class ProgramSelectionFragment extends TAPFragment
     super.onCreate(savedInstanceState);
 
     // TODO update app version to dynamic
-    mAppVersion = "version 0.91";
+    mAppVersion = "version " + BuildConfig.VERSION_NAME;
 
     mProgramId = Constants.CONVENTION2015_PROGRAM_OBJECT_ID;
   }

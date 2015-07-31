@@ -7,20 +7,14 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
-import java.io.StreamCorruptedException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -31,8 +25,8 @@ public class BibleBuilder {
   private static final String TAG = BibleBuilder.class.getSimpleName();
 
   private String defaultLanguage;
-  private Resources r;
-  private Context c;
+  private Resources resources;
+  private Context context;
 
   //Kris:  To use BibleBuilder:
   //1.  Instantiate it.
@@ -45,33 +39,26 @@ public class BibleBuilder {
   private String[] bookAbbreviations;
   private final Serializer<Bible> serializer;
 
-  public BibleBuilder(final Context c) {
+  public BibleBuilder(final Context context) {
     defaultLanguage = Locale.getDefault().getLanguage();
-//    final String applicationVersionNumber = getAppVersionLabel();
-//    if (applicationVersionNumber != null) {
-      // e.g. "bible-ENGLISH.bible"
-      programFilename = BIBLE_FILE_PREFIX + defaultLanguage +
-//          applicationVersionNumber +
-          FILE_EXTENSION;
-//    } else {
-      // if applicationVersion cannot be determined, generate the bible every time (to be safe)
-//      programFilename = null;
-//    }
-    this.c = c;
-    r = c.getResources();
-    chapterQuantities = r.getIntArray(R.array.chapter_quantities);
-    bookNames = r.getStringArray(R.array.bible_books);
-    bookAbbreviations = r.getStringArray(R.array.book_abbr);
+      // e.g. "bible-en.bible"
+      programFilename = Constants.SERIALIZER_FILE_BIBLE_PREFIX + defaultLanguage +
+          Constants.SERIALIZER_FILE_BIBLE_EXTENSION;
+    this.context = context;
+    this.resources = context.getResources();
+    this.chapterQuantities = resources.getIntArray(R.array.chapter_quantities);
+    this.bookNames = resources.getStringArray(R.array.bible_books);
+    this.bookAbbreviations = resources.getStringArray(R.array.book_abbr);
 
-    serializer = new Serializer<>(Bible.class);
+    this.serializer = new Serializer<>(Bible.class);
 
     // from removeBadTags(), single initialization
-    allowedTags3 = r.getStringArray(R.array.allowed_tags);
+    this.allowedTags3 = resources.getStringArray(R.array.allowed_tags);
   }
 
   private String getAppVersionLabel() {
     try {
-      final PackageInfo pInfo = c.getPackageManager().getPackageInfo(c.getPackageName(), 0);
+      final PackageInfo pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
       return "-" + pInfo.versionName + "-" + pInfo.versionCode;
     } catch (PackageManager.NameNotFoundException e) {
       e.printStackTrace();
@@ -99,8 +86,7 @@ public class BibleBuilder {
     return bible;
   }
 
-  private static final String FILE_EXTENSION = ".bible";
-  private static final String BIBLE_FILE_PREFIX = "bible-";
+
 
   private final String programFilename;
 
@@ -110,7 +96,7 @@ public class BibleBuilder {
     }
 
     try {
-      final Bible bible = serializer.load(c, programFilename);
+      final Bible bible = serializer.load(context, programFilename);
       Log.d(TAG, "bible loaded as: " + programFilename);
       return bible;
     } catch (ClassNotFoundException e) {
@@ -127,7 +113,7 @@ public class BibleBuilder {
     }
 
     try {
-      boolean result = serializer.save(c, programFilename, bible);
+      boolean result = serializer.save(context, programFilename, bible);
       Log.d(TAG, "bible serialized as: " + programFilename);
       return result;
     } catch (FileNotFoundException e) {
@@ -174,8 +160,8 @@ public class BibleBuilder {
   public String[] loadChapterVerses(final int bookNumber, final int chapter) {
 
     filename = getFileName(bookNumber, chapter);
-    fileID = r.getIdentifier(filename, "raw", c.getPackageName());
-    is = r.openRawResource(fileID);
+    fileID = resources.getIdentifier(filename, "raw", context.getPackageName());
+    is = resources.openRawResource(fileID);
     isr = new InputStreamReader(is);
     br = new BufferedReader(isr);
     versesText = cleanupChapter(readChapterFile(br), chapter);
@@ -326,7 +312,7 @@ public class BibleBuilder {
   private String removeBadTags(final String s, final ArrayList<TagPair> tags) {
 
     // moved to INITIALIZATION, only 1 time needed
-    // allowedTags3 = r.getStringArray(R.array.allowed_tags);
+    // allowedTags3 = resources.getStringArray(R.array.allowed_tags);
 
     sb3 = new StringBuilder(s);
 
@@ -436,7 +422,7 @@ public class BibleBuilder {
         filename5
             .append("b")
             .append(convertBookNumberToAbbrevSpanish(bookNumber + 1))
-            .append(r.getString(R.string.default_verse_split))
+            .append(resources.getString(R.string.default_verse_split))
             .append(String.valueOf(chapter + 1));
       }
 
@@ -445,13 +431,13 @@ public class BibleBuilder {
       //Default Language
       if (chapter == 0) {
         filename5
-            .append(r.getString(R.string.default_verse_prefix))
+            .append(resources.getString(R.string.default_verse_prefix))
             .append(String.valueOf(bookNumber + 105));
       } else {
         filename5
-            .append(r.getString(R.string.default_verse_prefix))
+            .append(resources.getString(R.string.default_verse_prefix))
             .append(String.valueOf(bookNumber + 105))
-            .append(r.getString(R.string.default_verse_split))
+            .append(resources.getString(R.string.default_verse_split))
             .append(String.valueOf(chapter + 1));
       }
     }

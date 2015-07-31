@@ -144,6 +144,9 @@ public class EditorFragment extends TAPFragment
   public void onSubmitClicked(String editorText, INote.NoteType type, @Nullable INote note) {
     if (note == null) {
       // existing note was null -- proceed to create new note
+      if (editorText == null || editorText.isEmpty()) {
+        editorText = "---";
+      }
       mCallbacks.createNote(editorText, type);
       return;
     }

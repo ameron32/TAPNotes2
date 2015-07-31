@@ -22,6 +22,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -182,6 +183,24 @@ public class _MiscUtils {
 
   private static Talk getTalk(int number) throws ParseException {
     return ParseQuery.getQuery(Talk.class).whereEqualTo(Constants.TALK_METADATA_STRING_KEY, "#" + number).getFirst();
+  }
+
+  public static void _modifySymposiumTalkTitles(String programId) {
+    try {
+      final Program program = Queries.Local.getProgram(programId);
+      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+      final List<Talk> toSave = new ArrayList<>();
+      for (Talk talk : talks) {
+        final String symposiumTitle = talk.getSymposiumTitle();
+        if (symposiumTitle.contains("Symposium:")) {
+          talk.setSymposiumTitle(symposiumTitle.replace(": ", ": \n"));
+          toSave.add(talk);
+        }
+      }
+      Talk.saveAll(toSave);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
 
