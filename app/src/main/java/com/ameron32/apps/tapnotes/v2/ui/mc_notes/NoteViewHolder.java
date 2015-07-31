@@ -60,8 +60,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
         boldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getParent().getParent().getParent() instanceof NotesRecycler){
-                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent();
+                if (v.getParent().getParent().getParent().getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickBoldNote(note);
 
@@ -72,8 +72,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
         importantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getParent().getParent().getParent() instanceof NotesRecycler){
-                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent();
+                if (v.getParent().getParent().getParent().getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickImportantNote(note);
 
@@ -84,8 +84,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getParent().getParent().getParent() instanceof NotesRecycler){
-                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent();
+                if (v.getParent().getParent().getParent().getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickDeleteNote(note);
 

@@ -3,9 +3,12 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemAnimator.ItemAnimatorFinishedListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
@@ -13,6 +16,7 @@ import com.ameron32.apps.tapnotes.v2.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.levelupstudio.recyclerview.ExpandableRecyclerView;
+import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.MicahExpandableRecyclerView.ExpandableAdapter;
 
 import org.joda.time.DateTime;
 
@@ -27,7 +31,7 @@ import butterknife.InjectView;
 /**
  * Created by Micah on 7/7/2015.
  */
-public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<ProgramAdapter.ViewHolder, Integer> implements IProgramDelegate{
+public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapter<ProgramAdapter.ViewHolder, Integer> implements IProgramDelegate{
 
 
 
@@ -191,7 +195,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
 
 
-    public abstract static class ViewHolder extends ExpandableRecyclerView.ExpandableViewHolder {
+    public abstract static class ViewHolder extends MicahExpandableRecyclerView.ExpandableViewHolder   {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -201,6 +205,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
     public static class GroupViewHolderWithoutBaptism extends ViewHolder {
 
+        @InjectView(R.id.program_group_list_item) RelativeLayout layout;
         @InjectView(R.id.weekdayTextView) TextView weekdayView;
         @InjectView(R.id.dateTextView) TextView dateTextView;
         public GroupViewHolderWithoutBaptism(@NonNull View itemView) {
@@ -210,25 +215,51 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
         }
 
         @Override
-        protected boolean canExpand() {
-            return true;
-        }
-    }
+        protected boolean onViewClicked(View v){
+            if (v.getParent() instanceof ProgramRecycler){
+                ProgramRecycler pr = (ProgramRecycler) v.getParent();
 
-    public static class GroupViewHolderWithBaptism extends ViewHolder {
-
-        @InjectView(R.id.weekdayTextView) TextView weekdayView;
-        @InjectView(R.id.dateTextView) TextView dateTextView;
-
-        public GroupViewHolderWithBaptism(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.inject(this, itemView);
+            }
+            return false;
         }
 
         @Override
         protected boolean canExpand() {
             return true;
         }
+
+
+
+    }
+
+    public static class GroupViewHolderWithBaptism extends ViewHolder {
+
+        @InjectView(R.id.program_group_list_item) RelativeLayout layout;
+        @InjectView(R.id.weekdayTextView) TextView weekdayView;
+        @InjectView(R.id.dateTextView) TextView dateTextView;
+
+        public GroupViewHolderWithBaptism(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.inject(this, itemView);
+
+
+        }
+
+        @Override
+        protected boolean canExpand() {
+            return true;
+        }
+
+        @Override
+        protected boolean onViewClicked(View v){
+            if (v.getParent() instanceof ProgramRecycler){
+                ProgramRecycler pr = (ProgramRecycler) v.getParent();
+
+            }
+            return false;
+        }
+
+
     }
 
     public static class ChildViewHolderWithSymposium extends ChildViewHolder{
@@ -238,6 +269,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
             super(itemView, adapter);
             ButterKnife.inject(this, itemView);
         }
+
 
     }
 
@@ -280,6 +312,7 @@ public class ProgramAdapter extends ExpandableRecyclerView.ExpandableAdapter<Pro
 
             return false;
         }
+
 
     }
 
