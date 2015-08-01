@@ -207,6 +207,7 @@ public class ProgramFragment extends TAPFragment
 
           // TODO remove fake insert
 //          _MiscUtils._modifySymposiumTalkTitles(mProgramId);
+//          _MiscUtils._saveProgramScriptures(context, program);
 
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();

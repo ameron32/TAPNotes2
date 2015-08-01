@@ -156,20 +156,28 @@ public class Note
     Commands.Local.saveEventuallyNote(this);
   }
 
-/*  private List<Integer> getTags() {
-    final List<Integer> tags = this.getList(NOTE_TAGS_ARRAY_KEY);
-    return (tags == null) ? new ArrayList<>(0) : tags;
+  private List<Integer> getTags() {
+    final List<String> tags = this.getList(NOTE_TAGS_ARRAY_KEY);
+    if (tags == null) {
+      return new ArrayList<>(0);
+    }
+
+    final List<Integer> tagsI = new ArrayList<>(tags.size());
+    for (String tag : tags) {
+      tagsI.add(Integer.valueOf(tag));
+    }
+    return tagsI;
   }
 
   private void addTag(int tag) {
     this.addAllUnique(NOTE_TAGS_ARRAY_KEY,
-        Arrays.asList(new int[]{tag}));
+        Arrays.asList(new String[]{ Integer.toString(tag) }));
   }
 
   private void removeTag(int tag) {
     this.removeAll(NOTE_TAGS_ARRAY_KEY,
-        Arrays.asList(new int[]{tag}));
-  }*/
+        Arrays.asList(new String[]{ Integer.toString(tag) }));
+  }
 
   private void removeNoteTypes() {
     int size = getTags().size();
@@ -221,30 +229,6 @@ public class Note
   public boolean isNoteEditableByClient() {
     final ParseACL acl = getACL();
     return acl.getWriteAccess(Commands.Local.getClientUser());
-  }
-
-
-  private List<Integer> getTags() {
-    final List<String> tags = this.getList(NOTE_TAGS_ARRAY_KEY);
-    if (tags == null) {
-      return new ArrayList<>(0);
-    }
-
-    final List<Integer> tagsI = new ArrayList<>(tags.size());
-    for (String tag : tags) {
-      tagsI.add(Integer.valueOf(tag));
-    }
-    return tagsI;
-  }
-
-  private void addTag(int tag) {
-    this.addAllUnique(NOTE_TAGS_ARRAY_KEY,
-            Arrays.asList(new String[]{ Integer.toString(tag) }));
-  }
-
-  private void removeTag(int tag) {
-    this.removeAll(NOTE_TAGS_ARRAY_KEY,
-            Arrays.asList(new String[]{ Integer.toString(tag) }));
   }
 
 }

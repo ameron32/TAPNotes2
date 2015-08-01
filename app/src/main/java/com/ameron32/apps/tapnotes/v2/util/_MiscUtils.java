@@ -1,26 +1,24 @@
 package com.ameron32.apps.tapnotes.v2.util;
 
+import android.content.Context;
 import android.util.Log;
 
-import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.parse.object.Note;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseRole;
 
-import org.eclipse.mat.parser.index.IndexManager;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +27,8 @@ import java.util.List;
  * Created by klemeilleur on 7/7/2015.
  */
 public class _MiscUtils {
+
+  private static final String TAG = _MiscUtils.class.getSimpleName();
 
   /**
    * ONE TIME USE APPLICATION OF PROGRAM OBJECT TO TALKS FOR 2015 CONVENTION
@@ -40,13 +40,17 @@ public class _MiscUtils {
 
           @Override
           public void done(final Program program, ParseException e) {
-            if (e != null) { return; }
+            if (e != null) {
+              return;
+            }
             ParseQuery.getQuery(Talk.class)
                 .findInBackground(new FindCallback<Talk>() {
 
                   @Override
                   public void done(List<Talk> list, ParseException e) {
-                    if (e != null) { return; }
+                    if (e != null) {
+                      return;
+                    }
                     for (int i = 0; i < list.size(); i++) {
                       Talk t = list.get(i);
                       t.put("oProgram", program);
@@ -90,13 +94,141 @@ public class _MiscUtils {
   public static void _generate1001Notes(Talk talk, Program program)
       throws ParseException {
     for (int i = 0; i < 1001; i++) {
-      final Note note = Note.create("spam note " + (i+1), program, talk, Commands.Local.getClientUser());
+      final Note note = Note.create("spam note " + (i + 1), program, talk, Commands.Local.getClientUser());
       note.save();
     }
   }
 
-  public static void _saveProgramScriptures(Program program) {
+  private static final String[][] seq =
+      {   {"a001","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a002","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a003","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Luke 6:40)"},
+          {"a004","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Matthew 6:25-30)"},
+          {"a005","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Mark 9:50)"},
+          {"a006","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Luke 6:47-49)"},
+          {"a007","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a008","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Luke 11:9-13)(Luke 22:41-44)"},
+          {"a009","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Colossians 2:2-4)(Matthew 5:17-20,43-48)"},
+          {"a010","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a011","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a012","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a013","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Exodus 15:1,2,21)(Matthew 26:30)(2 Corinthians 8:12)(Colossians 3:16)"},
+          {"a014","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(John 2:13-17)"},
+          {"a015","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(John 13:3-5)"},
+          {"a016","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(Matthew 4:8-11)"},
+          {"a017","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(John 19:30)(Isaiah 55:10,11)"},
+          {"a018","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(Matthew 5:9)(Luke 24:34)"},
+          {"a019","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","(John 14:9)","Talk Theme:","(Matthew 22:15-22)"},
+          {"a020","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"a021","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Mark 5:22-43)(Luke 2:7-14,42-47)(Luke 4:1-30)(Luke 8:40-56)"},
+          {"a022","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Hebrews 5:7)(Matthew 10:27-31)(1 Peter 3:14)"},
+          {"a023","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:","(Luke 15:4-10)(Luke 19:10)"},
+          {"a024","Daily Theme: \"Learn From Me\"","(Matthew 11:29)","Symposium Theme:","","Talk Theme:",""},
+          {"b001","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b002","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b003","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Luke 14:13,14)"},
+          {"b004","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Luke 7:44)"},
+          {"b005","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Matthew 5:37)"},
+          {"b006","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(John 13:1)(Ephesians 4:24)"},
+          {"b007","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Matthew 23:23,24)"},
+          {"b008","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Matthew 18:22)(John 21:15-17)"},
+          {"b009","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Mark 10:13-15)"},
+          {"b010","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Matthew 11:28-30)"},
+          {"b011","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b012","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","(Matthew 4:23)","Talk Theme:","(Mark 1:38)"},
+          {"b013","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","(Matthew 4:23)","Talk Theme:","(Luke 24:32)"},
+          {"b014","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","(Matthew 4:23)","Talk Theme:","(Proverbs 12:18)(Galatians 6:1)"},
+          {"b015","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(1 Peter 2:21)"},
+          {"b016","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b017","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b018","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b019","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Proverbs 20:29)"},
+          {"b020","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(1 Corinthians 7:32-35,37)"},
+          {"b021","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Proverbs 14:1)(Proverbs 27:15,16)(Proverbs 31:17)"},
+          {"b022","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(1 Corinthians 11:3)(Hebrews 13:8)"},
+          {"b023","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Mark 10:14,16)"},
+          {"b024","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(James 5:16)"},
+          {"b025","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"b026","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Luke 22:54)"},
+          {"b027","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Luke 8:1)(Luke 9:1)(Luke 10:1)"},
+          {"b028","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(John 18:37)(Matthew 21:23-46)(Matthew 22:15-46)"},
+          {"b029","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:","(Matthew 4:8-10)(Matthew 8:1-3)(John 2:13-17)(1 Peter 4:1,2)"},
+          {"b030","Daily Theme: \"Have ... the Same Mental Attitude That Christ Jesus Had\"","(Romans 15:5)","Symposium Theme:","","Talk Theme:",""},
+          {"c001","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c002","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c003","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:4)"},
+          {"c004","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:4)"},
+          {"c005","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:4,5)"},
+          {"c006","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:5)"},
+          {"c007","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:5)"},
+          {"c008","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:6)"},
+          {"c009","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:7)"},
+          {"c010","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","(John 13:34,35)","Talk Theme:","(1 Corinthians 13:8)"},
+          {"c011","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c012","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:","(John 16:33)(Revelation 6:2)(Revelation 17:12-14)"},
+          {"c013","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c014","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c015","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c016","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c017","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:","(Leviticus 25:10-12)(Acts 3:21)"},
+          {"c018","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:","(Matthew 16:13-20)(John 9:1-41)(John 11:1-44)(Acts 1:1-11)(Acts 2:31)"},
+          {"c019","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""},
+          {"c020","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:","(Matthew 14:22-34)(Hebrews 12:2)"},
+          {"c021","Daily Theme: \"Keep Following Me\"","(Matthew 16:24)","Symposium Theme:","","Talk Theme:",""}
+      };
 
+  public static void _saveProgramScriptures(final Context context, Program program) {
+    try {
+      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+      if (talks.size() != seq.length) {
+        Log.d(TAG, "mismatch size: " + talks.size() + " / " + seq.length);
+        return;
+      }
+
+      int i = 0;
+      for (Talk talk : talks) {
+        Log.d(TAG, "talk: " + talk.getTalkTitle());
+        final String talkSeq = talk.getString("sequence");
+        for (String[] row : seq) {
+          final String rowSeq = row[0]; // sequence
+          if (talkSeq == rowSeq) {
+            // they match
+            // add notes to talk
+            final String t1 = row[1];
+            final String s1 = row[2];
+            if (s1.length() > 1) {
+              // TODO generate the note
+
+            } else {
+              // don't do it
+            }
+
+            final String t2 = row[3];
+            final String s2 = row[4];
+            if (s2.length() > 1) {
+              // TODO generate the note
+
+            } else {
+              // don't do it
+            }
+
+            final String t3 = row[5];
+            final String s4 = row[6];
+            if (s2.length() > 1) {
+              // TODO generate the note
+
+            } else {
+              // don't do it
+            }
+
+          }
+        }
+        talk.save();
+        i++;
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void _saveSongNotes(String programId) {
@@ -182,7 +314,9 @@ public class _MiscUtils {
   }
 
   private static Talk getTalk(int number) throws ParseException {
-    return ParseQuery.getQuery(Talk.class).whereEqualTo(Constants.TALK_METADATA_STRING_KEY, "#" + number).getFirst();
+    return ParseQuery.getQuery(Talk.class)
+        .whereEqualTo(Constants.TALK_METADATA_STRING_KEY, "#" + number)
+        .getFirst();
   }
 
   public static void _modifySymposiumTalkTitles(String programId) {
@@ -203,174 +337,4 @@ public class _MiscUtils {
     }
   }
 
-
-
-  /*
-  LINKED LIST STORED FOR REVIEW ONLY
-   */
-
-  static class _CrunchifyLinkedListTest {
-
-    public static void main(String[] args) {
-      _CrunchifyLinkedList lList = new _CrunchifyLinkedList();
-
-      // add elements to LinkedList
-      lList.add("1");
-      lList.add("2");
-      lList.add("3");
-      lList.add("4");
-      lList.add("5");
-
-        /*
-         * Please note that primitive values can not be added into LinkedList
-         * directly. They must be converted to their corresponding wrapper
-         * class.
-         */
-
-      System.out.println("lList - print linkedlist: " + lList);
-      System.out.println("lList.size() - print linkedlist size: " + lList.size());
-      System.out.println("lList.get(3) - get 3rd element: " + lList.get(3));
-      System.out.println("lList.remove(2) - remove 2nd element: " + lList.remove(2));
-      System.out.println("lList.get(3) - get 3rd element: " + lList.get(3));
-      System.out.println("lList.size() - print linkedlist size: " + lList.size());
-      System.out.println("lList - print linkedlist: " + lList);
-    }
-  }
-
-  static class _CrunchifyLinkedList {
-    // reference to the head node.
-    private Node head;
-    private int listCount;
-
-    // LinkedList constructor
-    public _CrunchifyLinkedList() {
-      // this is an empty list, so the reference to the head node
-      // is set to a new node with no data
-      head = new Node(null);
-      listCount = 0;
-    }
-
-    public void add(Object data)
-    // appends the specified element to the end of this list.
-    {
-      Node crunchifyTemp = new Node(data);
-      Node crunchifyCurrent = head;
-      // starting at the head node, crawl to the end of the list
-      while (crunchifyCurrent.getNext() != null) {
-        crunchifyCurrent = crunchifyCurrent.getNext();
-      }
-      // the last node's "next" reference set to our new node
-      crunchifyCurrent.setNext(crunchifyTemp);
-      listCount++;// increment the number of elements variable
-    }
-
-    public void add(Object data, int index)
-    // inserts the specified element at the specified position in this list
-    {
-      Node crunchifyTemp = new Node(data);
-      Node crunchifyCurrent = head;
-      // crawl to the requested index or the last element in the list,
-      // whichever comes first
-      for (int i = 1; i < index && crunchifyCurrent.getNext() != null; i++) {
-        crunchifyCurrent = crunchifyCurrent.getNext();
-      }
-      // set the new node's next-node reference to this node's next-node
-      // reference
-      crunchifyTemp.setNext(crunchifyCurrent.getNext());
-      // now set this node's next-node reference to the new node
-      crunchifyCurrent.setNext(crunchifyTemp);
-      listCount++;// increment the number of elements variable
-    }
-
-    public Object get(int index)
-    // returns the element at the specified position in this list.
-    {
-      // index must be 1 or higher
-      if (index <= 0)
-        return null;
-
-      Node crunchifyCurrent = head.getNext();
-      for (int i = 1; i < index; i++) {
-        if (crunchifyCurrent.getNext() == null)
-          return null;
-
-        crunchifyCurrent = crunchifyCurrent.getNext();
-      }
-      return crunchifyCurrent.getData();
-    }
-
-    public boolean remove(int index)
-    // removes the element at the specified position in this list.
-    {
-      // if the index is out of range, exit
-      if (index < 1 || index > size())
-        return false;
-
-      Node crunchifyCurrent = head;
-      for (int i = 1; i < index; i++) {
-        if (crunchifyCurrent.getNext() == null)
-          return false;
-
-        crunchifyCurrent = crunchifyCurrent.getNext();
-      }
-      crunchifyCurrent.setNext(crunchifyCurrent.getNext().getNext());
-      listCount--; // decrement the number of elements variable
-      return true;
-    }
-
-    public int size()
-    // returns the number of elements in this list.
-    {
-      return listCount;
-    }
-
-    public String toString() {
-      Node crunchifyCurrent = head.getNext();
-      String output = "";
-      while (crunchifyCurrent != null) {
-        output += "[" + crunchifyCurrent.getData().toString() + "]";
-        crunchifyCurrent = crunchifyCurrent.getNext();
-      }
-      return output;
-    }
-
-    private class Node {
-      // reference to the next node in the chain,
-      // or null if there isn't one.
-      Node next;
-      // data carried by this node.
-      // could be of any type you need.
-      Object data;
-
-      // Node constructor
-      public Node(Object dataValue) {
-        next = null;
-        data = dataValue;
-      }
-
-      // another Node constructor if we want to
-      // specify the node to point to.
-      public Node(Object dataValue, Node nextValue) {
-        next = nextValue;
-        data = dataValue;
-      }
-
-      // these methods should be self-explanatory
-      public Object getData() {
-        return data;
-      }
-
-      public void setData(Object dataValue) {
-        data = dataValue;
-      }
-
-      public Node getNext() {
-        return next;
-      }
-
-      public void setNext(Node nextValue) {
-        next = nextValue;
-      }
-    }
-  }
 }
