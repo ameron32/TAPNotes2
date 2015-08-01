@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -43,6 +44,15 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     private ScriptureAppender appender;
     AwesomeTextHandler noteTextHandler;
+
+    public void setSelected(int position){
+        mProvider.setSelected(position);
+    }
+
+    public int getPositionOfSelectedItem(){
+        return mProvider.getPositionOfSelectedItem();
+    }
+
 
     @Override
     public void onBibleCreated(IBible bible) {
@@ -95,6 +105,13 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public void onBindViewHolder(NoteViewHolder holder, int position) {
 
         INote note = mProvider.getItem(position);
+
+        if (mProvider.getPositionOfSelectedItem() == position){
+            holder.noteLayout.setSelected(true);
+        }else{
+            holder.noteLayout.setSelected(false);
+        }
+
         //holder.notesTextView.setText(note.getNoteText());
         holder.noteLayout.setTag(R.string.holdertag, holder);
         holder.noteLayout.setTag(R.string.notetag, note);
@@ -108,6 +125,11 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
             .setView(holder.notesTextView);
         noteTextHandler.setText(note.getNoteText());
+        if (note.isBoldNote()){
+            holder.notesTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+        }else{
+            holder.notesTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        }
         String appendedText = appendedScriptures.get(note);
         if (appendedText != null) {
             appendedText = appendedText.trim();
@@ -149,6 +171,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             }
         }
         notifyDataSetChanged();
+
 
     }
 
@@ -243,4 +266,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             }
         });
     }
+
+
 }

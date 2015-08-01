@@ -3,6 +3,7 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.IBible;
@@ -257,6 +258,7 @@ public class Sanitizer implements ISanitizer{
         ws.scriptureParsedInfo = String.valueOf(bookNumber)+ " " + String.valueOf(chapter)+" ";
         for (int i=0; i<verses.length; i++){
             ws.scriptureParsedInfo = ws.scriptureParsedInfo + String.valueOf(verses[i])+" ";
+            Log.i("SCRIPTURE", ws.scriptureParsedInfo.toString());
         }
 
         return ws;

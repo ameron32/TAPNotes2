@@ -64,6 +64,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
                     NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickBoldNote(note);
+                    nr.getAdapter().notifyDataSetChanged();
+                    popup.setVisibility(View.INVISIBLE);
 
                 }
             }
@@ -76,6 +78,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
                     NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickImportantNote(note);
+                    nr.getAdapter().notifyDataSetChanged();
+                    popup.setVisibility(View.INVISIBLE);
 
                 }
             }
@@ -88,6 +92,8 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
                     NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
                     INote note = (INote) noteLayout.getTag(R.string.notetag);
                     ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickDeleteNote(note);
+                    nr.getAdapter().notifyDataSetChanged();
+                    popup.setVisibility(View.INVISIBLE);
 
                 }
             }

@@ -26,6 +26,11 @@ public class NotesRecycler extends RecyclerView {
 
         }
         view.setSelected(true);
+        if (getAdapter() instanceof NotesRecyclerAdapter){
+            NotesRecyclerAdapter nra = (NotesRecyclerAdapter)getAdapter();
+            nra.setSelected(indexOfChild(view));
+        }
+
 
     }
 

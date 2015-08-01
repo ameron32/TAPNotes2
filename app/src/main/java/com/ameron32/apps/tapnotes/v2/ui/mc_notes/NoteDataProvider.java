@@ -16,6 +16,7 @@ public class NoteDataProvider extends AbstractDataProvider {
     private INote mLastRemovedData;
     private int mLastRemovedPosition = -1;
 
+    private int selected = -1;
 
 
     public NoteDataProvider() {
@@ -28,6 +29,15 @@ public class NoteDataProvider extends AbstractDataProvider {
         mData.add(note);
     }
 
+    public void setSelected (int position){
+        if ((mData!=null) && (position<mData.size()) && position>=0){
+            selected = position;
+        }
+    }
+
+    public int getPositionOfSelectedItem(){
+        return selected;
+    }
     public void populateWithExistingNotes(LinkedList<INote> notes){
         mData = notes;
     }
