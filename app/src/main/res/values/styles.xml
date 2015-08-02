@@ -49,6 +49,10 @@
 
     <item name="span_scripture_background">@drawable/teal_span_scripture_background</item>
     <item name="fragment_frame_border">@color/teal_fragment_frame_border</item>
+
+    <!-- TODO change to black icons -->
+    <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
+    <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
   </style>
 
 
@@ -95,6 +99,9 @@
 
     <item name="span_scripture_background">@drawable/ultrablack_span_scripture_background</item>
     <item name="fragment_frame_border">@color/ultrablack_fragment_frame_border</item>
+
+    <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
+    <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
   </style>
 
   <style name="MaterialDarkTheme" parent="AppDarkTheme">
@@ -139,6 +146,9 @@
 
     <item name="span_scripture_background">@drawable/materialdark_span_scripture_background</item>
     <item name="fragment_frame_border">@color/materialdark_fragment_frame_border</item>
+
+    <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
+    <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

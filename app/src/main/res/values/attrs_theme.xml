@@ -43,4 +43,7 @@
   <attr name="span_scripture_background" format="reference" />
   <attr name="fragment_frame_border" format="reference|color" />
 
+  <attr name="expandable_icon" format="reference" />
+  <attr name="collapsable_icon" format="reference" />
+
 </resources>

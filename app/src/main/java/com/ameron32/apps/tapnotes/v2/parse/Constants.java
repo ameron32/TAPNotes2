@@ -26,6 +26,7 @@ public class Constants {
   public static final String TALK_METADATA_STRING_KEY = "metadata";
   public static final String TALK_TITLE_STRING_KEY = "title";
   public static final String TALK_SCRIPTURES_STRING_KEY = "scriptures";
+  public static final String TALK_SEQUENCE_STRING_KEY = "sequence";
   public static final String TALK_DURATIONMINUTES_NUMBER_KEY = "durationMinutes";
   public static final String TALK_HEADERIMAGE_FILE_KEY = "headerImage";
   public static final String TALK_CREATEDAT_DATE_KEY = "createdAt";

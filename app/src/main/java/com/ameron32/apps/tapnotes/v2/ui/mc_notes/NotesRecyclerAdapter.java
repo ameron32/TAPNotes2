@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -103,7 +104,6 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
     @Override
     public void onBindViewHolder(NoteViewHolder holder, int position) {
-
         INote note = mProvider.getItem(position);
 
         if (mProvider.getPositionOfSelectedItem() == position){
@@ -135,12 +135,14 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             appendedText = appendedText.trim();
             if (!appendedText.isEmpty() && appendedText.length() > 0) {
                 holder.appendTextView.setVisibility(View.VISIBLE);
-                holder.appendTextView.setText(Html.fromHtml(appendedText));
+                holder.appendTextView.setText(Html.fromHtml(appendedText), isScriptureHidden, position);
             } else {
                 holder.appendTextView.setVisibility(View.GONE);
             }
         }
     }
+
+    private final SparseBooleanArray isScriptureHidden = new SparseBooleanArray();
 
     @Override
     public int getItemCount() {

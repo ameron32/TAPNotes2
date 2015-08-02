@@ -41,8 +41,8 @@ public class ExpandableTextView
   /* The default alpha value when the animation starts */
   private static final float DEFAULT_ANIM_ALPHA_START = 0.7f;
 
-
-
+  /* The default expanded or collapsed state of the text */
+  private static final boolean DEFAULT_COLLAPSED_STATE = true;
 
 
 
@@ -134,7 +134,6 @@ public class ExpandableTextView
     if (mExpandDrawable == null) {
 //      mExpandDrawable = getResources().getDrawable(R.drawable.ic_action_unfold_more_white);
       mExpandDrawable = ContextCompat.getDrawable(context, R.drawable.ic_action_unfold_more_white);
-
     }
     if (mCollapseDrawable == null) {
 //      mCollapseDrawable = getResources().getDrawable(R.drawable.ic_action_unfold_less_white);
@@ -201,6 +200,7 @@ public class ExpandableTextView
   @Override protected void onFinishInflate() {
     // super.onFinishInflate();
     findViews();
+    setCollapsedState();
   }
 
   private void findViews() {
@@ -217,11 +217,8 @@ public class ExpandableTextView
     }
 
     mCollapsed = !mCollapsed;
-    mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
 
-    if (mCollapsedStatus != null) {
-      mCollapsedStatus.put(mPosition, mCollapsed);
-    }
+    setCollapsedState();
 
     Animation animation;
     if (mCollapsed) {
@@ -252,6 +249,14 @@ public class ExpandableTextView
 
     clearAnimation();
     startAnimation(animation);
+  }
+
+  private void setCollapsedState() {
+    mButton.setImageDrawable(mCollapsed ? mExpandDrawable : mCollapseDrawable);
+
+    if (mCollapsedStatus != null) {
+      mCollapsedStatus.put(mPosition, mCollapsed);
+    }
   }
 
   public void setText(CharSequence text, SparseBooleanArray collapsedStatus, int position) {

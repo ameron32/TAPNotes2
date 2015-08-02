@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView;
+import com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView2;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableItemViewHolder;
 
 import butterknife.ButterKnife;
@@ -44,8 +46,11 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
     @InjectView(R.id.delete_button)
     public ImageView deleteButton;
 
-    @InjectView(R.id.appendTextView)
-    public TextView appendTextView;
+//    @InjectView(R.id.appendTextView)
+//    public TextView appendTextView;
+
+    @InjectView(R.id.expand_text_view)
+    ExpandableTextView2 appendTextView;
 
 
     public NoteViewHolder(View itemView) {

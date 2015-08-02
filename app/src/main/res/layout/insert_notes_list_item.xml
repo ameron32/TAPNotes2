@@ -36,10 +36,10 @@
       android:layout_centerInParent="true"
       tools:visibility="gone"/>
 
-    <!--fontPath="fonts/LiberationSerif-Regular.ttf"-->
-    <TextView
-      android:id="@+id/appendTextView"
-      fontPath="@string/font_serif_italic_liberation"
+    <com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView2
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/expand_text_view"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_alignParentEnd="true"
@@ -50,10 +50,31 @@
       android:layout_marginLeft="75dp"
       android:layout_marginRight="50dp"
       android:layout_marginTop="@dimen/note_text_vertical_margin"
-      tools:ignore="MissingPrefix"
-      tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."
-      />
+      android:orientation="vertical"
+      expandableTextView:collapseDrawable="?collapsable_icon"
+      expandableTextView:expandDrawable="?expandable_icon"
+      expandableTextView:maxCollapsedLines="8"
+      expandableTextView:animDuration="200">
 
+      <!--fontPath="fonts/LiberationSerif-Regular.ttf"-->
+      <!--android:id="@+id/appendTextView"-->
+      <TextView
+        android:id="@+id/expandable_text"
+        fontPath="@string/font_serif_italic_liberation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingPrefix"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."
+        />
+
+      <ImageButton
+        android:id="@+id/expand_collapse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        android:background="@android:color/transparent"/>
+
+    </com.ameron32.apps.tapnotes.v2.ui.view.ExpandableTextView2>
   </RelativeLayout>
 </FrameLayout>
 
