@@ -220,6 +220,16 @@ public class Queries {
       return talk;
     }
 
+    public static Talk getTalkAtSequence(String sequence)
+        throws ParseException, IndexOutOfBoundsException {
+      Log.d(TAG, "getTalkAtSequence " + sequence);
+      final Talk talk = ParseQuery.getQuery(Talk.class)
+          .fromLocalDatastore()
+          .whereEqualTo(Constants.TALK_SEQUENCE_STRING_KEY, sequence)
+          .find().get(0);
+      return talk;
+    }
+
     public static List<Note> findClientOwnedNotesFor(Talk talk)
         throws ParseException {
       Log.d(TAG, "findClientOwnedNotesFor " + talk.getObjectId());

@@ -45,6 +45,8 @@ import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgressFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ScripturePickerFragment;
 import com.ameron32.apps.tapnotes.v2.ui.view.AnimatingPaneLayout;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.parse.ParseException;
 import com.squareup.otto.Bus;
 
@@ -190,15 +192,57 @@ public class MNIActivity extends TAPActivity
         startActivity(browserIntent);
         return true;
       case R.id.action_next_talk:
-// TODO next talk
-        new ActivitySnackBarController(this).toast("BETA: Almost ready... but not quite there.");
+        try {
+          final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+          final String sequence = talk.getSequence();
+          final String session = String.valueOf(sequence.charAt(0));
+          final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
+          final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession+1);
+          Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
+          final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+          commitNotesFragmentFromTalkId(nextTalk.getId());
+        } catch (ParseException e) {
+          e.printStackTrace();
+          Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
+        } catch (IndexOutOfBoundsException e) {
+          e.printStackTrace();
+          Log.d(MNIActivity.class.getSimpleName(), "nextTalk not found");
+        }
         return true;
       case R.id.action_prev_talk:
-// TODO prev talk
-        new ActivitySnackBarController(this).toast("BETA: Almost ready... but not quite there.");
+        try {
+          final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+          final String sequence = talk.getSequence();
+          final String session = String.valueOf(sequence.charAt(0));
+          final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
+          final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
+          Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
+          final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+          commitNotesFragmentFromTalkId(nextTalk.getId());
+        } catch (ParseException e) {
+          e.printStackTrace();
+          Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
+        } catch (IndexOutOfBoundsException e) {
+          e.printStackTrace();
+          Log.d(MNIActivity.class.getSimpleName(), "prevTalk not found");
+        }
         return true;
       case R.id.action_settings:
         startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
+        return true;
+      case R.id.action_about:
+        new LibsBuilder()
+            //Pass the fields of your application to the lib so it can find all external lib information
+            .withFields(R.string.class.getFields())
+                //provide a style (optional) (LIGHT, DARK, LIGHT_DARK_TOOLBAR)
+            .withActivityStyle(Libs.ActivityStyle.LIGHT_DARK_TOOLBAR)
+            .withAboutIconShown(true)
+            .withAboutVersionShown(true)
+            .withAboutDescription("<b>TAP Notes v2</b><br />" +
+                "Take notes with quick references to scriptures.<br />" +
+                "<b>Thank you for using this app!</b>")
+                //start the activity
+            .start(this);
         return true;
     }
 

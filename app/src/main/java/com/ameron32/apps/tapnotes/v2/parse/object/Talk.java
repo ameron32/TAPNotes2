@@ -4,6 +4,7 @@ import com.ameron32.apps.tapnotes.v2.model.EventType;
 import com.ameron32.apps.tapnotes.v2.model.INote;
 import com.ameron32.apps.tapnotes.v2.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.frmk.ColumnableParseObject;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
@@ -87,6 +88,11 @@ public class Talk
       return getSongNumberWithinMetadata();
     }
     return NO_SONG_NUMBER;
+  }
+
+  @Override
+  public String getSequence() {
+    return this.getString(Constants.TALK_SEQUENCE_STRING_KEY);
   }
 
   @Override

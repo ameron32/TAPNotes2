@@ -43,9 +43,9 @@
     <item name="program_container_background">@color/teal_program_container_background</item>
     <item name="default_background">@color/teal_default_background</item>
 
-    <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
-    <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
-    <item name="ic_bible_icon">@drawable/bible</item>
+    <item name="ic_photo_camera_icon">@drawable/camera_black</item>
+    <item name="ic_videocam_icon">@drawable/video_black</item>
+    <item name="ic_bible_icon">@drawable/bible_black</item>
 
     <item name="span_scripture_background">@drawable/teal_span_scripture_background</item>
     <item name="fragment_frame_border">@color/teal_fragment_frame_border</item>
@@ -53,6 +53,9 @@
     <!-- TODO change to black icons -->
     <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
     <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
+
+    <item name="menu_next_icon">@drawable/next_black</item>
+    <item name="menu_prev_icon">@drawable/previous_black</item>
   </style>
 
 
@@ -93,15 +96,19 @@
     <item name="default_background">@color/ultrablack_default_background</item>
 
     <!-- TODO MICAH change to white icons -->
-    <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
-    <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
-    <item name="ic_bible_icon">@drawable/bible</item>
+    <item name="ic_photo_camera_icon">@drawable/camera_white</item>
+    <item name="ic_videocam_icon">@drawable/video_white</item>
+    <item name="ic_bible_icon">@drawable/bible_white</item>
 
     <item name="span_scripture_background">@drawable/ultrablack_span_scripture_background</item>
     <item name="fragment_frame_border">@color/ultrablack_fragment_frame_border</item>
 
     <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
     <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
+
+    <item name="menu_next_icon">@drawable/next_white</item>
+    <item name="menu_prev_icon">@drawable/previous_white</item>
+
   </style>
 
   <style name="MaterialDarkTheme" parent="AppDarkTheme">
@@ -140,15 +147,18 @@
     <item name="default_background">@color/materialdark_default_background</item>
 
     <!-- TODO MICAH change to white icons -->
-    <item name="ic_photo_camera_icon">@drawable/ic_photo_camera_black_48dp</item>
-    <item name="ic_videocam_icon">@drawable/ic_videocam_black_48dp</item>
-    <item name="ic_bible_icon">@drawable/bible</item>
+    <item name="ic_photo_camera_icon">@drawable/camera_white</item>
+    <item name="ic_videocam_icon">@drawable/video_white</item>
+    <item name="ic_bible_icon">@drawable/bible_white</item>
 
     <item name="span_scripture_background">@drawable/materialdark_span_scripture_background</item>
     <item name="fragment_frame_border">@color/materialdark_fragment_frame_border</item>
 
     <item name="expandable_icon">@drawable/ic_action_unfold_more_white</item>
     <item name="collapsable_icon">@drawable/ic_action_unfold_less_white</item>
+
+    <item name="menu_next_icon">@drawable/next_white</item>
+    <item name="menu_prev_icon">@drawable/previous_white</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

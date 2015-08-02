@@ -7,14 +7,14 @@
   <item
     android:id="@+id/action_prev_talk"
     android:title="@string/action_prev_talk"
-    android:icon="@drawable/ic_arrow_back_black_48dp"
+    android:icon="?menu_prev_icon"
     android:orderInCategory="97"
     app:showAsAction="always"/>
 
   <item
     android:id="@+id/action_next_talk"
     android:title="@string/action_prev_talk"
-    android:icon="@drawable/ic_arrow_forward_black_48dp"
+    android:icon="?menu_next_icon"
     android:orderInCategory="98"
     app:showAsAction="always"/>
 
@@ -28,5 +28,11 @@
     android:id="@+id/action_settings"
     android:title="@string/action_settings"
     android:orderInCategory="100"
+    app:showAsAction="never" />
+
+  <item
+    android:id="@+id/action_about"
+    android:title="@string/action_about"
+    android:orderInCategory="101"
     app:showAsAction="never" />
 </menu>

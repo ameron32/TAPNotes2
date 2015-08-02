@@ -21,4 +21,5 @@ public interface ITalk<T extends IScripture, U extends IBible> extends IObject {
   String getSymposiumTitle();
   int getSongNumber();
   int getDurationInMinutes();
+  String getSequence();
 }
