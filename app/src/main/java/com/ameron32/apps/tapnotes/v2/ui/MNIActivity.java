@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ameron32.apps.tapnotes.v2.BuildConfig;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -184,13 +186,19 @@ public class MNIActivity extends TAPActivity
     int id = item.getItemId();
 
     switch (id) {
+
       case android.R.id.home:
         toggleProgramPane();
         return true;
+
       case R.id.action_submit_feedback:
+        // TODO update app version to dynamic
+        final String version = "version " + BuildConfig.VERSION_NAME;
+        Toast.makeText(getContext(), "TAP Notes v2: " + version, Toast.LENGTH_LONG).show();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_SUBMIT_FEEDBACK_GOOGLE_FORMS));
         startActivity(browserIntent);
         return true;
+
       case R.id.action_next_talk:
         try {
           final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
@@ -209,6 +217,7 @@ public class MNIActivity extends TAPActivity
           Log.d(MNIActivity.class.getSimpleName(), "nextTalk not found");
         }
         return true;
+
       case R.id.action_prev_talk:
         try {
           final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
@@ -227,9 +236,11 @@ public class MNIActivity extends TAPActivity
           Log.d(MNIActivity.class.getSimpleName(), "prevTalk not found");
         }
         return true;
+
       case R.id.action_settings:
         startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
         return true;
+
       case R.id.action_about:
         new LibsBuilder()
             //Pass the fields of your application to the lib so it can find all external lib information
@@ -244,6 +255,7 @@ public class MNIActivity extends TAPActivity
                 //start the activity
             .start(this);
         return true;
+
     }
 
     return super.onOptionsItemSelected(item);

@@ -21,30 +21,44 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <TextView
-      android:id="@+id/text_symposium_title"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      tools:text="Symposium Title:"
-      android:layout_above="@+id/text_speaker_name"
-      android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
-      android:layout_alignParentBottom="true"
-      android:layout_marginLeft="64dp"
-      android:layout_marginBottom="40dp"/>
-
+  <!-- TODO revert invisible to visible when speaker notes are implemented -->
   <TextView
       android:id="@+id/text_speaker_name"
-      android:layout_width="wrap_content"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
       android:layout_alignParentLeft="true"
       android:layout_alignParentStart="true"
-      tools:text="Speaker Name:"
       android:layout_marginLeft="64dp"
-      android:layout_marginTop="16dp"
-      android:layout_alignParentTop="true"/>
+      android:layout_marginBottom="4dp"
+      android:visibility="invisible"
+      tools:text="Speaker Name:"/>
+
+  <TextView
+      android:id="@+id/text_symposium_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/text_talk_title"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_marginBottom="4dp"
+      android:layout_marginLeft="64dp"
+      android:layout_marginRight="64dp"
+      tools:text="Symposium Title: \nTwo Line Title"/>
+
+  <TextView
+      android:id="@+id/text_talk_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@id/text_speaker_name"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_marginBottom="4dp"
+      android:layout_marginLeft="64dp"
+      android:layout_marginRight="8dp"
+      android:textAppearance="?android:attr/textAppearanceLarge"
+      tools:text="Talk Title: Long -- With Lots of Text to Go Two Lines"/>
 </RelativeLayout>

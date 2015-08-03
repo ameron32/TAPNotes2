@@ -114,6 +114,8 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @InjectView(R.id.text_symposium_title)
   TextView mSymposiumTextView;
+  @InjectView(R.id.text_talk_title)
+  TextView mTalkTextView;
   @InjectView(R.id.image_toolbar_header_background)
   ImageView mHeaderImage;
   @InjectView(R.id.collapsing_toolbar)
@@ -176,6 +178,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   @Override
   public void setTalkTitle(String title) {
     mToolbarLayout.setTitle(title);
+    mTalkTextView.setText(title);
   }
 
   @Override
@@ -185,7 +188,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   @Override
   public void setSpeakerName(String speakerName) {
-
+    // TODO allow speaker notes
   }
 
   @Override

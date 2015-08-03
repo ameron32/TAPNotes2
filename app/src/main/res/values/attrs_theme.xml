@@ -49,4 +49,10 @@
   <attr name="menu_next_icon" format="reference" />
   <attr name="menu_prev_icon" format="reference" />
 
+  <attr name="context_menu_move" format="reference" />
+  <attr name="context_menu_bold" format="reference" />
+  <attr name="context_menu_important" format="reference" />
+  <attr name="context_menu_edit" format="reference" />
+  <attr name="context_menu_delete" format="reference" />
+
 </resources>
