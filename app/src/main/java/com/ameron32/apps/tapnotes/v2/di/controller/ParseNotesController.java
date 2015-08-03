@@ -47,6 +47,24 @@ public class ParseNotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, checkedTime.toDate());
   }
 
+  public Observable<Progress> pinAllClientOwnedNotesFor(Program program, Talk talk) {
+    // TODO perform online check with offline instantComplete
+    if (!Status.isConnectionToServerAvailable(getApplication())) {
+      return instantComplete();
+    }
+
+    return ControllerActions.pinClientNotesFor(program, talk, null);
+  }
+
+  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(Program program, Talk talk) {
+    // TODO perform online check with offline instantComplete
+    if (!Status.isConnectionToServerAvailable(getApplication())) {
+      return instantComplete();
+    }
+
+    return ControllerActions.unpinThenRepinClientNotesFor(program, talk, null);
+  }
+
   public Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
     // TODO perform online check with offline instantComplete
     if (!Status.isConnectionToServerAvailable(getApplication())) {

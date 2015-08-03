@@ -324,18 +324,6 @@ public class NotesFragment extends TAPFragment
     mNotesDelegate.addNotes(notes);
   }
 
-  @Override
-  public void onPreviousPressed() {
-    // TODO: KRIS delegate callback
-    mSnackBar.toast("onPreviousPressed() to be implemented.");
-  }
-
-  @Override
-  public void onNextPressed() {
-    // TODO: KRIS delegate callback
-    mSnackBar.toast("onNextPressed() to be implemented.");
-  }
-
 
 
   @Inject

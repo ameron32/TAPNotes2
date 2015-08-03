@@ -237,6 +237,10 @@ public class MNIActivity extends TAPActivity
         }
         return true;
 
+      case R.id.action_refresh_talk:
+        unpinAndRepinNotesForThisTalk();
+        return true;
+
       case R.id.action_settings:
         startActivityForResult(SettingsActivity.makeIntent(getContext()), SETTINGS_REQUEST_CODE);
         return true;
@@ -570,10 +574,29 @@ public class MNIActivity extends TAPActivity
     }
   };
 
+  private void unpinAndRepinNotesForThisTalk() {
+    try {
+      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final Program program = Queries.Local.getProgram(mProgramId);
+      if (talk instanceof Talk) {
+        cache2 = bindLifecycle(
+            notesController.unpinThenRepinAllClientOwnedNotesFor(program, talk),
+            DESTROY).cache();
+        cache2.subscribe(observer);
+        // see Observer for callbacks
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
+
+
   @Inject
   ParseNotesController notesController;
 
   private Observable<Progress> cache;
+  private Observable<Progress> cache2;
 
   // SUBSCRIBE THIS OBSERVER TO ALL OPERATIONS
   // THAT SYNCHRONIZE Live.Notes (server) INTO Local.Notes (local datastore)

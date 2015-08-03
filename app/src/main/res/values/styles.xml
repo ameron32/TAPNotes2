@@ -57,6 +57,7 @@
     <!-- MUST BE WHITE IF COLORPRIMARY IS DARK-->
     <item name="menu_next_icon">@drawable/next_white</item>
     <item name="menu_prev_icon">@drawable/previous_white</item>
+    <item name="menu_refresh_icon">@drawable/ic_action_refresh</item>
 
     <item name="context_menu_move">@drawable/move_white</item>
     <item name="context_menu_bold">@drawable/bold_white</item>
@@ -115,6 +116,7 @@
 
     <item name="menu_next_icon">@drawable/next_white</item>
     <item name="menu_prev_icon">@drawable/previous_white</item>
+    <item name="menu_refresh_icon">@drawable/ic_action_refresh</item>
 
     <item name="context_menu_move">@drawable/move_white</item>
     <item name="context_menu_bold">@drawable/bold_white</item>
@@ -171,6 +173,7 @@
 
     <item name="menu_next_icon">@drawable/next_white</item>
     <item name="menu_prev_icon">@drawable/previous_white</item>
+    <item name="menu_refresh_icon">@drawable/ic_action_refresh</item>
 
     <item name="context_menu_move">@drawable/move_white</item>
     <item name="context_menu_bold">@drawable/bold_white</item>

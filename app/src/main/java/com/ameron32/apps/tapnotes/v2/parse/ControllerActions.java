@@ -19,6 +19,10 @@ public class ControllerActions {
     return Rx.Live.pinRecentClientOwnedNotesFor(program, talk, checkedTime);
   }
 
+  public static Observable<Progress> unpinThenRepinClientNotesFor(Program program, Talk talk, Date checkedTime) {
+    return Rx.Live.unpinThenRepinAllClientOwnedNotesFor(program, talk, checkedTime);
+  }
+
   public static Observable<Progress> pinNotesFor(Program program, Date checkedTime) {
     return Rx.Live.pinRecentProgramNotes(program, checkedTime);
   }

@@ -18,7 +18,5 @@ public interface IToolbarHeaderDelegate {
 
   public interface IToolbarHeaderCallbacks {
 
-    void onPreviousPressed();
-    void onNextPressed();
   }
 }

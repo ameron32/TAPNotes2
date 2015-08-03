@@ -45,7 +45,7 @@ android {
     minSdkVersion 16
     targetSdkVersion 22
     versionCode 4
-    versionName "0.922" // alpha2 // versionName MUST BE A FLOAT
+    versionName "0.93" // beta1 // versionName MUST BE A FLOAT
   }
   packagingOptions {
     exclude 'META-INF/services/javax.annotation.processing.Processor'

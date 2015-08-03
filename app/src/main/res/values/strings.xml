@@ -36,5 +36,6 @@
   <string name="program_menu_wol">Watchtower Online Library</string>
   <string name="action_submit_feedback">Submit Feedback</string>
   <string name="action_prev_talk">Previous Talk</string>
+  <string name="action_refresh_talk">Refresh Notes</string>
 
 </resources>
