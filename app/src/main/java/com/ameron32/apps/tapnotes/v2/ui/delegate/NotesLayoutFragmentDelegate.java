@@ -40,17 +40,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
 
   private NotesRecyclerAdapter adapter;
 
-  private static final IToolbarHeaderCallbacks stubCallbacks1 = new IToolbarHeaderCallbacks() {
-    @Override
-    public void onPreviousPressed() {
-      // stub only
-    }
-
-    @Override
-    public void onNextPressed() {
-      // stub only
-    }
-  };
+  private static final IToolbarHeaderCallbacks stubCallbacks1 = new IToolbarHeaderCallbacks() {};
 
   private IToolbarHeaderCallbacks mCallbacks1;
 

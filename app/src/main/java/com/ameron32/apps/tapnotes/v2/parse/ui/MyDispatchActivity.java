@@ -43,6 +43,8 @@ public abstract class MyDispatchActivity extends Activity {
     try {
       final float minimumVersion = ParseConfig.get()
           .getNumber(Constants.CONFIG_MINIMUM_VERSION).floatValue();
+      final float currentVersion = ParseConfig.get()
+          .getNumber(Constants.CONFIG_CURRENT_VERSION).floatValue();
       final float clientVersion = getClientApplicationVersion();
       Log.d(MyDispatchActivity.class.getSimpleName(), "clientVersion: " + clientVersion + " | minimumVersion: " + minimumVersion);
       if (minimumVersion > clientVersion) {
@@ -57,13 +59,30 @@ public abstract class MyDispatchActivity extends Activity {
                 finish();
               }
             });
+      } else if (currentVersion > clientVersion) {
+        final String message = "Great news! A new version of TAP Notes has been created!\n" +
+            "Make sure to update TAP Notes to get access " +
+            "to whatever features or fixes we've developed.\n\n" +
+            "New version: ( " + currentVersion + " )\n" +
+            "Your version: ( " + clientVersion + " )";
+        new ActivityAlertDialogController(this).showInterruptDialog("Outdated Version", message,
+            new Runnable() {
+              @Override
+              public void run() {
+                startMainActivity();
+              }
+            });
       } else {
-        // proceed to application
-        startActivityForResult(new Intent(this, getTargetClass()), TARGET_REQUEST);
+        startMainActivity();
       }
     } catch (ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  private void startMainActivity() {
+    // proceed to application
+    startActivityForResult(new Intent(this, getTargetClass()), TARGET_REQUEST);
   }
 
   private float getClientApplicationVersion() {
