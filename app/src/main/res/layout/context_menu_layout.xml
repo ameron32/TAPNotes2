@@ -1,84 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="fill_parent"
-    android:layout_height="@dimen/note_row_height_min"
-    android:background="@null"
-    android:id="@+id/contextmenu">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contextmenu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <!--android:layout_height="@dimen/note_row_height_min"-->
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:adjustViewBounds="true"
-        android:id="@+id/repos_button"
-        android:src="@drawable/reposition"
-        style = "?navBar_upper"
-        android:elevation="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/bold_button"
-        android:layout_toStartOf="@+id/bold_button"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+  <ImageView
+      android:id="@+id/repos_button"
+      style="?navBar_upper"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toLeftOf="@+id/bold_button"
+      android:layout_toStartOf="@+id/bold_button"
+      android:adjustViewBounds="true"
+      android:elevation="2dp"
+      android:src="?context_menu_move"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/bold_button"
-        android:src="@drawable/bold"
-        android:adjustViewBounds="true"
-        style = "?navBar_upper"
-        android:elevation="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/important_button"
-        android:layout_toStartOf="@+id/important_button"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+  <ImageView
+      android:id="@+id/bold_button"
+      style="?navBar_upper"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toLeftOf="@+id/important_button"
+      android:layout_toStartOf="@+id/important_button"
+      android:adjustViewBounds="true"
+      android:elevation="2dp"
+      android:src="?context_menu_bold"/>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/important_button"
-        android:src="@drawable/important"
-        android:adjustViewBounds="true"
-        style = "?navBar_upper"
-        android:elevation="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
-
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/edit_button"
-        android:src="@drawable/edit"
-        android:adjustViewBounds="true"
-        style = "?navBar_upper"
-        android:elevation="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/important_button"
-        android:layout_toEndOf="@+id/important_button"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+  <ImageView
+      android:id="@+id/important_button"
+      style="?navBar_upper"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:adjustViewBounds="true"
+      android:elevation="2dp"
+      android:src="?context_menu_important"/>
 
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:id="@+id/delete_button"
-        android:src="@drawable/delete"
-        android:adjustViewBounds="true"
-        style = "?navBar_upper"
-        android:elevation="2dp"
-        android:layout_gravity="center_vertical"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/edit_button"
-        android:layout_toEndOf="@+id/edit_button"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+  <ImageView
+      android:id="@+id/edit_button"
+      style="?navBar_upper"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toEndOf="@+id/important_button"
+      android:layout_toRightOf="@+id/important_button"
+      android:adjustViewBounds="true"
+      android:elevation="2dp"
+      android:src="?context_menu_edit"/>
 
+
+  <ImageView
+      android:id="@+id/delete_button"
+      style="?navBar_upper"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentTop="true"
+      android:layout_gravity="center_vertical"
+      android:layout_marginLeft="5dp"
+      android:layout_marginRight="5dp"
+      android:layout_toEndOf="@+id/edit_button"
+      android:layout_toRightOf="@+id/edit_button"
+      android:adjustViewBounds="true"
+      android:elevation="2dp"
+      android:src="?context_menu_delete"/>
 </RelativeLayout>
