@@ -18,22 +18,20 @@ public class NotesRecycler extends RecyclerView {
     }
 
     public void itemClicked(View view){
-
-        int size = this.getChildCount();
-        for (int i=0; i<size; i++){
+        final int size = this.getChildCount();
+        for (int i = 0; i < size; i++){
             getChildAt(i).setSelected(false);
             getChildAt(i).findViewById(R.id.contextmenu).setVisibility(View.GONE);
-
         }
+        if (view == null) {
+            return;
+        }
+
+        // proceed to set the view as selected
         view.setSelected(true);
         if (getAdapter() instanceof NotesRecyclerAdapter){
             NotesRecyclerAdapter nra = (NotesRecyclerAdapter)getAdapter();
             nra.setSelected(indexOfChild(view));
         }
-
-
     }
-
-
-
 }

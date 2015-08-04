@@ -20,6 +20,7 @@
       android:layout_toStartOf="@+id/bold_button"
       android:adjustViewBounds="true"
       android:elevation="2dp"
+      android:visibility="invisible"
       android:src="?context_menu_move"/>
 
   <ImageView

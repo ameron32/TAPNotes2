@@ -90,6 +90,19 @@ public class NoteViewHolder extends AbstractDraggableItemViewHolder {
             }
         });
 
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v.getParent().getParent().getParent().getParent() instanceof NotesRecycler){
+                    NotesRecycler nr = (NotesRecycler)v.getParent().getParent().getParent().getParent();
+                    INote note = (INote) noteLayout.getTag(R.string.notetag);
+                    ((NotesRecyclerAdapter)nr.getAdapter()).getmCallback().onUserClickEditNote(note);
+                    nr.getAdapter().notifyDataSetChanged();
+                    popup.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

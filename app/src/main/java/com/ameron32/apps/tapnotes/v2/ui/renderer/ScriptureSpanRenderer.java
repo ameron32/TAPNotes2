@@ -12,7 +12,9 @@ import com.jmpergar.awesometext.AwesomeTextHandler;
 /**
  * Created by Micah on 7/19/2015.
  */
-public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRenderer, AwesomeTextHandler.ViewSpanClickListener {
+public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRenderer
+//    , AwesomeTextHandler.ViewSpanClickListener
+{
 
     private final static int textSizeInDips = 14;
 
@@ -40,10 +42,10 @@ public class ScriptureSpanRenderer implements AwesomeTextHandler.ViewSpanRendere
         int px = (int) (dips * scale + 0.5f);
         return px;
     }
-
-    @Override
-    public void onClick(String text, Context context) {
-        // TODO KRIS handle editor scripture click according to UX
-//        Toast.makeText(context, "Hello " + text, Toast.LENGTH_SHORT).show();
-    }
+//
+//    @Override
+//    public void onClick(String text, Context context) {
+//        // TODO KRIS handle editor scripture click according to UX
+////        Toast.makeText(context, "Hello " + text, Toast.LENGTH_SHORT).show();
+//    }
 }

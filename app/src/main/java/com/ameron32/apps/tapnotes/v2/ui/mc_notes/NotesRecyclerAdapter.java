@@ -32,10 +32,10 @@ import butterknife.InjectView;
 public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> implements INotesDelegate {
 
     private static final String TAG = "NotesRecyclerAdapter";
-    public static final int offsetToStartDrag = 100;
+//    public static final int offsetToStartDrag = 100;
     private final Context mContext;
-    int lastX;
-    int lastY;
+//    int lastX;
+//    int lastY;
     Bible bible;
     private HashMap<INote, String> appendedScriptures;
 
@@ -92,10 +92,10 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     public NoteViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.insert_notes_list_item, parent, false);
-        setOnClickListener(v);
-        setonTouch(v);
+//        setOnClickListener(v);
+//        setonTouch(v);
         NoteViewHolder holder = new NoteViewHolder(v);
-        setLongPressListener(v, holder.popup);
+//        setLongPressListener(v, holder.popup);
         return holder;
     }
 
@@ -116,6 +116,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         holder.noteLayout.setTag(R.string.holdertag, holder);
         holder.noteLayout.setTag(R.string.notetag, note);
         setOnClickListener(holder.noteLayout);
+        setLongPressListener(holder.noteLayout, holder.popup);
 
         if (noteTextHandler == null)
             noteTextHandler = new AwesomeTextHandler();
@@ -129,6 +130,11 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
             holder.notesTextView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
         }else{
             holder.notesTextView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+        }
+        if (note.isImportantNote()){
+            // TODO isImportantNote
+        }else{
+            // TODO IS NOT ImportantNote
         }
         String appendedText = appendedScriptures.get(note);
         if (appendedText != null) {
@@ -206,14 +212,15 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
     }
 
     private void setOnClickListener(View v) {
+        // TODO discuss and adjust click listener to resolve click issues WHILE retaining desired effect
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getParent() instanceof NotesRecycler) {
                     NotesRecycler nr = (NotesRecycler) v.getParent();
-                    nr.itemClicked(v);
+                    nr.itemClicked(null);
                 }
-                mCallback.onUserClickEditNote(((INote) v.getTag(R.string.notetag)));
+//                mCallback.onUserClickEditNote(((INote) v.getTag(R.string.notetag)));
             }
         });
     }
@@ -222,16 +229,16 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         v.setOnLongClickListener(new View.OnLongClickListener() {
 
 
-            @InjectView(R.id.repos_button)
-            ImageView reposButton;
-            @InjectView(R.id.bold_button)
-            ImageView boldButton;
-            @InjectView(R.id.important_button)
-            ImageView importantButton;
-            @InjectView(R.id.edit_button)
-            ImageView editButton;
-            @InjectView(R.id.delete_button)
-            ImageView deleteButton;
+//            @InjectView(R.id.repos_button)
+//            ImageView reposButton;
+//            @InjectView(R.id.bold_button)
+//            ImageView boldButton;
+//            @InjectView(R.id.important_button)
+//            ImageView importantButton;
+//            @InjectView(R.id.edit_button)
+//            ImageView editButton;
+//            @InjectView(R.id.delete_button)
+//            ImageView deleteButton;
 
 
             @Override
@@ -241,6 +248,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
                     NotesRecycler nr = ((NotesRecycler) v.getParent());
                     nr.itemClicked(v);
                     popup.setVisibility(View.VISIBLE);
+                    return true;
                 }
 
                 return false;
@@ -248,26 +256,26 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         });
     }
 
-    private void setonTouch(View v) {
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent ev) {
-                final int action = ev.getAction();
-                switch (action & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_DOWN: {
-                        int y = 0;
-                        if (v.getParent() instanceof NotesRecycler) {
-                            NotesRecycler nr = (NotesRecycler) v.getParent();
-                            y = nr.indexOfChild(v) * (int) (mContext.getResources().getDimension(R.dimen.note_row_height_min));
-                        }
-                        lastY = y - 200;
-                        break;
-                    }
-                }
-                return false;
-            }
-        });
-    }
+//    private void setonTouch(View v) {
+//        v.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent ev) {
+//                final int action = ev.getAction();
+//                switch (action & MotionEvent.ACTION_MASK) {
+//                    case MotionEvent.ACTION_DOWN: {
+//                        int y = 0;
+//                        if (v.getParent() instanceof NotesRecycler) {
+//                            NotesRecycler nr = (NotesRecycler) v.getParent();
+//                            y = nr.indexOfChild(v) * (int) (mContext.getResources().getDimension(R.dimen.note_row_height_min));
+//                        }
+//                        lastY = y - 200;
+//                        break;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+//    }
 
 
 }
