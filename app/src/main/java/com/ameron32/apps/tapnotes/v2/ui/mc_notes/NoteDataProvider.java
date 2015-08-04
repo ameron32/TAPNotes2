@@ -106,7 +106,6 @@ public class NoteDataProvider extends AbstractDataProvider {
     public void replaceNotes(List<INote> notesToReplace){
         for (INote note:mData){
             for (INote noteToReplace:notesToReplace){
-                //TODO - Notes need an ID field?  Would like to do the following:
                 if (note.getId() == noteToReplace.getId()){
                 note = noteToReplace;
                 }

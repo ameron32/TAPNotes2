@@ -74,7 +74,7 @@ public class ParseNotesController extends AbsApplicationController {
 
       if (checkedTime.plusDays(2).isBefore(getNow())) {
         // more than 2 days (48 hours), repin all notes
-        return ControllerActions.pinCompleteClientNotesFor(program);
+        return unpinProgramAndTalksAndNotesThenRepin(programId);
       }
 
       return ControllerActions.pinNotesFor(program, checkedTime.toDate());
@@ -89,6 +89,7 @@ public class ParseNotesController extends AbsApplicationController {
       return instantComplete();
     }
 
+    final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
       final Program program = Queries.Local.getProgram(programId);
       return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);

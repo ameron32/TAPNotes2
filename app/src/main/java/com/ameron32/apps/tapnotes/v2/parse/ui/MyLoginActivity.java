@@ -358,7 +358,6 @@ public abstract class MyLoginActivity
 
   protected void onLoginError() {
     showProgress(false);
-    // TODO: notify user
   }
 
   protected void onLoginSuccess() {
@@ -368,12 +367,9 @@ public abstract class MyLoginActivity
 
   protected void onResetError() {
     showProgress(false);
-    // TODO: notify user
   }
 
   protected void onResetSuccess() {
     showProgress(false);
-    // TODO: notify user
-
   }
 }

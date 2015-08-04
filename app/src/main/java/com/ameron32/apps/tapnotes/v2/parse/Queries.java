@@ -52,14 +52,14 @@ public class Queries {
       return notes;
     }
 
-    static List<Note> pinAllGenericNotesFor(Program program)
+    static List<Note> pinAllGenericNotesFor(Program program, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryGenericNotesFor(program, null, currentPage);
+        final List<Note> moreNotes = queryGenericNotesFor(program, null, date, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
@@ -92,14 +92,14 @@ public class Queries {
       return notes;
     }
 
-    static List<Note> pinAllGenericNotesFor(Program program, Talk talk)
+    static List<Note> pinAllGenericNotesFor(Program program, Talk talk, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
       do {
-        final List<Note> moreNotes = queryGenericNotesFor(program, talk, currentPage);
+        final List<Note> moreNotes = queryGenericNotesFor(program, talk, date, currentPage);
         final int size = moreNotes.size();
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
@@ -109,19 +109,6 @@ public class Queries {
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.pinAll(Constants.NOTE_PIN_NAME, notes);
-      return notes;
-    }
-
-    private static List<Note> queryGenericNotesFor(Program program, Talk talk, int page)
-        throws ParseException {
-      ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
-          .whereDoesNotExist(Constants.NOTE_uOWNER_USER_KEY)
-          .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
-          .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
-      if (talk != null) {
-        query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
-      }
-      final List<Note> notes = query.find();
       return notes;
     }
 
@@ -329,6 +316,23 @@ public class Queries {
           .get(noteId);
       return note;
     }
+  }
+
+  private static List<Note> queryGenericNotesFor(Program program, Talk talk, Date date, int page)
+      throws ParseException {
+    ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
+        .whereDoesNotExist(Constants.NOTE_uOWNER_USER_KEY)
+        .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+        .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+    if (talk != null) {
+      query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
+    }
+    if (date != null) {
+      query = query.whereGreaterThanOrEqualTo(Constants.NOTE_UPDATEDAT_DATE_KEY,
+          date);
+    }
+    final List<Note> notes = query.find();
+    return notes;
   }
 
   // PRIVATE UNIFIED USAGE METHOD

@@ -192,7 +192,7 @@ public class MNIActivity extends TAPActivity
         return true;
 
       case R.id.action_submit_feedback:
-        // TODO update app version to dynamic
+        // TODO app version to DI controller
         final String version = "version " + BuildConfig.VERSION_NAME;
         Toast.makeText(getContext(), "TAP Notes v2: " + version, Toast.LENGTH_LONG).show();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.LINK_SUBMIT_FEEDBACK_GOOGLE_FORMS));
@@ -200,41 +200,11 @@ public class MNIActivity extends TAPActivity
         return true;
 
       case R.id.action_next_talk:
-        try {
-          final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-          final String sequence = talk.getSequence();
-          final String session = String.valueOf(sequence.charAt(0));
-          final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
-          final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession+1);
-          Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-          final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
-          commitNotesFragmentFromTalkId(nextTalk.getId());
-        } catch (ParseException e) {
-          e.printStackTrace();
-          Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
-        } catch (IndexOutOfBoundsException e) {
-          e.printStackTrace();
-          Log.d(MNIActivity.class.getSimpleName(), "nextTalk not found");
-        }
+        switchToNextTalk();
         return true;
 
       case R.id.action_prev_talk:
-        try {
-          final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-          final String sequence = talk.getSequence();
-          final String session = String.valueOf(sequence.charAt(0));
-          final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
-          final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
-          Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-          final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
-          commitNotesFragmentFromTalkId(nextTalk.getId());
-        } catch (ParseException e) {
-          e.printStackTrace();
-          Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
-        } catch (IndexOutOfBoundsException e) {
-          e.printStackTrace();
-          Log.d(MNIActivity.class.getSimpleName(), "prevTalk not found");
-        }
+        switchToPreviousTalk();
         return true;
 
       case R.id.action_refresh_talk:
@@ -263,6 +233,46 @@ public class MNIActivity extends TAPActivity
     }
 
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void switchToNextTalk() {
+    try {
+      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final String sequence = talk.getSequence();
+      final String session = String.valueOf(sequence.charAt(0));
+      final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
+      final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession+1);
+      Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
+      final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      commitNotesFragmentFromTalkId(nextTalk.getId());
+    } catch (ParseException e) {
+      e.printStackTrace();
+      Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace();
+      Log.d(MNIActivity.class.getSimpleName(), "nextTalk not found");
+    }
+  }
+
+  @Override
+  public void switchToPreviousTalk() {
+    try {
+      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final String sequence = talk.getSequence();
+      final String session = String.valueOf(sequence.charAt(0));
+      final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
+      final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
+      Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
+      final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      commitNotesFragmentFromTalkId(nextTalk.getId());
+    } catch (ParseException e) {
+      e.printStackTrace();
+      Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace();
+      Log.d(MNIActivity.class.getSimpleName(), "prevTalk not found");
+    }
   }
 
   private static final int SETTINGS_REQUEST_CODE = 141;
@@ -358,7 +368,7 @@ public class MNIActivity extends TAPActivity
       final Talk talk = Queries.Local.getTalk(talkId);
       if (talk != null) {
         final String talkName = talk.getTalkTitle();
-        final String imageUrl = ""; // TODO update
+        final String imageUrl = ""; // TODO implement imageUrl
         commitNotesFragment(talkId, talkName, imageUrl);
       }
     } catch (ParseException e) {
@@ -555,7 +565,7 @@ public class MNIActivity extends TAPActivity
       // TODO add an imageUrl
       final String talkId = talk.getId();
       final String talkName = talk.getTalkTitle();
-      final String imageUrl = ""; // TODO update
+      final String imageUrl = ""; // TODO implement imageUrl
       commitNotesFragment(talkId, talkName, imageUrl);
 
       displayNotesFragment();
@@ -666,6 +676,16 @@ public class MNIActivity extends TAPActivity
     public void openScripturePicker() {
       commitNewScripturePickerFragment();
     }
+
+    @Override
+    public void switchToNextTalk() {
+      // applied in MNIActivity
+    }
+
+    @Override
+    public void switchToPreviousTalk() {
+      // applied in MNIActivity
+    }
   };
 
   private NotesFragment.Callbacks mNCallbacks = new NotesFragment.Callbacks() {
@@ -682,7 +702,6 @@ public class MNIActivity extends TAPActivity
     public void scripturePrepared(IScripture scripture) {
       closeScripturePicker();
 
-      // TODO scripture to editor
       getEditorFragment().provideScriptureToEditor(scripture);
     }
 

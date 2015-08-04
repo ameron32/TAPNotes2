@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 /**
  * Created by klemeilleur on 7/17/2015.
+ * TODO consider using or eliminating. currently atrophy code
  */
 public class Tools {
   /**

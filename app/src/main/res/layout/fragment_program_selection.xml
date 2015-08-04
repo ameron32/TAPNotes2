@@ -13,54 +13,56 @@
   <ImageButton
       android:id="@+id/testing_button_mni"
       style="?attr/borderlessButtonStyle"
-      tools:src="@mipmap/ic_launcher"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerInParent="true"/>
+      android:layout_centerInParent="true"
+      tools:src="@drawable/placeholder"/>
 
   <ImageButton
       android:id="@+id/refresh_button"
       style="?attr/borderlessButtonStyle"
-      tools:src="@drawable/ic_action_sync"
-      tools:tint="@color/colorPrimary"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_alignRight="@+id/testing_button_mni"
       android:layout_alignTop="@+id/testing_button_mni"
-      android:layout_alignRight="@+id/testing_button_mni"/>
+      tools:src="@drawable/ic_action_sync"
+      tools:tint="@color/colorPrimary"/>
 
   <ImageView
       android:id="@+id/status_image"
-      tools:src="@drawable/ic_action_get_app"
-      tools:tint="@color/colorPrimary"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_above="@+id/program_progress_bar"
-      android:layout_alignRight="@+id/testing_button_mni"/>
+      android:layout_alignRight="@+id/testing_button_mni"
+      tools:src="@drawable/ic_action_get_app"
+      tools:tint="@color/colorPrimary"/>
 
   <ProgressBar
       android:id="@+id/program_progress_bar"
       style="?android:attr/progressBarStyleHorizontal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/testing_button_mni"
       android:layout_alignEnd="@+id/testing_button_mni"
       android:layout_alignLeft="@+id/testing_button_mni"
+      android:layout_alignParentBottom="true"
       android:layout_alignRight="@+id/testing_button_mni"
       android:layout_alignStart="@+id/testing_button_mni"
       android:indeterminate="true"
-      android:visibility="invisible"/>
+      android:visibility="invisible"
+      tools:visibility="visible"/>
 
   <TextView
       android:id="@+id/program_progress_bar_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_alignBottom="@+id/testing_button_mni"
-      android:layout_alignEnd="@+id/testing_button_mni"
-      android:layout_alignLeft="@+id/testing_button_mni"
-      android:layout_alignRight="@+id/testing_button_mni"
-      android:layout_alignStart="@+id/testing_button_mni"
+      android:layout_alignEnd="@+id/program_progress_bar"
+      android:layout_alignLeft="@+id/program_progress_bar"
+      android:layout_alignParentBottom="true"
+      android:layout_alignRight="@+id/program_progress_bar"
+      android:layout_alignStart="@+id/program_progress_bar"
       android:visibility="invisible"
-      tools:text="Progress Text"/>
+      tools:text="Progress Text\nMultiLine"
+      tools:visibility="visible"/>
 
   <TextView
       android:id="@+id/program_app_version"

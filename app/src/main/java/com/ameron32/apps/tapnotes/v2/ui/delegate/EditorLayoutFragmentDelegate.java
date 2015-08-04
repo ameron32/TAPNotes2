@@ -18,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
@@ -62,6 +63,16 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     public void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks) {
       // stub only
     }
+
+    @Override
+    public void onKeyNextTalk() {
+      // stub only
+    }
+
+    @Override
+    public void onKeyPreviousTalk() {
+      // stub only
+    }
   };
 
   private IEditorDelegate.IEditorDelegateCallbacks mCallbacks;
@@ -93,14 +104,14 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
             }
           }
           if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-            if (event.isShiftPressed()) {
-              // TODO shift RIGHT pressed
+            if (event.isShiftPressed() && event.isCtrlPressed()) {
+              mCallbacks.onKeyNextTalk();
               return true;
             }
           }
           if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-            if (event.isShiftPressed()) {
-              // TODO shift LEFT pressed
+            if (event.isShiftPressed() && event.isCtrlPressed()) {
+              mCallbacks.onKeyPreviousTalk();
               return true;
             }
           }

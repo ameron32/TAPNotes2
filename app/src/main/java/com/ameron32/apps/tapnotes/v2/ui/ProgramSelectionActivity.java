@@ -80,7 +80,6 @@ public class ProgramSelectionActivity
 
     @Override
     public void onNext(Progress progress) {
-      // TODO inform user of status?
       onProgress(progress);
     }
   };
@@ -93,12 +92,6 @@ public class ProgramSelectionActivity
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
-        // TODO re-evaluate unpinning notes and redownloading
-//        try {
-//          Note.unpinAll(Constants.NOTE_PIN_NAME); // TODO add tags to Notes
-//        } catch (ParseException e) {
-//          e.printStackTrace();
-//        }
         subscriber.onNext(new Progress(0, 3, false, "Loading Bible", "Loading Bible... (may take several minutes)"));
         mBible.get();
         subscriber.onNext(new Progress(1, 3, false, "Loading Bible", "Bible complete. Loading user input module..."));

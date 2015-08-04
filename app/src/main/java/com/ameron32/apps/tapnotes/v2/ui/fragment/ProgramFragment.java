@@ -205,9 +205,9 @@ public class ProgramFragment extends TAPFragment
           mTalks.clear();
           mTalks.addAll(talks);
 
-          // TODO remove fake insert
-//          _MiscUtils._modifySymposiumTalkTitles(mProgramId);
-//          _MiscUtils._saveProgramScriptures(getContext(), program);
+          // LOCATION OF COMMON NON-RECURRING ACTIONS using _MiscUtils
+          //
+          // *********************************************************
 
           subscriber.onNext(new Progress(1, 1, false));
           subscriber.onCompleted();

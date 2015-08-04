@@ -27,5 +27,9 @@ public interface IEditorDelegate {
     void onSubmitClicked(String editorText, INote.NoteType type, @Nullable INote note);
 
     void setSanitizerCallbacks(ISanitizer.ISanitizerCallbacks callbacks);
+
+    void onKeyNextTalk();
+
+    void onKeyPreviousTalk();
   }
 }

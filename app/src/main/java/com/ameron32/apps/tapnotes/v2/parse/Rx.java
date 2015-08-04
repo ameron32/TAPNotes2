@@ -45,7 +45,6 @@ public class Rx {
             final Program program = Queries.Live.pinProgram(programId);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Saving notes"));
 
-            // TODO KRIS are the talks already here? switch to local and delay network query
             Queries.Live.pinAllProgramTalksFor(program);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Notes saved"));
             subscriber.onCompleted();
@@ -65,8 +64,7 @@ public class Rx {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Downloading Notes (1/2)"));
 
-            // TODO KRIS did we local the program and talks? delay network query and restrict to new only
-            Queries.Live.pinAllGenericNotesFor(program);
+            Queries.Live.pinAllGenericNotesFor(program, null);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
             Queries.Live.pinAllClientOwnedNotesFor(program, null);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Done!"));
@@ -121,14 +119,14 @@ public class Rx {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
-            subscriber.onNext(new Progress(0, 3, false));
+            subscriber.onNext(new Progress(0, 3, false, "Refresh Program Notes", "Clearing Local Notes"));
             Queries.Local.unpinAllGenericNotesFor(program);
             Queries.Local.unpinAllClientOwnedNotesFor(program, date);
-            subscriber.onNext(new Progress(1, 3, false));
-            Queries.Live.pinAllGenericNotesFor(program);
-            subscriber.onNext(new Progress(2, 3, false));
+            subscriber.onNext(new Progress(1, 3, false, "Refresh Program Notes", "Retrieving Theme and Song Notes"));
+            Queries.Live.pinAllGenericNotesFor(program, date);
+            subscriber.onNext(new Progress(2, 3, false, "Refresh Program Notes", "Retrieving Personal Notes"));
             Queries.Live.pinAllClientOwnedNotesFor(program, date);
-            subscriber.onNext(new Progress(3, 3, false));
+            subscriber.onNext(new Progress(3, 3, false, "Refresh Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {
             subscriber.onNext(new Progress(0, 3, true));
@@ -142,13 +140,15 @@ public class Rx {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
-          subscriber.onNext(new Progress(0, 1, false));
           try {
+            subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Theme and Song Notes"));
+            Queries.Live.pinAllGenericNotesFor(program, date);
+            subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Personal Notes"));
             Queries.Live.pinAllClientOwnedNotesFor(program, date);
-            subscriber.onNext(new Progress(1, 1, false));
+            subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {
-            subscriber.onNext(new Progress(0, 1, true));
+            subscriber.onNext(new Progress(0, 2, true));
             subscriber.onCompleted();
           }
         }

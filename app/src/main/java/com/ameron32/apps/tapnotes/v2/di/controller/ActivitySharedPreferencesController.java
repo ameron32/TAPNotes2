@@ -55,6 +55,7 @@ public class ActivitySharedPreferencesController extends AbsActivityController {
    * @return TRUE if runnable has runOnce. FALSE if it failed to run.
    */
   public boolean runOnce(final String key, final SuccessfulRunnable runOnce) {
+    // TODO KRIS delete code if unused
     // returns isSuccessful
 
     if (runOnce == null) {
@@ -66,8 +67,6 @@ public class ActivitySharedPreferencesController extends AbsActivityController {
       // already happened
       return true;
     }
-
-    // TODO: prepare
 
     if (!runOnce.run()) {
       // SuccessfulRunnable failed

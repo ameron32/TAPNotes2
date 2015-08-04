@@ -99,8 +99,6 @@ public class MyLoginParseActivity extends MyLoginActivity {
       @Override
       public void done(final ParseException e) {
 
-        // TODO: Confirm if login is still needed
-
         if (e == null) {
           onLoginSuccess();
         } else {

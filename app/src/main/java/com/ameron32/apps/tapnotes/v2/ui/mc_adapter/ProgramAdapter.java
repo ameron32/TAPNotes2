@@ -65,7 +65,6 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
     }
 
     public void setCallBackListener(IProgramDelegateCallbacks listener){
-        //TODO - Call this from the ProgramLayoutDelegate so Kris can pass his listeners through.
         mCallBack=listener;
     }
 
@@ -367,7 +366,7 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
     @Override
     protected void onBindChildView(ProgramAdapter.ViewHolder viewHolder, int i, int i2) {
         if (!(viewHolder instanceof ChildViewHolder)) {
-            // fail: ensure onCreate is generating the correct ChildViewHolder 
+            // fail: ensure onCreate is generating the correct ChildViewHolder
             return;
         }
 

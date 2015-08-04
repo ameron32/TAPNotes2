@@ -198,7 +198,7 @@ public class _MiscUtils {
             final String t1 = row[1];
             final String s1 = row[2];
             if (s1.length() > 1) {
-              // TODO generate the note
+              // generate the note
               Log.d(TAG, "note to create: " + rowSeq + " " + t1 + " " + s1);
               Note.create(t1 + "\n" + s1, program, talk, null).save();
             } else {
@@ -208,7 +208,7 @@ public class _MiscUtils {
             final String t2 = row[3];
             final String s2 = row[4];
             if (s2.length() > 1) {
-              // TODO generate the note
+              // generate the note
               Log.d(TAG, "note to create: " + rowSeq + " " + t2 + " " + s2);
               Note.create(t2 + "\n" + s2, program, talk, null).save();
             } else {
@@ -218,13 +218,12 @@ public class _MiscUtils {
             final String t3 = row[5];
             final String s3 = row[6];
             if (s3.length() > 1) {
-              // TODO generate the note
+              // generate the note
               Log.d(TAG, "note to create: " + rowSeq + " " + t3 + " " + s3);
               Note.create(t3 + "\n" + s3, program, talk, null).save();
             } else {
               // don't do it
             }
-
           }
         }
         talk.save();

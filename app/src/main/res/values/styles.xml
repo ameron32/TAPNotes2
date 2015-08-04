@@ -154,7 +154,6 @@
     <item name="program_container_background">@color/materialdark_program_container_background</item>
     <item name="default_background">@color/materialdark_default_background</item>
 
-    <!-- TODO MICAH change to white icons -->
     <item name="ic_photo_camera_icon">@drawable/camera_white</item>
     <item name="ic_videocam_icon">@drawable/video_white</item>
     <item name="ic_bible_icon">@drawable/bible_white</item>

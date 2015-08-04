@@ -210,5 +210,17 @@ public class EditorFragment extends TAPFragment
     void createNote(String editorText, INote.NoteType type);
     void editNote(String editorText, INote.NoteType type, INote note);
     void openScripturePicker();
+    void switchToNextTalk();
+    void switchToPreviousTalk();
+  }
+
+  @Override
+  public void onKeyNextTalk() {
+    mCallbacks.switchToNextTalk();
+  }
+
+  @Override
+  public void onKeyPreviousTalk() {
+    mCallbacks.switchToPreviousTalk();
   }
 }

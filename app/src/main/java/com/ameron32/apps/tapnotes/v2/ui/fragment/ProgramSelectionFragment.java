@@ -61,7 +61,7 @@ public class ProgramSelectionFragment extends TAPFragment
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // TODO update app version to dynamic
+    // TODO replace with DI controller
     mAppVersion = "version " + BuildConfig.VERSION_NAME;
 
     mProgramId = Constants.CONVENTION2015_PROGRAM_OBJECT_ID;
@@ -104,7 +104,7 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   private void loadPlaceholderView() {
-    programButton.setImageResource(R.mipmap.ic_launcher);
+    programButton.setImageResource(R.drawable.placeholder);
   }
 
   @InjectView(R.id.testing_button_mni)

@@ -17,7 +17,7 @@ import java.util.TreeMap;
  * Created by Kris on 3/14/2015.
  *
  * Element which combined ParseObject & Columnable
- * TODO: needs ParseApplication subclass notification
+ * TODO: REMINDER needs ParseApplication subclass notification
  */
 public class ColumnableParseObject
     extends ParseObject

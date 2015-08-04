@@ -399,7 +399,7 @@ public class NotesFragment extends TAPFragment
       INote repositionedNote,
       INote noteBeforeOriginOfRepositionedNote,
       INote noteBeforeTargetOfRepositionedNote) {
-    // TODO entire move process needs reworking
+    // TODO KRIS entire move process needs reworking
   }
 
   private List<INote> listify(INote... notes) {
