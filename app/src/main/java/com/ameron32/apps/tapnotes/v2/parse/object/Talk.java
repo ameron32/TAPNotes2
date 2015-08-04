@@ -40,12 +40,6 @@ public class Talk
   }
 
   @Override
-  public INote[] getNotes() {
-    // FIXME
-    return null;
-  }
-
-  @Override
   public DateTime getDateAndTime(Locale locale) {
     final String dateTime = this.getString(TALK_DATE_STRING_KEY);
     final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy H:mm")

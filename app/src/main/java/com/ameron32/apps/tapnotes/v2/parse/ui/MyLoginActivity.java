@@ -98,6 +98,11 @@ public abstract class MyLoginActivity
     attemptSignup();
   }
 
+  @OnClick(R.id.forgot_password_button)
+  void forgotPassword() {
+    attemptForgotPassword();
+  }
+
   void softKeyboardAction(int id) {
     attemptLogin();
   }
@@ -118,7 +123,7 @@ public abstract class MyLoginActivity
     String email = mEmailView.getText().toString();
     String password = mPasswordView.getText().toString();
 
-    if (!hasFormErrors()) {
+    if (!hasFormErrors(REQUEST_LOGIN)) {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
       showProgress(true);
@@ -137,7 +142,7 @@ public abstract class MyLoginActivity
     String email = mEmailView.getText().toString();
     String password = mPasswordView.getText().toString();
 
-    if (!hasFormErrors()) {
+    if (!hasFormErrors(REQUEST_CREATE)) {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
       showProgress(true);
@@ -156,7 +161,7 @@ public abstract class MyLoginActivity
     String email = mEmailView.getText().toString();
     String password = mPasswordView.getText().toString();
 
-    if (!hasFormErrors()) {
+    if (!hasFormErrors(REQUEST_FORGOT)) {
       // Show a progress spinner, and kick off a background task to
       // perform the user login attempt.
       showProgress(true);
@@ -165,7 +170,11 @@ public abstract class MyLoginActivity
     }
   }
 
-  private boolean hasFormErrors() {
+  private static final int REQUEST_LOGIN = 0;
+  private static final int REQUEST_CREATE = 1;
+  private static final int REQUEST_FORGOT = 2;
+
+  private boolean hasFormErrors(final int requestType) {
     // Reset errors.
     mEmailView.setError(null);
     mPasswordView.setError(null);
@@ -178,11 +187,13 @@ public abstract class MyLoginActivity
     View focusView = null;
 
 
-    // Check for a valid password, if the user entered one.
-    if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-      mPasswordView.setError(getString(R.string.error_invalid_password));
-      focusView = mPasswordView;
-      hasFormErrors = true;
+    if (requestType == REQUEST_LOGIN || requestType == REQUEST_CREATE) {
+      // Check for a valid password, if the user entered one.
+      if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        mPasswordView.setError(getString(R.string.error_invalid_password));
+        focusView = mPasswordView;
+        hasFormErrors = true;
+      }
     }
 
     // Check for a valid email address.
@@ -361,6 +372,8 @@ public abstract class MyLoginActivity
   }
 
   protected void onResetSuccess() {
+    showProgress(false);
     // TODO: notify user
+
   }
 }

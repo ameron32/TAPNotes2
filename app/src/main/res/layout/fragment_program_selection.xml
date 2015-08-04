@@ -13,12 +13,25 @@
   <ImageButton
       android:id="@+id/testing_button_mni"
       style="?attr/borderlessButtonStyle"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      tools:src="@mipmap/ic_launcher"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_centerInParent="true"/>
+
+  <ImageButton
+      android:id="@+id/refresh_button"
+      style="?attr/borderlessButtonStyle"
+      tools:src="@drawable/ic_action_sync"
+      tools:tint="@color/colorPrimary"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/testing_button_mni"
+      android:layout_alignRight="@+id/testing_button_mni"/>
 
   <ImageView
       android:id="@+id/status_image"
+      tools:src="@drawable/ic_action_get_app"
+      tools:tint="@color/colorPrimary"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_above="@+id/program_progress_bar"

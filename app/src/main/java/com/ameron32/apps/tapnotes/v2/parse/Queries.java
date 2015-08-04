@@ -54,7 +54,7 @@ public class Queries {
 
     static List<Note> pinAllGenericNotesFor(Program program)
         throws ParseException {
-      Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
+      Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
@@ -64,7 +64,7 @@ public class Queries {
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
         currentPage++;
-        Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
+        Log.d(TAG, "pinAllGenericNotesFor(loop) | page: " +
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
@@ -94,7 +94,7 @@ public class Queries {
 
     static List<Note> pinAllGenericNotesFor(Program program, Talk talk)
         throws ParseException {
-      Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
+      Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
       int notesPinned = 0;
       final List<Note> notes = new ArrayList<>();
@@ -104,7 +104,7 @@ public class Queries {
         notesPinned = notesPinned + size;
         notes.addAll(moreNotes);
         currentPage++;
-        Log.d(TAG, "pinAllClientOwnedNotesFor(loop) | page: " +
+        Log.d(TAG, "pinAllGenericNotesFor(loop) | page: " +
             currentPage + " notesPinned: " + notesPinned);
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
@@ -164,7 +164,47 @@ public class Queries {
         notes.addAll(moreNotes);
         currentPage++;
         Log.d(TAG, "unpinAllClientOwnedNotesFor(loop) | page: " +
-            currentPage + " notesPinned: " + notesPinned + ((date == null) ? "" : " @ " + date.getTime()));
+            currentPage + " notesUnpinned: " + notesPinned + ((date == null) ? "" : " @ " + date.getTime()));
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
+          && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      Note.unpinAll(Constants.NOTE_PIN_NAME, notes);
+      return notes;
+    }
+
+    static List<Note> unpinAllGenericNotesFor(Program program)
+        throws ParseException {
+      Log.d(TAG, "unpinAllGenericNotesFor " + program.getObjectId());
+      int currentPage = 0;
+      int notesPinned = 0;
+      final List<Note> notes = new ArrayList<>();
+      do {
+        final List<Note> moreNotes = queryLocalGenericNotesFor(program, null, null, currentPage);
+        final int size = moreNotes.size();
+        notesPinned = notesPinned + size;
+        notes.addAll(moreNotes);
+        currentPage++;
+        Log.d(TAG, "unpinAllGenericNotesFor(loop) | page: " +
+            currentPage + " notesUnpinned: " + notesPinned);
+      } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
+          && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
+      Note.unpinAll(notes);
+      return notes;
+    }
+
+    static List<Note> unpinAllClientOwnedNotesFor(Program program, Date date)
+        throws ParseException {
+      Log.d(TAG, "unpinAllClientOwnedNotesFor " + program.getObjectId());
+      int currentPage = 0;
+      int notesPinned = 0;
+      final List<Note> notes = new ArrayList<>();
+      do {
+        final List<Note> moreNotes = queryLocalClientOwnedNotesFor(program, null, date, currentPage);
+        final int size = moreNotes.size();
+        notesPinned = notesPinned + size;
+        notes.addAll(moreNotes);
+        currentPage++;
+        Log.d(TAG, "unpinAllClientOwnedNotesFor(loop) | page: " +
+            currentPage + " notesUnpinned: " + notesPinned + ((date == null) ? "" : " @ " + date.getTime()));
       } while (notesPinned == currentPage * LIMIT_QUERY_MAXIMUM_ALLOWED
           && notesPinned < LIMIT_SKIP_MAXIMUM_ALLOWED);
       Note.unpinAll(Constants.NOTE_PIN_NAME, notes);
@@ -299,6 +339,9 @@ public class Queries {
             Commands.Local.getClientUser())
         .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
         .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+    if (program != null) {
+      query = query.whereEqualTo(Constants.NOTE_oPROGRAM_OBJECT_KEY, program);
+    }
     if (date != null) {
       query = query.whereGreaterThanOrEqualTo(Constants.NOTE_UPDATEDAT_DATE_KEY,
           date);
@@ -319,6 +362,31 @@ public class Queries {
             Commands.Local.getClientUser())
         .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
         .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+    if (program != null) {
+      query = query.whereEqualTo(Constants.NOTE_oPROGRAM_OBJECT_KEY, program);
+    }
+    if (date != null) {
+      query = query.whereGreaterThanOrEqualTo(Constants.NOTE_UPDATEDAT_DATE_KEY,
+          date);
+    }
+    if (talk != null) {
+      query = query.whereEqualTo(Constants.NOTE_oTALK_OBJECT_KEY, talk);
+    }
+    final List<Note> notes = query.find();
+    return notes;
+  }
+
+  // PRIVATE UNIFIED USAGE METHOD
+  private static List<Note> queryLocalGenericNotesFor(Program program, Talk talk, Date date, int page)
+      throws ParseException {
+    ParseQuery<Note> query = ParseQuery.getQuery(Note.class)
+        .fromLocalDatastore()
+        .whereDoesNotExist(Constants.NOTE_uOWNER_USER_KEY)
+        .setSkip(page * LIMIT_QUERY_MAXIMUM_ALLOWED)
+        .setLimit(LIMIT_QUERY_MAXIMUM_ALLOWED);
+    if (program != null) {
+      query = query.whereEqualTo(Constants.NOTE_oPROGRAM_OBJECT_KEY, program);
+    }
     if (date != null) {
       query = query.whereGreaterThanOrEqualTo(Constants.NOTE_UPDATEDAT_DATE_KEY,
           date);

@@ -50,16 +50,11 @@ public class MyLoginParseActivity extends MyLoginActivity {
   @Inject
   ActivityAlertDialogController dialog;
 
-  /**
-   * TODO: CURRENTLY UNUSED, PLEASE INCLUDE IN MyLoginActivity PROCESS FLOW
-   * @param email
-   * @param password
-   */
   @Override
   protected void performLogin(final String email, final String password) {
     ParseUser.logInInBackground(email, password, new LogInCallback() {
       @Override
-      public void done(ParseUser parseUser, ParseException e) {
+      public void done(final ParseUser parseUser, final ParseException e) {
         if (e != null) {
           if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
             e.printStackTrace();
@@ -94,20 +89,15 @@ public class MyLoginParseActivity extends MyLoginActivity {
     });
   }
 
-  /**
-   * TODO: CURRENTLY UNUSED, PLEASE INCLUDE IN MyLoginActivity PROCESS FLOW
-   * @param email
-   * @param password
-   */
   @Override
-  protected void performSignUp(String email, String password) {
-    ParseUser user = new ParseUser();
+  protected void performSignUp(final String email, final String password) {
+    final ParseUser user = new ParseUser();
     user.setEmail(email);
     user.setUsername(email);
     user.setPassword(password);
     user.signUpInBackground(new SignUpCallback() {
       @Override
-      public void done(ParseException e) {
+      public void done(final ParseException e) {
 
         // TODO: Confirm if login is still needed
 
@@ -115,7 +105,21 @@ public class MyLoginParseActivity extends MyLoginActivity {
           onLoginSuccess();
         } else {
           e.printStackTrace();
-          onLoginError();
+          dialog.showInterruptDialog("Account Creation Failed", "We couldn't create your account " +
+                  "with the username and/or password you have chosen.\n" +
+                  "--valid email address\n" +
+                  "--password 6 characters or longer\n" +
+                  "--email cannot already have an account\n" +
+                  "Please try again."
+                  ,
+              new Runnable() {
+            @Override
+            public void run() {
+              e.printStackTrace();
+              Log.d(MyLoginParseActivity.class.getSimpleName(), "error: " + e.getCode() + " " + e.getLocalizedMessage());
+              onLoginError();
+            }
+          });
         }
 
         // if (cancelled()) {
@@ -125,19 +129,26 @@ public class MyLoginParseActivity extends MyLoginActivity {
     });
   }
 
-  /**
-   * TODO: CURRENTLY UNUSED, PLEASE INCLUDE IN MyLoginActivity PROCESS FLOW
-   * @param email
-   */
   @Override
-  protected void performForgotPassword(String email) {
+  protected void performForgotPassword(final String email) {
     ParseUser.requestPasswordResetInBackground(email, new RequestPasswordResetCallback() {
       @Override
-      public void done(ParseException e) {
+      public void done(final ParseException e) {
         if (e == null) {
           onResetSuccess();
+          dialog.showInterruptDialog("Password Reset", "Your password is ready to reset. " +
+                  "Please check your email address for an e-mail from noreply@parseapps.com. " +
+                  "Follow the link in the email and enter your new password. " +
+                  "Your login will work after that.",
+              new Runnable() {
+                @Override
+                public void run() {
+                  Log.d(MyLoginParseActivity.class.getSimpleName(), "success!");
+                  onResetSuccess();
+                }
+              });
         } else {
-          // e.printStackTrace();
+          e.printStackTrace();
           onResetError();
         }
 

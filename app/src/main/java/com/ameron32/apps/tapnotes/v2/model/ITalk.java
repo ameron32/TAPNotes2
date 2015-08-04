@@ -13,7 +13,6 @@ import java.util.Locale;
  */
 public interface ITalk<T extends IScripture, U extends IBible> extends IObject {
 
-  INote[] getNotes();
   DateTime getDateAndTime(Locale locale);
   EventType getEventType();
   String getTalkTitle();

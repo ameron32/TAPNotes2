@@ -116,6 +116,28 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
+    static Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(final Program program, final Date date) {
+      return Observable.create(new Observable.OnSubscribe<Progress>() {
+        @Override
+        public void call(Subscriber<? super Progress> subscriber) {
+          try {
+            subscriber.onNext(new Progress(0, 3, false));
+            Queries.Local.unpinAllGenericNotesFor(program);
+            Queries.Local.unpinAllClientOwnedNotesFor(program, date);
+            subscriber.onNext(new Progress(1, 3, false));
+            Queries.Live.pinAllGenericNotesFor(program);
+            subscriber.onNext(new Progress(2, 3, false));
+            Queries.Live.pinAllClientOwnedNotesFor(program, date);
+            subscriber.onNext(new Progress(3, 3, false));
+            subscriber.onCompleted();
+          } catch (ParseException e) {
+            subscriber.onNext(new Progress(0, 3, true));
+            subscriber.onCompleted();
+          }
+        }
+      }).subscribeOn(Schedulers.computation());
+    }
+
     static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override

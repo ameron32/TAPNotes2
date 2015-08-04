@@ -10,6 +10,7 @@ import rx.Observable;
 
 /**
  * Created by klemeilleur on 7/30/2015.
+ * TODO confusing Rx.Live names and usage. Needs improvement.
  */
 public class ControllerActions {
 
@@ -25,6 +26,10 @@ public class ControllerActions {
 
   public static Observable<Progress> pinNotesFor(Program program, Date checkedTime) {
     return Rx.Live.pinRecentProgramNotes(program, checkedTime);
+  }
+
+  public static Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(Program program) {
+    return Rx.Live.unpinThenRepinAllClientOwnedNotesFor(program, null);
   }
 
   // pin everything

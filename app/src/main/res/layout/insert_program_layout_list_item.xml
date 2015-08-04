@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="320dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="320dp"
     android:layout_height="wrap_content"
     android:paddingRight="25dp"
     android:paddingTop="5dp"
@@ -13,10 +15,10 @@
         style="?listItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        tools:text="New Text"
         android:id="@+id/program_item_textview"
         android:layout_marginLeft="50dp"
-        android:textSize="15dp"
+        android:textSize="@dimen/program_list_text_size"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginStart="49dp"

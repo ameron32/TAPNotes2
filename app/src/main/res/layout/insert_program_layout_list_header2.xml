@@ -19,7 +19,7 @@
       android:layout_marginLeft="23dp"
       android:layout_marginTop="15dp"
       tools:text="New Text"
-      android:textSize="20dp"/>
+      android:textSize="@dimen/program_text_size"/>
 
   <LinearLayout
       android:id="@+id/linearLayout"

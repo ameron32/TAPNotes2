@@ -31,4 +31,10 @@
   <dimen name="scripture_span_rounded_corner_dp">2dp</dimen>
   <dimen name="scripture_span_padding_dp">2dp</dimen>
 
+  <!-- Notes Interface -->
+  <dimen name="notes_text_size">14sp</dimen>
+  <dimen name="editor_text_size">14sp</dimen>
+  <dimen name="program_text_size">20sp</dimen>
+  <dimen name="program_list_text_size">16sp</dimen>
+
 </resources>

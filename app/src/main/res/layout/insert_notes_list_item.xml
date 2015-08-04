@@ -23,6 +23,7 @@
       android:layout_alignParentLeft="true"
       android:layout_alignParentTop="true"
       android:gravity="left|center"
+      android:textSize="@dimen/notes_text_size"
       android:minHeight="@dimen/note_text_height_min"
       tools:ignore="RtlHardcoded"
       tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."/>
@@ -55,6 +56,7 @@
         fontPath="@string/font_serif_italic_liberation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/notes_text_size"
         tools:ignore="MissingPrefix"
         tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed quam sed diam tempus auctor ac vitae purus. Fusce eu egestas quam. Nunc laoreet fringilla felis pellentesque consequat. Cras gravida enim vitae ex lobortis facilisis. Vivamus mauris massa, pulvinar ac ex vel, dignissim rhoncus velit. Etiam sed ante felis. Nulla facilisi. Fusce consequat tempus arcu eu venenatis."
         />

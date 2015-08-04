@@ -6,4 +6,10 @@
 
   <dimen name="scripture_picker_width">576dp</dimen>
   <dimen name="scripture_picker_box_padding">4dp</dimen>
+
+  <!-- Notes Interface -->
+  <dimen name="notes_text_size">20sp</dimen>
+  <dimen name="editor_text_size">20sp</dimen>
+  <dimen name="program_text_size">20sp</dimen>
+  <dimen name="program_list_text_size">16sp</dimen>
 </resources>

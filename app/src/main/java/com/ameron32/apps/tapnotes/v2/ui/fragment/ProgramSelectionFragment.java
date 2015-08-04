@@ -80,6 +80,7 @@ public class ProgramSelectionFragment extends TAPFragment
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
     setStatusImage();
+    setRefreshButtonImage();
     setAppVersion();
 
     loadPlaceholderView();
@@ -108,6 +109,8 @@ public class ProgramSelectionFragment extends TAPFragment
 
   @InjectView(R.id.testing_button_mni)
   ImageButton programButton;
+  @InjectView(R.id.refresh_button)
+  ImageButton refreshButton;
   @InjectView(R.id.status_image)
   ImageView statusImage;
   @InjectView(R.id.program_progress_bar)
@@ -127,6 +130,12 @@ public class ProgramSelectionFragment extends TAPFragment
     }
   }
 
+  @OnClick(R.id.refresh_button)
+  void onClickRefresh() {
+    getCallbacks().downloadProgram(mProgramId);
+    getCallbacks().refreshProgramNotes(mProgramId);
+  }
+
   private void setStatusImage() {
     if (programSaved(mProgramId)) {
       statusImage.setImageResource(R.drawable.ic_action_done);
@@ -136,6 +145,17 @@ public class ProgramSelectionFragment extends TAPFragment
     ColoredDrawableUtil.setDrawableColor(getActivity(),
         statusImage.getDrawable(),
         R.attr.colorAccent, R.color.teal_colorAccent);
+  }
+
+  private void setRefreshButtonImage() {
+    if (programSaved(mProgramId)) {
+      refreshButton.setImageResource(R.drawable.ic_action_sync);
+      ColoredDrawableUtil.setDrawableColor(getActivity(),
+          refreshButton.getDrawable(),
+          R.attr.colorAccent, R.color.teal_colorAccent);
+    } else {
+      refreshButton.setImageDrawable(null);
+    }
   }
 
   private void setAppVersion() {
@@ -158,6 +178,7 @@ public class ProgramSelectionFragment extends TAPFragment
   public void setProgramDownloaded(String programId) {
     mProgramId = programId;
     setStatusImage();
+    setRefreshButtonImage();
   }
 
   @Override
@@ -200,6 +221,7 @@ public class ProgramSelectionFragment extends TAPFragment
   public interface Callbacks {
     void startActivity(final String programId);
     void downloadProgram(final String programId);
+    void refreshProgramNotes(final String programId);
   }
 
   private Callbacks getCallbacks() {

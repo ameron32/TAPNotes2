@@ -62,8 +62,8 @@ public class ProgramSelectionActivity
     snackBarController = new ActivitySnackBarController(this);
     dialog = new ActivityAlertDialogController(this);
 
-    bindLifecycle(buildBibleObservable(), DESTROY)
-        .subscribe(bibleLoadingObserver);
+    cache3 = bindLifecycle(buildBibleObservable(), DESTROY).cache();
+    cache3.subscribe(bibleLoadingObserver);
   }
 
   private final Observer<Progress> bibleLoadingObserver = new Observer<Progress>() {
@@ -202,6 +202,8 @@ public class ProgramSelectionActivity
 
 
   private Observable<Progress> cache;
+  private Observable<Progress> cache2;
+  private Observable<Progress> cache3;
   private String mProgramId;
 
   @Inject ParseNotesController notesController;
@@ -211,8 +213,8 @@ public class ProgramSelectionActivity
     mProgramId = programId;
     Observable<Progress> observable;
     observable = notesController.pinAllNewClientOwnedNotesFor(mProgramId);
-    cache = bindLifecycle(observable, DESTROY).cache();
-    cache.subscribe(downloadNotesObserver);
+    cache2 = bindLifecycle(observable, DESTROY).cache();
+    cache2.subscribe(downloadNotesObserver);
   }
 
   @Override
@@ -230,7 +232,20 @@ public class ProgramSelectionActivity
     cache.subscribe(downloadProgramObserver);
   }
 
+  @Override
+  public void refreshProgramNotes(String programId) {
+    if (!Status.isConnectionToServerAvailable(getActivity())) {
+      final String message = "Server connection failed. Please check that you have an internet connection. Also, you must be logged into TAP Notes.";
+//      snackBarController.toast(message);
+      dialog.showInformationDialog("Connection Unavailable", message);
+      return;
+    }
 
+    mProgramId = programId;
+    onLoading();
+    cache = bindLifecycle(notesController.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
+    cache.subscribe(downloadProgramObserver);
+  }
 
   @Inject
   @ForApplication

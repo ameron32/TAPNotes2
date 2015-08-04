@@ -23,6 +23,7 @@ import rx.Observable;
 
 /**
  * Created by klemeilleur on 7/22/2015.
+ * TODO confusing ControllerActions names and usage. Needs improvement.
  */
 public class ParseNotesController extends AbsApplicationController {
 
@@ -38,7 +39,6 @@ public class ParseNotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> pinAllNewClientOwnedNotesFor(Program program, Talk talk) {
-    // TODO perform online check with offline instantComplete
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -48,7 +48,6 @@ public class ParseNotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> pinAllClientOwnedNotesFor(Program program, Talk talk) {
-    // TODO perform online check with offline instantComplete
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -57,7 +56,6 @@ public class ParseNotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(Program program, Talk talk) {
-    // TODO perform online check with offline instantComplete
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -66,7 +64,6 @@ public class ParseNotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
-    // TODO perform online check with offline instantComplete
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -84,11 +81,25 @@ public class ParseNotesController extends AbsApplicationController {
     } catch (ParseException e) {
       e.printStackTrace();
     }
-    return null;
+    return instantComplete();
+  }
+
+  public Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(String programId) {
+    if (!Status.isConnectionToServerAvailable(getApplication())) {
+      return instantComplete();
+    }
+
+    try {
+      final Program program = Queries.Local.getProgram(programId);
+      return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    return instantComplete();
   }
 
   public Observable<Progress> pinProgramAndTalks(String programId) {
-    // TODO what is fallback for offline no program and talks?
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -97,7 +108,6 @@ public class ParseNotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> pinCompleteClientNotesFor(Program program) {
-    // TODO what is fallback for offline no program and talks?
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <!-- Notes Interface -->
+  <dimen name="notes_text_size">16sp</dimen>
+  <dimen name="editor_text_size">16sp</dimen>
+  <dimen name="program_text_size">20sp</dimen>
+  <dimen name="program_list_text_size">16sp</dimen>
+</resources>
