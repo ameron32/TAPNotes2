@@ -2,7 +2,6 @@ package com.ameron32.apps.tapnotes.v2.scripture;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.Menu;
@@ -10,8 +9,6 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.ProgramAdapter;
-import com.levelupstudio.recyclerview.ExpandableRecyclerView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

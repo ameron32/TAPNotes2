@@ -68,7 +68,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         this.mContext = context;
         mProvider = new NoteDataProvider();
         setHasStableIds(true);
-        appendedScriptures = new HashMap<>();
+        appendedScriptures = new HashMap<>(); // TODO MICAH or KRIS consider switch to ArrayMap for <1000 items
 
     }
 

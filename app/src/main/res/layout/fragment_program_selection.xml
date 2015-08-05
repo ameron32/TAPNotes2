@@ -23,8 +23,8 @@
       style="?attr/borderlessButtonStyle"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_alignRight="@+id/testing_button_mni"
-      android:layout_alignTop="@+id/testing_button_mni"
+      android:layout_alignLeft="@+id/testing_button_mni"
+      android:layout_alignBottom="@+id/testing_button_mni"
       tools:src="@drawable/ic_action_sync"
       tools:tint="@color/colorPrimary"/>
 
