@@ -20,6 +20,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.parse.Status;
 import com.ameron32.apps.tapnotes.v2.parse.object.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;
@@ -83,29 +84,60 @@ public class ProgramSelectionFragment extends TAPFragment
     setRefreshButtonImage();
     setAppVersion();
 
-    loadPlaceholderView();
+//    loadPlaceholderView();
     getImageFromProgram(mProgramId);
   }
 
-  private void getImageFromProgram(String programId) {
+  private void getImageFromProgram(final String programId) {
+    // attempt to get image from local datastore
     ParseQuery.getQuery(Program.class)
+        .fromLocalDatastore()
         .getInBackground(programId, new GetCallback<Program>() {
           @Override
           public void done(Program program, ParseException e) {
             if (e == null && program != null) {
-              Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
-              if (o != null && o instanceof ParseFile) {
-                final ParseFile file = (ParseFile) o;
-                Picasso.with(getContext()).load(file.getUrl()).into(programButton);
-              }
+              loadProgramImage(program);
+            } else {
+              // if that fails, attempt from internet connection
+              getProgramRemote(programId);
             }
           }
         });
   }
 
-  private void loadPlaceholderView() {
-    programButton.setImageResource(R.drawable.placeholder);
+  private void getProgramRemote(String programId) {
+    if (!Status.isConnectionToServerAvailable(getContext())) {
+      // do nothing
+      return;
+    }
+    // connection confirmed
+    ParseQuery.getQuery(Program.class)
+        .getInBackground(programId, new GetCallback<Program>() {
+          @Override
+          public void done(Program program, ParseException e) {
+            if (e == null && program != null) {
+              program.pinInBackground();
+              loadProgramImage(program);
+            }
+          }
+        });
   }
+
+  private void loadProgramImage(Program program) {
+    Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
+    if (o != null && o instanceof ParseFile) {
+      final ParseFile file = (ParseFile) o;
+      if (!Status.isConnectionToServerAvailable(getContext())) {
+        // do nothing
+        return;
+      }
+      Picasso.with(getContext()).load(file.getUrl()).into(programButton);
+    }
+  }
+
+//  private void loadPlaceholderView() {
+//    programButton.setImageResource(R.drawable.placeholder);
+//  }
 
   @InjectView(R.id.testing_button_mni)
   ImageButton programButton;

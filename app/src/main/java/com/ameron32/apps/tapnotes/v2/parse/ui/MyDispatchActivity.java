@@ -11,12 +11,14 @@ import android.util.Log;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
 import com.ameron32.apps.tapnotes.v2.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.parse.Status;
 import com.parse.Parse;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
 
 /**
  * Created by klemeilleur on 6/18/2015.
+ * TODO clean out PARSE references from this core dispatch activity
  */
 public abstract class MyDispatchActivity extends Activity {
 
@@ -35,8 +37,16 @@ public abstract class MyDispatchActivity extends Activity {
     runDispatch();
   }
 
-  private final Context getContext() {
-    return MyDispatchActivity.this;
+  // RETURN FROM LOGIN ACTIVITY
+  @Override
+  final protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+    setResult(resultCode);
+    if (requestCode == LOGIN_REQUEST && resultCode == RESULT_OK) {
+      runDispatch();
+    } else {
+      finish();
+    }
   }
 
   private void checkVersionAgainstMinimumOnTheServer() {
@@ -47,6 +57,8 @@ public abstract class MyDispatchActivity extends Activity {
           .getNumber(Constants.CONFIG_CURRENT_VERSION).floatValue();
       final float clientVersion = getClientApplicationVersion();
       Log.d(MyDispatchActivity.class.getSimpleName(), "clientVersion: " + clientVersion + " | minimumVersion: " + minimumVersion);
+
+      // client version is obsolete
       if (minimumVersion > clientVersion) {
         final String message = "This version of TAP Notes ( " + clientVersion + " ) " +
             "is older than the minimum version compatible with the server ( " + minimumVersion + " ). " +
@@ -59,7 +71,10 @@ public abstract class MyDispatchActivity extends Activity {
                 finish();
               }
             });
-      } else if (currentVersion > clientVersion) {
+      }
+
+      // client version is outdated, but not obsolete
+      else if (currentVersion > clientVersion) {
         final String message = "Great news! A new version of TAP Notes has been created!\n" +
             "Make sure to update TAP Notes to get access " +
             "to whatever features or fixes we've developed.\n\n" +
@@ -72,7 +87,10 @@ public abstract class MyDispatchActivity extends Activity {
                 startMainActivity();
               }
             });
-      } else {
+      }
+
+      // client version is current
+      else {
         startMainActivity();
       }
     } catch (ParseException e) {
@@ -85,6 +103,37 @@ public abstract class MyDispatchActivity extends Activity {
     startActivityForResult(new Intent(this, getTargetClass()), TARGET_REQUEST);
   }
 
+  private void startLoginActivity() {
+    startActivityForResult(new Intent(this, getLoginActivityClass()), LOGIN_REQUEST);
+  }
+
+  private void checkVersionThenStartActivity() {
+    checkVersionAgainstMinimumOnTheServer();
+  }
+
+  private void runDispatch() {
+    if (Commands.Local.getClientUser() != null) {
+      debugLog("user logged in " + getTargetClass());
+      if (Status.isConnectionToServerAvailable(getContext())) {
+        checkVersionThenStartActivity();
+      } else {
+        startMainActivity();
+      }
+    } else {
+      debugLog("user not logged in" + getTargetClass());
+      startLoginActivity();
+    }
+  }
+
+  private void debugLog(String message) {
+    if (Parse.getLogLevel() <= Parse.LOG_LEVEL_DEBUG &&
+        Log.isLoggable(LOG_TAG, Log.DEBUG)) {
+      Log.d(LOG_TAG, message);
+    }
+  }
+
+
+
   private float getClientApplicationVersion() {
     try {
       PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -95,35 +144,7 @@ public abstract class MyDispatchActivity extends Activity {
     return 0.0f;
   }
 
-  @Override
-  final protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    setResult(resultCode);
-    if (requestCode == LOGIN_REQUEST && resultCode == RESULT_OK) {
-      runDispatch();
-    } else {
-      finish();
-    }
-  }
-
-  private void checkVersionThenStartActivity() {
-    checkVersionAgainstMinimumOnTheServer();
-  }
-
-  private void runDispatch() {
-    if (Commands.Local.getClientUser() != null) {
-      debugLog("user logged in " + getTargetClass());
-      checkVersionThenStartActivity();
-    } else {
-      debugLog("user not logged in" + getTargetClass());
-      startActivityForResult(new Intent(this, getLoginActivityClass()), LOGIN_REQUEST);
-    }
-  }
-
-  private void debugLog(String message) {
-    if (Parse.getLogLevel() <= Parse.LOG_LEVEL_DEBUG &&
-        Log.isLoggable(LOG_TAG, Log.DEBUG)) {
-      Log.d(LOG_TAG, message);
-    }
+  private final Context getContext() {
+    return MyDispatchActivity.this;
   }
 }

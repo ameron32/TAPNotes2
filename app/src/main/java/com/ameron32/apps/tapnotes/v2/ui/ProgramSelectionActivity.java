@@ -61,6 +61,11 @@ public class ProgramSelectionActivity
     // setContentView() handled in super.onCreate()
     snackBarController = new ActivitySnackBarController(this);
     dialog = new ActivityAlertDialogController(this);
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
 
     cache3 = bindLifecycle(buildBibleObservable(), DESTROY).cache();
     cache3.subscribe(bibleLoadingObserver);
@@ -176,16 +181,16 @@ public class ProgramSelectionActivity
     };
   }
 
-  void onLoading() {
+  private void onLoading() {
 //    snackBarController.toast("Downloading Program...");
   }
 
-  void onProgress(Progress progress) {
+  private void onProgress(Progress progress) {
     programList.setProgramProgress(mProgramId, progress);
 //    snackBarController.toast("Step " + progress.item + " of " + progress.total + " complete.");
   }
 
-  void onLoaded() {
+  private void onLoaded() {
 //    snackBarController.toast("Complete!");
     if (programList != null) {
       programList.setProgramDownloaded(mProgramId);

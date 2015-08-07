@@ -236,7 +236,7 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void switchToNextTalk() {
+  public void switchToNextTalk() { // if notesFragment isn't done loading, do nothing
     try {
       final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
@@ -256,7 +256,7 @@ public class MNIActivity extends TAPActivity
   }
 
   @Override
-  public void switchToPreviousTalk() {
+  public void switchToPreviousTalk() { // if notesFragment isn't done loading, do nothing
     try {
       final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();

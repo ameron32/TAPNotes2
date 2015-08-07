@@ -16,7 +16,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      tools:src="@drawable/placeholder"/>
+      android:src="@drawable/placeholder"/>
 
   <ImageButton
       android:id="@+id/refresh_button"
@@ -32,7 +32,7 @@
       android:id="@+id/status_image"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_above="@+id/program_progress_bar"
+      android:layout_alignBottom="@+id/testing_button_mni"
       android:layout_alignRight="@+id/testing_button_mni"
       tools:src="@drawable/ic_action_get_app"
       tools:tint="@color/colorPrimary"/>

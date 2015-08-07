@@ -264,7 +264,7 @@ public class NotesFragment extends TAPFragment
     return Observable.create(new Observable.OnSubscribe<Progress>() {
 
       @Override
-      public void call(Subscriber<? super Progress> subscriber) {
+      public void call(Subscriber<? super Progress> subscriber) { // lock (next talk/prev talk)
         try {
           subscriber.onNext(new Progress(0, 1, false));
           mTalk = Queries.Local.getTalk(mTalkId);
@@ -279,11 +279,11 @@ public class NotesFragment extends TAPFragment
           Log.d(NotesFragment.class.getSimpleName(),
               "mNotes.size() : " + mNotes.size());
           subscriber.onNext(new Progress(1, 1, false));
-          subscriber.onCompleted();
+          subscriber.onCompleted(); // unlock (next talk/prev talk)
         } catch (ParseException e) {
           e.printStackTrace();
           subscriber.onNext(new Progress(0, 1, true));
-          subscriber.onCompleted();
+          subscriber.onCompleted(); // unlock (next talk/prev talk)
         }
       }
     });
