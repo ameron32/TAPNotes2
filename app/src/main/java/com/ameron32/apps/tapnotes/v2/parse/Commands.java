@@ -88,6 +88,12 @@ public class Commands {
       return notes;
     }
 
+    public static Note pinNote(Note note) {
+      Log.d(TAG, "pinNote: " + note.getObjectId());
+      note.pinInBackground();
+      return note;
+    }
+
     public static void deleteEventuallyNote(Note note) {
       Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
       if (!note.isNoteOwnedByClient()) {

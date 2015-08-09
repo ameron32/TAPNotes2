@@ -13,7 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +58,7 @@ import com.squareup.otto.Bus;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 
@@ -78,6 +83,7 @@ public class MNIActivity extends TAPActivity
 {
 
 
+  private static final String TAG = MNIActivity.class.getSimpleName();
 
   private static final String EXTRA_KEY_PROGRAM_ID = "EXTRA_KEY_PROGRAM_ID";
   private static final String EXTRA_KEY_CURRENT_TALK_ID = "EXTRA_KEY_CURRENT_TALK_ID";
@@ -158,10 +164,43 @@ public class MNIActivity extends TAPActivity
     commitProgramFragment(mProgramId);
     commitProgressFragment();
     // commitEditorFragment() when real NotesFragment is created
+
+    registerPanelListenerToMinimizeKeyboard();
+  }
+
+  private AnimatingPaneLayout.PanelListener mPanelListener;
+  private void registerPanelListenerToMinimizeKeyboard() {
+    mPanelListener = new AnimatingPaneLayout.PanelListener() {
+      @Override
+      public void onPanelOpened() {
+        // TODO convert to controller
+        // hide soft keyboard
+        final boolean isDisplacement = getActivity().getResources().getBoolean(R.bool.dual_layout_uses_displacement);
+        if (!isDisplacement) {
+          // MUST BE A SMALL SCREEN
+          Log.d(TAG, "PanelOpened");
+          View view = getActivity().getCurrentFocus();
+          view.clearFocus();
+          if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+          }
+        }
+      }
+
+      @Override
+      public void onPanelClosed() {}
+    };
+    mAnimatingPane.addPanelListener(mPanelListener);
+  }
+  private void unregisterPanelListenerToMinimizeKeyboard() {
+    mAnimatingPane.removePanelListener(mPanelListener);
+    mPanelListener = null;
   }
 
   @Override
   protected void onDestroy() {
+    unregisterPanelListenerToMinimizeKeyboard();
     bus.unregister(this);
     ButterKnife.reset(this);
     super.onDestroy();
@@ -235,17 +274,41 @@ public class MNIActivity extends TAPActivity
     return super.onOptionsItemSelected(item);
   }
 
+  private AtomicBoolean delay = new AtomicBoolean(false);
+
   @Override
   public void switchToNextTalk() { // if notesFragment isn't done loading, do nothing
+    if (delay.get()) {
+      // delay clicks by rejecting click attempts
+      Log.d(TAG, "click was refused, delay TRUE");
+      return;
+    }
+
     try {
       final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
       final String session = String.valueOf(sequence.charAt(0));
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
-      final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession+1);
+      final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession + 1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
       final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
+
+      // TODO find a better way to delay clicks
+      delay.set(true);
+      final Thread thread = new Thread() {
+        @Override
+        public void run() {
+          try {
+            Thread.sleep(3000);
+            delay.set(false);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      };
+      thread.start();
+
     } catch (ParseException e) {
       e.printStackTrace();
       Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
@@ -257,6 +320,12 @@ public class MNIActivity extends TAPActivity
 
   @Override
   public void switchToPreviousTalk() { // if notesFragment isn't done loading, do nothing
+    if (delay.get()) {
+      // delay clicks by rejecting click attempts
+      Log.d(TAG, "click was refused, delay TRUE");
+      return;
+    }
+
     try {
       final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
@@ -266,6 +335,22 @@ public class MNIActivity extends TAPActivity
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
       final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
+
+      // TODO find a better way to delay clicks
+      delay.set(true);
+      final Thread thread = new Thread() {
+        @Override
+        public void run() {
+          try {
+            Thread.sleep(3000);
+            delay.set(false);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      };
+      thread.start();
+
     } catch (ParseException e) {
       e.printStackTrace();
       Log.d(MNIActivity.class.getSimpleName(), "query failed unexpectedly");
@@ -653,6 +738,7 @@ public class MNIActivity extends TAPActivity
       if (note != null) {
         // TODO replace with Observable!!!
         Commands.Local.saveEventuallyNote(note);
+        Commands.Local.pinNote(note);
 //        getNotesFragment().notesChanged(listify(lastNote));
         getNotesFragment().notesAdded(listify(note));
       }

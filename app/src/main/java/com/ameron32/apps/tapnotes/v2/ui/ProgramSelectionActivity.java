@@ -202,6 +202,7 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache;
   private Observable<Progress> cache2;
   private Observable<Progress> cache3;
+  private Observable<Progress> cache4;
   private String mProgramId;
 
   @Inject ParseNotesController notesController;
@@ -241,8 +242,8 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache = bindLifecycle(notesController.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
-    cache.subscribe(downloadProgramObserver);
+    cache4 = bindLifecycle(notesController.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
+    cache4.subscribe(downloadProgramObserver);
   }
 
   @Inject
@@ -294,7 +295,8 @@ public class ProgramSelectionActivity
       if (mProgramId == null || failed.get()) {
         snackBarController.toast(mResources.getString(R.string.program_failed_to_load));
         return;
-      } else {
+      }
+      else {
         startActivity(MNIActivity.makeIntent(getContext(), mProgramId));
       }
     }

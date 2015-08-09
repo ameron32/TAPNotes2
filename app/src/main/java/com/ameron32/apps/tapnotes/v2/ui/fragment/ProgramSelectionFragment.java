@@ -116,7 +116,7 @@ public class ProgramSelectionFragment extends TAPFragment
           @Override
           public void done(Program program, ParseException e) {
             if (e == null && program != null) {
-              program.pinInBackground();
+//              program.pinInBackground();
               loadProgramImage(program);
             }
           }
@@ -131,7 +131,10 @@ public class ProgramSelectionFragment extends TAPFragment
         // do nothing
         return;
       }
-      Picasso.with(getContext()).load(file.getUrl()).into(programButton);
+      Picasso.with(getContext()).load(file.getUrl())
+          .error(R.drawable.placeholder)
+          .placeholder(R.drawable.placeholder)
+          .into(programButton);
     }
   }
 
@@ -164,7 +167,7 @@ public class ProgramSelectionFragment extends TAPFragment
 
   @OnClick(R.id.refresh_button)
   void onClickRefresh() {
-    getCallbacks().downloadProgram(mProgramId);
+//    getCallbacks().downloadProgram(mProgramId);
     getCallbacks().refreshProgramNotes(mProgramId);
   }
 
