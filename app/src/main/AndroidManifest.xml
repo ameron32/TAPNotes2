@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ameron32.apps.tapnotes.v2" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -86,6 +87,7 @@
         <activity
             android:name=".scripture.ScriptureTestingActivity"
             android:label="@string/title_activity_scripture_testing"
+            android:launchMode="singleTop"
             android:parentActivityName=".ui.MNIActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -94,11 +96,13 @@
         <!-- /MICAH -->
         <activity
             android:name=".ui.ProgramSelectionActivity"
-            android:label="@string/title_activity_program_selection" >
+            android:label="@string/title_activity_program_selection"
+            android:launchMode="singleTop">
         </activity>
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:launchMode="singleTop"
             android:parentActivityName=".ui.MNIActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
