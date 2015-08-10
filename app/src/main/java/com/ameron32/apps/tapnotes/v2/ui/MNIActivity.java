@@ -2,7 +2,6 @@ package com.ameron32.apps.tapnotes.v2.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -14,15 +13,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
-import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
@@ -108,7 +103,6 @@ public class MNIActivity extends TAPActivity
   NavigationView mNavigationView;
   @InjectView(R.id.nav_header_username_text)
   TextView mUsernameTextView;
-
   @InjectView(R.id.pane_animating_layout)
   AnimatingPaneLayout mAnimatingPane;
 
