@@ -131,16 +131,13 @@ public class ProgramSelectionFragment extends TAPFragment
         // do nothing
         return;
       }
+      // TODO undo placeholder2
       Picasso.with(getContext()).load(file.getUrl())
-          .error(R.drawable.placeholder)
-          .placeholder(R.drawable.placeholder)
+          .error(R.drawable.placeholder2)
+          .placeholder(R.drawable.placeholder2)
           .into(programButton);
     }
   }
-
-//  private void loadPlaceholderView() {
-//    programButton.setImageResource(R.drawable.placeholder);
-//  }
 
   @InjectView(R.id.testing_button_mni)
   ImageButton programButton;

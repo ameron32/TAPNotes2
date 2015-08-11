@@ -40,6 +40,9 @@ fabric.properties
 .DS_Store
 /build
 
+# Specific to Project
+placeholder2.png
+
 
 
 
