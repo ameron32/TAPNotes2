@@ -45,7 +45,7 @@ android {
     minSdkVersion 16
     targetSdkVersion 22
     versionCode 10
-    versionName "0.961" // RELEASE 1+ dev // versionName MUST BE A FLOAT
+    versionName "0.962" // RELEASE 1+ dev // versionName MUST BE A FLOAT
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
   packagingOptions {
