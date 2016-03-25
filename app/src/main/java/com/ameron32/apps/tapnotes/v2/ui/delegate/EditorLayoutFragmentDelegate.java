@@ -1,16 +1,11 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Selection;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.Spanned;
 import android.text.TextWatcher;
-import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,14 +13,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.model.IBible;
-import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.model.IScripture;
-import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.WrappedScripture;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;

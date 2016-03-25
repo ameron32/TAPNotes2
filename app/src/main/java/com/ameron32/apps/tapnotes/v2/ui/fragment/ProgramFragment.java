@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,21 +13,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
-import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 
-import com.ameron32.apps.tapnotes.v2.util._MiscUtils;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,8 +198,8 @@ public class ProgramFragment extends TAPFragment
       public void call(Subscriber<? super Progress> subscriber) {
         try {
           subscriber.onNext(new Progress(0, 1, false));
-          final Program program = Queries.Local.getProgram(mProgramId);
-          final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+          final IProgram program = Queries.Local.getProgram(mProgramId);
+          final List<ITalk> talks = Queries.Local.findAllProgramTalks((Program) program);
           mTalks.clear();
           mTalks.addAll(talks);
 

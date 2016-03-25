@@ -18,27 +18,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.MNIActivityModule;
-import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
+import com.ameron32.apps.tapnotes.v2.events.LiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.IEditHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgressHandler;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
-import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.model.IScripture;
-import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.parse.Commands;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
-import com.ameron32.apps.tapnotes.v2.parse.ui.MyDispatchMainActivity;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
+import com.ameron32.apps.tapnotes.v2.uiparse.ui.MyDispatchMainActivity;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesPlaceholderFragment;
@@ -279,13 +280,13 @@ public class MNIActivity extends TAPActivity
     }
 
     try {
-      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
       final String session = String.valueOf(sequence.charAt(0));
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession + 1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks
@@ -321,13 +322,13 @@ public class MNIActivity extends TAPActivity
     }
 
     try {
-      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
       final String session = String.valueOf(sequence.charAt(0));
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final Talk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks
@@ -444,7 +445,7 @@ public class MNIActivity extends TAPActivity
 
   private void commitNotesFragmentFromTalkId(final String talkId) {
     try {
-      final Talk talk = Queries.Local.getTalk(talkId);
+      final ITalk talk = Queries.Local.getTalk(talkId);
       if (talk != null) {
         final String talkName = talk.getTalkTitle();
         final String imageUrl = ""; // TODO implement imageUrl
@@ -555,7 +556,7 @@ public class MNIActivity extends TAPActivity
   }
 
   private void postLiveUpdateEvent(int requestCode) {
-    bus.post(new ParseRequestLiveUpdateEvent(requestCode));
+    bus.post(new LiveUpdateEvent(requestCode));
   }
 
 
@@ -651,11 +652,13 @@ public class MNIActivity extends TAPActivity
 
       try {
         if (talk instanceof Talk) {
-          final Program program = Queries.Local.getProgram(mProgramId);
-          cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor(program,
-              (Talk) talk), DESTROY).cache();
-          cache.subscribe(observer);
-          // see Observer for callbacks
+          final IProgram program = Queries.Local.getProgram(mProgramId);
+          if (program instanceof Program) {
+            cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor((Program) program,
+                    (Talk) talk), DESTROY).cache();
+            cache.subscribe(observer);
+            // see Observer for callbacks
+          }
         }
       } catch (ParseException e) {
         e.printStackTrace();
@@ -665,11 +668,11 @@ public class MNIActivity extends TAPActivity
 
   private void unpinAndRepinNotesForThisTalk() {
     try {
-      final Talk talk = Queries.Local.getTalk(mCurrentTalkId);
-      final Program program = Queries.Local.getProgram(mProgramId);
-      if (talk instanceof Talk) {
+      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final IProgram program = Queries.Local.getProgram(mProgramId);
+      if (talk instanceof Talk && program instanceof Program) {
         cache2 = bindLifecycle(
-            notesController.unpinThenRepinAllClientOwnedNotesFor(program, talk),
+            notesController.unpinThenRepinAllClientOwnedNotesFor((Program) program, (Talk) talk),
             DESTROY).cache();
         cache2.subscribe(observer);
         // see Observer for callbacks
@@ -694,7 +697,7 @@ public class MNIActivity extends TAPActivity
     @Override
     public void onCompleted() {
       // as soon as request is complete
-      postLiveUpdateEvent(ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH);
+      postLiveUpdateEvent(LiveUpdateEvent.REQUEST_NOTES_REFRESH);
     }
 
     @Override

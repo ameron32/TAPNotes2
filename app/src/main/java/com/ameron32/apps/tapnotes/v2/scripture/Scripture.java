@@ -1,6 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import com.ameron32.apps.tapnotes.v2.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 
 import java.util.ArrayList;
 import java.util.List;

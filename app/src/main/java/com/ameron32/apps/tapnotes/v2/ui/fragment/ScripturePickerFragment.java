@@ -2,30 +2,21 @@ package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorRes;
 import android.support.annotation.Nullable;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
-import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.model.IScripture;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
-import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IScripturePickerDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IScripturePickerDelegate.IScripturePickerDelegateCallbacks;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ScripturePickerLayoutFragmentDelegate;
@@ -33,8 +24,6 @@ import com.ameron32.apps.tapnotes.v2.ui.delegate.ScripturePickerLayoutFragmentDe
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * Created by klemeilleur on 6/15/2015.

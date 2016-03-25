@@ -10,14 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.model.IBible;
-import com.ameron32.apps.tapnotes.v2.model.IScripture;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -168,7 +167,7 @@ public class ScripturePickerAdapter extends PagerAdapter
     return holder;
   }
 
-  private void bindHolder(PageHolder holder, int position) {
+  private void bindHolder(PageHolder holder, final int position) {
     holder.buttonNext.setOnClickListener(
         new View.OnClickListener() {
           @Override

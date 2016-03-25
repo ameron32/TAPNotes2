@@ -20,11 +20,7 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 import android.app.Activity;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityCalendarViewDialogController;
-import com.ameron32.apps.tapnotes.v2.parse.ui.MyLoginParseActivity;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.EditorFragment;
-import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.NotesFragment;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramFragment;
+import com.ameron32.apps.tapnotes.v2.uiparse.ui.MyLoginParseActivity;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityLoggingController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesController;

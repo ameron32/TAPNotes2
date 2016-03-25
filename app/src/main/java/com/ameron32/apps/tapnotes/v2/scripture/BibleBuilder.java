@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
 
 import java.io.BufferedReader;

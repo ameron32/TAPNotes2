@@ -3,15 +3,15 @@ package com.ameron32.apps.tapnotes.v2;
 import android.app.Application;
 import android.content.res.Resources;
 
+import com.ameron32.apps.tapnotes.v2.data.parse.model.User;
 import com.ameron32.apps.tapnotes.v2.di.Injector;
 import com.ameron32.apps.tapnotes.v2.di.module.ApplicationModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidApplicationModule;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.crashlytics.android.Crashlytics;
 import com.parse.Parse;
-import com.parse.ParseCrashReporting;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
@@ -73,15 +73,17 @@ public class TAPApplication extends Application {
     final Resources r = app.getResources();
 
     // Register Custom ParseObjects
+    ParseObject.registerSubclass(User.class);
     ParseObject.registerSubclass(Program.class);
     ParseObject.registerSubclass(Talk.class);
-    ParseObject.registerSubclass(Note.class);//
+    ParseObject.registerSubclass(Note.class);
+    //
 
     // Enable Local Data Store
     Parse.enableLocalDatastore(app);
 
     // Enable Crash Reporting
-    ParseCrashReporting.enable(app);
+//    ParseCrashReporting.enable(app);
     Parse.initialize(app, r.getString(R.string.APPLICATION_ID), r.getString(R.string.CLIENT_KEY));
 
     // Save the current Installation to Parse.

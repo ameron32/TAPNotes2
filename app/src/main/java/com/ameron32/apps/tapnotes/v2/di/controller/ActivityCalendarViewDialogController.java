@@ -20,7 +20,9 @@ public class ActivityCalendarViewDialogController extends AbsActivityController 
 
   public ActivityCalendarViewDialogController(Activity activity) {
     super(activity);
-    dialogListener = (dialog, which) -> {
+    dialogListener = new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
       switch (which) {
         case DialogInterface.BUTTON_POSITIVE:
 
@@ -34,7 +36,7 @@ public class ActivityCalendarViewDialogController extends AbsActivityController 
       }
       dialog.dismiss();
     };
-  }
+  };}
 
   public void showCalendarDialog(final String title, final String message) {
     final Resources r = getActivity().getResources();

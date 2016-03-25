@@ -15,21 +15,25 @@ public class ActivityAlertDialogController extends AbsActivityController {
   private DialogInterface.OnClickListener dialogListener;
 
   public ActivityAlertDialogController(Activity activity) {
-    super(activity);
-    dialogListener = (dialog, which) -> {
-      switch(which) {
-        case DialogInterface.BUTTON_POSITIVE:
+      super(activity);
+      dialogListener = new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
 
-          break;
-        case DialogInterface.BUTTON_NEGATIVE:
+              switch (which) {
+                  case DialogInterface.BUTTON_POSITIVE:
 
-          break;
-        case DialogInterface.BUTTON_NEUTRAL:
-        default:
+                      break;
+                  case DialogInterface.BUTTON_NEGATIVE:
 
-      }
-      dialog.dismiss();
-    };
+                      break;
+                  case DialogInterface.BUTTON_NEUTRAL:
+                  default:
+
+              }
+              dialog.dismiss();
+          }
+      };
   }
 
   public void showInformationDialog(final String title, final String message) {
@@ -63,18 +67,22 @@ public class ActivityAlertDialogController extends AbsActivityController {
         .setTitle(title)
         .setMessage(message)
         .setPositiveButton(r.getString(R.string.dialog_ok),
-            (dialog, which) -> {
-          switch (which) {
-            case DialogInterface.BUTTON_POSITIVE:
-              break;
-            case DialogInterface.BUTTON_NEGATIVE:
-              break;
-            case DialogInterface.BUTTON_NEUTRAL:
-            default:
-          }
-          dialog.dismiss();
-          runnable.run();
-        })
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                break;
+                            case DialogInterface.BUTTON_NEUTRAL:
+                            default:
+                        }
+                        dialog.dismiss();
+                        runnable.run();
+                    };
+                })
         .create();
     informationDialog.show();
   }

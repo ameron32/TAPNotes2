@@ -3,8 +3,6 @@ package com.ameron32.apps.tapnotes.v2.ui.mc_adapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.RecyclerView.ItemAnimator.ItemAnimatorFinishedListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,11 +10,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
-import com.levelupstudio.recyclerview.ExpandableRecyclerView;
-import com.ameron32.apps.tapnotes.v2.ui.mc_adapter.MicahExpandableRecyclerView.ExpandableAdapter;
 
 import org.joda.time.DateTime;
 

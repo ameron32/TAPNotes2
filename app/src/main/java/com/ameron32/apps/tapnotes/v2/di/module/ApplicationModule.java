@@ -72,6 +72,4 @@ public class ApplicationModule {
 //  LocationManager provideLocationManager() {
 //    return (LocationManager) mApplication.getSystemService(LOCATION_SERVICE);
 //  }
-
-
 }

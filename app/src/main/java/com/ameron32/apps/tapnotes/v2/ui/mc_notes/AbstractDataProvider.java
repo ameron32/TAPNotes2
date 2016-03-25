@@ -1,6 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
-import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
 
 /**
  * Created by Micah on 7/6/2015.

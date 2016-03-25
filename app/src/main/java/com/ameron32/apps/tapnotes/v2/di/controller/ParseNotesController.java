@@ -3,21 +3,20 @@ package com.ameron32.apps.tapnotes.v2.di.controller;
 import android.app.Application;
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
-import com.ameron32.apps.tapnotes.v2.parse.ControllerActions;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.Status;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.data.parse.ControllerActions;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.Status;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
 import com.parse.ParseException;
 
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.joda.time.format.DateTimeFormat;
 
 import java.io.IOException;
-import java.util.Date;
 
 import rx.Observable;
 
@@ -70,15 +69,17 @@ public class ParseNotesController extends AbsApplicationController {
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
-      final Program program = Queries.Local.getProgram(programId);
+      final IProgram program = Queries.Local.getProgram(programId);
 
       if (checkedTime.plusDays(2).isBefore(getNow())) {
         // more than 2 days (48 hours), repin all notes
         return unpinProgramAndTalksAndNotesThenRepin(programId);
       }
 
-      return ControllerActions.pinNotesFor(program, checkedTime.toDate());
+      return ControllerActions.pinNotesFor((Program) program, checkedTime.toDate());
     } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (ClassCastException e) {
       e.printStackTrace();
     }
     return instantComplete();
@@ -91,9 +92,11 @@ public class ParseNotesController extends AbsApplicationController {
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
-      final Program program = Queries.Local.getProgram(programId);
-      return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
+      final IProgram program = Queries.Local.getProgram(programId);
+      return ControllerActions.unpinProgramAndTalksAndNotesThenRepin((Program) program);
     } catch (ParseException e) {
+      e.printStackTrace();
+    } catch (ClassCastException e) {
       e.printStackTrace();
     }
 

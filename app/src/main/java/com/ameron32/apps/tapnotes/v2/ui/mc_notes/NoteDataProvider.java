@@ -1,15 +1,9 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_notes;
 
-import android.content.Context;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
 
-import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.scripture.Bible;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class NoteDataProvider extends AbstractDataProvider {
     private List<INote> mData;

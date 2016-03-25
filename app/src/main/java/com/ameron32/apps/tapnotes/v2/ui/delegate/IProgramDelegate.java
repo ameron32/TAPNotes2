@@ -1,6 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
-import com.ameron32.apps.tapnotes.v2.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 
 import java.util.List;
 

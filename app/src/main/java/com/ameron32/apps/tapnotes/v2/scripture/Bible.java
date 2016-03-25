@@ -1,6 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import com.ameron32.apps.tapnotes.v2.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
 
 import java.io.Serializable;
 

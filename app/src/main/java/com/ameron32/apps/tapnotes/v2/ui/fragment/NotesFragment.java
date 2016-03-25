@@ -1,8 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -14,28 +12,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
-import com.ameron32.apps.tapnotes.v2.events.ParseRequestLiveUpdateEvent;
+import com.ameron32.apps.tapnotes.v2.events.LiveUpdateEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
-import com.ameron32.apps.tapnotes.v2.model.INote;
-import com.ameron32.apps.tapnotes.v2.model.INoteEditable;
-import com.ameron32.apps.tapnotes.v2.parse.Commands;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.frmk.ParseLiveReceiver;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.INoteEditable;
+import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.frmk.ParseLiveReceiver;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
 import com.parse.GetCallback;
-import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
@@ -80,6 +78,8 @@ public class NotesFragment extends TAPFragment
   @Inject
   ActivitySnackBarController mSnackBar;
 
+  @Inject
+  DataManager dataManager;
   @Inject
   Bible bible;
 
@@ -223,7 +223,7 @@ public class NotesFragment extends TAPFragment
     }
   }
 
-  private Talk mTalk;
+  private ITalk mTalk;
   private List<INote> mNotes = new ArrayList<>();
   private Observable<Progress> cache;
 
@@ -270,8 +270,11 @@ public class NotesFragment extends TAPFragment
           mTalk = Queries.Local.getTalk(mTalkId);
           mSymposiumTitle = mTalk.getSymposiumTitle();
           mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
-          final List<Note> genericNotes = Queries.Local.findGenericNotesFor(mTalk);
-          final List<Note> clientNotes = Queries.Local.findClientOwnedNotesFor(mTalk);
+
+          // TODO: decouple from Parse
+          final List<INote> genericNotes = Queries.Local.findGenericNotesFor((Talk) mTalk);
+          final List<INote> clientNotes = Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
+
           mNotes.clear();
           mNotes.addAll(genericNotes);
           mNotes.addAll(clientNotes);
@@ -330,7 +333,7 @@ public class NotesFragment extends TAPFragment
   Bus bus;
 
   @Subscribe
-  public void onRequestComplete(ParseRequestLiveUpdateEvent event) {
+  public void onRequestComplete(LiveUpdateEvent event) {
     final int requestCode = event.getRequestType();
     onRequestComplete(requestCode);
   }
@@ -338,7 +341,7 @@ public class NotesFragment extends TAPFragment
   @Override
   public void onRequestComplete(int requestCode) {
     switch(requestCode) {
-      case ParseRequestLiveUpdateEvent.REQUEST_NOTES_REFRESH:
+      case LiveUpdateEvent.REQUEST_NOTES_REFRESH:
         Log.d(NotesFragment.class.getSimpleName(), "notes refreshed.");
         giveNotesToDelegate();
         break;

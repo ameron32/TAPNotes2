@@ -14,14 +14,15 @@ import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.Status;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.Status;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;
 import com.parse.GetCallback;
@@ -133,8 +134,8 @@ public class ProgramSelectionFragment extends TAPFragment
       }
       // TODO undo placeholder2
       Picasso.with(getContext()).load(file.getUrl())
-          .error(R.drawable.placeholder2)
-          .placeholder(R.drawable.placeholder2)
+          .error(R.drawable.placeholder)
+          .placeholder(R.drawable.placeholder)
           .into(programButton);
     }
   }
@@ -196,7 +197,7 @@ public class ProgramSelectionFragment extends TAPFragment
 
   private boolean programSaved(String programId) {
     try {
-      final Program program = Queries.Local.getProgram(programId);
+      final IProgram program = Queries.Local.getProgram(programId);
       if (program != null) {
         return true;
       }

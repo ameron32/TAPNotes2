@@ -19,18 +19,11 @@ import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Rx;
-import com.ameron32.apps.tapnotes.v2.parse.Status;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
+import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
-import com.parse.Parse;
-import com.parse.ParseConfig;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 

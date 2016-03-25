@@ -3,13 +3,14 @@ package com.ameron32.apps.tapnotes.v2.util;
 import android.content.Context;
 import android.util.Log;
 
-import com.ameron32.apps.tapnotes.v2.parse.Commands;
-import com.ameron32.apps.tapnotes.v2.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.parse.object.Note;
-import com.ameron32.apps.tapnotes.v2.parse.object.Program;
-import com.ameron32.apps.tapnotes.v2.parse.object.Talk;
-import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseACL;
@@ -180,54 +181,57 @@ public class _MiscUtils {
 
   public static void _saveProgramScriptures(final Context context, Program program) {
     try {
-      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
+      final List<ITalk> talks = Queries.Local.findAllProgramTalks(program);
       if (talks.size() != seq.length) {
         Log.d(TAG, "mismatch size: " + talks.size() + " / " + seq.length);
         return;
       }
 
       int i = 0;
-      for (Talk talk : talks) {
-        Log.d(TAG, "talk: " + talk.getTalkTitle());
-        final String talkSeq = talk.getString(Constants.TALK_SEQUENCE_STRING_KEY);
-        for (String[] row : seq) {
-          final String rowSeq = row[0]; // sequence
-          if (talkSeq.equalsIgnoreCase(rowSeq)) {
-            // they match
-            // add notes to talk
-            final String t1 = row[1];
-            final String s1 = row[2];
-            if (s1.length() > 1) {
-              // generate the note
-              Log.d(TAG, "note to create: " + rowSeq + " " + t1 + " " + s1);
-              Note.create(t1 + "\n" + s1, program, talk, null).save();
-            } else {
-              // don't do it
-            }
+      for (ITalk iTalk : talks) {
+          if (iTalk instanceof Talk) {
+              Talk talk = (Talk) iTalk;
+              Log.d(TAG, "talk: " + talk.getTalkTitle());
+              final String talkSeq = talk.getString(Constants.TALK_SEQUENCE_STRING_KEY);
+              for (String[] row : seq) {
+                  final String rowSeq = row[0]; // sequence
+                  if (talkSeq.equalsIgnoreCase(rowSeq)) {
+                      // they match
+                      // add notes to talk
+                      final String t1 = row[1];
+                      final String s1 = row[2];
+                      if (s1.length() > 1) {
+                          // generate the note
+                          Log.d(TAG, "note to create: " + rowSeq + " " + t1 + " " + s1);
+                          Note.create(t1 + "\n" + s1, program, talk, null).save();
+                      } else {
+                          // don't do it
+                      }
 
-            final String t2 = row[3];
-            final String s2 = row[4];
-            if (s2.length() > 1) {
-              // generate the note
-              Log.d(TAG, "note to create: " + rowSeq + " " + t2 + " " + s2);
-              Note.create(t2 + "\n" + s2, program, talk, null).save();
-            } else {
-              // don't do it
-            }
+                      final String t2 = row[3];
+                      final String s2 = row[4];
+                      if (s2.length() > 1) {
+                          // generate the note
+                          Log.d(TAG, "note to create: " + rowSeq + " " + t2 + " " + s2);
+                          Note.create(t2 + "\n" + s2, program, talk, null).save();
+                      } else {
+                          // don't do it
+                      }
 
-            final String t3 = row[5];
-            final String s3 = row[6];
-            if (s3.length() > 1) {
-              // generate the note
-              Log.d(TAG, "note to create: " + rowSeq + " " + t3 + " " + s3);
-              Note.create(t3 + "\n" + s3, program, talk, null).save();
-            } else {
-              // don't do it
-            }
+                      final String t3 = row[5];
+                      final String s3 = row[6];
+                      if (s3.length() > 1) {
+                          // generate the note
+                          Log.d(TAG, "note to create: " + rowSeq + " " + t3 + " " + s3);
+                          Note.create(t3 + "\n" + s3, program, talk, null).save();
+                      } else {
+                          // don't do it
+                      }
+                  }
+              }
+              talk.save();
+              i++;
           }
-        }
-        talk.save();
-        i++;
       }
     } catch (ParseException e) {
       e.printStackTrace();
@@ -238,8 +242,8 @@ public class _MiscUtils {
 
     try {
 
-      final Program program = Queries.Local.getProgram(programId);
-      Talk talk;
+      final IProgram program = Queries.Local.getProgram(programId);
+      ITalk talk;
 
 //      talk = getTalk(120);
 //      Note.create("1. If we have listened to Christ, will we show it?", program, talk, null).save();
@@ -322,22 +326,22 @@ public class _MiscUtils {
         .getFirst();
   }
 
-  public static void _modifySymposiumTalkTitles(String programId) {
-    try {
-      final Program program = Queries.Local.getProgram(programId);
-      final List<Talk> talks = Queries.Local.findAllProgramTalks(program);
-      final List<Talk> toSave = new ArrayList<>();
-      for (Talk talk : talks) {
-        final String symposiumTitle = talk.getSymposiumTitle();
-        if (symposiumTitle.contains("Symposium:")) {
-          talk.setSymposiumTitle(symposiumTitle.replace(": ", ": \n"));
-          toSave.add(talk);
-        }
-      }
-      Talk.saveAll(toSave);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-  }
+//  public static void _modifySymposiumTalkTitles(String programId) {
+//    try {
+//      final IProgram program = Queries.Local.getProgram(programId);
+//      final List<ITalk> talks = Queries.Local.findAllProgramTalks(program);
+//      final List<ITalk> toSave = new ArrayList<>();
+//      for (ITalk talk : talks) {
+//        final String symposiumTitle = talk.getSymposiumTitle();
+//        if (symposiumTitle.contains("Symposium:")) {
+//          talk.setSymposiumTitle(symposiumTitle.replace(": ", ": \n"));
+//          toSave.add(talk);
+//        }
+//      }
+//      Talk.saveAll(toSave);
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
 }

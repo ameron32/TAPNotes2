@@ -6,14 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.model.IBible;
-import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.renderer.ScriptureSpanRenderer;
@@ -22,8 +20,6 @@ import com.jmpergar.awesometext.AwesomeTextHandler;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-
-import butterknife.InjectView;
 
 
 /**
@@ -225,7 +221,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
         });
     }
 
-    private void setLongPressListener(View v, View popup) {
+    private void setLongPressListener(View v, final View popup) {
         v.setOnLongClickListener(new View.OnLongClickListener() {
 
 

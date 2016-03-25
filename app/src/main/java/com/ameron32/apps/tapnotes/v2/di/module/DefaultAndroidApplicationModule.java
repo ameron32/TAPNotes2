@@ -43,6 +43,7 @@ import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
@@ -258,14 +259,20 @@ public class DefaultAndroidApplicationModule {
     return new ApplicationThemeController(application);
   }
 
-  //
+  @Provides
+  @Singleton
+  DataManager provideDataManager(final Application application) {
+    return new DataManager();
+  }
 
-  @Provides @Singleton
+  @Provides
+  @Singleton
   ParseNotesController provideNotesController(final Application application) {
     return new ParseNotesController(application);
   }
 
-  @Provides @Singleton
+  @Provides
+  @Singleton
   Bible provideBible(final Application application) {
     try {
       return new BibleBuilder(application).getBible();
@@ -275,13 +282,15 @@ public class DefaultAndroidApplicationModule {
     return null;
   }
 
-  @Provides @Singleton
+  @Provides
+  @Singleton
   Sanitizer provideSanitizer(final Application application) {
     // TODO update to Bible instead of Context as soon as Sanitizer is repaired
     return new Sanitizer(application);
   }
 
-  @Provides @Singleton
+  @Provides
+  @Singleton
   ScriptureFinder provideScriptureFinder() {
     // TODO update parameters if needed
     return new ScriptureFinder();

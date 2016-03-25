@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.INoteHandler;
-import com.ameron32.apps.tapnotes.v2.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
 
 import java.util.List;
 

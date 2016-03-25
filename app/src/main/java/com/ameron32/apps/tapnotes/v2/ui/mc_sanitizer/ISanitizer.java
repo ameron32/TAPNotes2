@@ -1,12 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer;
 
-import android.support.annotation.Nullable;
-
-import com.ameron32.apps.tapnotes.v2.model.IBible;
-import com.ameron32.apps.tapnotes.v2.scripture.Bible;
-import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
-
-import java.util.ArrayList;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
 
 /**
  * Created by Micah on 7/16/2015.

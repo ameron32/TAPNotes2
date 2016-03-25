@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.IBible;
 
 import java.util.List;
 
