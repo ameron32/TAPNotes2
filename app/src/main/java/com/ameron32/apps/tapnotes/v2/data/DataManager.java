@@ -91,23 +91,38 @@ public class DataManager {
     }
 
     public Observable<List<INote>> syncNotes() {
+        // TODO: CONFIRM: seems like this calls...
+        // localHelper.getNotes()
+        // then hands those to...
+        // remoteHelper.saveNotes() ...to save
+        // then the next thing to happen is...
+        // remoteHelper.getNotes()
+        // which hands those to...
+        // localHelper.setNotes() ...to store
         return localHelper.getNotes()
                 .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
                     @Override
                     public Observable<List<INote>> call(List<INote> iNotes) {
                         return remoteHelper.saveNotes(iNotes);
                     }
+                })
+                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                    @Override
+                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                        return remoteHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
+                                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                                    @Override
+                                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                        return localHelper.setNotes(iNotes);
+                                    }
+                                });
+                    }
                 });
+
     }
 
     public Observable<List<INote>> getNotes() {
-        return remoteHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
-                .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
-                    @Override
-                    public Observable<List<INote>> call(List<INote> iNotes) {
-                        return localHelper.setNotes(iNotes);
-                    }
-                });
+        return localHelper.getNotes().distinct();
     }
 
     // Helper method to post events from doOnCompleted.
