@@ -247,6 +247,7 @@ public class NotesFragment extends TAPFragment
       }
 
       mNotesDelegate.synchronizeNotes(mNotes);
+      getNotes(); // TODO: test command
     }
 
     @Override
@@ -259,6 +260,12 @@ public class NotesFragment extends TAPFragment
       mostRecentProgress = progress;
     }
   };
+
+  private Observable<List<INote>> getNotes() {
+//    dataManager.syncNotes();
+//    return dataManager.getNotes();
+    return null;
+  }
 
   private Observable<Progress> getLocalNotesObservable() {
     return Observable.create(new Observable.OnSubscribe<Progress>() {

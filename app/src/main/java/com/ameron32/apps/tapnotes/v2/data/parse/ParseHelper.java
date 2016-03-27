@@ -12,6 +12,7 @@ import com.parse.ParseException;
 
 import org.joda.time.DateTime;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -51,13 +52,52 @@ public class ParseHelper implements LocalHelper, RemoteHelper {
     @Override
     public Observable<List<INote>> setNotes(Collection<INote> newNotes) {
         // TODO method
-        return null;
+        return Observable.create(new Observable.OnSubscribe<List<INote>>() {
+            @Override
+            public void call(Subscriber<? super List<INote>> subscriber) {
+                subscriber.onNext(new ArrayList<INote>());
+                subscriber.onCompleted();
+            }
+        });
     }
 
     @Override
     public Observable<List<INote>> getNotes() {
         // TODO method
-        return null;
+        return Observable.create(new Observable.OnSubscribe<List<INote>>() {
+            @Override
+            public void call(Subscriber<? super List<INote>> subscriber) {
+                ArrayList<INote> fakeNotes = new ArrayList<>();
+                fakeNotes.add(new INote() {
+                    @Override
+                    public String getId() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getNoteText() {
+                        return null;
+                    }
+
+                    @Override
+                    public boolean isImportantNote() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean isBoldNote() {
+                        return false;
+                    }
+
+                    @Override
+                    public NoteType getNoteType() {
+                        return null;
+                    }
+                });
+                subscriber.onNext(fakeNotes);
+                subscriber.onCompleted();
+            }
+        });
     }
 
     private List<INote> unpinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {

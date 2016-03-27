@@ -1,10 +1,13 @@
 package com.ameron32.apps.tapnotes.v2.data;
 
+import android.util.Log;
+
 import com.ameron32.apps.tapnotes.v2.data.frmk.Helper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.LocalHelper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.RemoteHelper;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
+import com.ameron32.apps.tapnotes.v2.ui.mc_notes.AbstractDataProvider;
 
 import java.util.List;
 
@@ -20,6 +23,8 @@ import rx.functions.Func1;
  */
 @Singleton
 public class DataManager {
+
+    private static final String TAG = DataManager.class.getSimpleName();
 
     private enum RemoteSource { Parse, BackendlessSDK, BackendlessREST }
     private enum LocalSource { ParseOffline, SQBrite, Realm, Iron }
@@ -99,20 +104,24 @@ public class DataManager {
         // remoteHelper.getNotes()
         // which hands those to...
         // localHelper.setNotes() ...to store
+        Log.d(TAG, "localHelper.getNotes()");
         return localHelper.getNotes()
                 .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
                     @Override
                     public Observable<List<INote>> call(List<INote> iNotes) {
+                        Log.d(TAG, "remoteHelper.saveNotes()");
                         return remoteHelper.saveNotes(iNotes);
                     }
                 })
                 .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
                     @Override
                     public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                        Log.d(TAG, "remoteHelper.getNotes()");
                         return remoteHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
                                 .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
                                     @Override
                                     public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                        Log.d(TAG, "localHelper.setNotes()");
                                         return localHelper.setNotes(iNotes);
                                     }
                                 });
@@ -122,6 +131,7 @@ public class DataManager {
     }
 
     public Observable<List<INote>> getNotes() {
+        Log.d(TAG, "localHelper.getNotes().distinct()");
         return localHelper.getNotes().distinct();
     }
 
@@ -130,6 +140,7 @@ public class DataManager {
         return new Action0() {
             @Override
             public void call() {
+                // TODO: method
 //                eventPoster.postEventSafely(event);
             }
         };
