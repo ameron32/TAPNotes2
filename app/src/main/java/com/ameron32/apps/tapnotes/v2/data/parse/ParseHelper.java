@@ -55,8 +55,7 @@ public class ParseHelper implements LocalHelper, RemoteHelper {
         return Observable.create(new Observable.OnSubscribe<List<INote>>() {
             @Override
             public void call(Subscriber<? super List<INote>> subscriber) {
-                subscriber.onNext(new ArrayList<INote>());
-                subscriber.onCompleted();
+
             }
         });
     }
@@ -67,35 +66,7 @@ public class ParseHelper implements LocalHelper, RemoteHelper {
         return Observable.create(new Observable.OnSubscribe<List<INote>>() {
             @Override
             public void call(Subscriber<? super List<INote>> subscriber) {
-                ArrayList<INote> fakeNotes = new ArrayList<>();
-                fakeNotes.add(new INote() {
-                    @Override
-                    public String getId() {
-                        return null;
-                    }
 
-                    @Override
-                    public String getNoteText() {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean isImportantNote() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean isBoldNote() {
-                        return false;
-                    }
-
-                    @Override
-                    public NoteType getNoteType() {
-                        return null;
-                    }
-                });
-                subscriber.onNext(fakeNotes);
-                subscriber.onCompleted();
             }
         });
     }

@@ -247,7 +247,7 @@ public class NotesFragment extends TAPFragment
       }
 
       mNotesDelegate.synchronizeNotes(mNotes);
-      getNotes(); // TODO: test command
+      getNotes().subscribe(); // TODO: test command
     }
 
     @Override
@@ -262,9 +262,7 @@ public class NotesFragment extends TAPFragment
   };
 
   private Observable<List<INote>> getNotes() {
-//    dataManager.syncNotes();
-//    return dataManager.getNotes();
-    return null;
+    return (dataManager.getNotes());
   }
 
   private Observable<Progress> getLocalNotesObservable() {
