@@ -130,7 +130,7 @@ public class DataManager {
 
     private Observable<List<INote>> saveLocalChangesToRemote() {
         Log.d(TAG, "localHelper.getNotes()");
-        return localHelper.getNotes()
+        return localHelper.getLocalNotes()
                 .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
                     @Override
                     public Observable<List<INote>> call(List<INote> iNotes) {
@@ -142,7 +142,7 @@ public class DataManager {
 
     private Observable<List<INote>> getLocalNotes() {
         Log.d(TAG, "localHelper.getNotes().distinct()");
-        return localHelper.getNotes().distinct();
+        return localHelper.getLocalNotes().distinct();
     }
 
     // Helper method to post events from doOnCompleted.

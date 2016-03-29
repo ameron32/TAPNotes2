@@ -19,5 +19,5 @@ public interface LocalHelper extends Helper {
 
     Observable<List<INote>> clearNotes(IProgram program, ITalk talk, DateTime date, IUser user);
     Observable<List<INote>> setNotes(final Collection<INote> newNotes);
-    Observable<List<INote>> getNotes();
+    Observable<List<INote>> getLocalNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
 }

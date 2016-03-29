@@ -61,47 +61,17 @@ public class ParseHelper implements LocalHelper, RemoteHelper {
     }
 
     @Override
-    public Observable<List<INote>> getNotes() {
+    public Observable<List<INote>> getLocalNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user) {
         // TODO method
         return Observable.create(new Observable.OnSubscribe<List<INote>>() {
             @Override
             public void call(Subscriber<? super List<INote>> subscriber) {
-
+                if (subscriber.isUnsubscribed()) return;
+                List<INote> iNotes = getNotesAsync(program, talk, date, user);
+                subscriber.onNext(iNotes);
+                subscriber.onCompleted();
             }
         });
-    }
-
-    private List<INote> unpinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
-        try {
-            if (iProgram instanceof Program) {
-                Program program = (Program) iProgram;
-                Date date = (dateTime != FOREVER) ? dateTime.toDate() : null;
-                Talk talk = (iTalk != null && iTalk instanceof Talk) ? (Talk) iTalk : null;
-                if (dateTime != FOREVER) {
-                    date = dateTime.toDate();
-                }
-
-                if (iUser == USER_GENERIC) {
-                    return Queries.Local.unpinAllGenericNotesFor(program);
-                }
-
-                if (iUser == USER_ME) {
-                    if (iTalk == ALL_TALKS) {
-                        return Queries.Local.unpinAllClientOwnedNotesFor(program, date);
-                    } else {
-                        return Queries.Local.unpinAllClientOwnedNotesFor(program, talk, date);
-                    }
-                }
-
-                if (iUser == USER_ALL) {
-                    throw new IllegalStateException("FIXME");
-                }
-                return null;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     // ------------------------------------------
@@ -214,9 +184,71 @@ public class ParseHelper implements LocalHelper, RemoteHelper {
         return null;
     }
 
+    private List<INote> getNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
+        try {
+            if (iProgram instanceof Program) {
+                Program program = (Program) iProgram;
+                Date date = null;
+                Talk talk = (iTalk != null && iTalk instanceof Talk) ? (Talk) iTalk : null;
+                if (dateTime != FOREVER) {
+                    date = dateTime.toDate();
+                }
+
+                if (iUser == USER_ALL) {
+                    throw new IllegalStateException("FIXME");
+                } else {
+                    if (talk != ALL_TALKS) {
+                        List<INote> results = new ArrayList<>();
+                        results.addAll(Queries.Local.findGenericNotesFor(talk));
+                        results.addAll(Queries.Local.findClientOwnedNotesFor(talk));
+                        return results;
+                    }
+                }
+
+                return null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private List<INote> saveNotesAsync(List<INote> iNotes) {
         return ParseUtil.toINote(
                 Commands.Live.saveNotesNow(
                         ParseUtil.fromINote(iNotes)));
+    }
+
+    private List<INote> unpinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
+        try {
+            if (iProgram instanceof Program) {
+                Program program = (Program) iProgram;
+                Date date = (dateTime != FOREVER) ? dateTime.toDate() : null;
+                Talk talk = (iTalk != null && iTalk instanceof Talk) ? (Talk) iTalk : null;
+                if (dateTime != FOREVER) {
+                    date = dateTime.toDate();
+                }
+
+                if (iUser == USER_GENERIC) {
+                    return Queries.Local.unpinAllGenericNotesFor(program);
+                }
+
+                if (iUser == USER_ME) {
+                    if (iTalk == ALL_TALKS) {
+                        return Queries.Local.unpinAllClientOwnedNotesFor(program, date);
+                    } else {
+                        return Queries.Local.unpinAllClientOwnedNotesFor(program, talk, date);
+                    }
+                }
+
+                if (iUser == USER_ALL) {
+                    throw new IllegalStateException("FIXME");
+                }
+                return null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
