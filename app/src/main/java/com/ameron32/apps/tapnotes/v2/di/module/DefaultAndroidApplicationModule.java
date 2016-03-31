@@ -46,7 +46,7 @@ import android.view.LayoutInflater;
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
-import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
+import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
 import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
@@ -267,8 +267,8 @@ public class DefaultAndroidApplicationModule {
 
   @Provides
   @Singleton
-  ParseNotesController provideNotesController(final Application application) {
-    return new ParseNotesController(application);
+  NotesController provideNotesController(final Application application) {
+    return new NotesController(application);
   }
 
   @Provides

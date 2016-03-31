@@ -18,26 +18,10 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 
 import android.app.Application;
 import android.content.Context;
-import android.view.LayoutInflater;
 
 import com.ameron32.apps.tapnotes.v2.TAPApplication;
-import com.ameron32.apps.tapnotes.v2.di.ForApplication;
-import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
-import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
-import com.ameron32.apps.tapnotes.v2.scripture.Bible;
-import com.ameron32.apps.tapnotes.v2.scripture.BibleBuilder;
-import com.ameron32.apps.tapnotes.v2.scripture.BibleResourceNotFoundException;
-import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
-import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
-import com.squareup.otto.Bus;
-import com.squareup.otto.ThreadEnforcer;
-
-import javax.inject.Singleton;
 
 import dagger.Module;
-import dagger.Provides;
-
-import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 /**
  * A module for Android-specific dependencies which require a {@link Context} or

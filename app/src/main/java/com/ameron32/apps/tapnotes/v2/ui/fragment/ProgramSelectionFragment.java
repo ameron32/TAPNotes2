@@ -156,7 +156,7 @@ public class ProgramSelectionFragment extends TAPFragment
 
   @OnClick(R.id.testing_button_mni)
   void onClick() {
-    if (!programSaved(mProgramId)) {
+    if (!isProgramSaved(mProgramId)) {
       getCallbacks().downloadProgram(mProgramId);
     } else {
       getCallbacks().startActivity(mProgramId);
@@ -170,7 +170,7 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   private void setStatusImage() {
-    if (programSaved(mProgramId)) {
+    if (isProgramSaved(mProgramId)) {
       statusImage.setImageResource(R.drawable.ic_action_done);
     } else {
       statusImage.setImageResource(R.drawable.ic_action_get_app);
@@ -181,7 +181,7 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   private void setRefreshButtonImage() {
-    if (programSaved(mProgramId)) {
+    if (isProgramSaved(mProgramId)) {
       refreshButton.setImageResource(R.drawable.ic_action_sync);
       ColoredDrawableUtil.setDrawableColor(getActivity(),
           refreshButton.getDrawable(),
@@ -195,7 +195,7 @@ public class ProgramSelectionFragment extends TAPFragment
     appVersionText.setText(mAppVersion);
   }
 
-  private boolean programSaved(String programId) {
+  private boolean isProgramSaved(String programId) {
     try {
       final IProgram program = Queries.Local.getProgram(programId);
       if (program != null) {

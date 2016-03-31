@@ -121,6 +121,7 @@ dependencies {
   compile 'com.jmpergar:AwesomeText:1.0.0'
   compile 'com.h6ah4i.android.materialshadowninepatch:materialshadowninepatch:0.6.3'
   compile('com.mikepenz:aboutlibraries:5.0.9@aar') { transitive = true }
+  compile 'nl.littlerobots.rxlint:rxlint:1.0'
   //
 //  androidTestCompile ('com.android.support.test:runner:0.3') {
 //    exclude module: 'support-annotations' }

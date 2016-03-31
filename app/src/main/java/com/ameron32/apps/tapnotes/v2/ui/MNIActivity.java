@@ -18,8 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
-import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
+import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.controller.ApplicationThemeController;
@@ -106,6 +107,9 @@ public class MNIActivity extends TAPActivity
   TextView mUsernameTextView;
   @InjectView(R.id.pane_animating_layout)
   AnimatingPaneLayout mAnimatingPane;
+
+  @Inject
+  DataManager dataManager;
 
   private String mProgramId;
   private String mCurrentTalkId;
@@ -685,7 +689,7 @@ public class MNIActivity extends TAPActivity
 
 
   @Inject
-  ParseNotesController notesController;
+  NotesController notesController;
 
   private Observable<Progress> cache;
   private Observable<Progress> cache2;

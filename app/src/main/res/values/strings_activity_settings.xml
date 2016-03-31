@@ -31,11 +31,13 @@
     <item>Teal 2015</item>
     <item>Material Dark</item>
     <item>Ultra Black</item>
+    <item>Blue 2016</item>
   </string-array>
   <string-array name="pref_theme_list_values">
     <item>0</item>
     <item>1</item>
     <item>2</item>
+    <item>3</item>
   </string-array>
 
   <!-- Example settings for Data & Sync -->

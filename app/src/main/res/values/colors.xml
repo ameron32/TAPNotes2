@@ -29,4 +29,11 @@
   <color name="DarkRedGrey">#810f0f</color>
   <!--<color name="DarkRedGrey">#fe0404</color>-->
 
+  <color name="DeepBlue">#10435b</color>
+  <color name="LightBlue">#91cbde</color>
+  <color name="BurntOrange">#b15c2f</color>
+  <color name="TextBlue">#0f425a</color>
+  <color name="LightGreyCloud">#ebeae9</color>
+  <color name="DeepGrey">#94999c</color>
+
 </resources>

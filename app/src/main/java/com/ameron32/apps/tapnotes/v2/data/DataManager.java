@@ -6,6 +6,7 @@ import com.ameron32.apps.tapnotes.v2.data.frmk.Helper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.LocalHelper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.RemoteHelper;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.AbstractDataProvider;
 
@@ -60,45 +61,45 @@ public class DataManager {
         if (REMOTE_DATA_SOURCE == RemoteSource.Parse
                 && LOCAL_DATA_SOURCE == LocalSource.ParseOffline) {
             ParseHelper parseHelper = new ParseHelper();
-            remoteHelper = parseHelper;
-            localHelper = parseHelper;
+            remoteHelper = parseHelper.getRemote();
+            localHelper = parseHelper.getCache();
             return;
         }
 
         switch(REMOTE_DATA_SOURCE) {
             case Parse:
-                remoteHelper = new ParseHelper();
+                remoteHelper = new ParseHelper().getRemote();
                 break;
             case BackendlessSDK:
-                remoteHelper = new ParseHelper(); // FIXME
+                remoteHelper = null; // FIXME
                 break;
             case BackendlessREST:
-                remoteHelper = new ParseHelper(); // FIXME
+                remoteHelper = null; // FIXME
                 break;
             default:
-                remoteHelper = new ParseHelper(); // FIXME
+                remoteHelper = null; // FIXME
         }
         switch(LOCAL_DATA_SOURCE) {
             case ParseOffline:
-                localHelper = new ParseHelper();
+                localHelper = new ParseHelper().getCache();
                 break;
             case SQBrite:
-                localHelper = new ParseHelper(); // FIXME
+                localHelper = null; // FIXME
                 break;
             case Realm:
-                localHelper = new ParseHelper(); // FIXME
+                localHelper = null; // FIXME
                 break;
             case Iron:
-                localHelper = new ParseHelper(); // FIXME
+                localHelper = null; // FIXME
                 break;
             default:
-                localHelper = new ParseHelper(); // FIXME
+                localHelper = null; // FIXME
         }
     }
 
 
 
-    public Observable<List<INote>> syncNotes() {
+    public Observable<List<INote>> syncNotes(IProgram program) {
         // TODO: CONFIRM: seems like this calls...
         // localHelper.getNotes()
         // then hands those to...
@@ -108,29 +109,29 @@ public class DataManager {
         // which hands those to...
         // localHelper.setNotes() ...to store
         Log.d(TAG, "Observable.concat()");
-        return Observable.concat(saveLocalChangesToRemote(), getRemoteNotes());
+        return Observable.concat(saveLocalChangesToRemote(program), getRemoteNotes());
     }
 
-    public Observable<List<INote>> getNotes() {
+    public Observable<List<INote>> getNotes(IProgram program) {
         Log.d(TAG, "Observable.concat()");
-        return Observable.concat(getLocalNotes(), getRemoteNotes());
+        return Observable.concat(getLocalNotes(program), getRemoteNotes());
     }
 
     private Observable<List<INote>> getRemoteNotes() {
         Log.d(TAG, "remoteHelper.getNotes()");
-        return remoteHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
+        return remoteHelper.syncNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
                 .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
                     @Override
                     public Observable<? extends List<INote>> call(List<INote> iNotes) {
                         Log.d(TAG, "localHelper.setNotes()");
-                        return localHelper.setNotes(iNotes);
+                        return localHelper.pinNotes(iNotes);
                     }
                 });
     }
 
-    private Observable<List<INote>> saveLocalChangesToRemote() {
+    private Observable<List<INote>> saveLocalChangesToRemote(IProgram program) {
         Log.d(TAG, "localHelper.getNotes()");
-        return localHelper.getLocalNotes()
+        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
                 .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
                     @Override
                     public Observable<List<INote>> call(List<INote> iNotes) {
@@ -140,9 +141,9 @@ public class DataManager {
                 });
     }
 
-    private Observable<List<INote>> getLocalNotes() {
+    private Observable<List<INote>> getLocalNotes(IProgram program) {
         Log.d(TAG, "localHelper.getNotes().distinct()");
-        return localHelper.getLocalNotes().distinct();
+        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL).distinct();
     }
 
     // Helper method to post events from doOnCompleted.

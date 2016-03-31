@@ -2,13 +2,21 @@ package com.ameron32.apps.tapnotes.v2.ui;
 
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
+import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
+import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseUtil;
+import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
+import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
@@ -24,7 +32,10 @@ import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.parse.ParseQuery;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
@@ -198,7 +209,8 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache4;
   private String mProgramId;
 
-  @Inject ParseNotesController notesController;
+  @Inject
+  NotesController notesController;
 
   @Override
   public void startActivity(final String programId) {

@@ -2,7 +2,9 @@ package com.ameron32.apps.tapnotes.v2.data.parse;
 
 import android.util.Log;
 
-import com.ameron32.apps.tapnotes.v2.di.controller.ParseNotesController;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
@@ -23,7 +25,7 @@ public class Rx {
     return Observable.create(new Observable.OnSubscribe<Progress>() {
       @Override
       public void call(Subscriber<? super Progress> subscriber) {
-        Log.d(ParseNotesController.class.getSimpleName(), "instantComplete called");
+        Log.d(NotesController.class.getSimpleName(), "instantComplete called");
         subscriber.onNext(new Progress(1, 1, false));
         subscriber.onCompleted();
       }
@@ -40,10 +42,10 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Get program"));
-            final Program program = Queries.Live.pinProgram(programId);
+            final IProgram program = Queries.Live.pinProgram(programId);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Saving notes"));
 
-            Queries.Live.pinAllProgramTalksFor(program);
+            Queries.Live.pinAllProgramTalksFor((Program) program);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Notes saved"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -55,16 +57,16 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    static Observable<Progress> pinAllProgramNotes(final Program program) {
+    static Observable<Progress> pinAllProgramNotes(final IProgram program) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Downloading Notes (1/2)"));
 
-            Queries.Live.pinAllGenericNotesFor(program, null);
+            Queries.Live.pinAllGenericNotesFor((Program) program, null);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
-            Queries.Live.pinAllClientOwnedNotesFor(program, null);
+            Queries.Live.pinAllClientOwnedNotesFor((Program) program, null);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Done!"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -76,13 +78,13 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    static Observable<Progress> pinRecentClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
+    static Observable<Progress> pinRecentClientOwnedNotesFor(final IProgram program, final ITalk talk, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           subscriber.onNext(new Progress(0, 1, false));
           try {
-            Queries.Live.pinAllClientOwnedNotesFor(program, talk, date);
+            Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(1, 1, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -93,15 +95,15 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    static Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(final Program program, final Talk talk, final Date date) {
+    static Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(final IProgram program, final ITalk talk, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           subscriber.onNext(new Progress(0, 2, false));
           try {
-            Queries.Local.unpinAllClientOwnedNotesFor(program, talk, date);
+            Queries.Local.unpinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(1, 2, false));
-            Queries.Live.pinAllClientOwnedNotesFor(program, talk, date);
+            Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(2, 2, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -112,18 +114,18 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    static Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(final Program program, final Date date) {
+    static Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(final IProgram program, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 3, false, "Refresh Program Notes", "Clearing Local Notes"));
-            Queries.Local.unpinAllGenericNotesFor(program);
-            Queries.Local.unpinAllClientOwnedNotesFor(program, date);
+            Queries.Local.unpinAllGenericNotesFor((Program) program);
+            Queries.Local.unpinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(1, 3, false, "Refresh Program Notes", "Retrieving Theme and Song Notes"));
-            Queries.Live.pinAllGenericNotesFor(program, date);
+            Queries.Live.pinAllGenericNotesFor((Program) program, date);
             subscriber.onNext(new Progress(2, 3, false, "Refresh Program Notes", "Retrieving Personal Notes"));
-            Queries.Live.pinAllClientOwnedNotesFor(program, date);
+            Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(3, 3, false, "Refresh Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -134,15 +136,15 @@ public class Rx {
       }).subscribeOn(Schedulers.computation());
     }
 
-    static Observable<Progress> pinRecentProgramNotes(final Program program, final Date date) {
+    static Observable<Progress> pinRecentProgramNotes(final IProgram program, final Date date) {
       return Observable.create(new Observable.OnSubscribe<Progress>() {
         @Override
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Theme and Song Notes"));
-            Queries.Live.pinAllGenericNotesFor(program, date);
+            Queries.Live.pinAllGenericNotesFor((Program) program, date);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Personal Notes"));
-            Queries.Live.pinAllClientOwnedNotesFor(program, date);
+            Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {

@@ -175,6 +175,62 @@
     <item name="context_menu_delete">@drawable/delete_white</item>
   </style>
 
+  <style name="Blue2016Theme" parent="AppTheme">
+    <!-- Customize your theme here. -->
+
+    <item name="listItem">@style/listItem_blue2016</item>
+    <item name="line_dark">@style/line_dark_blue2016</item>
+    <item name="line_light">@style/line_light_blue2016</item>
+
+
+    <item name="navBar_upper">@style/navBar_upper_blue2016</item>
+    <item name="navBar_lower">@style/navBar_lower_blue2016</item>
+    <item name="listItem_dark">@style/listItem_dark_blue2016</item>
+    <item name="listItem_selected">@style/listItem_selected_blue2016</item>
+    <item name="text_dimmed">@style/text_dimmed_blue2016</item>
+    <item name="text_bold">@style/text_bold_blue2016</item>
+    <item name="text_scripture">@style/text_scripture_blue2016</item>
+
+
+
+    <!--Kris's items below-->
+    <item name="colorPrimary">@color/blue2016_colorPrimary</item>
+    <item name="colorPrimaryDark">@color/blue2016_colorPrimaryDark</item>
+    <item name="colorAccent">@color/blue2016_colorAccent</item>
+
+    <!--<item name="android:windowBackground">@color/blue2016_windowBackground</item>-->
+    <item name="android:textColorPrimary">@color/blue2016_textColorPrimary</item>
+    <item name="colorPrimaryText">@color/blue2016_colorPrimaryText</item>
+
+
+    <item name="editor_container_background">@color/blue2016_editor_container_background</item>
+    <item name="scripture_picker_container_background">@color/blue2016_editor_container_background</item>
+    <item name="notes_container_background">@color/blue2016_notes_container_background</item>
+    <item name="program_nav_bar_background">@color/blue2016_program_nav_bar_background</item>
+    <item name="program_container_background">@color/blue2016_program_container_background</item>
+    <item name="default_background">@color/blue2016_default_background</item>
+
+    <item name="ic_photo_camera_icon">@drawable/camera_black</item>
+    <item name="ic_videocam_icon">@drawable/video_black</item>
+    <item name="ic_bible_icon">@drawable/bible_black</item>
+
+    <item name="span_scripture_background">@drawable/blue2016_span_scripture_background</item>
+    <item name="fragment_frame_border">@color/blue2016_fragment_frame_border</item>
+
+    <item name="expandable_icon">@drawable/ic_action_unfold_more_black</item>
+    <item name="collapsable_icon">@drawable/ic_action_unfold_less_black</item>
+
+    <item name="menu_next_icon">@drawable/next_black</item>
+    <item name="menu_prev_icon">@drawable/previous_black</item>
+    <item name="menu_refresh_icon">@drawable/ic_action_refresh</item>
+
+    <item name="context_menu_move">@drawable/move_black</item>
+    <item name="context_menu_bold">@drawable/bold_black</item>
+    <item name="context_menu_important">@drawable/favorite_black</item>
+    <item name="context_menu_edit">@drawable/edit_black</item>
+    <item name="context_menu_delete">@drawable/delete_black</item>
+  </style>
+
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
   </style>

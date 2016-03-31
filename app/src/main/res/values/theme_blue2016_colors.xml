@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <color name="blue2016_navBar_upper">#455a64</color>
+  <color name="blue2016_navBar_lower">#607d8b</color>
+  <color name="blue2016_listItem_dark">#111111</color>
+  <drawable name="blue2016_listItem_selected">@color/DarkRedGrey</drawable>
+  <drawable name="blue2016_listItem">#212121</drawable>
+  <color name="blue2016_text_bright">#e1e1e1</color>
+  <color name="blue2016_text_dimmed">#757575</color>
+  <color name="blue2016_text_bold">#e3e3e3</color>
+  <color name="blue2016_text_scripture">#e37d76</color>
+  <color name="blue2016_line_dark_color">#1f1f1f</color>
+  <color name="blue2016_line_light_color">#494949</color>
+
+  <!--Kris's colors below-->
+
+  <color name="blue2016_colorPrimary">@color/LightBlue</color>
+  <color name="blue2016_colorPrimaryDark">@color/DeepBlue</color>
+  <color name="blue2016_colorAccent">@color/BurntOrange</color>
+
+  <color name="blue2016_textColorPrimary">@color/UltraWhite</color>
+  <color name="blue2016_colorPrimaryText">@color/TextBlue</color>
+
+  <color name="blue2016_notes_container_background">@color/LightGreyCloud</color>
+  <color name="blue2016_program_container_background">@color/UltraWhite</color>
+  <color name="blue2016_program_nav_bar_background">@color/DeepBlue</color>
+  <color name="blue2016_editor_container_background">@color/UltraWhite</color>
+  <color name="blue2016_scripture_picker_container_background">@color/UltraWhite</color>
+  <color name="blue2016_default_background">@color/AMOLEDBlack</color>
+
+  <color name="blue2016_fragment_frame_border">@color/Clear</color>
+
+
+
+  <style name="listItem_blue2016">
+    <item name="android:background">@drawable/listitem_selector_blue2016</item>
+    <item name="android:textColor">@color/blue2016_text_bright</item>
+  </style>
+
+  <style name="line_dark_blue2016">
+    <item name="android:color">@color/blue2016_line_dark_color</item>
+  </style>
+
+<!--  <style name="icon_blue2016">
+    <item name="android:color">@color/blue2016_text_bright</item>
+  </style>-->
+
+  <style name="navBar_upper_blue2016">
+    <item name="android:background">@color/blue2016_navBar_upper</item>
+  </style>
+
+  <style name="navBar_lower_blue2016">
+    <item name="android:background">@color/blue2016_navBar_lower</item>
+  </style>
+
+  <style name="listItem_dark_blue2016">
+    <item name="android:background">@color/blue2016_listItem_dark</item>
+  </style>
+
+  <style name="listItem_selected_blue2016">
+    <item name="android:background">@drawable/blue2016_listItem_selected</item>
+  </style>
+
+  <style name="text_dimmed_blue2016">
+    <item name="android:textColor">@color/blue2016_text_dimmed</item>
+  </style>
+
+  <style name="text_bold_blue2016">
+    <item name="android:textColor">@color/blue2016_text_bold</item>
+  </style>
+
+  <style name="text_scripture_blue2016">
+    <item name="android:textColor">@color/blue2016_text_scripture</item>
+  </style>
+
+  <style name="line_light_blue2016">
+    <item name="android:background">@color/blue2016_line_light_color</item>
+  </style>
+
+
+</resources>

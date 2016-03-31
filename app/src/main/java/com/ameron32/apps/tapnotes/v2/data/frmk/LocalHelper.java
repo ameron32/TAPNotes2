@@ -4,6 +4,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.model.IUser;
+import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 
 import org.joda.time.DateTime;
 
@@ -17,7 +18,11 @@ import rx.Observable;
  */
 public interface LocalHelper extends Helper {
 
-    Observable<List<INote>> clearNotes(IProgram program, ITalk talk, DateTime date, IUser user);
-    Observable<List<INote>> setNotes(final Collection<INote> newNotes);
-    Observable<List<INote>> getLocalNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
+    Observable<IProgram> getProgram(String programId);
+    Observable<ITalk> getTalk(String talkId);
+    Observable<ITalk> getTalkAtSequence(String sequencePosition);
+    Observable<List<ITalk>> getProgramTalks(IProgram iProgram);
+    Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
+
+    Observable<List<INote>> pinNotes(List<INote> notes);
 }

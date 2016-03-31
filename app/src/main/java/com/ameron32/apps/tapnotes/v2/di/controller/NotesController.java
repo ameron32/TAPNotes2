@@ -24,20 +24,20 @@ import rx.Observable;
  * Created by klemeilleur on 7/22/2015.
  * TODO confusing ControllerActions names and usage. Needs improvement.
  */
-public class ParseNotesController extends AbsApplicationController {
+public class NotesController extends AbsApplicationController {
 
-  private static final String TAG = ParseNotesController.class.getSimpleName();
+  private static final String TAG = NotesController.class.getSimpleName();
 
   private Serializer<DateTime> serializer;
   private DateTime lastCheckedAllNotes;
 
-  public ParseNotesController(Application application) {
+  public NotesController(Application application) {
     super(application);
     // empty constructor
     serializer = new Serializer<>(DateTime.class);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(Program program, Talk talk) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, Talk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -46,7 +46,7 @@ public class ParseNotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, checkedTime.toDate());
   }
 
-  public Observable<Progress> pinAllClientOwnedNotesFor(Program program, Talk talk) {
+  public Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, Talk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -54,7 +54,7 @@ public class ParseNotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(Program program, Talk talk) {
+  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, Talk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -76,12 +76,11 @@ public class ParseNotesController extends AbsApplicationController {
         return unpinProgramAndTalksAndNotesThenRepin(programId);
       }
 
-      return ControllerActions.pinNotesFor((Program) program, checkedTime.toDate());
+      return ControllerActions.pinNotesFor(program, checkedTime.toDate());
     } catch (ParseException e) {
       e.printStackTrace();
-    } catch (ClassCastException e) {
-      e.printStackTrace();
     }
+
     return instantComplete();
   }
 
@@ -93,10 +92,8 @@ public class ParseNotesController extends AbsApplicationController {
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
       final IProgram program = Queries.Local.getProgram(programId);
-      return ControllerActions.unpinProgramAndTalksAndNotesThenRepin((Program) program);
+      return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
     } catch (ParseException e) {
-      e.printStackTrace();
-    } catch (ClassCastException e) {
       e.printStackTrace();
     }
 
@@ -111,7 +108,7 @@ public class ParseNotesController extends AbsApplicationController {
     return ControllerActions.pinProgramAndTalks(programId);
   }
 
-  public Observable<Progress> pinCompleteClientNotesFor(Program program) {
+  public Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
