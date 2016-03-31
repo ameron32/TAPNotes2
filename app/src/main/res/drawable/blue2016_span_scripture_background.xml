@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- TODO don't leave this like this -->
+    <!--<solid android:color="@color/materialdark_colorPrimary" />-->
+    <corners android:radius="@dimen/scripture_span_rounded_corner_dp" />
+    <padding
+        android:bottom="@dimen/scripture_span_padding_dp"
+        android:left="@dimen/scripture_span_padding_dp"
+        android:right="@dimen/scripture_span_padding_dp"
+        android:top="@dimen/scripture_span_padding_dp" />
+</shape>

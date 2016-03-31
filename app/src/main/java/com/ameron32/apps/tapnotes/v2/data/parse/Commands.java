@@ -19,7 +19,7 @@ public class Commands {
 
   public static class Live {
 
-    static Note saveNoteNow(Note note) {
+    public static Note saveNoteNow(Note note) {
       Log.d(TAG, "saveNoteNow " + note.getObjectId());
       try {
         note.save();
@@ -29,7 +29,7 @@ public class Commands {
       return note;
     }
 
-    static List<Note> saveNotesNow(List<Note> notes) {
+    public static List<Note> saveNotesNow(List<Note> notes) {
       Log.d(TAG, "saveNoteNow: size " + notes.size());
       for (Note note : notes) {
         saveNoteNow(note);
@@ -40,17 +40,17 @@ public class Commands {
 
   public static class Local {
 
-    static ParseUser getClientUser() {
+    public static ParseUser getClientUser() {
       Log.d(TAG, "getClientUser");
       return ParseUser.getCurrentUser();
     }
 
-    static Note saveEventuallyNote(Note note) {
+    public static Note saveEventuallyNote(Note note) {
       saveEventuallyNote(note, null);
       return note;
     }
 
-    static Note saveEventuallyNote(Note note, SaveCallback callback) {
+    public static Note saveEventuallyNote(Note note, SaveCallback callback) {
       Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
       if (!note.isNoteOwnedByClient()) {
         // do not delete notes that are not owned by the client
@@ -61,7 +61,7 @@ public class Commands {
       return note;
     }
 
-    static List<Note> saveEventuallyNotes(List<Note> notes) {
+    public static List<Note> saveEventuallyNotes(List<Note> notes) {
       Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
       for (Note note : notes) {
         saveEventuallyNote(note);
@@ -69,7 +69,7 @@ public class Commands {
       return notes;
     }
 
-    static List<Note> saveEventuallyParseNotes(List<Note> notes) {
+    public static List<Note> saveEventuallyParseNotes(List<Note> notes) {
       Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
       for (INote note : notes) {
         if (note instanceof Note) {
@@ -79,13 +79,13 @@ public class Commands {
       return notes;
     }
 
-    static Note pinNote(Note note) {
+    public static Note pinNote(Note note) {
       Log.d(TAG, "pinNote: " + note.getObjectId());
       note.pinInBackground();
       return note;
     }
 
-    static void deleteEventuallyNote(Note note) {
+    public static void deleteEventuallyNote(Note note) {
       Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
       if (!note.isNoteOwnedByClient()) {
         // do not delete notes that are not owned by the client
@@ -95,14 +95,14 @@ public class Commands {
       note.deleteEventually();
     }
 
-    static void deleteEventuallyNotes(List<Note> notes) {
+    public static void deleteEventuallyNotes(List<Note> notes) {
       Log.d(TAG, "deleteEventuallyNotes: size " + notes.size());
       for (Note note : notes) {
         deleteEventuallyNote(note);
       }
     }
 
-    static void logoutClientUser() {
+    public static void logoutClientUser() {
       ParseUser.logOut();
     }
   }

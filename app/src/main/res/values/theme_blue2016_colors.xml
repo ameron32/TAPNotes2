@@ -3,20 +3,20 @@
 
   <color name="blue2016_navBar_upper">#455a64</color>
   <color name="blue2016_navBar_lower">#607d8b</color>
-  <color name="blue2016_listItem_dark">#111111</color>
-  <drawable name="blue2016_listItem_selected">@color/DarkRedGrey</drawable>
-  <drawable name="blue2016_listItem">#212121</drawable>
-  <color name="blue2016_text_bright">#e1e1e1</color>
-  <color name="blue2016_text_dimmed">#757575</color>
-  <color name="blue2016_text_bold">#e3e3e3</color>
-  <color name="blue2016_text_scripture">#e37d76</color>
-  <color name="blue2016_line_dark_color">#1f1f1f</color>
-  <color name="blue2016_line_light_color">#494949</color>
+  <color name="blue2016_listItem_dark">#ebebeb</color>
+  <drawable name="blue2016_listItem_selected">@color/BurntOrange</drawable>
+  <drawable name="blue2016_listItem">#e0e0e0</drawable>
+  <color name="blue2016_text_bright">#393425</color>
+  <color name="blue2016_text_dimmed">#c2c2c2</color>
+  <color name="blue2016_text_bold">@color/BurntOrange</color>
+  <color name="blue2016_text_scripture">@color/TextBlue</color>
+  <color name="blue2016_line_dark_color">#c5c5c5</color>
+  <color name="blue2016_line_light_color">#e4e4e4</color>
 
   <!--Kris's colors below-->
 
-  <color name="blue2016_colorPrimary">@color/LightBlue</color>
-  <color name="blue2016_colorPrimaryDark">@color/DeepBlue</color>
+  <color name="blue2016_colorPrimary">@color/DeepBlue</color>
+  <color name="blue2016_colorPrimaryDark">@color/LightBlue</color>
   <color name="blue2016_colorAccent">@color/BurntOrange</color>
 
   <color name="blue2016_textColorPrimary">@color/UltraWhite</color>
@@ -27,7 +27,7 @@
   <color name="blue2016_program_nav_bar_background">@color/DeepBlue</color>
   <color name="blue2016_editor_container_background">@color/UltraWhite</color>
   <color name="blue2016_scripture_picker_container_background">@color/UltraWhite</color>
-  <color name="blue2016_default_background">@color/AMOLEDBlack</color>
+  <color name="blue2016_default_background">@color/UltraWhite</color>
 
   <color name="blue2016_fragment_frame_border">@color/Clear</color>
 

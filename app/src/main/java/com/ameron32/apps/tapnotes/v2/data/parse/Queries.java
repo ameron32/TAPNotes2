@@ -34,7 +34,7 @@ public class Queries {
   public static class Live {
 
     // CURRENT LIMIT = 10000
-    static List<INote> pinAllClientOwnedNotesFor(Program program, Date date)
+    public static List<INote> pinAllClientOwnedNotesFor(Program program, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId());
       int currentPage = 0;
@@ -55,7 +55,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> pinAllGenericNotesFor(Program program, Date date)
+    public static List<INote> pinAllGenericNotesFor(Program program, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId());
       int currentPage = 0;
@@ -75,7 +75,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> pinAllClientOwnedNotesFor(Program program, Talk talk, Date date)
+    public static List<INote> pinAllClientOwnedNotesFor(Program program, Talk talk, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
@@ -95,7 +95,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> pinAllGenericNotesFor(Program program, Talk talk, Date date)
+    public static List<INote> pinAllGenericNotesFor(Program program, Talk talk, Date date)
         throws ParseException {
       Log.d(TAG, "pinAllGenericNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
@@ -116,7 +116,7 @@ public class Queries {
     }
 
     // CURRENT LIMIT = 1000
-    static List<ITalk> pinAllProgramTalksFor(Program program)
+    public static List<ITalk> pinAllProgramTalksFor(Program program)
         throws ParseException {
       Log.d(TAG, "pinAllProgramTalksFor " + program.getObjectId());
       final List<Talk> talks = ParseQuery.getQuery(Talk.class)
@@ -127,7 +127,7 @@ public class Queries {
       return ParseUtil.toITalk(talks);
     }
 
-    static Program pinProgram(String programId)
+    public static Program pinProgram(String programId)
         throws ParseException {
       Log.d(TAG, "pinProgram " + programId);
       final Program program = ParseQuery.getQuery(Program.class)
@@ -141,7 +141,7 @@ public class Queries {
 
   public static class Local {
 
-    static List<INote> unpinAllClientOwnedNotesFor(Program program, Talk talk, Date date)
+    public static List<INote> unpinAllClientOwnedNotesFor(Program program, Talk talk, Date date)
         throws ParseException {
       Log.d(TAG, "unpinAllClientOwnedNotesFor " + program.getObjectId() + " and " + talk.getObjectId());
       int currentPage = 0;
@@ -161,7 +161,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> unpinAllGenericNotesFor(Program program)
+    public static List<INote> unpinAllGenericNotesFor(Program program)
         throws ParseException {
       Log.d(TAG, "unpinAllGenericNotesFor " + program.getObjectId());
       int currentPage = 0;
@@ -181,7 +181,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> unpinAllClientOwnedNotesFor(Program program, Date date)
+    public static List<INote> unpinAllClientOwnedNotesFor(Program program, Date date)
         throws ParseException {
       Log.d(TAG, "unpinAllClientOwnedNotesFor " + program.getObjectId());
       int currentPage = 0;
@@ -201,19 +201,19 @@ public class Queries {
       return notes;
     }
 
-    static void unpinNotes() throws ParseException {
+    public static void unpinNotes() throws ParseException {
       Note.unpinAll(Constants.NOTE_PIN_NAME);
     }
 
-    static void unpinTalks() throws ParseException {
+    public static void unpinTalks() throws ParseException {
       Talk.unpinAll(Constants.TALK_PIN_NAME);
     }
 
-    static void unpinPrograms() throws ParseException {
+    public static void unpinPrograms() throws ParseException {
       Program.unpinAll(Constants.PROGRAM_PIN_NAME);
     }
 
-    static List<INote> findAllClientOwnedNotes()
+    public static List<INote> findAllClientOwnedNotes()
         throws ParseException {
       Log.d(TAG, "findAllClientOwnedNotes");
       final List<INote> notes = ParseUtil.toINote(ParseQuery.getQuery(Note.class)
@@ -224,7 +224,7 @@ public class Queries {
       return notes;
     }
 
-    static int countPrograms()
+    public static int countPrograms()
         throws ParseException {
       Log.d(TAG, "countPrograms");
       final List<Program> programs = ParseQuery.getQuery(Program.class)
@@ -233,7 +233,7 @@ public class Queries {
       return programs.size();
     }
 
-    static IProgram getProgram(String programId)
+    public static IProgram getProgram(String programId)
         throws ParseException {
       Log.d(TAG, "getProgram " + programId);
       final Program program = ParseQuery.getQuery(Program.class)
@@ -242,7 +242,7 @@ public class Queries {
       return program;
     }
 
-    static ITalk getTalk(String talkId)
+    public static ITalk getTalk(String talkId)
         throws ParseException {
       Log.d(TAG, "getTalk " + talkId);
       final ITalk talk = ParseQuery.getQuery(Talk.class)
@@ -251,7 +251,7 @@ public class Queries {
       return talk;
     }
 
-    static ITalk getTalkAtSequence(String sequence)
+    public static ITalk getTalkAtSequence(String sequence)
         throws ParseException, IndexOutOfBoundsException {
       Log.d(TAG, "getTalkAtSequence " + sequence);
       final ITalk talk = ParseQuery.getQuery(Talk.class)
@@ -261,7 +261,7 @@ public class Queries {
       return talk;
     }
 
-    static List<INote> findClientOwnedNotesFor(Talk talk)
+    public static List<INote> findClientOwnedNotesFor(Talk talk)
         throws ParseException {
       Log.d(TAG, "findClientOwnedNotesFor " + talk.getObjectId());
       final List<INote> notes = ParseUtil.toINote(ParseQuery.getQuery(Note.class)
@@ -275,7 +275,7 @@ public class Queries {
       return notes;
     }
 
-    static List<INote> findGenericNotesFor(Talk talk)
+    public static List<INote> findGenericNotesFor(Talk talk)
         throws ParseException {
       Log.d(TAG, "findClientOwnedNotesFor " + talk.getObjectId());
       final List<INote> notes = ParseUtil.toINote(ParseQuery.getQuery(Note.class)
@@ -301,7 +301,7 @@ public class Queries {
 //      return notes.get(FIRST_OR_ONLY);
 //    }
 
-    static List<ITalk> findAllProgramTalks(Program program)
+    public static List<ITalk> findAllProgramTalks(Program program)
         throws ParseException {
       Log.d(TAG, "findAllProgramTalks " + program.getObjectId());
       final List<Talk> talks = ParseQuery.getQuery(Talk.class)
@@ -311,7 +311,7 @@ public class Queries {
       return ParseUtil.toITalk(talks);
     }
 
-    static Note getNote(String noteId)
+    public static Note getNote(String noteId)
         throws ParseException {
       Log.d(TAG, "getNote " + noteId);
       final Note note = ParseQuery.getQuery(Note.class)

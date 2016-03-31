@@ -58,24 +58,24 @@ public class Note
     return acl;
   }
 
-//  @Nullable
-//  public static Note create(
-//      final String text,
-//      final String programId, final String talkId,
-//      final ParseUser owner) {
-//    Log.d(Note.class.getSimpleName(),
-//        "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
-//    try {
-//      final IProgram program = Queries.Local.getProgram(programId);
-//      final ITalk talk = Queries.Local.getTalk(talkId);
-//      if (program instanceof Program && talk instanceof Talk) {
-//        return Note.create(text, (Program) program, (Talk) talk, owner);
-//      }
-//    } catch (ParseException e) {
-//      e.printStackTrace();
-//    }
-//    return null;
-//  }
+  @Nullable
+  public static Note create(
+      final String text,
+      final String programId, final String talkId,
+      final ParseUser owner) {
+    Log.d(Note.class.getSimpleName(),
+        "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
+    try {
+      final IProgram program = Queries.Local.getProgram(programId);
+      final ITalk talk = Queries.Local.getTalk(talkId);
+      if (program instanceof Program && talk instanceof Talk) {
+        return Note.create(text, (Program) program, (Talk) talk, owner);
+      }
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   public Note() {
     // required empty
