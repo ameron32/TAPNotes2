@@ -101,17 +101,23 @@ public class DataManager implements DataAccess {
 
     @Override
     public Observable<List<IProgram>> getPrograms() {
-        return null;
+        return localHelper.getPrograms().distinct();
     }
 
     @Override
     public Observable<List<IProgram>> syncPrograms() {
-        return null;
+        return remoteHelper.getPrograms()
+                .concatMap(new Func1<List<IProgram>, Observable<? extends List<IProgram>>>() {
+                    @Override
+                    public Observable<? extends List<IProgram>> call(List<IProgram> iPrograms) {
+                        return localHelper.pinPrograms(iPrograms);
+                    }
+                });
     }
 
     @Override
     public Observable<IProgram> getProgram(String programId) {
-        return localHelper.getProgram(programId);
+        return localHelper.getProgram(programId).distinct();
     }
 
     @Override
@@ -127,7 +133,7 @@ public class DataManager implements DataAccess {
 
     @Override
     public Observable<List<ITalk>> getTalks(IProgram program) {
-        return localHelper.getProgramTalks(program);
+        return localHelper.getProgramTalks(program).distinct();
     }
 
     @Override
@@ -142,7 +148,7 @@ public class DataManager implements DataAccess {
 
     @Override
     public Observable<ITalk> getTalk(String talkId) {
-        return localHelper.getTalk(talkId);
+        return localHelper.getTalk(talkId).distinct();
     }
 
     @Override
@@ -152,23 +158,55 @@ public class DataManager implements DataAccess {
 
     @Override
     public Observable<List<INote>> syncNotes(IProgram program) {
-        return remoteHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
-                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
-                    @Override
-                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
-                        return localHelper.pinNotes(iNotes);
-                    }
-                });
+        return Observable.concat(
+                localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
+                        .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                            @Override
+                            public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                return remoteHelper.saveNotes(iNotes);
+                            }
+                        }),
+                remoteHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
+                        .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                            @Override
+                            public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                return localHelper.pinNotes(iNotes);
+                            }
+                        }));
     }
 
     @Override
     public Observable<List<INote>> getNotes(ITalk talk) {
-        return null;
+        return localHelper.getNotes(Helper.ALL_PROGRAMS, talk, Helper.FOREVER, Helper.USER_ALL).distinct();
     }
 
     @Override
     public Observable<List<INote>> syncNotes(ITalk talk) {
-        return null;
+        return Observable.concat(
+                localHelper.getNotes(Helper.ALL_PROGRAMS, talk, Helper.FOREVER, Helper.USER_ALL)
+                        .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                            @Override
+                            public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                return remoteHelper.saveNotes(iNotes);
+                            }
+                        }),
+                remoteHelper.getNotes(Helper.ALL_PROGRAMS, talk, Helper.FOREVER, Helper.USER_ALL)
+                        .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                            @Override
+                            public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                                return localHelper.pinNotes(iNotes);
+                            }
+                        }));
+    }
+
+    @Override
+    public Observable<INote> deleteNote(INote note) {
+        return localHelper.deleteNote(note).concatMap(new Func1<INote, Observable<? extends INote>>() {
+            @Override
+            public Observable<? extends INote> call(INote iNote) {
+                return remoteHelper.deleteNote(iNote);
+            }
+        });
     }
 
     //    @Override

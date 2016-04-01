@@ -33,4 +33,6 @@ public interface LocalHelper extends Helper {
 
     Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
     Observable<List<INote>> pinNotes(List<INote> notes);
+
+    Observable<INote> deleteNote(INote note);
 }

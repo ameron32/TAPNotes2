@@ -28,4 +28,6 @@ public interface DataAccess {
     Observable<List<INote>> syncNotes(IProgram program);
     Observable<List<INote>> getNotes(ITalk talk);
     Observable<List<INote>> syncNotes(ITalk talk);
+
+    Observable<INote> deleteNote(INote note);
 }

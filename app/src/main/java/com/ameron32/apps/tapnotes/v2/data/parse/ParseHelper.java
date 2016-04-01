@@ -26,12 +26,16 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscriber;
 
+import static com.ameron32.apps.tapnotes.v2.data.frmk.Helper.*;
+
 /**
  * Created by klemeilleur on 3/25/2016.
  */
 public class ParseHelper {
 
     private static final String NOTE_TAG = "note";
+    private static final String TALK_TAG = "talk";
+    private static final String PROGRAM_TAG = "program";
 
     public final LocalHelper cache;
     public final RemoteHelper remote;
@@ -84,8 +88,132 @@ public class ParseHelper {
 //        });
 //    }
 
+    private List<IProgram> pinProgramsAsync() {
+        try {
+            return Queries.Live.pinPrograms();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private IProgram pinProgramAsync(String programId) {
+        try {
+            return Queries.Live.pinProgram(programId);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private List<ITalk> pinTalksAsync(IProgram program) {
+        if (program instanceof Program) {
+            try {
+                return Queries.Live.pinAllProgramTalksFor((Program) program);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private INote deleteNoteAsync(INote note) {
+        if (note instanceof Note) {
+            Commands.Local.deleteEventuallyNote((Note) note);
+            return note;
+        }
+        return note;
+    }
+
+    private List<INote> pinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
+        try {
+            if (iProgram instanceof Program) {
+                Program program = (Program) iProgram;
+                Date date = null;
+                Talk talk = (iTalk != null && iTalk instanceof Talk) ? (Talk) iTalk : null;
+                if (dateTime != FOREVER) {
+                    date = dateTime.toDate();
+                }
+
+                if (iUser == USER_GENERIC) {
+                    if (iTalk == ALL_TALKS) {
+                        return Queries.Live.pinAllGenericNotesFor(program, date);
+                    } else {
+                        return Queries.Live.pinAllGenericNotesFor(program, talk, date);
+                    }
+                }
+
+                if (iUser == USER_ME) {
+                    if (iTalk == ALL_TALKS) {
+                        return Queries.Live.pinAllClientOwnedNotesFor(program, date);
+                    } else {
+                        return Queries.Live.pinAllClientOwnedNotesFor(program, talk, date);
+                    }
+                }
+
+                if (iUser == USER_ALL) {
+                    throw new IllegalStateException("FIXME");
+                }
+                return null;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ParseHelper() {
         cache = new LocalHelper() {
+
+            @Override
+            public Observable<List<IProgram>> getPrograms() {
+                return Observable.create(new Observable.OnSubscribe<List<IProgram>>() {
+                    @Override
+                    public void call(Subscriber<? super List<IProgram>> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        List<IProgram> program = getProgramsAsync();
+                        subscriber.onNext(program);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+
+            @Override
+            public Observable<List<IProgram>> pinPrograms(final List<IProgram> programs) {
+                return Observable.create(new Observable.OnSubscribe<List<IProgram>>() {
+                    @Override
+                    public void call(Subscriber<? super List<IProgram>> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        pinPrograms(programs);
+                        subscriber.onNext(programs);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+
+            @Override
+            public Observable<IProgram> pinProgram(final IProgram program) {
+                return Observable.create(new Observable.OnSubscribe<IProgram>() {
+                    @Override
+                    public void call(Subscriber<? super IProgram> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        pinProgram(program);
+                        subscriber.onNext(program);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+
+            @Override
+            public Observable<ITalk> pinTalk(ITalk talk) {
+                return null;
+            }
+
+            @Override
+            public Observable<List<ITalk>> pinTalks(List<ITalk> talks) {
+                return null;
+            }
+
             @Override
             public Observable<IProgram> getProgram(final String programId) {
                 return Observable.create(new Observable.OnSubscribe<IProgram>() {
@@ -162,6 +290,28 @@ public class ParseHelper {
                         subscriber.onCompleted();
                     }
                 });
+            }
+
+            @Override
+            public Observable<INote> deleteNote(final INote note) {
+                return Observable.create(new Observable.OnSubscribe<INote>() {
+                    @Override
+                    public void call(Subscriber<? super INote> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        deleteNoteAsync(note);
+                        subscriber.onNext(note);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+
+            private List<IProgram> getProgramsAsync() {
+                try {
+                    return Queries.Local.getPrograms();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             private IProgram getProgramAsync(String programId) {
@@ -247,6 +397,30 @@ public class ParseHelper {
                 }
             }
 
+            private void pinTalksAsync(List<ITalk> talks) {
+                for (ITalk iTalk : talks) {
+                    if (iTalk instanceof Talk) {
+                        try {
+                            ((Talk) iTalk).pin(TALK_TAG);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
+            private void pinProgramsAsync(List<IProgram> programs) {
+                for (IProgram iProgram : programs) {
+                    if (iProgram instanceof Program) {
+                        try {
+                            ((Program) iProgram).pin(PROGRAM_TAG);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+
             private List<INote> unpinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
                 try {
                     if (iProgram instanceof Program) {
@@ -286,7 +460,20 @@ public class ParseHelper {
         remote = new RemoteHelper() {
 
             @Override
-            public Observable<IProgram> syncProgram(final String programId) {
+            public Observable<List<IProgram>> getPrograms() {
+                return Observable.create(new Observable.OnSubscribe<List<IProgram>>() {
+                    @Override
+                    public void call(Subscriber<? super List<IProgram>> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        List<IProgram> iPrograms = pinProgramsAsync();
+                        subscriber.onNext(iPrograms);
+                        subscriber.onCompleted();
+                    }
+                });
+            }
+
+            @Override
+            public Observable<IProgram> getProgram(final String programId) {
                 return Observable.create(new Observable.OnSubscribe<IProgram>() {
                     @Override
                     public void call(Subscriber<? super IProgram> subscriber) {
@@ -299,7 +486,7 @@ public class ParseHelper {
             }
 
             @Override
-            public Observable<List<ITalk>> syncTalks(final IProgram program) {
+            public Observable<List<ITalk>> getTalks(final IProgram program) {
                 return Observable.create(new Observable.OnSubscribe<List<ITalk>>() {
                     @Override
                     public void call(Subscriber<? super List<ITalk>> subscriber) {
@@ -312,7 +499,7 @@ public class ParseHelper {
             }
 
             @Override
-            public Observable<List<INote>> syncNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user) {
+            public Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user) {
                 return Observable.create(new Observable.OnSubscribe<List<INote>>() {
                     @Override
                     public void call(Subscriber<? super List<INote>> subscriber) {
@@ -336,72 +523,31 @@ public class ParseHelper {
             }
 
             @Override
-            public Observable<List<INote>> syncProgramNotes(final IProgram program) {
+            public Observable<List<INote>> getProgramNotes(final IProgram program) {
                 return Observable.create(new Observable.OnSubscribe<List<INote>>() {
                     @Override
                     public void call(Subscriber<? super List<INote>> subscriber) {
                         if (subscriber.isUnsubscribed()) return;
-                        pinNotesAsync(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC);
-                        pinNotesAsync(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ME);
+                        List<INote> notes = new ArrayList<>();
+                        notes.addAll(pinNotesAsync(program, ALL_TALKS, FOREVER, USER_GENERIC));
+                        notes.addAll(pinNotesAsync(program, ALL_TALKS, FOREVER, USER_ME));
+                        subscriber.onNext(notes);
+                        subscriber.onCompleted();
                     }
                 });
             }
 
-            private IProgram pinProgramAsync(String programId) {
-                try {
-                    return Queries.Live.pinProgram(programId);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            private List<ITalk> pinTalksAsync(IProgram program) {
-                if (program instanceof Program) {
-                    try {
-                        return Queries.Live.pinAllProgramTalksFor((Program) program);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+            @Override
+            public Observable<INote> deleteNote(final INote note) {
+                return Observable.create(new Observable.OnSubscribe<INote>() {
+                    @Override
+                    public void call(Subscriber<? super INote> subscriber) {
+                        if (subscriber.isUnsubscribed()) return;
+                        deleteNote(note);
+                        subscriber.onNext(note);
+                        subscriber.onCompleted();
                     }
-                }
-                return null;
-            }
-
-            private List<INote> pinNotesAsync(IProgram iProgram, ITalk iTalk, DateTime dateTime, IUser iUser) {
-                try {
-                    if (iProgram instanceof Program) {
-                        Program program = (Program) iProgram;
-                        Date date = null;
-                        Talk talk = (iTalk != null && iTalk instanceof Talk) ? (Talk) iTalk : null;
-                        if (dateTime != FOREVER) {
-                            date = dateTime.toDate();
-                        }
-
-                        if (iUser == USER_GENERIC) {
-                            if (iTalk == ALL_TALKS) {
-                                return Queries.Live.pinAllGenericNotesFor(program, date);
-                            } else {
-                                return Queries.Live.pinAllGenericNotesFor(program, talk, date);
-                            }
-                        }
-
-                        if (iUser == USER_ME) {
-                            if (iTalk == ALL_TALKS) {
-                                return Queries.Live.pinAllClientOwnedNotesFor(program, date);
-                            } else {
-                                return Queries.Live.pinAllClientOwnedNotesFor(program, talk, date);
-                            }
-                        }
-
-                        if (iUser == USER_ALL) {
-                            throw new IllegalStateException("FIXME");
-                        }
-                        return null;
-                    }
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return null;
+                });
             }
 
             private List<INote> saveNotesAsync(List<INote> iNotes) {
@@ -668,6 +814,16 @@ public class ParseHelper {
           program.pin(Constants.PROGRAM_PIN_NAME);
           return program;
         }
+
+    public //
+          static List<IProgram> pinPrograms()
+                  throws ParseException {
+              Log.d(TAG, "pinPrograms: all");
+              final List<Program> programs = ParseQuery.getQuery(Program.class)
+                      .find();
+              Program.pinAll(Constants.PROGRAM_PIN_NAME, programs);
+              return ParseUtil.toIProgram(programs);
+          }
       }
 
 
@@ -772,6 +928,16 @@ public class ParseHelper {
               .fromLocalDatastore()
               .find();
           return programs.size();
+        }
+
+    public //
+        static List<IProgram> getPrograms()
+            throws ParseException {
+          Log.d(TAG, "getPrograms: all");
+          final List<Program> programs = ParseQuery.getQuery(Program.class)
+              .fromLocalDatastore()
+              .find();
+          return ParseUtil.toIProgram(programs);
         }
 
     public //

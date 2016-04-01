@@ -45,6 +45,7 @@ import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 import static rx.android.lifecycle.LifecycleEvent.*;
 
@@ -200,8 +201,29 @@ public class NotesFragment extends TAPFragment
 
     if (isStringUsable(mTalkId)) {
       mNotesDelegate.onBibleCreated(bible);
-      giveNotesToDelegate();
+//      giveNotesToDelegate(); // moved to subscription
     }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    dataManager.syncNotes(mTalk).subscribe(new Observer<List<INote>>() {
+      @Override
+      public void onCompleted() {
+        giveNotesToDelegate();
+      }
+
+      @Override
+      public void onError(Throwable e) {
+        e.printStackTrace();
+      }
+
+      @Override
+      public void onNext(List<INote> iNotes) {
+
+      }
+    });
   }
 
   private void displayToolbarImage() {
@@ -261,29 +283,59 @@ public class NotesFragment extends TAPFragment
 
       @Override
       public void call(Subscriber<? super Progress> subscriber) { // lock (next talk/prev talk)
-        try {
-          subscriber.onNext(new Progress(0, 1, false));
-          mTalk = ParseHelper.Queries.Local.getTalk(mTalkId);
-          mSymposiumTitle = mTalk.getSymposiumTitle();
-          mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
+        subscriber.onNext(new Progress(0, 1, false));
+        dataManager.getTalk(mTalkId).subscribe(new Observer<ITalk>() {
+          @Override
+          public void onCompleted() {
 
-          // TODO: decouple from Parse
-          final List<INote> genericNotes = ParseHelper.Queries.Local.findGenericNotesFor((Talk) mTalk);
-          final List<INote> clientNotes = ParseHelper.Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
+          }
 
-          mNotes.clear();
-          mNotes.addAll(genericNotes);
-          mNotes.addAll(clientNotes);
+          @Override
+          public void onError(Throwable e) {
+            e.printStackTrace();
+          }
 
-          Log.d(NotesFragment.class.getSimpleName(),
-              "mNotes.size() : " + mNotes.size());
-          subscriber.onNext(new Progress(1, 1, false));
-          subscriber.onCompleted(); // unlock (next talk/prev talk)
-        } catch (ParseException e) {
-          e.printStackTrace();
-          subscriber.onNext(new Progress(0, 1, true));
-          subscriber.onCompleted(); // unlock (next talk/prev talk)
-        }
+          @Override
+          public void onNext(ITalk iTalk) {
+            mTalk = iTalk;
+//              mTalk = ParseHelper.Queries.Local.getTalk(mTalkId);
+            mSymposiumTitle = mTalk.getSymposiumTitle();
+            mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
+
+            // TODO: decouple from Parse
+//          final List<INote> genericNotes = ParseHelper.Queries.Local.findGenericNotesFor((Talk) mTalk);
+//          final List<INote> clientNotes = ParseHelper.Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
+            dataManager.getNotes(mTalk).subscribe(new Observer<List<INote>>() {
+              @Override
+              public void onCompleted() {
+
+              }
+
+              @Override
+              public void onError(Throwable e) {
+                e.printStackTrace();
+              }
+
+              @Override
+              public void onNext(List<INote> iNotes) {
+                mNotes.clear();
+                if (iNotes != null) {
+                  mNotes.addAll(iNotes);
+                }
+
+                Log.d(NotesFragment.class.getSimpleName(),
+                        "mNotes.size() : " + mNotes.size());
+              }
+            });
+
+//              mNotes.clear();
+//              mNotes.addAll(genericNotes);
+//              mNotes.addAll(clientNotes);
+          }
+        });
+
+        subscriber.onNext(new Progress(1, 1, false));
+        subscriber.onCompleted(); // unlock (next talk/prev talk)
       }
     });
   }
@@ -372,9 +424,7 @@ public class NotesFragment extends TAPFragment
   public void onUserClickDeleteNote(INote note) {
     if (isUserPermitted(note)) {
       mNotesDelegate.removeNotes(listify(note));
-      if (note instanceof Note) {
-        ParseHelper.Commands.Local.deleteEventuallyNote((Note) note);
-      }
+      dataManager.deleteNote(note);
     }
   }
 

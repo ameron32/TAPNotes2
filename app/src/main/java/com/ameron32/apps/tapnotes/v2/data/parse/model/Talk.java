@@ -55,6 +55,12 @@ public class Talk
   }
 
   @Override
+  public String getHeaderImageUrl() {
+    // TODO database does not yet support headerImageUrl string
+    return this.getString(TALK_HEADERIMAGEURL_STRING_KEY);
+  }
+
+  @Override
   public List<Scripture> getTalkScriptures(final Bible bible) {
     return Scripture.generateAll(bible, getTalkThemeScriptures());
   }
