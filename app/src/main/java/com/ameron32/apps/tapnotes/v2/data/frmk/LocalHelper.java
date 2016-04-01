@@ -18,11 +18,19 @@ import rx.Observable;
  */
 public interface LocalHelper extends Helper {
 
-    Observable<IProgram> getProgram(String programId);
-    Observable<ITalk> getTalk(String talkId);
-    Observable<ITalk> getTalkAtSequence(String sequencePosition);
-    Observable<List<ITalk>> getProgramTalks(IProgram iProgram);
-    Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
+    Observable<List<IProgram>> getPrograms();
+    Observable<List<IProgram>> pinPrograms(List<IProgram> programs);
 
+    Observable<IProgram> getProgram(String programId);
+    Observable<IProgram> pinProgram(IProgram program);
+
+    Observable<ITalk> getTalk(String talkId);
+    Observable<ITalk> pinTalk(ITalk talk);
+    Observable<ITalk> getTalkAtSequence(String sequencePosition);
+
+    Observable<List<ITalk>> getProgramTalks(IProgram iProgram);
+    Observable<List<ITalk>> pinTalks(List<ITalk> talks);
+
+    Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
     Observable<List<INote>> pinNotes(List<INote> notes);
 }

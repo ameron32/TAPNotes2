@@ -100,8 +100,44 @@ public class DataManager implements DataAccess {
     }
 
     @Override
+    public Observable<List<IProgram>> getPrograms() {
+        return null;
+    }
+
+    @Override
+    public Observable<List<IProgram>> syncPrograms() {
+        return null;
+    }
+
+    @Override
     public Observable<IProgram> getProgram(String programId) {
         return localHelper.getProgram(programId);
+    }
+
+    @Override
+    public Observable<IProgram> syncProgram(String programId) {
+        return remoteHelper.getProgram(programId)
+                .concatMap(new Func1<IProgram, Observable<? extends IProgram>>() {
+                    @Override
+                    public Observable<? extends IProgram> call(IProgram iProgram) {
+                        return localHelper.pinProgram(iProgram);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<List<ITalk>> getTalks(IProgram program) {
+        return localHelper.getProgramTalks(program);
+    }
+
+    @Override
+    public Observable<List<ITalk>> syncTalks(IProgram program) {
+        return remoteHelper.getTalks(program).concatMap(new Func1<List<ITalk>, Observable<? extends List<ITalk>>>() {
+            @Override
+            public Observable<? extends List<ITalk>> call(List<ITalk> iTalks) {
+                return localHelper.pinTalks(iTalks);
+            }
+        });
     }
 
     @Override
@@ -110,53 +146,89 @@ public class DataManager implements DataAccess {
     }
 
     @Override
-    public Observable<List<INote>> syncNotes(IProgram program) {
-        // TODO: CONFIRM: seems like this calls...
-        // localHelper.getNotes()
-        // then hands those to...
-        // remoteHelper.saveNotes() ...to save
-        // then the next thing to happen is...
-        // remoteHelper.getNotes()
-        // which hands those to...
-        // localHelper.setNotes() ...to store
-        Log.d(TAG, "Observable.concat()");
-        return Observable.concat(saveLocalChangesToRemote(program), getRemoteNotes());
+    public Observable<ITalk> getTalkAtSequence(String sequence) {
+        return null;
     }
 
     @Override
-    public Observable<List<INote>> getNotes(IProgram program) {
-        Log.d(TAG, "Observable.concat()");
-        return Observable.concat(getLocalNotes(program), getRemoteNotes());
-    }
-
-    private Observable<List<INote>> getRemoteNotes() {
-        Log.d(TAG, "remoteHelper.getNotes()");
-        return remoteHelper.syncNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
+    public Observable<List<INote>> syncNotes(IProgram program) {
+        return remoteHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
                 .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
                     @Override
                     public Observable<? extends List<INote>> call(List<INote> iNotes) {
-                        Log.d(TAG, "localHelper.setNotes()");
                         return localHelper.pinNotes(iNotes);
                     }
                 });
     }
 
-    private Observable<List<INote>> saveLocalChangesToRemote(IProgram program) {
-        Log.d(TAG, "localHelper.getNotes()");
-        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
-                .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
-                    @Override
-                    public Observable<List<INote>> call(List<INote> iNotes) {
-                        Log.d(TAG, "remoteHelper.saveNotes()");
-                        return remoteHelper.saveNotes(iNotes);
-                    }
-                });
+    @Override
+    public Observable<List<INote>> getNotes(ITalk talk) {
+        return null;
     }
 
-    private Observable<List<INote>> getLocalNotes(IProgram program) {
-        Log.d(TAG, "localHelper.getNotes().distinct()");
-        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL).distinct();
+    @Override
+    public Observable<List<INote>> syncNotes(ITalk talk) {
+        return null;
     }
+
+    //    @Override
+//    public Observable<IProgram> getProgram(String programId) {
+//        return localHelper.getProgram(programId);
+//    }
+//
+//    @Override
+//    public Observable<ITalk> getTalk(String talkId) {
+//        return localHelper.getTalk(talkId);
+//    }
+//
+//    @Override
+//    public Observable<List<INote>> syncNotes(IProgram program) {
+//        // TODO: CONFIRM: seems like this calls...
+//        // localHelper.getNotes()
+//        // then hands those to...
+//        // remoteHelper.saveNotes() ...to save
+//        // then the next thing to happen is...
+//        // remoteHelper.getNotes()
+//        // which hands those to...
+//        // localHelper.setNotes() ...to store
+//        Log.d(TAG, "Observable.concat()");
+//        return Observable.concat(saveLocalChangesToRemote(program), getRemoteNotes());
+//    }
+//
+//    @Override
+//    public Observable<List<INote>> getNotes(IProgram program) {
+//        Log.d(TAG, "Observable.concat()");
+//        return Observable.concat(getLocalNotes(program), getRemoteNotes());
+//    }
+//
+//    private Observable<List<INote>> getRemoteNotes() {
+//        Log.d(TAG, "remoteHelper.getNotes()");
+//        return remoteHelper.syncNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
+//                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+//                    @Override
+//                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
+//                        Log.d(TAG, "localHelper.setNotes()");
+//                        return localHelper.pinNotes(iNotes);
+//                    }
+//                });
+//    }
+//
+//    private Observable<List<INote>> saveLocalChangesToRemote(IProgram program) {
+//        Log.d(TAG, "localHelper.getNotes()");
+//        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
+//                .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
+//                    @Override
+//                    public Observable<List<INote>> call(List<INote> iNotes) {
+//                        Log.d(TAG, "remoteHelper.saveNotes()");
+//                        return remoteHelper.saveNotes(iNotes);
+//                    }
+//                });
+//    }
+//
+//    private Observable<List<INote>> getLocalNotes(IProgram program) {
+//        Log.d(TAG, "localHelper.getNotes().distinct()");
+//        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL).distinct();
+//    }
 
     // Helper method to post events from doOnCompleted.
     private Action0 postEventAction(final Object event) {

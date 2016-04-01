@@ -16,10 +16,10 @@ import rx.Observable;
  */
 public interface RemoteHelper extends Helper {
 
-    Observable<IProgram> syncProgram(String programId);
-    Observable<List<ITalk>> syncTalks(IProgram program);
-    Observable<List<INote>> syncNotes(IProgram program, ITalk talk, DateTime date, IUser user);
-    Observable<List<INote>> syncProgramNotes(IProgram program);
+    Observable<IProgram> getProgram(String programId);
+    Observable<List<ITalk>> getTalks(IProgram program);
+    Observable<List<INote>> getNotes(IProgram program, ITalk talk, DateTime date, IUser user);
+    Observable<List<INote>> getProgramNotes(IProgram program);
 
     Observable<List<INote>> saveNotes(List<INote> iNotes);
 }

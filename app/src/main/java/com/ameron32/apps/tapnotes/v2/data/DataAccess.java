@@ -14,15 +14,18 @@ import rx.Observable;
 public interface DataAccess {
 
     Observable<List<IProgram>> getPrograms();
+    Observable<List<IProgram>> syncPrograms();
+
     Observable<IProgram> getProgram(String programId);
+    Observable<IProgram> syncProgram(String programId);
+
     Observable<List<ITalk>> getTalks(IProgram program);
+    Observable<List<ITalk>> syncTalks(IProgram program);
 
     Observable<ITalk> getTalk(String talkId);
     Observable<ITalk> getTalkAtSequence(String sequence);
 
-    Observable<List<INote>> getNotes(IProgram program);
-    Observable<List<INote>> getNotes(ITalk talk);
-
-    // TODO: sync smallest set possible
     Observable<List<INote>> syncNotes(IProgram program);
+    Observable<List<INote>> getNotes(ITalk talk);
+    Observable<List<INote>> syncNotes(ITalk talk);
 }
