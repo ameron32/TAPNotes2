@@ -21,6 +21,6 @@ public class Status {
   }
 
   public static boolean isLoggedIn() {
-    return !ParseAnonymousUtils.isLinked(Commands.Local.getClientUser());
+    return !ParseAnonymousUtils.isLinked(ParseHelper.Commands.Local.getClientUser());
   }
 }

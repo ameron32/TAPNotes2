@@ -15,12 +15,12 @@ import android.widget.TextView;
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
@@ -197,7 +197,7 @@ public class ProgramSelectionFragment extends TAPFragment
 
   private boolean isProgramSaved(String programId) {
     try {
-      final IProgram program = Queries.Local.getProgram(programId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       if (program != null) {
         return true;
       }

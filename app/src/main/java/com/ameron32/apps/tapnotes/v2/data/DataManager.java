@@ -7,6 +7,7 @@ import com.ameron32.apps.tapnotes.v2.data.frmk.LocalHelper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.RemoteHelper;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.AbstractDataProvider;
 
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
@@ -24,7 +26,7 @@ import rx.functions.Func1;
  * Created by klemeilleur on 3/24/2016.
  */
 @Singleton
-public class DataManager {
+public class DataManager implements DataAccess {
 
     private static final String TAG = DataManager.class.getSimpleName();
 
@@ -97,8 +99,17 @@ public class DataManager {
         }
     }
 
+    @Override
+    public Observable<IProgram> getProgram(String programId) {
+        return localHelper.getProgram(programId);
+    }
 
+    @Override
+    public Observable<ITalk> getTalk(String talkId) {
+        return localHelper.getTalk(talkId);
+    }
 
+    @Override
     public Observable<List<INote>> syncNotes(IProgram program) {
         // TODO: CONFIRM: seems like this calls...
         // localHelper.getNotes()
@@ -112,6 +123,7 @@ public class DataManager {
         return Observable.concat(saveLocalChangesToRemote(program), getRemoteNotes());
     }
 
+    @Override
     public Observable<List<INote>> getNotes(IProgram program) {
         Log.d(TAG, "Observable.concat()");
         return Observable.concat(getLocalNotes(program), getRemoteNotes());

@@ -8,8 +8,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
-import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.parse.Parse;
@@ -112,7 +112,7 @@ public abstract class MyDispatchActivity extends Activity {
   }
 
   private void runDispatch() {
-    if (Commands.Local.getClientUser() != null) {
+    if (ParseHelper.Commands.Local.getClientUser() != null) {
       debugLog("user logged in " + getTargetClass());
       if (Status.isConnectionToServerAvailable(getContext())) {
         checkVersionThenStartActivity();

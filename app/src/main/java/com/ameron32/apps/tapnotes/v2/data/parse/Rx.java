@@ -42,10 +42,10 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Get program"));
-            final IProgram program = Queries.Live.pinProgram(programId);
+            final IProgram program = ParseHelper.Queries.Live.pinProgram(programId);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Saving notes"));
 
-            Queries.Live.pinAllProgramTalksFor((Program) program);
+            ParseHelper.Queries.Live.pinAllProgramTalksFor((Program) program);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Notes saved"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -64,9 +64,9 @@ public class Rx {
           try {
             subscriber.onNext(new Progress(0, 2, false, "Download Program Notes", "Downloading Notes (1/2)"));
 
-            Queries.Live.pinAllGenericNotesFor((Program) program, null);
+            ParseHelper.Queries.Live.pinAllGenericNotesFor((Program) program, null);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Downloading Notes (2/2)"));
-            Queries.Live.pinAllClientOwnedNotesFor((Program) program, null);
+            ParseHelper.Queries.Live.pinAllClientOwnedNotesFor((Program) program, null);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Done!"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -84,7 +84,7 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           subscriber.onNext(new Progress(0, 1, false));
           try {
-            Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
+            ParseHelper.Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(1, 1, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -101,9 +101,9 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           subscriber.onNext(new Progress(0, 2, false));
           try {
-            Queries.Local.unpinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
+            ParseHelper.Queries.Local.unpinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(1, 2, false));
-            Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
+            ParseHelper.Queries.Live.pinAllClientOwnedNotesFor((Program) program, (Talk) talk, date);
             subscriber.onNext(new Progress(2, 2, false));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -120,12 +120,12 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(0, 3, false, "Refresh Program Notes", "Clearing Local Notes"));
-            Queries.Local.unpinAllGenericNotesFor((Program) program);
-            Queries.Local.unpinAllClientOwnedNotesFor((Program) program, date);
+            ParseHelper.Queries.Local.unpinAllGenericNotesFor((Program) program);
+            ParseHelper.Queries.Local.unpinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(1, 3, false, "Refresh Program Notes", "Retrieving Theme and Song Notes"));
-            Queries.Live.pinAllGenericNotesFor((Program) program, date);
+            ParseHelper.Queries.Live.pinAllGenericNotesFor((Program) program, date);
             subscriber.onNext(new Progress(2, 3, false, "Refresh Program Notes", "Retrieving Personal Notes"));
-            Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
+            ParseHelper.Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(3, 3, false, "Refresh Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {
@@ -142,9 +142,9 @@ public class Rx {
         public void call(Subscriber<? super Progress> subscriber) {
           try {
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Theme and Song Notes"));
-            Queries.Live.pinAllGenericNotesFor((Program) program, date);
+            ParseHelper.Queries.Live.pinAllGenericNotesFor((Program) program, date);
             subscriber.onNext(new Progress(1, 2, false, "Download Program Notes", "Retrieving Personal Notes"));
-            Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
+            ParseHelper.Queries.Live.pinAllClientOwnedNotesFor((Program) program, date);
             subscriber.onNext(new Progress(2, 2, false, "Download Program Notes", "Complete"));
             subscriber.onCompleted();
           } catch (ParseException e) {

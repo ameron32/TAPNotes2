@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.ameron32.apps.tapnotes.v2.BuildConfig;
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
@@ -34,9 +35,7 @@ import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
@@ -284,13 +283,13 @@ public class MNIActivity extends TAPActivity
     }
 
     try {
-      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final ITalk talk = ParseHelper.Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
       final String session = String.valueOf(sequence.charAt(0));
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession + 1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final ITalk nextTalk = ParseHelper.Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks
@@ -326,13 +325,13 @@ public class MNIActivity extends TAPActivity
     }
 
     try {
-      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
+      final ITalk talk = ParseHelper.Queries.Local.getTalk(mCurrentTalkId);
       final String sequence = talk.getSequence();
       final String session = String.valueOf(sequence.charAt(0));
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final ITalk nextTalk = ParseHelper.Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks
@@ -449,7 +448,7 @@ public class MNIActivity extends TAPActivity
 
   private void commitNotesFragmentFromTalkId(final String talkId) {
     try {
-      final ITalk talk = Queries.Local.getTalk(talkId);
+      final ITalk talk = ParseHelper.Queries.Local.getTalk(talkId);
       if (talk != null) {
         final String talkName = talk.getTalkTitle();
         final String imageUrl = ""; // TODO implement imageUrl
@@ -545,7 +544,7 @@ public class MNIActivity extends TAPActivity
                     return true;
                   case R.id.nav_logout:
                     // logout then...
-                    Commands.Local.logoutClientUser();
+                    ParseHelper.Commands.Local.logoutClientUser();
                     // go to dispatch, then straight thru to MyDispatchLoginActivity
                     startActivity(MyDispatchMainActivity.makeIntent(getContext()));
                     finish();
@@ -556,7 +555,7 @@ public class MNIActivity extends TAPActivity
                 return true;
               }
             });
-    mUsernameTextView.setText(Commands.Local.getClientUser().getUsername());
+    mUsernameTextView.setText(ParseHelper.Commands.Local.getClientUser().getUsername());
   }
 
   private void postLiveUpdateEvent(int requestCode) {
@@ -656,7 +655,7 @@ public class MNIActivity extends TAPActivity
 
       try {
         if (talk instanceof Talk) {
-          final IProgram program = Queries.Local.getProgram(mProgramId);
+          final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
           if (program instanceof Program) {
             cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor((Program) program,
                     (Talk) talk), DESTROY).cache();
@@ -672,8 +671,8 @@ public class MNIActivity extends TAPActivity
 
   private void unpinAndRepinNotesForThisTalk() {
     try {
-      final ITalk talk = Queries.Local.getTalk(mCurrentTalkId);
-      final IProgram program = Queries.Local.getProgram(mProgramId);
+      final ITalk talk = ParseHelper.Queries.Local.getTalk(mCurrentTalkId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
       if (talk instanceof Talk && program instanceof Program) {
         cache2 = bindLifecycle(
             notesController.unpinThenRepinAllClientOwnedNotesFor((Program) program, (Talk) talk),
@@ -728,7 +727,7 @@ public class MNIActivity extends TAPActivity
 //      } catch (ParseException e) {
 //        e.printStackTrace();
 //      }
-      final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, Commands.Local.getClientUser());
+      final Note note = Note.create(editorText, mProgramId, mCurrentTalkId, ParseHelper.Commands.Local.getClientUser());
 //      final Note lastNote = prevNote;
 //
 //      if (lastNote != null) {
@@ -738,8 +737,8 @@ public class MNIActivity extends TAPActivity
 
       if (note != null) {
         // TODO replace with Observable!!!
-        Commands.Local.saveEventuallyNote(note);
-        Commands.Local.pinNote(note);
+        ParseHelper.Commands.Local.saveEventuallyNote(note);
+        ParseHelper.Commands.Local.pinNote(note);
 //        getNotesFragment().notesChanged(listify(lastNote));
         getNotesFragment().notesAdded(listify(note));
       }
@@ -754,7 +753,7 @@ public class MNIActivity extends TAPActivity
         }
         note.setNoteText(editorText);
 
-        Commands.Local.saveEventuallyNote(note);
+        ParseHelper.Commands.Local.saveEventuallyNote(note);
         getNotesFragment().notesChanged(listify(note));
       }
     }

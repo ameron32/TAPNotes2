@@ -18,4 +18,5 @@ public interface ITalk<T extends IScripture, U extends IBible> extends IObject {
   int getSongNumber();
   int getDurationInMinutes();
   String getSequence();
+  String getHeaderImageUrl();
 }

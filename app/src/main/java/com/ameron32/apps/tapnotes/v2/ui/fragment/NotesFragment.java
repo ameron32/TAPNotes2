@@ -23,20 +23,12 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.INoteEditable;
-import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
-import com.ameron32.apps.tapnotes.v2.data.parse.frmk.ParseLiveReceiver;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
+import com.ameron32.apps.tapnotes.v2.data.parse.frmk.LiveReceiver;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IToolbarHeaderDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.NotesLayoutFragmentDelegate;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
@@ -51,6 +43,8 @@ import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.Subscription;
+import rx.functions.Action1;
 
 import static rx.android.lifecycle.LifecycleEvent.*;
 
@@ -62,7 +56,7 @@ public class NotesFragment extends TAPFragment
       INoteHandler,
       IToolbarHeaderDelegate.IToolbarHeaderCallbacks,
       INotesDelegate.INotesDelegateCallbacks,
-      ParseLiveReceiver
+      LiveReceiver
 {
 
   private static final String TITLE_ARG = "TITLE_ARG";
@@ -75,6 +69,7 @@ public class NotesFragment extends TAPFragment
   Toolbar mToolbar;
   @InjectView(R.id.notesRecycler)
   RecyclerView mRecyclerView;
+
   @Inject
   ActivitySnackBarController mSnackBar;
 
@@ -82,156 +77,20 @@ public class NotesFragment extends TAPFragment
   DataManager dataManager;
   @Inject
   Bible bible;
-
+  @InjectView(R.id.image_toolbar_header_background)
+  ImageView mToolbarImage;
+  @Inject
+  Bus bus;
   private Callbacks mCallbacks;
-
   private IToolbarHeaderDelegate mHeaderDelegate;
   private INotesDelegate mNotesDelegate;
   private String mTalkId;
   private String mToolbarTitle;
   private String mSymposiumTitle;
   private String mImageUrl;
-
-
-  public NotesFragment() {
-    // empty constructor
-  }
-
-  @Override
-  protected FragmentDelegate createDelegate() {
-    return NotesLayoutFragmentDelegate.create(NotesFragment.this);
-  }
-
-  public static NotesFragment create(
-      String toolbarTitle,
-      String talkId,
-      String imageUrl) {
-    final NotesFragment f = new NotesFragment();
-    final Bundle args = new Bundle();
-    args.putString(TITLE_ARG, toolbarTitle);
-    args.putString(TALK_ID_ARG, talkId);
-    args.putString(IMAGEURL_ARG, imageUrl);
-    f.setArguments(args);
-    return f;
-  }
-
-  @Override
-  public void onAttach(Activity activity) {
-    super.onAttach(activity);
-    if (activity instanceof Callbacks) {
-      mCallbacks = (Callbacks) activity;
-    } else {
-      throw new IllegalStateException(activity.getClass().getSimpleName()
-          + "must implement " + Callbacks.class.getSimpleName() + " in order to use "
-          + NotesFragment.class.getSimpleName());
-    }
-  }
-
-  @Override
-  public void onDetach() {
-    mCallbacks = null;
-    super.onDetach();
-  }
-
-
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    bus.register(this);
-    final Bundle args = getArguments();
-    if (args != null) {
-      mTalkId = args.getString(TALK_ID_ARG);
-      mToolbarTitle = args.getString(TITLE_ARG);
-      mImageUrl = args.getString(IMAGEURL_ARG);
-    }
-  }
-
-  @Override
-  public void onDestroy() {
-    bus.unregister(this);
-    super.onDestroy();
-  }
-
-  @Nullable
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    final View rootView = inflater.inflate(R.layout.fragment_mni_notes, container, false);
-    return rootView;
-  }
-
-  @InjectView(R.id.image_toolbar_header_background)
-  ImageView mToolbarImage;
-
-  @Override
-  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    ButterKnife.inject(this, view);
-
-
-    confirmToolbarDelegateHasInterface();
-    confirmNotesDelegateHasInterface();
-    mHeaderDelegate.onToolbarViewCreated(mToolbar);
-    setTitles();
-    displayToolbarImage();
-
-    if (isStringUsable(mTalkId)) {
-      mNotesDelegate.onBibleCreated(bible);
-      giveNotesToDelegate();
-    }
-  }
-
-  private void displayToolbarImage() {
-    // TODO KRIS enable toolbar imagery
-//    getImageFromProgram(mTalkId);
-  }
-
-  private void getImageFromProgram(String talkId) {
-    ParseQuery.getQuery(Talk.class)
-        .fromLocalDatastore()
-        .getInBackground(talkId, new GetCallback<Talk>() {
-          @Override
-          public void done(Talk program, ParseException e) {
-            if (e == null) {
-              final Object o = program.get(Constants.TALK_HEADERIMAGE_FILE_KEY);
-              if (o != null && o instanceof ParseFile) {
-                final ParseFile file = (ParseFile) o;
-                Picasso.with(getContext()).load(file.getUrl())
-                    .into(mToolbarImage);
-              }
-            }
-          }
-        });
-  }
-
-  private void confirmToolbarDelegateHasInterface() {
-    if (getDelegate() instanceof IToolbarHeaderDelegate) {
-      mHeaderDelegate = ((IToolbarHeaderDelegate) getDelegate());
-    } else {
-      throw new IllegalStateException("delegate " +
-          "should implement " + IToolbarHeaderDelegate.class.getSimpleName() +
-          " to allow necessary method calls.");
-    }
-  }
-
-  private void confirmNotesDelegateHasInterface() {
-    if (getDelegate() instanceof INotesDelegate) {
-      mNotesDelegate = ((INotesDelegate) getDelegate());
-    } else {
-      throw new IllegalStateException("delegate " +
-          "should implement " + INotesDelegate.class.getSimpleName() +
-          " to allow necessary method calls.");
-    }
-  }
-
+  private Observable<ITalk> loadImageCache;
   private ITalk mTalk;
   private List<INote> mNotes = new ArrayList<>();
-  private Observable<Progress> cache;
-
-  private void giveNotesToDelegate() {
-    cache = bindLifecycle(getLocalNotesObservable(), DESTROY).cache();
-    cache.subscribe(noteObserver);
-  }
-
   private final Observer<Progress> noteObserver = new Observer<Progress>() {
 
     private Progress mostRecentProgress;
@@ -260,6 +119,137 @@ public class NotesFragment extends TAPFragment
       mostRecentProgress = progress;
     }
   };
+  private Observable<Progress> cache;
+
+  public NotesFragment() {
+    // empty constructor
+  }
+
+  public static NotesFragment create(
+      String toolbarTitle,
+      String talkId,
+      String imageUrl) {
+    final NotesFragment f = new NotesFragment();
+    final Bundle args = new Bundle();
+    args.putString(TITLE_ARG, toolbarTitle);
+    args.putString(TALK_ID_ARG, talkId);
+    args.putString(IMAGEURL_ARG, imageUrl);
+    f.setArguments(args);
+    return f;
+  }
+
+  @Override
+  protected FragmentDelegate createDelegate() {
+    return NotesLayoutFragmentDelegate.create(NotesFragment.this);
+  }
+
+  @Override
+  public void onAttach(Activity activity) {
+    super.onAttach(activity);
+    if (activity instanceof Callbacks) {
+      mCallbacks = (Callbacks) activity;
+    } else {
+      throw new IllegalStateException(activity.getClass().getSimpleName()
+          + "must implement " + Callbacks.class.getSimpleName() + " in order to use "
+          + NotesFragment.class.getSimpleName());
+    }
+  }
+
+  @Override
+  public void onDetach() {
+    mCallbacks = null;
+    super.onDetach();
+  }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    bus.register(this);
+    final Bundle args = getArguments();
+    if (args != null) {
+      mTalkId = args.getString(TALK_ID_ARG);
+      mToolbarTitle = args.getString(TITLE_ARG);
+      mImageUrl = args.getString(IMAGEURL_ARG);
+    }
+  }
+
+  @Override
+  public void onDestroy() {
+    bus.unregister(this);
+    super.onDestroy();
+  }
+
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    final View rootView = inflater.inflate(R.layout.fragment_mni_notes, container, false);
+    return rootView;
+  }
+
+  @Override
+  public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    ButterKnife.inject(this, view);
+
+
+    confirmToolbarDelegateHasInterface();
+    confirmNotesDelegateHasInterface();
+    mHeaderDelegate.onToolbarViewCreated(mToolbar);
+    setTitles();
+    displayToolbarImage();
+
+    if (isStringUsable(mTalkId)) {
+      mNotesDelegate.onBibleCreated(bible);
+      giveNotesToDelegate();
+    }
+  }
+
+  private void displayToolbarImage() {
+    // TODO KRIS enable toolbar imagery
+//    getImageFromProgram(mTalkId);
+  }
+
+  private void getImageFromProgram(String talkId) {
+    // TODO: confirm if this even works
+    loadImageCache = bindLifecycle(dataManager.getTalk(talkId), DESTROY).cache();
+    loadImageCache.subscribe(new Observer<ITalk>() {
+      @Override
+      public void onCompleted() {}
+      @Override
+      public void onError(Throwable e) {}
+      @Override
+      public void onNext(ITalk iTalk) {
+        Picasso.with(getContext())
+                .load(iTalk.getHeaderImageUrl())
+                .into(mToolbarImage);
+      }
+    });
+  }
+
+  private void confirmToolbarDelegateHasInterface() {
+    if (getDelegate() instanceof IToolbarHeaderDelegate) {
+      mHeaderDelegate = ((IToolbarHeaderDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + IToolbarHeaderDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
+    }
+  }
+
+  private void confirmNotesDelegateHasInterface() {
+    if (getDelegate() instanceof INotesDelegate) {
+      mNotesDelegate = ((INotesDelegate) getDelegate());
+    } else {
+      throw new IllegalStateException("delegate " +
+          "should implement " + INotesDelegate.class.getSimpleName() +
+          " to allow necessary method calls.");
+    }
+  }
+
+  private void giveNotesToDelegate() {
+    cache = bindLifecycle(getLocalNotesObservable(), DESTROY).cache();
+    cache.subscribe(noteObserver);
+  }
 
   private Observable<List<INote>> getNotes() {
     // TODO: rethink method
@@ -273,13 +263,13 @@ public class NotesFragment extends TAPFragment
       public void call(Subscriber<? super Progress> subscriber) { // lock (next talk/prev talk)
         try {
           subscriber.onNext(new Progress(0, 1, false));
-          mTalk = Queries.Local.getTalk(mTalkId);
+          mTalk = ParseHelper.Queries.Local.getTalk(mTalkId);
           mSymposiumTitle = mTalk.getSymposiumTitle();
           mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
 
           // TODO: decouple from Parse
-          final List<INote> genericNotes = Queries.Local.findGenericNotesFor((Talk) mTalk);
-          final List<INote> clientNotes = Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
+          final List<INote> genericNotes = ParseHelper.Queries.Local.findGenericNotesFor((Talk) mTalk);
+          final List<INote> clientNotes = ParseHelper.Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
 
           mNotes.clear();
           mNotes.addAll(genericNotes);
@@ -333,11 +323,6 @@ public class NotesFragment extends TAPFragment
     mNotesDelegate.addNotes(notes);
   }
 
-
-
-  @Inject
-  Bus bus;
-
   @Subscribe
   public void onRequestComplete(LiveUpdateEvent event) {
     final int requestCode = event.getRequestType();
@@ -388,7 +373,7 @@ public class NotesFragment extends TAPFragment
     if (isUserPermitted(note)) {
       mNotesDelegate.removeNotes(listify(note));
       if (note instanceof Note) {
-        Commands.Local.deleteEventuallyNote((Note) note);
+        ParseHelper.Commands.Local.deleteEventuallyNote((Note) note);
       }
     }
   }

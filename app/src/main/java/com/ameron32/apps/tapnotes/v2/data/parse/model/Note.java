@@ -7,9 +7,8 @@ import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.INoteEditable;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.data.parse.frmk.ColumnableParseObject;
 import com.parse.ParseACL;
 import com.parse.ParseClassName;
@@ -66,8 +65,8 @@ public class Note
     Log.d(Note.class.getSimpleName(),
         "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
     try {
-      final IProgram program = Queries.Local.getProgram(programId);
-      final ITalk talk = Queries.Local.getTalk(talkId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
+      final ITalk talk = ParseHelper.Queries.Local.getTalk(talkId);
       if (program instanceof Program && talk instanceof Talk) {
         return Note.create(text, (Program) program, (Talk) talk, owner);
       }
@@ -134,7 +133,7 @@ public class Note
     } else {
       removeTag(INote.TAG_IMPORTANT_NOTE);
     }
-    Commands.Local.saveEventuallyNote(this);
+    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   @Override
@@ -144,7 +143,7 @@ public class Note
     } else {
       removeTag(INote.TAG_BOLD_NOTE);
     }
-    Commands.Local.saveEventuallyNote(this);
+    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   @Override
@@ -157,7 +156,7 @@ public class Note
     if (newType != getNoteType()) {
       setNoteType(newType);
     }
-    Commands.Local.saveEventuallyNote(this);
+    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   private List<Integer> getTags() {
@@ -217,7 +216,7 @@ public class Note
       return false;
     }
 
-    return (Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
+    return (ParseHelper.Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
   }
 
   private ParseUser getOwner() {
@@ -232,7 +231,7 @@ public class Note
   @Override
   public boolean isNoteEditableByClient() {
     final ParseACL acl = getACL();
-    return acl.getWriteAccess(Commands.Local.getClientUser());
+    return acl.getWriteAccess(ParseHelper.Commands.Local.getClientUser());
   }
 
 }

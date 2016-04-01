@@ -4,12 +4,11 @@ import android.app.Application;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.data.parse.ControllerActions;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.data.parse.Status;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
 import com.parse.ParseException;
 
@@ -37,7 +36,7 @@ public class NotesController extends AbsApplicationController {
     serializer = new Serializer<>(DateTime.class);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, Talk talk) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -46,7 +45,7 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, checkedTime.toDate());
   }
 
-  public Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, Talk talk) {
+  public Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -54,7 +53,7 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, Talk talk) {
+  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!Status.isConnectionToServerAvailable(getApplication())) {
       return instantComplete();
     }
@@ -69,7 +68,7 @@ public class NotesController extends AbsApplicationController {
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
-      final IProgram program = Queries.Local.getProgram(programId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
 
       if (checkedTime.plusDays(2).isBefore(getNow())) {
         // more than 2 days (48 hours), repin all notes
@@ -91,7 +90,7 @@ public class NotesController extends AbsApplicationController {
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
     try {
-      final IProgram program = Queries.Local.getProgram(programId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
     } catch (ParseException e) {
       e.printStackTrace();

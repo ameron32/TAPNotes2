@@ -16,35 +16,42 @@ public class ControllerActions {
 
   // pin recent
 
-  public static Observable<Progress> pinClientNotesFor(IProgram program, ITalk talk, Date checkedTime) {
+public //
+  static Observable<Progress> pinClientNotesFor(IProgram program, ITalk talk, Date checkedTime) {
     return Rx.Live.pinRecentClientOwnedNotesFor(program, talk, checkedTime);
   }
 
-  public static Observable<Progress> unpinThenRepinClientNotesFor(IProgram program, ITalk talk, Date checkedTime) {
+public //
+  static Observable<Progress> unpinThenRepinClientNotesFor(IProgram program, ITalk talk, Date checkedTime) {
     return Rx.Live.unpinThenRepinAllClientOwnedNotesFor(program, talk, checkedTime);
   }
 
-  public static Observable<Progress> pinNotesFor(IProgram program, Date checkedTime) {
+public //
+  static Observable<Progress> pinNotesFor(IProgram program, Date checkedTime) {
     return Rx.Live.pinRecentProgramNotes(program, checkedTime);
   }
 
-  public static Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(IProgram program) {
+public //
+  static Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(IProgram program) {
     return Rx.Live.unpinThenRepinAllClientOwnedNotesFor(program, null);
   }
 
   // pin everything
 
-  public static Observable<Progress> pinProgramAndTalks(String programId) {
+public //
+  static Observable<Progress> pinProgramAndTalks(String programId) {
     return Rx.Live.pinProgramWithTalks(programId);
   }
 
-  public static Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
+public //
+  static Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
     return Rx.Live.pinAllProgramNotes(program);
   }
 
   // online unavailable
 
-  public static Observable<Progress> instantComplete() {
+public //
+  static Observable<Progress> instantComplete() {
     return Rx.instantComplete();
   }
 }

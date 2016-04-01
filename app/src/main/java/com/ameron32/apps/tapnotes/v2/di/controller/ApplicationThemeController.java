@@ -53,7 +53,7 @@ public class ApplicationThemeController extends AbsApplicationController {
         setThemeInPreferences(R.style.Blue2016Theme);
         break;
       default:
-        setThemeInPreferences(R.style.Teal2015Theme);
+        setThemeInPreferences(R.style.Blue2016Theme);
     }
   }
 

@@ -5,9 +5,8 @@ import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.data.parse.Commands;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
@@ -21,7 +20,6 @@ import com.parse.ParseRole;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,7 +93,7 @@ public class _MiscUtils {
   public static void _generate1001Notes(Talk talk, Program program)
       throws ParseException {
     for (int i = 0; i < 1001; i++) {
-      final Note note = Note.create("spam note " + (i + 1), program, talk, Commands.Local.getClientUser());
+      final Note note = Note.create("spam note " + (i + 1), program, talk, ParseHelper.Commands.Local.getClientUser());
       note.save();
     }
   }
@@ -181,7 +179,7 @@ public class _MiscUtils {
 
   public static void _saveProgramScriptures(final Context context, Program program) {
     try {
-      final List<ITalk> talks = Queries.Local.findAllProgramTalks(program);
+      final List<ITalk> talks = ParseHelper.Queries.Local.findAllProgramTalks(program);
       if (talks.size() != seq.length) {
         Log.d(TAG, "mismatch size: " + talks.size() + " / " + seq.length);
         return;
@@ -242,7 +240,7 @@ public class _MiscUtils {
 
     try {
 
-      final IProgram program = Queries.Local.getProgram(programId);
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       ITalk talk;
 
 //      talk = getTalk(120);

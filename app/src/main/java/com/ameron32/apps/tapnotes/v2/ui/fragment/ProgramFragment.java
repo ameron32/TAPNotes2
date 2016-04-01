@@ -14,15 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Queries;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 
@@ -198,8 +197,8 @@ public class ProgramFragment extends TAPFragment
       public void call(Subscriber<? super Progress> subscriber) {
         try {
           subscriber.onNext(new Progress(0, 1, false));
-          final IProgram program = Queries.Local.getProgram(mProgramId);
-          final List<ITalk> talks = Queries.Local.findAllProgramTalks((Program) program);
+          final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
+          final List<ITalk> talks = ParseHelper.Queries.Local.findAllProgramTalks((Program) program);
           mTalks.clear();
           mTalks.addAll(talks);
 
