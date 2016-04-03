@@ -6,6 +6,7 @@ import com.ameron32.apps.tapnotes.v2.data.frmk.Helper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.LocalHelper;
 import com.ameron32.apps.tapnotes.v2.data.frmk.RemoteHelper;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
@@ -97,6 +98,15 @@ public class DataManager implements DataAccess {
             default:
                 localHelper = null; // FIXME
         }
+    }
+
+    @Override
+    public Observable<List<IObject>> performSync() {
+        // upload all changed objects
+        // wait for server response is finished processing
+        // download all objects
+        // TODO: determine full scope of object sync
+        return null;
     }
 
     @Override

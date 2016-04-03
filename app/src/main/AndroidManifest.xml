@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ameron32.apps.tapnotes.v2" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ameron32.apps.tapnotes.v2">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -24,17 +23,16 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Teal2015Theme" >
+        android:theme="@style/Teal2015Theme">
         <activity
             android:name=".ui.MNIActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
+            android:windowSoftInputMode="adjustResize"></activity>
 
         <service android:name="com.parse.PushService" />
 
-        <receiver android:name="com.parse.ParseBroadcastReceiver" >
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.USER_PRESENT" />
@@ -42,7 +40,7 @@
         </receiver>
         <receiver
             android:name="com.parse.ParsePushBroadcastReceiver"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.parse.push.intent.RECEIVE" />
                 <action android:name="com.parse.push.intent.DELETE" />
@@ -51,7 +49,7 @@
         </receiver>
         <receiver
             android:name="com.parse.GcmBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -63,7 +61,7 @@
         <activity
             android:name=".uiparse.ui.MyDispatchMainActivity"
             android:label="@string/app_name"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,7 +72,7 @@
             android:name=".uiparse.ui.MyLoginParseActivity"
             android:label="@string/title_activity_my_login"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible">
             <meta-data
                 android:name=".parse.ui.MyLoginActivity.PARSE_LOGIN_ENABLED"
                 android:value="true" />
@@ -89,7 +87,7 @@
             android:name=".scripture.ScriptureTestingActivity"
             android:label="@string/title_activity_scripture_testing"
             android:launchMode="singleTask"
-            android:parentActivityName=".ui.MNIActivity" >
+            android:parentActivityName=".ui.MNIActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ui.MNIActivity" />
@@ -98,17 +96,21 @@
         <activity
             android:name=".ui.ProgramSelectionActivity"
             android:label="@string/title_activity_program_selection"
-            android:launchMode="singleTask">
-        </activity>
+            android:launchMode="singleTask"></activity>
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:launchMode="singleTask"
-            android:parentActivityName=".ui.MNIActivity" >
+            android:parentActivityName=".ui.MNIActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ameron32.apps.tapnotes.v2.ui.MNIActivity" />
         </activity>
+
+        <service
+            android:name=".data.SyncService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
