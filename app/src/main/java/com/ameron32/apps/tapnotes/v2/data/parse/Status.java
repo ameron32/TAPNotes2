@@ -11,15 +11,6 @@ import com.parse.ParseAnonymousUtils;
  */
 public class Status {
 
-  public static boolean isConnectionToServerAvailable(Context context) {
-    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    NetworkInfo ni = cm.getActiveNetworkInfo();
-    if ((ni != null) && (ni.isConnected())) {
-      return true;
-    }
-    return false;
-  }
-
   public static boolean isLoggedIn() {
     return !ParseAnonymousUtils.isLinked(ParseHelper.Commands.Local.getClientUser());
   }

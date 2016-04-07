@@ -1,6 +1,5 @@
 package com.ameron32.apps.tapnotes.v2.data;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +9,8 @@ import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPService;
+import com.ameron32.apps.tapnotes.v2.util.AndroidComponentUtil;
+import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 
 import java.util.List;
 

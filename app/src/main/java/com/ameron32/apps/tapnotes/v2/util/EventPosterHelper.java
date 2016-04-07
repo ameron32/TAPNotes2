@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.data;
+package com.ameron32.apps.tapnotes.v2.util;
 
 import android.os.Handler;
 import android.os.Looper;

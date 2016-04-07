@@ -12,6 +12,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.AbstractDataProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -106,7 +107,15 @@ public class DataManager implements DataAccess {
         // wait for server response is finished processing
         // download all objects
         // TODO: determine full scope of object sync
-        return null;
+        return Observable.concat(saveLocalChangesToRemote(), getRemoteNotes())
+                .map(new Func1<List<INote>, List<IObject>>() {
+                    @Override
+                    public List<IObject> call(List<INote> iNotes) {
+                        List<IObject> iObjects = new ArrayList<>();
+                        iObjects.addAll(iNotes);
+                        return iObjects;
+                    }
+                });
     }
 
     @Override
@@ -249,29 +258,29 @@ public class DataManager implements DataAccess {
 //        return Observable.concat(getLocalNotes(program), getRemoteNotes());
 //    }
 //
-//    private Observable<List<INote>> getRemoteNotes() {
-//        Log.d(TAG, "remoteHelper.getNotes()");
-//        return remoteHelper.syncNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
-//                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
-//                    @Override
-//                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
-//                        Log.d(TAG, "localHelper.setNotes()");
-//                        return localHelper.pinNotes(iNotes);
-//                    }
-//                });
-//    }
-//
-//    private Observable<List<INote>> saveLocalChangesToRemote(IProgram program) {
-//        Log.d(TAG, "localHelper.getNotes()");
-//        return localHelper.getNotes(program, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
-//                .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
-//                    @Override
-//                    public Observable<List<INote>> call(List<INote> iNotes) {
-//                        Log.d(TAG, "remoteHelper.saveNotes()");
-//                        return remoteHelper.saveNotes(iNotes);
-//                    }
-//                });
-//    }
+    private Observable<List<INote>> getRemoteNotes() {
+        Log.d(TAG, "remoteHelper.getNotes()");
+        return remoteHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_GENERIC)
+                .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                    @Override
+                    public Observable<? extends List<INote>> call(List<INote> iNotes) {
+                        Log.d(TAG, "localHelper.setNotes()");
+                        return localHelper.pinNotes(iNotes);
+                    }
+                });
+    }
+
+    private Observable<List<INote>> saveLocalChangesToRemote() {
+        Log.d(TAG, "localHelper.getNotes()");
+        return localHelper.getNotes(Helper.ALL_PROGRAMS, Helper.ALL_TALKS, Helper.FOREVER, Helper.USER_ALL)
+                .concatMap(new Func1<List<INote>, Observable<List<INote>>>() {
+                    @Override
+                    public Observable<List<INote>> call(List<INote> iNotes) {
+                        Log.d(TAG, "remoteHelper.saveNotes()");
+                        return remoteHelper.saveNotes(iNotes);
+                    }
+                });
+    }
 //
 //    private Observable<List<INote>> getLocalNotes(IProgram program) {
 //        Log.d(TAG, "localHelper.getNotes().distinct()");

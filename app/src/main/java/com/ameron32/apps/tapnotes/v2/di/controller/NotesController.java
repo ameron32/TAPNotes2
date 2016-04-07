@@ -3,14 +3,12 @@ package com.ameron32.apps.tapnotes.v2.di.controller;
 import android.app.Application;
 import android.util.Log;
 
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
-import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
-import com.ameron32.apps.tapnotes.v2.data.parse.ControllerActions;
-import com.ameron32.apps.tapnotes.v2.data.parse.Status;
+import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
-import com.parse.ParseException;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -36,8 +34,8 @@ public class NotesController extends AbsApplicationController {
     serializer = new Serializer<>(DateTime.class);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, ITalk talk) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(DataManager dataManager, IProgram program, ITalk talk) {
+    if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 
@@ -45,8 +43,9 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, checkedTime.toDate());
   }
 
+
   public Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+    if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 
@@ -54,15 +53,15 @@ public class NotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+    if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 
     return ControllerActions.unpinThenRepinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(DataManager dataManager, String programId) {
+    if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 

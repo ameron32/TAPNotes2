@@ -1,6 +1,8 @@
 package com.ameron32.apps.tapnotes.v2;
 
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
 import com.ameron32.apps.tapnotes.v2.data.parse.model.User;
@@ -10,6 +12,7 @@ import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidApplicationModule;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Talk;
+import com.backendless.Backendless;
 import com.crashlytics.android.Crashlytics;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -58,15 +61,26 @@ public class TAPApplication extends Application {
 
   private void initializeCalligraphy() {
     CalligraphyConfig.initDefault(
-        new CalligraphyConfig.Builder()
-            .setDefaultFontPath(getDefaultFontPath())
-            .setFontAttrId(R.attr.fontPath)
-            .build());
+            new CalligraphyConfig.Builder()
+                    .setDefaultFontPath(getDefaultFontPath())
+                    .setFontAttrId(R.attr.fontPath)
+                    .build());
   }
 
   private String getDefaultFontPath() {
     // "fonts/LiberationSans-Regular.ttf"
     return getApplicationContext().getResources().getString(R.string.font_sans_regular_liberation);
+  }
+
+  public void initializeBackendless(Application app) {
+    String appVersion = "1";
+    try {
+      final PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+      appVersion = pInfo.versionName + "-" + pInfo.versionCode;
+    } catch (PackageManager.NameNotFoundException e) {
+      e.printStackTrace();
+    }
+    Backendless.initApp(this, getString(R.string.BACKENDLESS_APPLICATION_ID), getString(R.string.BACKENDLESS_ANDROID_SECRET_KEY), appVersion);
   }
 
   public void initializeParse(Application app) {
