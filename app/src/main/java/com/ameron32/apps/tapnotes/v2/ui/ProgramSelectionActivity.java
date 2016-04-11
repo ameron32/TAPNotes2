@@ -24,6 +24,7 @@ import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
+import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -212,7 +213,7 @@ public class ProgramSelectionActivity
 
   @Override
   public void downloadProgram(String programId) {
-    if (!Status.isConnectionToServerAvailable(getActivity())) {
+    if (!NetworkUtil.isNetworkConnected(getActivity())) {
       final String message = "Server connection failed. Please check that you have an internet connection. Also, you must be logged into TAP Notes.";
 //      snackBarController.toast(message);
       dialog.showInformationDialog("Connection Unavailable", message);
@@ -227,7 +228,7 @@ public class ProgramSelectionActivity
 
   @Override
   public void refreshProgramNotes(String programId) {
-    if (!Status.isConnectionToServerAvailable(getActivity())) {
+    if (!NetworkUtil.isNetworkConnected(getActivity())) {
       final String message = "Server connection failed. Please check that you have an internet connection. Also, you must be logged into TAP Notes.";
 //      snackBarController.toast(message);
       dialog.showInformationDialog("Connection Unavailable", message);

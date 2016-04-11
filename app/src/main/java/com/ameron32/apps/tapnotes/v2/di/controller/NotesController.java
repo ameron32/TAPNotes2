@@ -34,7 +34,7 @@ public class NotesController extends AbsApplicationController {
     serializer = new Serializer<>(DateTime.class);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(DataManager dataManager, IProgram program, ITalk talk) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
@@ -60,46 +60,33 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.unpinThenRepinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(DataManager dataManager, String programId) {
+  public Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
-    try {
-      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
 
+      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       if (checkedTime.plusDays(2).isBefore(getNow())) {
         // more than 2 days (48 hours), repin all notes
         return unpinProgramAndTalksAndNotesThenRepin(programId);
       }
-
       return ControllerActions.pinNotesFor(program, checkedTime.toDate());
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    return instantComplete();
   }
 
   public Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(String programId) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+    if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
-    try {
       final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    return instantComplete();
   }
 
   public Observable<Progress> pinProgramAndTalks(String programId) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+    if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
 
@@ -107,7 +94,7 @@ public class NotesController extends AbsApplicationController {
   }
 
   public Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
-    if (!Status.isConnectionToServerAvailable(getApplication())) {
+    if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
 

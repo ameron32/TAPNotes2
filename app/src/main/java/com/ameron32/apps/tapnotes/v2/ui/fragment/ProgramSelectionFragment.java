@@ -25,6 +25,7 @@ import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;
+import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -107,7 +108,7 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   private void getProgramRemote(String programId) {
-    if (!Status.isConnectionToServerAvailable(getContext())) {
+    if (!NetworkUtil.isNetworkConnected(getContext())) {
       // do nothing
       return;
     }
@@ -128,7 +129,7 @@ public class ProgramSelectionFragment extends TAPFragment
     Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
     if (o != null && o instanceof ParseFile) {
       final ParseFile file = (ParseFile) o;
-      if (!Status.isConnectionToServerAvailable(getContext())) {
+      if (!NetworkUtil.isNetworkConnected(getContext())) {
         // do nothing
         return;
       }

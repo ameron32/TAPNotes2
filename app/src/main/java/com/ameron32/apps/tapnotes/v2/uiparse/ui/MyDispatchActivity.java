@@ -12,6 +12,7 @@ import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
 import com.ameron32.apps.tapnotes.v2.data.parse.Status;
+import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 import com.parse.Parse;
 import com.parse.ParseConfig;
 import com.parse.ParseException;
@@ -114,7 +115,7 @@ public abstract class MyDispatchActivity extends Activity {
   private void runDispatch() {
     if (ParseHelper.Commands.Local.getClientUser() != null) {
       debugLog("user logged in " + getTargetClass());
-      if (Status.isConnectionToServerAvailable(getContext())) {
+      if (NetworkUtil.isNetworkConnected(getContext())) {
         checkVersionThenStartActivity();
       } else {
         startMainActivity();
