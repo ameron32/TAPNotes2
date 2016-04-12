@@ -3,7 +3,7 @@ package com.ameron32.apps.tapnotes.v2;
 import android.support.test.InstrumentationRegistry;
 import android.test.ActivityInstrumentationTestCase2;
 
-import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.program_selection.ProgramSelectionActivity;
 
 import org.junit.Before;
 

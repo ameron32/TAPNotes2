@@ -1,7 +1,6 @@
 package com.ameron32.apps.tapnotes.v2;
 
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureTestingActivity;
-import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
 
 import org.junit.Before;
 import org.junit.Test;

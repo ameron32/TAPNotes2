@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui.fragment;
+package com.ameron32.apps.tapnotes.v2.ui.program_selection;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -21,7 +21,6 @@ import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.util.ColoredDrawableUtil;

@@ -27,8 +27,8 @@ import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySharedPreferencesCont
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivitySnackBarController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityTitleController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityFullScreenController;
-import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
+import com.ameron32.apps.tapnotes.v2.ui.program_selection.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.program_selection.ProgramSelectionFragment;
 import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramTemplateFragment;
 import com.ameron32.apps.tapnotes.v2.ui.SettingsActivity;
 

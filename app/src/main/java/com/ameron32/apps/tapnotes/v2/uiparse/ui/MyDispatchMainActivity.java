@@ -3,7 +3,7 @@ package com.ameron32.apps.tapnotes.v2.uiparse.ui;
 import android.content.Context;
 import android.content.Intent;
 
-import com.ameron32.apps.tapnotes.v2.ui.ProgramSelectionActivity;
+import com.ameron32.apps.tapnotes.v2.ui.program_selection.ProgramSelectionActivity;
 
 
 /**

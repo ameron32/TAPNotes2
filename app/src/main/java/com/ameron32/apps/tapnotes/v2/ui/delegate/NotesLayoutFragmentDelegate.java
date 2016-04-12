@@ -46,7 +46,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
     @Override
     public void onUserClickBoldNote(INote note) {
       // stub only
-
     }
 
     @Override
@@ -76,7 +75,6 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   public void onCreate(@Nullable Bundle savedInstanceState) {
 
     adapter = new NotesRecyclerAdapter(getContext());
-
   }
 
 

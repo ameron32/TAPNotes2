@@ -94,7 +94,7 @@
         </activity>
         <!-- /MICAH -->
         <activity
-            android:name=".ui.ProgramSelectionActivity"
+            android:name=".ui.program_selection.ProgramSelectionActivity"
             android:label="@string/title_activity_program_selection"
             android:launchMode="singleTask"></activity>
         <activity

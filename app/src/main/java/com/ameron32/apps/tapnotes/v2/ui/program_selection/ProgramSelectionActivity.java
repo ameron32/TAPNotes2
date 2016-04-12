@@ -1,4 +1,4 @@
-package com.ameron32.apps.tapnotes.v2.ui;
+package com.ameron32.apps.tapnotes.v2.ui.program_selection;
 
 import android.content.Intent;
 import android.content.res.Resources;
@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
-import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.di.ForApplication;
@@ -20,10 +19,9 @@ import com.ameron32.apps.tapnotes.v2.di.module.ActivityModule;
 import com.ameron32.apps.tapnotes.v2.di.module.DefaultAndroidActivityModule;
 import com.ameron32.apps.tapnotes.v2.frmk.IProgramList;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPActivity;
-import com.ameron32.apps.tapnotes.v2.data.parse.Status;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.scripture.ScriptureFinder;
-import com.ameron32.apps.tapnotes.v2.ui.fragment.ProgramSelectionFragment;
+import com.ameron32.apps.tapnotes.v2.ui.MNIActivity;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.Sanitizer;
 import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 
