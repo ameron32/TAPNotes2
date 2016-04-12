@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.di.controller.NotesController;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.R;
@@ -45,6 +46,8 @@ public class ProgramSelectionActivity
 
   @Inject
   ApplicationThemeController themeController;
+  @Inject
+  DataManager dataManager;
 
   private IProgramList programList;
   private ActivityAlertDialogController dialog;
@@ -199,14 +202,11 @@ public class ProgramSelectionActivity
   private Observable<Progress> cache4;
   private String mProgramId;
 
-  @Inject
-  NotesController notesController;
-
   @Override
   public void startActivity(final String programId) {
     mProgramId = programId;
     Observable<Progress> observable;
-    observable = notesController.pinAllNewClientOwnedNotesFor(mProgramId);
+    observable = dataManager.pinAllNewClientOwnedNotesFor(mProgramId);
     cache2 = bindLifecycle(observable, DESTROY).cache();
     cache2.subscribe(downloadNotesObserver);
   }
@@ -222,7 +222,7 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache = bindLifecycle(notesController.pinProgramAndTalks(mProgramId), DESTROY).cache();
+    cache = bindLifecycle(dataManager.pinProgramAndTalks(mProgramId), DESTROY).cache();
     cache.subscribe(downloadProgramObserver);
   }
 
@@ -237,7 +237,7 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache4 = bindLifecycle(notesController.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
+    cache4 = bindLifecycle(dataManager.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
     cache4.subscribe(downloadProgramObserver);
   }
 

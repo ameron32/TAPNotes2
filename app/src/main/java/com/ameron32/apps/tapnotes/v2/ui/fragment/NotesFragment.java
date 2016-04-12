@@ -82,6 +82,7 @@ public class NotesFragment extends TAPFragment
   ImageView mToolbarImage;
   @Inject
   Bus bus;
+
   private Callbacks mCallbacks;
   private IToolbarHeaderDelegate mHeaderDelegate;
   private INotesDelegate mNotesDelegate;

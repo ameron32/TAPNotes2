@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class ParseUtil {
 
-    static List<INote> toINote(List<Note> notes) {
+    public static List<INote> toINote(List<Note> notes) {
         List<INote> iNotes = new ArrayList<>();
         iNotes.addAll(notes);
         return iNotes;
     }
 
-    static List<Note> fromINote(List<INote> iNotes) {
+    public static List<Note> fromINote(List<INote> iNotes) {
         List<Note> notes = new ArrayList<>();
         if (iNotes != null) {
             for (INote iNote : iNotes) {
@@ -37,13 +37,13 @@ public class ParseUtil {
         return notes;
     }
 
-    static List<ITalk> toITalk(List<Talk> talks) {
+    public static List<ITalk> toITalk(List<Talk> talks) {
         List<ITalk> iTalks = new ArrayList<>();
         iTalks.addAll(talks);
         return iTalks;
     }
 
-    static List<Talk> fromITalk(List<ITalk> iTalks) {
+    public static List<Talk> fromITalk(List<ITalk> iTalks) {
         List<Talk> talks = new ArrayList<>();
         if (iTalks != null) {
             for (ITalk iTalk : iTalks) {
@@ -59,13 +59,13 @@ public class ParseUtil {
         return talks;
     }
 
-    static List<IProgram> toIProgram(List<Program> programs) {
+    public static List<IProgram> toIProgram(List<Program> programs) {
         List<IProgram> iPrograms = new ArrayList<>();
         iPrograms.addAll(programs);
         return iPrograms;
     }
 
-    static List<Program> fromIProgram(List<IProgram> iPrograms) {
+    public static List<Program> fromIProgram(List<IProgram> iPrograms) {
         List<Program> talks = new ArrayList<>();
         if (iPrograms != null) {
             for (IProgram iProgram : iPrograms) {

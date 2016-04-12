@@ -10,7 +10,6 @@ import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
-import com.ameron32.apps.tapnotes.v2.ui.mc_notes.AbstractDataProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
 
@@ -34,12 +31,14 @@ public class DataManager implements DataAccess {
 
     private enum RemoteSource { Parse, BackendlessSDK, BackendlessREST }
     private enum LocalSource { ParseOffline, SQBrite, Realm, Iron }
+    private enum SyncEventType { New }
     /*
      *  THIS IS THE DATA_SOURCE TOGGLE.
      *  SWITCH from PARSE when infrastructure ready to migrate away.
      */
     private static final RemoteSource REMOTE_DATA_SOURCE = RemoteSource.Parse;
     private static final LocalSource LOCAL_DATA_SOURCE = LocalSource.ParseOffline;
+    private static final SyncEventType SYNC_EVENT = SyncEventType.New;
 
     //
     /**
@@ -59,6 +58,8 @@ public class DataManager implements DataAccess {
 
     private final RemoteHelper remoteHelper;
     private final LocalHelper localHelper;
+    private final SyncEvent syncEvent;
+    public SyncEvent getSyncEvent() { return syncEvent; }
 
     @Inject
     public DataManager() {
@@ -67,6 +68,7 @@ public class DataManager implements DataAccess {
             ParseHelper parseHelper = new ParseHelper();
             remoteHelper = parseHelper.getRemote();
             localHelper = parseHelper.getCache();
+            syncEvent = parseHelper.getSyncEvent();
             return;
         }
 
@@ -98,6 +100,11 @@ public class DataManager implements DataAccess {
                 break;
             default:
                 localHelper = null; // FIXME
+        }
+        switch(SYNC_EVENT) {
+            case New:
+            default:
+                syncEvent = new ParseHelper().getSyncEvent(); // FIXME
         }
     }
 

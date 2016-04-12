@@ -6,9 +6,12 @@ import android.util.Log;
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.parse.ControllerActions;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
 import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
 import com.ameron32.apps.tapnotes.v2.util.Serializer;
+import com.parse.ParseException;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -34,7 +37,7 @@ public class NotesController extends AbsApplicationController {
     serializer = new Serializer<>(DateTime.class);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, ITalk talk) {
+  Observable<Progress> pinAllNewClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
@@ -44,7 +47,7 @@ public class NotesController extends AbsApplicationController {
   }
 
 
-  public Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
+  Observable<Progress> pinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
@@ -52,7 +55,7 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.pinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
+  Observable<Progress> unpinThenRepinAllClientOwnedNotesFor(IProgram program, ITalk talk) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
@@ -60,32 +63,41 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.unpinThenRepinClientNotesFor(program, talk, null);
   }
 
-  public Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
+  Observable<Progress> pinAllNewClientOwnedNotesFor(String programId) {
     if (!NetworkUtil.isNetworkConnected(getContext())) {
       return instantComplete();
     }
 
     final DateTime checkedTime = getLastCheckedThenUpdateToNow();
-
+    try {
       final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       if (checkedTime.plusDays(2).isBefore(getNow())) {
         // more than 2 days (48 hours), repin all notes
         return unpinProgramAndTalksAndNotesThenRepin(programId);
       }
       return ControllerActions.pinNotesFor(program, checkedTime.toDate());
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
-  public Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(String programId) {
+  Observable<Progress> unpinProgramAndTalksAndNotesThenRepin(String programId) {
     if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
 
-    final DateTime checkedTime = getLastCheckedThenUpdateToNow();
+    try {
+      final DateTime checkedTime = getLastCheckedThenUpdateToNow();
       final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
       return ControllerActions.unpinProgramAndTalksAndNotesThenRepin(program);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
-  public Observable<Progress> pinProgramAndTalks(String programId) {
+  Observable<Progress> pinProgramAndTalks(String programId) {
     if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
@@ -93,7 +105,7 @@ public class NotesController extends AbsApplicationController {
     return ControllerActions.pinProgramAndTalks(programId);
   }
 
-  public Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
+  Observable<Progress> pinCompleteClientNotesFor(IProgram program) {
     if (!NetworkUtil.isNetworkConnected(getApplication())) {
       return instantComplete();
     }
@@ -102,14 +114,13 @@ public class NotesController extends AbsApplicationController {
   }
 
 
-
   //
 
   private Observable<Progress> instantComplete() {
     return ControllerActions.instantComplete();
   }
 
-  public DateTime getLastCheckedThenUpdateToNow() {
+  DateTime getLastCheckedThenUpdateToNow() {
     DateTime checked = getLastCheckedAllNotes();
     if (checked != null) {
       return checked;
@@ -133,7 +144,6 @@ public class NotesController extends AbsApplicationController {
   private DateTime getNow() {
     return DateTime.now();
   }
-
 
 
   //

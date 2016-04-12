@@ -657,7 +657,7 @@ public class MNIActivity extends TAPActivity
         if (talk instanceof Talk) {
           final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
           if (program instanceof Program) {
-            cache = bindLifecycle(notesController.pinAllNewClientOwnedNotesFor(
+            cache = bindLifecycle(dataManager.pinAllNewClientOwnedNotesFor(
                     program, talk), DESTROY).cache();
             cache.subscribe(observer);
             // see Observer for callbacks
@@ -675,7 +675,7 @@ public class MNIActivity extends TAPActivity
       final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
       if (talk instanceof Talk && program instanceof Program) {
         cache2 = bindLifecycle(
-            notesController.unpinThenRepinAllClientOwnedNotesFor((Program) program, (Talk) talk),
+            dataManager.unpinThenRepinAllClientOwnedNotesFor((Program) program, (Talk) talk),
             DESTROY).cache();
         cache2.subscribe(observer);
         // see Observer for callbacks
@@ -684,11 +684,6 @@ public class MNIActivity extends TAPActivity
       e.printStackTrace();
     }
   }
-
-
-
-  @Inject
-  NotesController notesController;
 
   private Observable<Progress> cache;
   private Observable<Progress> cache2;

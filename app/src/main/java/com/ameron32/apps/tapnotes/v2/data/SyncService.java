@@ -8,6 +8,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.data.model.IObject;
+import com.ameron32.apps.tapnotes.v2.data.parse.ParseSyncEvent;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPService;
 import com.ameron32.apps.tapnotes.v2.util.AndroidComponentUtil;
 import com.ameron32.apps.tapnotes.v2.util.NetworkUtil;
@@ -26,6 +27,7 @@ public class SyncService extends TAPService {
 
     @Inject
     DataManager mDataManager;
+
     private Subscription mSubscription;
 
     public static Intent getStartIntent(Context context) {
@@ -36,9 +38,13 @@ public class SyncService extends TAPService {
         return AndroidComponentUtil.isServiceRunning(context, SyncService.class);
     }
 
+    SyncEvent event;
+
     @Override
     public int onStartCommand(Intent intent, int flags, final int startId) {
         Log.i(TAG, "Starting sync...");
+        event = mDataManager.getSyncEvent();
+        event.onCreate(mDataManager);
 
         if (!NetworkUtil.isNetworkConnected(this)) {
             Log.i(TAG, "Sync canceled, connection not available");
@@ -48,26 +54,24 @@ public class SyncService extends TAPService {
         }
 
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
-        mSubscription = mDataManager.performSync()
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<IObject>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.i(TAG, "Synced successfully!");
-                        stopSelf(startId);
-                    }
+        mSubscription = event.performAction()
+            .subscribeOn(Schedulers.io())
+            .subscribe(new Observer<List<IObject>>() {
+                @Override
+                public void onCompleted() {
+                    Log.i(TAG, "Synced successfully!");
+                    stopSelf(startId);
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.w(TAG, "Error syncing.");
-                        stopSelf(startId);
-                    }
+                @Override
+                public void onError(Throwable e) {
+                    Log.w(TAG, "Error syncing.");
+                    stopSelf(startId);
+                }
 
-                    @Override
-                    public void onNext(List<IObject> ribot) {
-
-                    }
-                });
+                @Override
+                public void onNext(List<IObject> ribot) {}
+            });
 
         return START_STICKY;
     }
