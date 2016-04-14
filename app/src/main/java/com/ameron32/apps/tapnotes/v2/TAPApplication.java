@@ -80,7 +80,8 @@ public class TAPApplication extends Application {
     } catch (PackageManager.NameNotFoundException e) {
       e.printStackTrace();
     }
-    Backendless.initApp(this, getString(R.string.BACKENDLESS_APPLICATION_ID), getString(R.string.BACKENDLESS_ANDROID_SECRET_KEY), appVersion);
+    Backendless.initApp(this, getString(R.string.BACKENDLESS_APPLICATION_ID),
+            getString(R.string.BACKENDLESS_ANDROID_SECRET_KEY), appVersion);
   }
 
   public void initializeParse(Application app) {
@@ -98,7 +99,8 @@ public class TAPApplication extends Application {
 
     // Enable Crash Reporting
 //    ParseCrashReporting.enable(app);
-    Parse.initialize(app, r.getString(R.string.APPLICATION_ID), r.getString(R.string.CLIENT_KEY));
+    Parse.initialize(app, r.getString(R.string.APPLICATION_ID),
+            r.getString(R.string.CLIENT_KEY));
 
     // Save the current Installation to Parse.
     ParseInstallation.getCurrentInstallation().saveInBackground(
