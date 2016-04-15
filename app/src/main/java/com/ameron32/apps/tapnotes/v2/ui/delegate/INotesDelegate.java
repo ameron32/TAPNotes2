@@ -1,6 +1,6 @@
 package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public interface INotesDelegate {
   void removeNotes(List<INote> notesToRemove);
   void replaceNotes(List<INote> notesToReplace);
 
-  void onBibleCreated(IBible bible);
+  void onBibleCreated(ISearchableBible bible);
 
 
 

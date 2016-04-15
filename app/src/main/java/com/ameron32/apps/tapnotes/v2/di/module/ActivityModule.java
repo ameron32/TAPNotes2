@@ -20,6 +20,7 @@ package com.ameron32.apps.tapnotes.v2.di.module;
 import android.app.Activity;
 
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityCalendarViewDialogController;
+import com.ameron32.apps.tapnotes.v2.ui.program_selection.ProgramSelection2Fragment;
 import com.ameron32.apps.tapnotes.v2.uiparse.ui.MyLoginParseActivity;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityAlertDialogController;
 import com.ameron32.apps.tapnotes.v2.di.controller.ActivityLoggingController;
@@ -47,6 +48,7 @@ import dagger.Provides;
         SettingsActivity.class,
         ProgramSelectionActivity.class,
         ProgramSelectionFragment.class,
+        ProgramSelection2Fragment.class,
         ProgramTemplateFragment.class,
         MyLoginParseActivity.class
     },

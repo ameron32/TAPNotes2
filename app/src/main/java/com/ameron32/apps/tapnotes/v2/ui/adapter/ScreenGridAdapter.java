@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
 
   private final int screenType;
 
-  public ScreenGridAdapter(int screen, IBible bible) {
+  public ScreenGridAdapter(int screen, ISearchableBible bible) {
     this.bible = bible;
     if (screen != SCREEN_BOOKS) {
       throw new IllegalStateException("wrong constructor used for that screen");
@@ -40,7 +40,7 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
     initBooks();
   }
 
-  public ScreenGridAdapter(int screen, IBible bible, int bookNumber) {
+  public ScreenGridAdapter(int screen, ISearchableBible bible, int bookNumber) {
     this.bible = bible;
     if (screen != SCREEN_CHAPTERS) {
       throw new IllegalStateException("wrong constructor used for that screen");
@@ -51,7 +51,7 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
     initChapters(bookNumber);
   }
 
-  public ScreenGridAdapter(int screen, IBible bible, int bookNumber, int chapterNumber) {
+  public ScreenGridAdapter(int screen, ISearchableBible bible, int bookNumber, int chapterNumber) {
     this.bible = bible;
     if (screen != SCREEN_VERSES) {
       throw new IllegalStateException("wrong constructor used for that screen");
@@ -63,7 +63,7 @@ public class ScreenGridAdapter extends RecyclerView.Adapter<ScreenGridAdapter.Vi
     initVerses(bookNumber, chapterNumber);
   }
 
-  private IBible bible;
+  private ISearchableBible bible;
 
   private void initBooks() {
     BOOK_COUNT = bible.getBookCount();

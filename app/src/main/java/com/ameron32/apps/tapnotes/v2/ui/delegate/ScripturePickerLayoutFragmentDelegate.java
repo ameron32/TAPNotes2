@@ -10,7 +10,7 @@ import android.view.View;
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.ui.adapter.ScripturePickerAdapter;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 
 import butterknife.ButterKnife;
@@ -51,7 +51,7 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   ViewPager mPager;
 
   private ScripturePickerAdapter mAdapter;
-  private IBible mBible;
+  private ISearchableBible mBible;
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -63,7 +63,7 @@ public class ScripturePickerLayoutFragmentDelegate extends FragmentDelegate
   }
 
   @Override
-  public void onBibleCreated(IBible bible) {
+  public void onBibleCreated(ISearchableBible bible) {
     this.mBible = bible;
 
     mAdapter = new ScripturePickerAdapter(mBible);

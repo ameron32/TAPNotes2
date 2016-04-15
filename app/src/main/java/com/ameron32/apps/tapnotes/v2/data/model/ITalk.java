@@ -8,7 +8,7 @@ import java.util.Locale;
 /**
  * Created by klemeilleur on 6/29/2015.
  */
-public interface ITalk<T extends IScripture, U extends IBible> extends IObject {
+public interface ITalk<T extends IScripture, U extends ISearchableBible> extends IObject {
 
   DateTime getDateAndTime(Locale locale);
   EventType getEventType();

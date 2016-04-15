@@ -1,10 +1,10 @@
 package com.ameron32.apps.tapnotes.v2.scripture;
 
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 
 import java.io.Serializable;
 
-public class Bible implements IBible, Serializable {
+public class Bible implements ISearchableBible, Serializable {
 
   // CHANGE THIS WHEN CHANGES MAKE THE BIBLE INCOMPATIBLE
   private static final long serialVersionUID = 0L;

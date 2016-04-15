@@ -5,7 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class Sanitizer implements ISanitizer{
     private String chapterPart;
     private String versePart;
 
-    private IBible bible;
+    private ISearchableBible bible;
 
     public Sanitizer(Context context) {
         // TODO: MICAH CONSIDER MERGING bible_books & book_names
@@ -41,7 +41,7 @@ public class Sanitizer implements ISanitizer{
     }
 
     @Override
-    public void testForScriptures(IBible b, String s) {
+    public void testForScriptures(ISearchableBible b, String s) {
         verseString = "";
         this.bible = b;
         //TODO: Not sure about this subs.length check... needed? - MC

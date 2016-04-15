@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.scripture.Bible;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.INotesDelegate;
@@ -52,7 +52,7 @@ public class NotesRecyclerAdapter extends RecyclerView.Adapter<NoteViewHolder> i
 
 
     @Override
-    public void onBibleCreated(IBible bible) {
+    public void onBibleCreated(ISearchableBible bible) {
         if (bible instanceof Bible){
             Bible mBible = (Bible)bible;
             this.bible = mBible;

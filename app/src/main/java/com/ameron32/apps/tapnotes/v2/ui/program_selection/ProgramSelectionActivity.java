@@ -204,7 +204,9 @@ public class ProgramSelectionActivity
   public void startActivity(final String programId) {
     mProgramId = programId;
     Observable<Progress> observable;
-    observable = dataManager.pinAllNewClientOwnedNotesFor(mProgramId);
+    observable =
+        placeholder();
+        // dataManager.pinAllNewClientOwnedNotesFor(mProgramId);
     cache2 = bindLifecycle(observable, DESTROY).cache();
     cache2.subscribe(downloadNotesObserver);
   }
@@ -220,7 +222,10 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache = bindLifecycle(dataManager.pinProgramAndTalks(mProgramId), DESTROY).cache();
+    cache = bindLifecycle(
+        placeholder(),
+        // dataManager.pinProgramAndTalks(mProgramId),
+        DESTROY).cache();
     cache.subscribe(downloadProgramObserver);
   }
 
@@ -235,8 +240,15 @@ public class ProgramSelectionActivity
 
     mProgramId = programId;
     onLoading();
-    cache4 = bindLifecycle(dataManager.unpinProgramAndTalksAndNotesThenRepin(mProgramId), DESTROY).cache();
+    cache4 = bindLifecycle(
+        placeholder(),
+        // dataManager.unpinProgramAndTalksAndNotesThenRepin(mProgramId),
+        DESTROY).cache();
     cache4.subscribe(downloadProgramObserver);
+  }
+
+  private Observable<Progress> placeholder() {
+    return null;
   }
 
   @Inject

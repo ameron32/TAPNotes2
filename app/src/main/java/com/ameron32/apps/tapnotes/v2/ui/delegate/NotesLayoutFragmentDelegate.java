@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecycler;
 import com.ameron32.apps.tapnotes.v2.ui.mc_notes.NotesRecyclerAdapter;
@@ -178,7 +178,7 @@ public class NotesLayoutFragmentDelegate extends FragmentDelegate
   }
 
   @Override
-  public void onBibleCreated(IBible bible) {
+  public void onBibleCreated(ISearchableBible bible) {
     adapter.onBibleCreated(bible);
   }
 

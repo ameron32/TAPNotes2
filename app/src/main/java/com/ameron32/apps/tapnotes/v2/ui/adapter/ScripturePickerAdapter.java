@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.ameron32.apps.tapnotes.v2.R;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.scripture.Scripture;
 
@@ -35,9 +35,9 @@ public class ScripturePickerAdapter extends PagerAdapter
   public static final int SCREEN_CHAPTERS = 1;
   public static final int SCREEN_VERSES = 2;
 
-  private IBible bible;
+  private ISearchableBible bible;
 
-  public ScripturePickerAdapter(IBible bible) {
+  public ScripturePickerAdapter(ISearchableBible bible) {
     this.bible = bible;
   }
 

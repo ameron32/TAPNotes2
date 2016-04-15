@@ -2,7 +2,7 @@ package com.ameron32.apps.tapnotes.v2.ui.delegate;
 
 import android.support.annotation.Nullable;
 
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 
 /**
@@ -10,7 +10,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
  */
 public interface IScripturePickerDelegate {
 
-  void onBibleCreated(IBible bible);
+  void onBibleCreated(ISearchableBible bible);
 
 
 

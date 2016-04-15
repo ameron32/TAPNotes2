@@ -38,7 +38,8 @@ import butterknife.OnClick;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ProgramSelectionFragment extends TAPFragment
+public class ProgramSelectionFragment
+    extends TAPFragment
     implements IProgramList {
 
   public static ProgramSelectionFragment create() {
@@ -65,7 +66,6 @@ public class ProgramSelectionFragment extends TAPFragment
 
     // TODO replace with DI controller
     mAppVersion = "version " + BuildConfig.VERSION_NAME;
-
     mProgramId = Constants.CONVENTION2015_PROGRAM_OBJECT_ID;
   }
 

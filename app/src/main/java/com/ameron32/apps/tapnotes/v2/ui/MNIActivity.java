@@ -657,8 +657,10 @@ public class MNIActivity extends TAPActivity
         if (talk instanceof Talk) {
           final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
           if (program instanceof Program) {
-            cache = bindLifecycle(dataManager.pinAllNewClientOwnedNotesFor(program, talk),
-                    DESTROY).cache();
+            cache = bindLifecycle(
+                placeholder(),
+                // dataManager.pinAllNewClientOwnedNotesFor(program, talk),
+                DESTROY).cache();
             cache.subscribe(observer);
             // see Observer for callbacks
           }
@@ -675,7 +677,8 @@ public class MNIActivity extends TAPActivity
       final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
       if (talk instanceof Talk && program instanceof Program) {
         cache2 = bindLifecycle(
-            dataManager.unpinThenRepinAllClientOwnedNotesFor(program, talk),
+            placeholder(),
+            // dataManager.unpinThenRepinAllClientOwnedNotesFor(program, talk),
             DESTROY).cache();
         cache2.subscribe(observer);
         // see Observer for callbacks
@@ -683,6 +686,10 @@ public class MNIActivity extends TAPActivity
     } catch (ParseException e) {
       e.printStackTrace();
     }
+  }
+
+  private Observable<Progress> placeholder() {
+    return null;
   }
 
   private Observable<Progress> cache;

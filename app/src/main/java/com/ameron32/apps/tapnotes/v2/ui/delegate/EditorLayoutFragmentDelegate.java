@@ -16,7 +16,7 @@ import android.widget.Spinner;
 
 import com.ameron32.apps.tapnotes.v2.R;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
-import com.ameron32.apps.tapnotes.v2.data.model.IBible;
+import com.ameron32.apps.tapnotes.v2.data.model.ISearchableBible;
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IScripture;
 import com.ameron32.apps.tapnotes.v2.ui.mc_sanitizer.ISanitizer;
@@ -114,7 +114,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
     }
   };
   private ISanitizer sanitizer;
-  private IBible bible;
+  private ISearchableBible bible;
 
 
   private static final String SCRIPTURE_PATTERN = "@\\<\\<!\\<[0-9| ]+\\<[\\w|\\,|:|\\-|\\s]+\\>!\\>\\>";
@@ -168,7 +168,7 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
   }
 
   @Override
-  public void onBibleCreated(IBible bible) {
+  public void onBibleCreated(ISearchableBible bible) {
     this.bible = bible;
   }
 
@@ -332,9 +332,9 @@ public class EditorLayoutFragmentDelegate extends FragmentDelegate
 
     boolean added = true;
 
-    private IBible bible;
+    private ISearchableBible bible;
 
-    private void setBible(IBible b){
+    private void setBible(ISearchableBible b){
       bible = b;
     }
 
