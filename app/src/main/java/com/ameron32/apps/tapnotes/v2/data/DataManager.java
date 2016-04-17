@@ -109,7 +109,7 @@ public class DataManager implements DataAccess {
     }
 
     @Override
-    public Observable<List<IObject>> performSync() {
+    public Observable<PROGRESS> sync() {
         // upload all changed objects
         // wait for server response is finished processing
         // download all objects

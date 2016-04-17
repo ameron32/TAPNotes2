@@ -15,6 +15,10 @@ public class Bible implements ISearchableBible, Serializable {
   private String[] chapterNames;
   private String[] chapterAbbrevs;
 
+  public String getChapterVerses(int bookNumber, int chapter) {
+    throw new Error("Method incomplete");
+  }
+
   public String getVerse(int bookNumber, int chapter, int verse) {
     return books[bookNumber].chapters[chapter].verses[verse];
   }

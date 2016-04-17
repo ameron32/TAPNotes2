@@ -125,6 +125,8 @@ dependencies {
   compile 'com.squareup.retrofit2:retrofit:2.0.1'
   compile 'com.squareup.retrofit2:adapter-rxjava:2.0.1'
   compile 'com.backendless:backendless:3.0.11'
+  compile 'com.intuit.sdp:sdp-android:1.0.2'
+  compile 'com.github.moondroid.coverflow:library:1.0'
   //
 //  androidTestCompile ('com.android.support.test:runner:0.3') {
 //    exclude module: 'support-annotations' }

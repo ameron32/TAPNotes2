@@ -82,7 +82,7 @@ public class ProgramViewPagerFragment extends Fragment implements ViewPager.OnPa
     text.setText(itemName);
     Picasso.with(getActivity())
         .load(itemImageUrl)
-
+        .fit().centerCrop()
         .into(image, new Callback() {
           @Override
           public void onSuccess() {

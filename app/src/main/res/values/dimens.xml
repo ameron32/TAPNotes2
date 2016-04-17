@@ -37,4 +37,7 @@
   <dimen name="program_text_size">20sp</dimen>
   <dimen name="program_list_text_size">16sp</dimen>
 
+  <dimen name="program_pager_width">@dimen/_120sdp</dimen>
+  <dimen name="program_pager_height">@dimen/_180sdp</dimen>
+
 </resources>

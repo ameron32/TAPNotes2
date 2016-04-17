@@ -14,23 +14,42 @@ import rx.Observable;
  */
 public interface DataAccess {
 
-    Observable<List<IObject>> performSync();
+    Observable<PROGRESS> sync(SCOPES);
 
     Observable<List<IProgram>> getPrograms();
-    Observable<List<IProgram>> syncPrograms();
+    Observable<PROGRESS> syncPrograms();
 
     Observable<IProgram> getProgram(String programId);
-    Observable<IProgram> syncProgram(String programId);
+    Observable<PROGRESS> syncProgram(String programId);
 
     Observable<List<ITalk>> getTalks(IProgram program);
-    Observable<List<ITalk>> syncTalks(IProgram program);
+    Observable<PROGRESS> syncTalks(IProgram program);
 
     Observable<ITalk> getTalk(String talkId);
     Observable<ITalk> getTalkAtSequence(String sequence);
 
     Observable<List<INote>> getNotes(ITalk talk);
-    Observable<List<INote>> syncNotes(IProgram program);
-    Observable<List<INote>> syncNotes(ITalk talk);
+    Observable<PROGRESS> syncNotes(IProgram program);
+    Observable<PROGRESS> syncNotes(ITalk talk);
 
+    Observable<INote> createNote(INote note);
+    Observable<INote> updateNote(INote note);
     Observable<INote> deleteNote(INote note);
+
+    /**
+     * Set a change to DataManager functionality settings.
+     *
+     * @param option    The FLAG to describe the setting to modify.
+     */
+    void setDataManagerSetting(String option);
+
+    /**
+     * Listen for the activities of the DataManager, like a log
+     */
+    Observable<Action> getActions();
+
+    /**
+     * Trigger to start synchronization service
+     */
+    void initiateAndroidService();
 }
