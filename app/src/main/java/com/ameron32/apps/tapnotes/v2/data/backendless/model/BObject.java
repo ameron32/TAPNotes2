@@ -28,6 +28,7 @@ public class BObject implements IObject {
 
     private Date created;
     private Date updated;
+    private Date userTimestamp;
 
     public Date getCreated()
     {
@@ -47,5 +48,10 @@ public class BObject implements IObject {
     public void setUpdated( Date updated )
     {
         this.updated = updated;
+    }
+
+    @Override
+    public void setUserTimestamp(Date date) {
+        this.userTimestamp = date;
     }
 }

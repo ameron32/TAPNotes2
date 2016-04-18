@@ -56,24 +56,29 @@ public class SyncService extends TAPService {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = event.performAction()
             .subscribeOn(Schedulers.io())
-            .subscribe(new Observer<List<IObject>>() {
+            .subscribe(new Observer<DataAccess.Progress>() {
                 @Override
                 public void onCompleted() {
                     Log.i(TAG, "Synced successfully!");
-                    stopSelf(startId);
+                    stopService(startId);
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     Log.w(TAG, "Error syncing.");
-                    stopSelf(startId);
+                    stopService(startId);
                 }
 
                 @Override
-                public void onNext(List<IObject> ribot) {}
+                public void onNext(DataAccess.Progress progress) {}
             });
 
         return START_STICKY;
+    }
+
+    private void stopService(int startId) {
+        event.onStopService(mDataManager);
+        stopSelf(startId);
     }
 
     @Override

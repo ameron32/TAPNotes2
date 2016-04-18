@@ -13,5 +13,6 @@ import rx.Observer;
 public interface SyncEvent {
 
     void onCreate(DataAccess dataAccess);
-    Observable<List<IObject>> performAction();
+    Observable<DataAccess.Progress> performAction();
+    void onStopService(DataAccess dataAccess);
 }

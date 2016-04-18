@@ -55,7 +55,12 @@ public class ProgramSelection2Fragment extends TAPFragment {
 //        if (tabLayout != null) {
 //            tabLayout.setupWithViewPager(pager);
 //        }
-    pager.setCurrentItem(pager.getAdapter().getCount() -1);
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    pager.setCurrentItem(pager.getAdapter().getCount() -1, true);
   }
 
   @Override

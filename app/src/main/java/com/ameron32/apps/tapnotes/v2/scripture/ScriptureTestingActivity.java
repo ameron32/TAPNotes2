@@ -24,7 +24,6 @@ public class ScriptureTestingActivity extends AppCompatActivity {
     @InjectView(R.id.hello)
     TextView mHelloTextView;
 
-
     private Bible mBible;
 
     @Override

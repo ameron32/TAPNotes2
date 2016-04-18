@@ -17,6 +17,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static com.ameron32.apps.tapnotes.v2.data.parse.Constants.*;
@@ -234,4 +235,8 @@ public class Note
     return acl.getWriteAccess(ParseHelper.Commands.Local.getClientUser());
   }
 
+  @Override
+  public void setUserTimestamp(Date date) {
+    // TODO ignore userTimestamp for Parse
+  }
 }

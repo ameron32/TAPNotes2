@@ -12,6 +12,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -116,5 +117,10 @@ public class Talk
   @Override
   public String getId() {
     return this.getObjectId();
+  }
+
+  @Override
+  public void setUserTimestamp(Date date) {
+    // TODO ignore userTimestamp for Parse
   }
 }

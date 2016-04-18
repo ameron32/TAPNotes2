@@ -5,6 +5,8 @@ import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.frmk.ColumnableParseObject;
 import com.parse.ParseClassName;
 
+import java.util.Date;
+
 import static com.ameron32.apps.tapnotes.v2.data.parse.Constants.*;
 
 /**
@@ -36,5 +38,10 @@ public class Program
   @Override
   public String getId() {
     return this.getObjectId();
+  }
+
+  @Override
+  public void setUserTimestamp(Date date) {
+    // TODO ignore userTimestamp for Parse
   }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.ameron32.apps.tapnotes.v2.data.DataAccess;
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -209,19 +210,19 @@ public class NotesFragment extends TAPFragment
   @Override
   public void onResume() {
     super.onResume();
-    dataManager.syncNotes(mTalk).subscribe(new Observer<List<INote>>() {
+    dataManager.syncNotes(mTalk).subscribe(new Observer<DataAccess.Progress>() {
       @Override
       public void onCompleted() {
-        giveNotesToDelegate();
+
       }
 
       @Override
       public void onError(Throwable e) {
-        e.printStackTrace();
+
       }
 
       @Override
-      public void onNext(List<INote> iNotes) {
+      public void onNext(DataAccess.Progress progress) {
 
       }
     });

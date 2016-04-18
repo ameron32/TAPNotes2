@@ -14,27 +14,47 @@ import rx.Observable;
  */
 public interface DataAccess {
 
-    Observable<PROGRESS> sync(SCOPES);
-
-    Observable<List<IProgram>> getPrograms();
-    Observable<PROGRESS> syncPrograms();
-
-    Observable<IProgram> getProgram(String programId);
-    Observable<PROGRESS> syncProgram(String programId);
-
-    Observable<List<ITalk>> getTalks(IProgram program);
-    Observable<PROGRESS> syncTalks(IProgram program);
-
-    Observable<ITalk> getTalk(String talkId);
-    Observable<ITalk> getTalkAtSequence(String sequence);
-
-    Observable<List<INote>> getNotes(ITalk talk);
-    Observable<PROGRESS> syncNotes(IProgram program);
-    Observable<PROGRESS> syncNotes(ITalk talk);
 
     Observable<INote> createNote(INote note);
     Observable<INote> updateNote(INote note);
     Observable<INote> deleteNote(INote note);
+
+    Observable<List<IObject>> getObjects();
+    Observable<List<IProgram>> getPrograms();
+    Observable<List<ITalk>> getTalks(IProgram program);
+    Observable<List<INote>> getNotes(ITalk talk);
+
+    Observable<IObject> getObject(String objectId);
+    Observable<IProgram> getProgram(String programId);
+    Observable<ITalk> getTalk(String talkId);
+    @Deprecated Observable<ITalk> getTalkAtSequence(String sequence);
+    Observable<INote> getNote(String noteId);
+
+
+
+    // REMOTE CALLS
+    /** sync all remote objects */
+    Observable<Progress> syncObjects();
+
+    /** sync all objects in a given scope */
+    Observable<Progress> syncObjects(Scope... scopes);
+
+    /** sync all programs */
+    Observable<Progress> syncPrograms();
+
+    /** sync program */
+    Observable<Progress> syncProgram(String programId);
+
+    /** sync all talks in a program */
+    Observable<Progress> syncTalks(IProgram program);
+
+    /** sync all notes for all talks in a program */
+    Observable<Progress> syncNotes(IProgram program);
+
+    /** sync all notes in a talk */
+    Observable<Progress> syncNotes(ITalk talk);
+
+
 
     /**
      * Set a change to DataManager functionality settings.
@@ -44,7 +64,7 @@ public interface DataAccess {
     void setDataManagerSetting(String option);
 
     /**
-     * Listen for the activities of the DataManager, like a log
+     * Listen for the activities of the DataManager. Acts like a log listener
      */
     Observable<Action> getActions();
 
@@ -52,4 +72,18 @@ public interface DataAccess {
      * Trigger to start synchronization service
      */
     void initiateAndroidService();
+
+
+
+    interface Progress {
+
+    }
+
+    interface Action {
+
+    }
+
+    interface Scope {
+
+    }
 }
