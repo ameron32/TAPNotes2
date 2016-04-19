@@ -59,7 +59,6 @@ public class DataManager implements DataAccess {
     private final RemoteHelper remoteHelper;
     private final LocalHelper localHelper;
     private final SyncEvent syncEvent;
-    public SyncEvent getSyncEvent() { return syncEvent; }
 
     @Inject
     public DataManager() {
@@ -169,37 +168,37 @@ public class DataManager implements DataAccess {
     }
 
     @Override
-    public Observable<Progress> syncObjects() {
+    public Observable<List<IObject>> syncObjects() {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncObjects(Scope... scopes) {
+    public Observable<List<IObject>> syncObjects(Scope... scopes) {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncPrograms() {
+    public Observable<List<IProgram>> syncPrograms() {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncProgram(String programId) {
+    public Observable<IProgram> syncProgram(String programId) {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncTalks(IProgram program) {
+    public Observable<List<ITalk>> syncTalks(IProgram program) {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncNotes(IProgram program) {
+    public Observable<List<INote>> syncNotes(IProgram program) {
         return null;
     }
 
     @Override
-    public Observable<Progress> syncNotes(ITalk talk) {
+    public Observable<List<INote>> syncNotes(ITalk talk) {
         return null;
     }
 
@@ -414,4 +413,6 @@ public class DataManager implements DataAccess {
             }
         };
     }
+
+    public SyncEvent getSyncEvent() { return syncEvent; }
 }

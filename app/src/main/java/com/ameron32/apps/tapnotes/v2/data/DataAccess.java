@@ -14,7 +14,7 @@ import rx.Observable;
  */
 public interface DataAccess {
 
-
+    // LOCAL CALLS
     Observable<INote> createNote(INote note);
     Observable<INote> updateNote(INote note);
     Observable<INote> deleteNote(INote note);
@@ -30,29 +30,27 @@ public interface DataAccess {
     @Deprecated Observable<ITalk> getTalkAtSequence(String sequence);
     Observable<INote> getNote(String noteId);
 
-
-
     // REMOTE CALLS
     /** sync all remote objects */
-    Observable<Progress> syncObjects();
+    Observable<List<IObject>> syncObjects();
 
     /** sync all objects in a given scope */
-    Observable<Progress> syncObjects(Scope... scopes);
+    Observable<List<IObject>> syncObjects(Scope... scopes);
 
     /** sync all programs */
-    Observable<Progress> syncPrograms();
+    Observable<List<IProgram>> syncPrograms();
 
     /** sync program */
-    Observable<Progress> syncProgram(String programId);
+    Observable<IProgram> syncProgram(String programId);
 
     /** sync all talks in a program */
-    Observable<Progress> syncTalks(IProgram program);
+    Observable<List<ITalk>> syncTalks(IProgram program);
 
     /** sync all notes for all talks in a program */
-    Observable<Progress> syncNotes(IProgram program);
+    Observable<List<INote>> syncNotes(IProgram program);
 
     /** sync all notes in a talk */
-    Observable<Progress> syncNotes(ITalk talk);
+    Observable<List<INote>> syncNotes(ITalk talk);
 
 
 

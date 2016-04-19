@@ -300,13 +300,13 @@ public class NotesFragment extends TAPFragment
           @Override
           public void onNext(ITalk iTalk) {
             mTalk = iTalk;
-//              mTalk = ParseHelper.Queries.Local.getTalk(mTalkId);
+//              mTalk = OriginalParseHelper.Queries.Local.getTalk(mTalkId);
             mSymposiumTitle = mTalk.getSymposiumTitle();
             mHeaderDelegate.setSymposiumTitle(mSymposiumTitle);
 
             // TODO: decouple from Parse
-//          final List<INote> genericNotes = ParseHelper.Queries.Local.findGenericNotesFor((Talk) mTalk);
-//          final List<INote> clientNotes = ParseHelper.Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
+//          final List<INote> genericNotes = OriginalParseHelper.Queries.Local.findGenericNotesFor((Talk) mTalk);
+//          final List<INote> clientNotes = OriginalParseHelper.Queries.Local.findClientOwnedNotesFor((Talk) mTalk);
             dataManager.getNotes(mTalk).subscribe(new Observer<List<INote>>() {
               @Override
               public void onCompleted() {
