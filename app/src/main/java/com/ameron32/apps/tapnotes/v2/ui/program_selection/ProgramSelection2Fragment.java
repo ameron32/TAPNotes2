@@ -17,15 +17,16 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -93,10 +94,16 @@ public class ProgramSelection2Fragment extends TAPFragment {
 
   void requestPrograms() {
     addToCompositeSubscription(
-            dataManager.getPrograms()
-                    .observeOn(Schedulers.computation())
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .subscribe(programObserver));
+        dataManager.syncPrograms()
+            .concatMap(new Func1<List<IProgram>, Observable<List<IProgram>>>() {
+              @Override
+              public Observable<List<IProgram>> call(List<IProgram> iPrograms) {
+                return dataManager.getPrograms();
+              }
+            })
+            .observeOn(Schedulers.computation())
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .subscribe(programObserver));
   }
 
   @Override

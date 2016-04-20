@@ -25,12 +25,17 @@ public class ParseSyncEvent implements SyncEvent {
 
   @Override
   public Observable<List<IObject>> performAction() {
-    return dataAccess.syncPrograms().map(new Func1<List<IProgram>, List<IObject>>() {
-      @Override
-      public List<IObject> call(List<IProgram> iPrograms) {
-        return ParseUtil.toIObject(iPrograms);
-      }
-    });
+    return programsToObjects();
+  }
+
+  private Observable<List<IObject>> programsToObjects() {
+    return dataAccess.syncPrograms()
+        .map(new Func1<List<IProgram>, List<IObject>>() {
+          @Override
+          public List<IObject> call(List<IProgram> iPrograms) {
+            return ParseUtil.toIObject(iPrograms);
+          }
+        });
   }
 
   @Override

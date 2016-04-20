@@ -210,22 +210,22 @@ public class NotesFragment extends TAPFragment
   @Override
   public void onResume() {
     super.onResume();
-    dataManager.syncNotes(mTalk).subscribe(new Observer<DataAccess.Progress>() {
-      @Override
-      public void onCompleted() {
-
-      }
-
-      @Override
-      public void onError(Throwable e) {
-
-      }
-
-      @Override
-      public void onNext(DataAccess.Progress progress) {
-
-      }
-    });
+//    dataManager.syncNotes(mTalk).subscribe(new Observer<DataAccess.Progress>() {
+//      @Override
+//      public void onCompleted() {
+//
+//      }
+//
+//      @Override
+//      public void onError(Throwable e) {
+//
+//      }
+//
+//      @Override
+//      public void onNext(DataAccess.Progress progress) {
+//
+//      }
+//    });
   }
 
   private void displayToolbarImage() {
@@ -433,9 +433,10 @@ public class NotesFragment extends TAPFragment
   private boolean isUserPermitted(INote note) {
     if (note instanceof INoteEditable) {
       INoteEditable eNote = (INoteEditable) note;
-      if (eNote.isNoteOwnedByClient() && eNote.isNoteEditableByClient()) {
-        return true;
-      }
+//      dataManager.isO
+//      if (eNote.isNoteOwnedByClient() && eNote.isNoteEditableByClient()) {
+//        return true;
+//      }
     }
     return false;
   }

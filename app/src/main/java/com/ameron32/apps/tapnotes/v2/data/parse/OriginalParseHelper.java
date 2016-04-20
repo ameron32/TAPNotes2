@@ -133,7 +133,7 @@ public class OriginalParseHelper {
 
   private INote deleteNoteAsync(INote note) {
     if (note instanceof Note) {
-      Commands.Local.deleteEventuallyNote((Note) note);
+//      Commands.Local.deleteEventuallyNote((Note) note);
       return note;
     }
     return note;
@@ -607,74 +607,74 @@ public class OriginalParseHelper {
         return ParseUser.getCurrentUser();
       }
 
-      public //
-      static Note saveEventuallyNote(Note note) {
-        saveEventuallyNote(note, null);
-        return note;
-      }
-
-      public //
-      static Note saveEventuallyNote(Note note, SaveCallback callback) {
-        Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
-        if (!note.isNoteOwnedByClient()) {
-          // do not delete notes that are not owned by the client
-          Log.d(TAG, "note was not owned by client. not saving.");
-          return note;
-        }
-        note.saveEventually(callback);
-        return note;
-      }
-
-      public //
-      static List<Note> saveEventuallyNotes(List<Note> notes) {
-        Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
-        for (Note note : notes) {
-          saveEventuallyNote(note);
-        }
-        return notes;
-      }
-
-      public //
-      static List<Note> saveEventuallyParseNotes(List<Note> notes) {
-        Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
-        for (INote note : notes) {
-          if (note instanceof Note) {
-            saveEventuallyNote((Note) note);
-          }
-        }
-        return notes;
-      }
-
-      public //
-      static Note pinNote(Note note) {
-        Log.d(TAG, "pinNote: " + note.getObjectId());
-        note.pinInBackground();
-        return note;
-      }
-
-      public //
-      static void deleteEventuallyNote(Note note) {
-        Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
-        if (!note.isNoteOwnedByClient()) {
-          // do not delete notes that are not owned by the client
-          Log.d(TAG, "note was not owned by client. not deleting.");
-          return;
-        }
-        note.deleteEventually();
-      }
-
-      public //
-      static void deleteEventuallyNotes(List<Note> notes) {
-        Log.d(TAG, "deleteEventuallyNotes: size " + notes.size());
-        for (Note note : notes) {
-          deleteEventuallyNote(note);
-        }
-      }
-
-      public //
-      static void logoutClientUser() {
-        ParseUser.logOut();
-      }
+//      public //
+//      static Note saveEventuallyNote(Note note) {
+//        saveEventuallyNote(note, null);
+//        return note;
+//      }
+//
+//      public //
+//      static Note saveEventuallyNote(Note note, SaveCallback callback) {
+//        Log.d(TAG, "saveEventuallyNote " + note.getObjectId());
+//        if (!note.isNoteOwnedByClient()) {
+//          // do not delete notes that are not owned by the client
+//          Log.d(TAG, "note was not owned by client. not saving.");
+//          return note;
+//        }
+//        note.saveEventually(callback);
+//        return note;
+//      }
+//
+//      public //
+//      static List<Note> saveEventuallyNotes(List<Note> notes) {
+//        Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
+//        for (Note note : notes) {
+//          saveEventuallyNote(note);
+//        }
+//        return notes;
+//      }
+//
+//      public //
+//      static List<Note> saveEventuallyParseNotes(List<Note> notes) {
+//        Log.d(TAG, "saveEventuallyNotes: size " + notes.size());
+//        for (INote note : notes) {
+//          if (note instanceof Note) {
+//            saveEventuallyNote((Note) note);
+//          }
+//        }
+//        return notes;
+//      }
+//
+//      public //
+//      static Note pinNote(Note note) {
+//        Log.d(TAG, "pinNote: " + note.getObjectId());
+//        note.pinInBackground();
+//        return note;
+//      }
+//
+//      public //
+//      static void deleteEventuallyNote(Note note) {
+//        Log.d(TAG, "deleteEventuallyNote " + note.getObjectId());
+//        if (!note.isNoteOwnedByClient()) {
+//          // do not delete notes that are not owned by the client
+//          Log.d(TAG, "note was not owned by client. not deleting.");
+//          return;
+//        }
+//        note.deleteEventually();
+//      }
+//
+//      public //
+//      static void deleteEventuallyNotes(List<Note> notes) {
+//        Log.d(TAG, "deleteEventuallyNotes: size " + notes.size());
+//        for (Note note : notes) {
+//          deleteEventuallyNote(note);
+//        }
+//      }
+//
+//      public //
+//      static void logoutClientUser() {
+//        ParseUser.logOut();
+//      }
     }
   }
 

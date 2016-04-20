@@ -11,7 +11,7 @@ import com.parse.ParseAnonymousUtils;
  */
 public class Status {
 
-  public static boolean isLoggedIn() {
-    return !ParseAnonymousUtils.isLinked(ParseHelper.Commands.Local.getClientUser());
-  }
+//  public static boolean isLoggedIn() {
+//    return !ParseAnonymousUtils.isLinked(ParseHelper.Commands.Local.getClientUser());
+//  }
 }
