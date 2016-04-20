@@ -13,4 +13,9 @@ public class User extends ParseUser implements IUser {
     public User() {
         // required empty constructor
     }
+
+    @Override
+    public String getId() {
+        return this.getObjectId();
+    }
 }

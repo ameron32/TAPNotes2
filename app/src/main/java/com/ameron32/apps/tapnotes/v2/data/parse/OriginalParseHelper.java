@@ -37,13 +37,15 @@ public class OriginalParseHelper {
   private static final String TALK_TAG = "talk";
   private static final String PROGRAM_TAG = "program";
 
-  public final ParseLocalHelper cache;
-  public final ParseRemoteHelper remote;
+//  public final
+  ParseLocalHelper cache;
+//  public final
+  ParseRemoteHelper remote;
   public final ParseSyncEvent syncEvent;
 
   public OriginalParseHelper() {
-    cache = new ParseLocalHelper();
-    remote = new ParseRemoteHelper();
+//    cache = new ParseLocalHelper();
+//    remote = new ParseRemoteHelper();
     syncEvent = new ParseSyncEvent();
   }
 
@@ -175,7 +177,7 @@ public class OriginalParseHelper {
   }
 
 
-  public class ParseLocalHelper implements LocalHelper {
+  public abstract class ParseLocalHelper implements LocalHelper {
 
     @Override
     public Observable<List<IProgram>> getPrograms() {
@@ -266,7 +268,7 @@ public class OriginalParseHelper {
     }
 
     @Override
-    public Observable<List<ITalk>> getProgramTalks(final IProgram program) {
+    public Observable<List<ITalk>> getTalks(final IProgram program) {
       return Observable.create(new Observable.OnSubscribe<List<ITalk>>() {
         @Override
         public void call(Subscriber<? super List<ITalk>> subscriber) {
@@ -467,7 +469,7 @@ public class OriginalParseHelper {
     }
   }
 
-  public class ParseRemoteHelper implements RemoteHelper {
+  public abstract class ParseRemoteHelper implements RemoteHelper {
 
     @Override
     public Observable<List<IProgram>> getPrograms() {
@@ -508,18 +510,18 @@ public class OriginalParseHelper {
       });
     }
 
-    @Override
-    public Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user) {
-      return Observable.create(new Observable.OnSubscribe<List<INote>>() {
-        @Override
-        public void call(Subscriber<? super List<INote>> subscriber) {
-          if (subscriber.isUnsubscribed()) return;
-          List<INote> iNotes = pinNotesAsync(program, talk, date, user);
-          subscriber.onNext(iNotes);
-          subscriber.onCompleted();
-        }
-      });
-    }
+//    @Override
+//    public Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user) {
+//      return Observable.create(new Observable.OnSubscribe<List<INote>>() {
+//        @Override
+//        public void call(Subscriber<? super List<INote>> subscriber) {
+//          if (subscriber.isUnsubscribed()) return;
+//          List<INote> iNotes = pinNotesAsync(program, talk, date, user);
+//          subscriber.onNext(iNotes);
+//          subscriber.onCompleted();
+//        }
+//      });
+//    }
 
     @Override
     public Observable<List<INote>> saveNotes(final List<INote> iNotes) {
@@ -533,7 +535,7 @@ public class OriginalParseHelper {
     }
 
     @Override
-    public Observable<List<INote>> getProgramNotes(final IProgram program) {
+    public Observable<List<INote>> getNotes(final IProgram program) {
       return Observable.create(new Observable.OnSubscribe<List<INote>>() {
         @Override
         public void call(Subscriber<? super List<INote>> subscriber) {

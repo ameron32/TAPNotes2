@@ -24,7 +24,7 @@ public interface LocalHelper extends Helper {
     Observable<INote> deleteNote(INote note);
 
     Observable<List<IProgram>> getPrograms();
-    Observable<List<ITalk>> getProgramTalks(IProgram iProgram);
+    Observable<List<ITalk>> getTalks(IProgram iProgram);
     Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
 
     Observable<IProgram> getProgram(String programId);

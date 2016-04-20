@@ -9,6 +9,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.model.IUser;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 
 import java.util.ArrayList;
@@ -17,8 +18,11 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import rx.Notification;
 import rx.Observable;
+import rx.Observer;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.functions.Func1;
 
 /**
@@ -109,52 +113,70 @@ public class DataManager implements DataAccess {
 
     @Override
     public Observable<INote> createNote(INote note) {
-        return null;
+        return localHelper.createNote(note)
+            .concatMap(new Func1<INote, Observable<? extends INote>>() {
+                @Override
+                public Observable<? extends INote> call(INote note) {
+                    return remoteHelper.createNote(note);
+                }
+            });
     }
 
     @Override
     public Observable<INote> updateNote(INote note) {
-        return null;
+        return localHelper.updateNote(note)
+            .concatMap(new Func1<INote, Observable<? extends INote>>() {
+                @Override
+                public Observable<? extends INote> call(INote note) {
+                    return remoteHelper.updateNote(note);
+                }
+            });
     }
 
     @Override
     public Observable<INote> deleteNote(INote note) {
-        return null;
+        return localHelper.deleteNote(note)
+            .concatMap(new Func1<INote, Observable<? extends INote>>() {
+                @Override
+                public Observable<? extends INote> call(INote note) {
+                    return remoteHelper.deleteNote(note);
+                }
+            });
     }
 
     @Override
     public Observable<List<IObject>> getObjects() {
-        return null;
+        throw new Error("method not ready");
     }
 
     @Override
     public Observable<List<IProgram>> getPrograms() {
-        return null;
+        return localHelper.getPrograms();
     }
 
     @Override
     public Observable<List<ITalk>> getTalks(IProgram program) {
-        return null;
+        return localHelper.getTalks(program);
     }
 
     @Override
     public Observable<List<INote>> getNotes(ITalk talk) {
-        return null;
+        return localHelper.getNotes(null, talk, null, null);
     }
 
     @Override
     public Observable<IObject> getObject(String objectId) {
-        return null;
+        throw new Error("method not ready");
     }
 
     @Override
     public Observable<IProgram> getProgram(String programId) {
-        return null;
+        return localHelper.getProgram(programId);
     }
 
     @Override
     public Observable<ITalk> getTalk(String talkId) {
-        return null;
+        return localHelper.getTalk(talkId);
     }
 
     @Override
@@ -163,43 +185,73 @@ public class DataManager implements DataAccess {
     }
 
     @Override
-    public Observable<INote> getNote(String noteId) {
-        return null;
+    public Observable<INote> getNote(final String noteId) {
+        return localHelper.getNote(noteId);
     }
 
     @Override
     public Observable<List<IObject>> syncObjects() {
-        return null;
+        throw new Error("method not ready");
     }
 
     @Override
     public Observable<List<IObject>> syncObjects(Scope... scopes) {
-        return null;
+        throw new Error("method not ready");
     }
 
     @Override
     public Observable<List<IProgram>> syncPrograms() {
-        return null;
+        return remoteHelper.getPrograms()
+            .concatMap(new Func1<List<IProgram>, Observable<? extends List<IProgram>>>() {
+                @Override
+                public Observable<? extends List<IProgram>> call(List<IProgram> programs) {
+                    return localHelper.pinPrograms(programs);
+                }
+            });
     }
 
     @Override
     public Observable<IProgram> syncProgram(String programId) {
-        return null;
+        return remoteHelper.getProgram(programId)
+            .concatMap(new Func1<IProgram, Observable<? extends IProgram>>() {
+                @Override
+                public Observable<? extends IProgram> call(IProgram program) {
+                    return localHelper.pinProgram(program);
+                }
+            });
     }
 
     @Override
     public Observable<List<ITalk>> syncTalks(IProgram program) {
-        return null;
+        return remoteHelper.getTalks(program)
+            .concatMap(new Func1<List<ITalk>, Observable<? extends List<ITalk>>>() {
+                @Override
+                public Observable<? extends List<ITalk>> call(List<ITalk> talks) {
+                    return localHelper.pinTalks(talks);
+                }
+            });
     }
 
     @Override
     public Observable<List<INote>> syncNotes(IProgram program) {
-        return null;
+        return remoteHelper.getNotes(program)
+            .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                @Override
+                public Observable<? extends List<INote>> call(List<INote> notes) {
+                    return localHelper.pinNotes(notes);
+                }
+            });
     }
 
     @Override
     public Observable<List<INote>> syncNotes(ITalk talk) {
-        return null;
+        return remoteHelper.getNotes(talk)
+            .concatMap(new Func1<List<INote>, Observable<? extends List<INote>>>() {
+                @Override
+                public Observable<? extends List<INote>> call(List<INote> notes) {
+                    return localHelper.pinNotes(notes);
+                }
+            });
     }
 
     @Override
@@ -215,6 +267,16 @@ public class DataManager implements DataAccess {
     @Override
     public void initiateAndroidService() {
 
+    }
+
+    @Override
+    public Observable<IUser> getClientUser() {
+        return null;
+    }
+
+    @Override
+    public Observable<IUser> setClientUser() {
+        return null;
     }
 
     //    @Override
@@ -268,7 +330,7 @@ public class DataManager implements DataAccess {
 //
 //    @Override
 //    public Observable<List<ITalk>> getTalks(IProgram program) {
-//        return localHelper.getProgramTalks(program).distinct();
+//        return localHelper.getTalks(program).distinct();
 //    }
 //
 //    @Override

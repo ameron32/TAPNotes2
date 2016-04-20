@@ -21,7 +21,7 @@ import rx.Subscriber;
 /**
  * Created by klemeilleur on 3/24/2016.
  */
-public class BackendlessHelper implements RemoteHelper {
+public abstract class BackendlessHelper implements RemoteHelper {
 
     @Override
     public Observable<List<IProgram>> getPrograms() {
@@ -35,35 +35,5 @@ public class BackendlessHelper implements RemoteHelper {
                 subscriber.onNext(iPrograms);
             }
         });
-    }
-
-    @Override
-    public Observable<IProgram> getProgram(String programId) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<ITalk>> getTalks(IProgram program) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<INote>> getNotes(IProgram program, ITalk talk, DateTime date, IUser user) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<INote>> getProgramNotes(IProgram program) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<INote>> saveNotes(List<INote> iNotes) {
-        return null;
-    }
-
-    @Override
-    public Observable<INote> deleteNote(INote note) {
-        return null;
     }
 }

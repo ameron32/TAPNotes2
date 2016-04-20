@@ -4,6 +4,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.INote;
 import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
+import com.ameron32.apps.tapnotes.v2.data.model.IUser;
 
 import java.util.List;
 
@@ -84,4 +85,7 @@ public interface DataAccess {
     interface Scope {
 
     }
+
+    Observable<IUser> getClientUser();
+    Observable<IUser> setClientUser();
 }

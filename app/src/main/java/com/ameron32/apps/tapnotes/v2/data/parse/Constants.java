@@ -18,6 +18,8 @@ public class Constants {
   // PROGRAM
   public static final String PROGRAM_NAME_STRING_KEY = "name";
   public static final String PROGRAM_PROGRAMIMAGE_FILE_KEY = "programImage";
+  public static final String PROGRAM_CREATEDAT_DATE_KEY = "createdAt";
+  public static final String PROGRAM_UPDATEDAT_DATE_KEY = "updatedAt";
 
   // TALK
   public static final String TALK_oPROGRAM_OBJECT_KEY = "oProgram";

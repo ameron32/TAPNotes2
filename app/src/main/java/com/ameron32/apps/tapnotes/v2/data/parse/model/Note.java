@@ -31,21 +31,21 @@ public class Note
     implements INoteEditable
 {
 
-  public static Note create(final String text,
-      final Program program, final Talk talk,
-      final ParseUser owner) {
-    final Note note = new Note();
-    note.setNoteText(text);
-    note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
-    note.put(NOTE_oTALK_OBJECT_KEY, talk);
-    if (owner != null) {
-      note.put(NOTE_uOWNER_USER_KEY, owner);
-      note.setACL(getClientNoteACL(owner));
-    } else {
-      note.setACL(getClientNoteACL(null));
-    }
-    return note;
-  }
+//  public static Note create(final String text,
+//      final Program program, final Talk talk,
+//      final ParseUser owner) {
+//    final Note note = new Note();
+//    note.setNoteText(text);
+//    note.put(NOTE_oPROGRAM_OBJECT_KEY, program);
+//    note.put(NOTE_oTALK_OBJECT_KEY, talk);
+//    if (owner != null) {
+//      note.put(NOTE_uOWNER_USER_KEY, owner);
+//      note.setACL(getClientNoteACL(owner));
+//    } else {
+//      note.setACL(getClientNoteACL(null));
+//    }
+//    return note;
+//  }
 
   public static ParseACL getClientNoteACL(ParseUser user) {
     final ParseACL acl = new ParseACL();
@@ -58,24 +58,24 @@ public class Note
     return acl;
   }
 
-  @Nullable
-  public static Note create(
-      final String text,
-      final String programId, final String talkId,
-      final ParseUser owner) {
-    Log.d(Note.class.getSimpleName(),
-        "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
-    try {
-      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
-      final ITalk talk = ParseHelper.Queries.Local.getTalk(talkId);
-      if (program instanceof Program && talk instanceof Talk) {
-        return Note.create(text, (Program) program, (Talk) talk, owner);
-      }
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+//  @Nullable
+//  public static Note create(
+//      final String text,
+//      final String programId, final String talkId,
+//      final ParseUser owner) {
+//    Log.d(Note.class.getSimpleName(),
+//        "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
+//    try {
+//      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
+//      final ITalk talk = ParseHelper.Queries.Local.getTalk(talkId);
+//      if (program instanceof Program && talk instanceof Talk) {
+//        return Note.create(text, (Program) program, (Talk) talk, owner);
+//      }
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
+//    return null;
+//  }
 
   public Note() {
     // required empty
@@ -134,7 +134,7 @@ public class Note
     } else {
       removeTag(INote.TAG_IMPORTANT_NOTE);
     }
-    ParseHelper.Commands.Local.saveEventuallyNote(this);
+//    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   @Override
@@ -144,7 +144,7 @@ public class Note
     } else {
       removeTag(INote.TAG_BOLD_NOTE);
     }
-    ParseHelper.Commands.Local.saveEventuallyNote(this);
+//    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   @Override
@@ -157,7 +157,7 @@ public class Note
     if (newType != getNoteType()) {
       setNoteType(newType);
     }
-    ParseHelper.Commands.Local.saveEventuallyNote(this);
+//    ParseHelper.Commands.Local.saveEventuallyNote(this);
   }
 
   private List<Integer> getTags() {
@@ -210,30 +210,30 @@ public class Note
     return NoteType.STANDARD;
   }
 
-  @Override
-  public boolean isNoteOwnedByClient() {
-    final ParseUser owner = this.getOwner();
-    if (owner == null) {
-      return false;
-    }
-
-    return (ParseHelper.Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
-  }
-
-  private ParseUser getOwner() {
-    Object o = this.get(NOTE_uOWNER_USER_KEY);
-    if (o != null) {
-      ParseUser user = (ParseUser) o;
-      return user;
-    }
-    return null;
-  }
-
-  @Override
-  public boolean isNoteEditableByClient() {
-    final ParseACL acl = getACL();
-    return acl.getWriteAccess(ParseHelper.Commands.Local.getClientUser());
-  }
+//  @Override
+//  public boolean isNoteOwnedByClient() {
+//    final ParseUser owner = this.getOwner();
+//    if (owner == null) {
+//      return false;
+//    }
+//
+//    return (ParseHelper.Commands.Local.getClientUser().getObjectId() == owner.getObjectId());
+//  }
+//
+//  private ParseUser getOwner() {
+//    Object o = this.get(NOTE_uOWNER_USER_KEY);
+//    if (o != null) {
+//      ParseUser user = (ParseUser) o;
+//      return user;
+//    }
+//    return null;
+//  }
+//
+//  @Override
+//  public boolean isNoteEditableByClient() {
+//    final ParseACL acl = getACL();
+//    return acl.getWriteAccess(ParseHelper.Commands.Local.getClientUser());
+//  }
 
   @Override
   public void setUserTimestamp(Date date) {
