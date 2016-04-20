@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -47,11 +48,11 @@ public class ProgramViewPagerFragment extends Fragment implements ViewPager.OnPa
    * @return A new instance of fragment ProgramViewPagerFragment.
    */
   // TODO: Rename and change types and number of parameters
-  public static ProgramViewPagerFragment newInstance(ProgramSelection2Fragment.Item item) {
+  public static ProgramViewPagerFragment newInstance(IProgram program) {
     ProgramViewPagerFragment fragment = new ProgramViewPagerFragment();
     Bundle args = new Bundle();
-    args.putString(ITEM_NAME, item.getName());
-    args.putString(ITEM_IMAGE_URL, item.getImageUrl());
+    args.putString(ITEM_NAME, program.getName());
+    args.putString(ITEM_IMAGE_URL, program.getImageUrl());
     fragment.setArguments(args);
     return fragment;
   }

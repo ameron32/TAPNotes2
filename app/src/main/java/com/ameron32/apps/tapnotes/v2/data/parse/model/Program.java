@@ -44,4 +44,9 @@ public class Program
   public void setUserTimestamp(Date date) {
     // TODO ignore userTimestamp for Parse
   }
+
+  @Override
+  public String getImageUrl() {
+    return null;
+  }
 }

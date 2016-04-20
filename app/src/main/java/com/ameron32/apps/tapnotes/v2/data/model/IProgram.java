@@ -7,4 +7,5 @@ public interface IProgram extends IObject {
 
   ITalk[] getTalks();
   String getName();
+  String getImageUrl();
 }

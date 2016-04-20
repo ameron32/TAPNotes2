@@ -2,7 +2,6 @@ package com.ameron32.apps.tapnotes.v2.ui.program_selection;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ameron32.apps.tapnotes.v2.R;
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
+import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentDelegate;
@@ -19,8 +20,13 @@ import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramSelectionLayoutFragmentD
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -29,6 +35,9 @@ public class ProgramSelection2Fragment extends TAPFragment {
 
   @InjectView(R.id.viewPager)
   ViewPager pager;
+
+  @Inject
+  DataManager dataManager;
 
   public ProgramSelection2Fragment() {
   }
@@ -43,9 +52,7 @@ public class ProgramSelection2Fragment extends TAPFragment {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.inject(this, view);
-
     pager.setPageTransformer(false, new ParallaxTransformer());
-    pager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), pager, getItems()));
   }
 
   @Override
@@ -60,7 +67,7 @@ public class ProgramSelection2Fragment extends TAPFragment {
   @Override
   public void onResume() {
     super.onResume();
-    pager.setCurrentItem(pager.getAdapter().getCount() -1, true);
+    requestPrograms();
   }
 
   @Override
@@ -70,11 +77,26 @@ public class ProgramSelection2Fragment extends TAPFragment {
     super.onDestroyView();
   }
 
-  private List<Item> getItems() {
-    List<Item> items = new ArrayList<>();
-    items.add(new Item("2015", "https://i.imgur.com/Mgx193t.png"));
-    items.add(new Item("2016", "https://i.imgur.com/N8H7jHr.png"));
-    return items;
+  Observer<List<IProgram>> programObserver = new Observer<List<IProgram>>() {
+    @Override
+    public void onCompleted() {}
+
+    @Override
+    public void onError(Throwable e) {}
+
+    @Override
+    public void onNext(List<IProgram> iPrograms) {
+      pager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), pager, iPrograms));
+      pager.setCurrentItem(pager.getAdapter().getCount() -1, true);
+    }
+  };
+
+  void requestPrograms() {
+    addToCompositeSubscription(
+            dataManager.getPrograms()
+                    .observeOn(Schedulers.computation())
+                    .subscribeOn(AndroidSchedulers.mainThread())
+                    .subscribe(programObserver));
   }
 
   @Override
@@ -82,30 +104,37 @@ public class ProgramSelection2Fragment extends TAPFragment {
     return ProgramSelectionLayoutFragmentDelegate.create(ProgramSelection2Fragment.this);
   }
 
-  public static class Item {
-    private final String imageUrl;
-    private final String name;
-
-    public Item(String name, String imageUrl) {
-      this.imageUrl = imageUrl;
-      this.name = name;
-    }
-
-    public String getImageUrl() {
-      return imageUrl;
-    }
-
-    public String getName() {
-      return name;
-    }
-  }
+//  public static class Item {
+//    private final String imageUrl;
+//    private final String name;
+//
+//    public Item(String name, String imageUrl) {
+//      this.imageUrl = imageUrl;
+//      this.name = name;
+//    }
+//
+//    public String getImageUrl() {
+//      return imageUrl;
+//    }
+//
+//    public String getName() {
+//      return name;
+//    }
+//  }
+//
+//  private List<Item> getItems() {
+//    List<Item> items = new ArrayList<>();
+//    items.add(new Item("2015", "https://i.imgur.com/Mgx193t.png"));
+//    items.add(new Item("2016", "https://i.imgur.com/N8H7jHr.png"));
+//    return items;
+//  }
 
   public static class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final ViewPager pager;
-    private final List<Item> items;
+    private final List<IProgram> items;
 
-    public ViewPagerAdapter(FragmentManager fm, ViewPager pager, List<Item> items) {
+    public ViewPagerAdapter(FragmentManager fm, ViewPager pager, List<IProgram> items) {
       super(fm);
       this.pager = pager;
       this.items = items;

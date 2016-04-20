@@ -23,4 +23,9 @@ public class BProgram extends BObject implements IProgram {
     public String getId() {
         return null;
     }
+
+    @Override
+    public String getImageUrl() {
+        return null;
+    }
 }
