@@ -56,7 +56,7 @@ public class SyncService extends TAPService {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
         mSubscription = event.performAction()
             .subscribeOn(Schedulers.io())
-            .subscribe(new Observer<DataAccess.Progress>() {
+            .subscribe(new Observer<List<IObject>>() {
                 @Override
                 public void onCompleted() {
                     Log.i(TAG, "Synced successfully!");
@@ -70,7 +70,7 @@ public class SyncService extends TAPService {
                 }
 
                 @Override
-                public void onNext(DataAccess.Progress progress) {}
+                public void onNext(List<IObject> objects) {}
             });
 
         return START_STICKY;

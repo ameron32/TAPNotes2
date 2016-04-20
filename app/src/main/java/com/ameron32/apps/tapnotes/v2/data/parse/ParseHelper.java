@@ -773,6 +773,7 @@ public class ParseHelper {
           return Observable.create(new Observable.OnSubscribe<IUser>() {
             @Override
             public void call(Subscriber<? super IUser> subscriber) {
+              if (subscriber.isUnsubscribed()) return;
               try {
                 subscriber.onNext((User) ParseUser.logIn(username, password));
               } catch (ParseException e) {

@@ -28,6 +28,7 @@ public abstract class BackendlessHelper implements RemoteHelper {
         return Observable.create(new Observable.OnSubscribe<List<IProgram>>() {
             @Override
             public void call(Subscriber<? super List<IProgram>> subscriber) {
+                if (subscriber.isUnsubscribed()) return;
                 List<BProgram> bPrograms = Backendless.Data.of(BProgram.class)
                         .find().getPage(10,0).getCurrentPage();
                 List<IProgram> iPrograms = new ArrayList<>();

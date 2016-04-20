@@ -1,6 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.data.parse;
 
 import com.ameron32.apps.tapnotes.v2.data.model.INote;
+import com.ameron32.apps.tapnotes.v2.data.model.IObject;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.model.Note;
@@ -79,5 +80,15 @@ public class ParseUtil {
             }
         }
         return talks;
+    }
+
+    public static List<IObject> toIObject(List<? extends IObject> subObjects) {
+        List<IObject> objects = new ArrayList<>();
+        if (subObjects != null) {
+            for (IObject object: subObjects) {
+                objects.add(object);
+            }
+        }
+        return objects;
     }
 }
