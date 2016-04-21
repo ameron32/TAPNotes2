@@ -196,14 +196,14 @@ public class ProgramSelectionFragment
   }
 
   private boolean isProgramSaved(String programId) {
-    try {
-      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
-      if (program != null) {
-        return true;
-      }
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+//    try {
+//      final IProgram program = ParseHelper.Queries.Local.getProgram(programId);
+//      if (program != null) {
+//        return true;
+//      }
+//    } catch (ParseException e) {
+//      e.printStackTrace();
+//    }
     return false;
   }
 

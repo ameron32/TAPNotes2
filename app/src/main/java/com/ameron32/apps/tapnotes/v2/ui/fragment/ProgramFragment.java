@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.IProgram;
 import com.ameron32.apps.tapnotes.v2.data.parse.ParseHelper;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -21,7 +22,6 @@ import com.ameron32.apps.tapnotes.v2.frmk.FragmentDelegate;
 import com.ameron32.apps.tapnotes.v2.frmk.TAPFragment;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
-import com.ameron32.apps.tapnotes.v2.data.parse.model.Program;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.ProgramLayoutFragmentDelegate;
 
@@ -30,11 +30,14 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import static rx.android.lifecycle.LifecycleEvent.*;
@@ -46,6 +49,9 @@ public class ProgramFragment extends TAPFragment
     implements IProgramDelegate.IProgramDelegateCallbacks, Toolbar.OnMenuItemClickListener {
 
   private static final String PROGRAM_OBJECT_ID_ARG = "PROGRAM_OBJECT_ID_ARG";
+
+  @Inject
+  DataManager dataManager;
 
   private Callbacks mCallbacks;
   private IProgramDelegate mDelegate;
@@ -160,21 +166,21 @@ public class ProgramFragment extends TAPFragment
     cache.subscribe(notesObserver);
   }
 
-  private final Observer<Progress> notesObserver = new Observer<Progress>() {
+  private final Observer<List<ITalk>> notesObserver = new Observer<List<ITalk>>() {
 
     private Progress mostRecentProgress;
 
     @Override
     public void onCompleted() {
-      if (mostRecentProgress != null) {
-        if (mostRecentProgress.failed) {
-          // failed to load talks locally... that's weird
+//      if (mostRecentProgress != null) {
+//        if (mostRecentProgress.failed) {
+//          // failed to load talks locally... that's weird
+//
+//          return;
+//        }
+//      }
 
-          return;
-        }
-      }
 
-      mDelegate.loadProgramTalks(mTalks);
     }
 
     @Override
@@ -183,38 +189,49 @@ public class ProgramFragment extends TAPFragment
     }
 
     @Override
-    public void onNext(Progress progress) {
-      mostRecentProgress = progress;
+    public void onNext(List<ITalk> progress) {
+//      mostRecentProgress = progress;
+      mTalks.clear();
+      mTalks.addAll(progress);
+      mDelegate.loadProgramTalks(progress);
     }
   };
 
   private final List<ITalk> mTalks = new ArrayList<>();
-  private Observable<Progress> cache;
+  private Observable<List<ITalk>> cache;
 
-  private Observable<Progress> getLocalTalksObservable() {
-    return Observable.create(new Observable.OnSubscribe<Progress>() {
-      @Override
-      public void call(Subscriber<? super Progress> subscriber) {
-        try {
-          subscriber.onNext(new Progress(0, 1, false));
-          final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
-          final List<ITalk> talks = ParseHelper.Queries.Local.findAllProgramTalks((Program) program);
-          mTalks.clear();
-          mTalks.addAll(talks);
-
-          // LOCATION OF COMMON NON-RECURRING ACTIONS using _MiscUtils
-          //
-          // *********************************************************
-
-          subscriber.onNext(new Progress(1, 1, false));
-          subscriber.onCompleted();
-        } catch (ParseException e) {
-          e.printStackTrace();
-          subscriber.onNext(new Progress(0, 1, true));
-          subscriber.onCompleted();
-        }
-      }
-    }).subscribeOn(Schedulers.io());
+  private Observable<List<ITalk>> getLocalTalksObservable() {
+    return dataManager.getProgram(mProgramId)
+        .flatMap(new Func1<IProgram, Observable<List<ITalk>>>() {
+          @Override
+          public Observable<List<ITalk>> call(IProgram iProgram) {
+            return dataManager.getTalks(iProgram);
+          }
+        })
+        .subscribeOn(Schedulers.io());
+//    return Observable.create(new Observable.OnSubscribe<Progress>() {
+//      @Override
+//      public void call(Subscriber<? super Progress> subscriber) {
+//        try {
+//          subscriber.onNext(new Progress(0, 1, false));
+////          final IProgram program = ParseHelper.Queries.Local.getProgram(mProgramId);
+////          final List<ITalk> talks = ParseHelper.Queries.Local.findAllProgramTalks((Program) program);
+//          mTalks.clear();
+//          mTalks.addAll(talks);
+//
+//          // LOCATION OF COMMON NON-RECURRING ACTIONS using _MiscUtils
+//          //
+//          // *********************************************************
+//
+//          subscriber.onNext(new Progress(1, 1, false));
+//          subscriber.onCompleted();
+//        } catch (ParseException e) {
+//          e.printStackTrace();
+//          subscriber.onNext(new Progress(0, 1, true));
+//          subscriber.onCompleted();
+//        }
+//      }
+//    }).subscribeOn(Schedulers.io());
   }
 
   private void setNavigation() {
