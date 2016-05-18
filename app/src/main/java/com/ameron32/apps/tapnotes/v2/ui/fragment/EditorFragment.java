@@ -96,7 +96,7 @@ public class EditorFragment extends TAPFragment
     ButterKnife.inject(this, view);
     ColoredDrawableUtil.setDrawableColor(getActivity(),
         mSubmitButton.getDrawable(), R.attr.colorAccent,
-        R.color.teal_colorAccent);
+        R.color.default_colorAccent);
     return view;
   }
 

@@ -178,7 +178,7 @@ public class ProgramSelectionFragment extends TAPFragment
     }
     ColoredDrawableUtil.setDrawableColor(getActivity(),
         statusImage.getDrawable(),
-        R.attr.colorAccent, R.color.teal_colorAccent);
+        R.attr.colorAccent, R.color.default_colorAccent);
   }
 
   private void setRefreshButtonImage() {
@@ -186,7 +186,7 @@ public class ProgramSelectionFragment extends TAPFragment
       refreshButton.setImageResource(R.drawable.ic_action_sync);
       ColoredDrawableUtil.setDrawableColor(getActivity(),
           refreshButton.getDrawable(),
-          R.attr.colorAccent, R.color.teal_colorAccent);
+          R.attr.colorAccent, R.color.default_colorAccent);
     } else {
       refreshButton.setImageDrawable(null);
     }

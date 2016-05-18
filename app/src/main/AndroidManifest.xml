@@ -24,7 +24,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Teal2015Theme" >
+        android:theme="@style/Blue2016Theme" >
         <activity
             android:name=".ui.MNIActivity"
             android:label="@string/app_name"
