@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -200,6 +201,9 @@ public class ProgramFragment extends TAPFragment
           subscriber.onNext(new Progress(0, 1, false));
           final IProgram program = Queries.Local.getProgram(mProgramId);
           final List<ITalk> talks = Queries.Local.findAllProgramTalks((Program) program);
+
+          Log.v("TMP", "talks count: " + talks.size());
+
           mTalks.clear();
           mTalks.addAll(talks);
 

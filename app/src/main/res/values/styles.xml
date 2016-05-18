@@ -220,15 +220,16 @@
     <item name="expandable_icon">@drawable/ic_action_unfold_more_black</item>
     <item name="collapsable_icon">@drawable/ic_action_unfold_less_black</item>
 
-    <item name="menu_next_icon">@drawable/next_black</item>
-    <item name="menu_prev_icon">@drawable/previous_black</item>
+    <!-- MUST BE WHITE IF COLORPRIMARY IS DARK-->
+    <item name="menu_next_icon">@drawable/next_white</item>
+    <item name="menu_prev_icon">@drawable/previous_white</item>
     <item name="menu_refresh_icon">@drawable/ic_action_refresh</item>
 
-    <item name="context_menu_move">@drawable/move_black</item>
-    <item name="context_menu_bold">@drawable/bold_black</item>
-    <item name="context_menu_important">@drawable/favorite_black</item>
-    <item name="context_menu_edit">@drawable/edit_black</item>
-    <item name="context_menu_delete">@drawable/delete_black</item>
+    <item name="context_menu_move">@drawable/move_white</item>
+    <item name="context_menu_bold">@drawable/bold_white</item>
+    <item name="context_menu_important">@drawable/favorite_white</item>
+    <item name="context_menu_edit">@drawable/edit_white</item>
+    <item name="context_menu_delete">@drawable/delete_white</item>
   </style>
 
   <style name="NavBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">

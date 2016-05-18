@@ -66,7 +66,7 @@ public class ProgramSelectionFragment extends TAPFragment
     // TODO replace with DI controller
     mAppVersion = "version " + BuildConfig.VERSION_NAME;
 
-    mProgramId = Constants.CONVENTION2015_PROGRAM_OBJECT_ID;
+    mProgramId = Constants.CONVENTION2016_PROGRAM_OBJECT_ID;
   }
 
   @Override
@@ -125,19 +125,20 @@ public class ProgramSelectionFragment extends TAPFragment
   }
 
   private void loadProgramImage(Program program) {
-    Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
-    if (o != null && o instanceof ParseFile) {
-      final ParseFile file = (ParseFile) o;
+//    Object o = program.get(Constants.PROGRAM_PROGRAMIMAGE_FILE_KEY);
+//    if (o != null && o instanceof ParseFile) {
+//      final ParseFile file = (ParseFile) o;
       if (!Status.isConnectionToServerAvailable(getContext())) {
         // do nothing
         return;
       }
       // TODO undo placeholder2
-      Picasso.with(getContext()).load(file.getUrl())
+      Picasso.with(getContext())
+          .load(program.getString("programImageUrl"))
           .error(R.drawable.placeholder)
           .placeholder(R.drawable.placeholder)
           .into(programButton);
-    }
+//    }
   }
 
   @InjectView(R.id.testing_button_mni)

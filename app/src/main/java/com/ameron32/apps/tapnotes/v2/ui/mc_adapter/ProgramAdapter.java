@@ -42,6 +42,7 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
     private static final String THEME_TEAL2015 = "Teal2015Theme";
     private static final String THEME_ULTRABLACK = "UltraBlackTheme";
     private static final String THEME_MATERIALDARK = "MaterialDarkTheme";
+    private static final String THEME_BLUE2016 = "Blue2016Theme";
 
 
     private ArrayList<DateTime> headers;
@@ -413,6 +414,9 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
                 return;
             case THEME_ULTRABLACK:
                 cvh.textView.setBackgroundResource(R.color.ultrablack_listItem_dark);
+                return;
+            case THEME_BLUE2016:
+                cvh.textView.setBackgroundResource(R.color.blue2016_listItem_dark);
             default:
                 return;
         }

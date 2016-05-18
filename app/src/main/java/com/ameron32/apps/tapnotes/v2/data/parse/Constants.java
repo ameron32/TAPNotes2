@@ -8,6 +8,7 @@ import com.parse.ParseUser;
 public class Constants {
 
   public static final String CONVENTION2015_PROGRAM_OBJECT_ID = "BPCRNbT6Lf";
+  public static final String CONVENTION2016_PROGRAM_OBJECT_ID = "7HvHWXHOtz";
 
   // OBJECT KEY NAMES on Parse Server
   public static final String NOTE_OBJECT_NAME = "Note";
