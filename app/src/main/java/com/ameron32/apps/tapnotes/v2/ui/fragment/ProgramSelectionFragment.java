@@ -66,7 +66,7 @@ public class ProgramSelectionFragment extends TAPFragment
     // TODO replace with DI controller
     mAppVersion = "version " + BuildConfig.VERSION_NAME;
 
-    mProgramId = Constants.CONVENTION2016_PROGRAM_OBJECT_ID;
+    mProgramId = Constants.SINGLE_CONVENTION_ID;
   }
 
   @Override
