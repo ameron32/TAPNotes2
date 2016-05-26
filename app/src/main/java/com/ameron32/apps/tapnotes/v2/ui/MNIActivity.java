@@ -290,7 +290,8 @@ public class MNIActivity extends TAPActivity
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession + 1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final IProgram program = Queries.Local.getProgram(mProgramId);
+      final ITalk nextTalk = Queries.Local.getTalkAtSequence(program, session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks
@@ -332,7 +333,8 @@ public class MNIActivity extends TAPActivity
       final int sequenceWithinSession = Integer.valueOf(sequence.substring(1));
       final String sequenceWithinSessionString = String.format("%03d", sequenceWithinSession-1);
       Log.d(MNIActivity.class.getSimpleName(), "find sequence: " + session + sequenceWithinSessionString);
-      final ITalk nextTalk = Queries.Local.getTalkAtSequence(session + sequenceWithinSessionString);
+      final IProgram program = Queries.Local.getProgram(mProgramId);
+      final ITalk nextTalk = Queries.Local.getTalkAtSequence(program, session + sequenceWithinSessionString);
       commitNotesFragmentFromTalkId(nextTalk.getId());
 
       // TODO find a better way to delay clicks

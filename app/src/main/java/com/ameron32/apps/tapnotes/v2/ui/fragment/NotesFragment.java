@@ -1,9 +1,11 @@
 package com.ameron32.apps.tapnotes.v2.ui.fragment;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,7 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.ameron32.apps.tapnotes.v2.TempUtil;
 import com.ameron32.apps.tapnotes.v2.data.DataManager;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.frmk.object.Progress;
@@ -177,6 +181,23 @@ public class NotesFragment extends TAPFragment
     if (isStringUsable(mTalkId)) {
       mNotesDelegate.onBibleCreated(bible);
       giveNotesToDelegate();
+
+      new AsyncTask<Void, Void, Void>() {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+//          TempUtil.deleteTheOld();
+//          TempUtil.pushNotesA();
+//          TempUtil.pushNotesB();
+          return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+          super.onPostExecute(aVoid);
+//          Toast.makeText(getActivity(), "complete", Toast.LENGTH_LONG).show();
+        }
+      }.execute();
     }
   }
 

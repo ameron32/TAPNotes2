@@ -251,11 +251,12 @@ public class Queries {
       return talk;
     }
 
-    public static ITalk getTalkAtSequence(String sequence)
+    public static ITalk getTalkAtSequence(IProgram program, String sequence)
         throws ParseException, IndexOutOfBoundsException {
       Log.d(TAG, "getTalkAtSequence " + sequence);
       final ITalk talk = ParseQuery.getQuery(Talk.class)
           .fromLocalDatastore()
+          .whereEqualTo(Constants.TALK_oPROGRAM_OBJECT_KEY, program)
           .whereEqualTo(Constants.TALK_SEQUENCE_STRING_KEY, sequence)
           .find().get(0);
       return talk;

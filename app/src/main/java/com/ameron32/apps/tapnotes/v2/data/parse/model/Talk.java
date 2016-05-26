@@ -1,5 +1,7 @@
 package com.ameron32.apps.tapnotes.v2.data.parse.model;
 
+import android.util.Log;
+
 import com.ameron32.apps.tapnotes.v2.data.model.EventType;
 import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.data.parse.Constants;
@@ -26,6 +28,7 @@ public class Talk
     implements ITalk<Scripture, Bible> {
 
   public static final int NO_SONG_NUMBER = -1;
+  private static final String TAG = Talk.class.getSimpleName();
 
   public static Talk create() {
     final Talk t = new Talk();
@@ -41,7 +44,8 @@ public class Talk
     final String dateTime = this.getString(TALK_DATE_STRING_KEY);
     final DateTimeFormatter formatter = DateTimeFormat.forPattern("MM/dd/yyyy H:mm")
         .withLocale(locale);
-    return DateTime.parse(dateTime, formatter);
+    DateTime dt = DateTime.parse(dateTime, formatter);
+    return dt;
   }
 
   @Override

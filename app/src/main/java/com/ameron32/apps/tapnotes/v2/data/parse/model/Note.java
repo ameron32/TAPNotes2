@@ -64,7 +64,8 @@ public class Note
       final String programId, final String talkId,
       final ParseUser owner) {
     Log.d(Note.class.getSimpleName(),
-        "create Note : " + text + "|" + programId + "|" + talkId + "|" + owner.getObjectId());
+        "create Note : " + text + "|" + programId + "|" + talkId + "|" +
+            ((owner != null) ? owner.getObjectId() : ""));
     try {
       final IProgram program = Queries.Local.getProgram(programId);
       final ITalk talk = Queries.Local.getTalk(talkId);

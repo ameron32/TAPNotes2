@@ -109,12 +109,12 @@ public class ParseHelper {
             }
 
             @Override
-            public Observable<ITalk> getTalkAtSequence(final String sequencePosition) {
+            public Observable<ITalk> getTalkAtSequence(final IProgram program, final String sequencePosition) {
                 return Observable.create(new Observable.OnSubscribe<ITalk>() {
                     @Override
                     public void call(Subscriber<? super ITalk> subscriber) {
                         if (subscriber.isUnsubscribed()) return;
-                        ITalk talk = getTalkAtSequenceAsync(sequencePosition);
+                        ITalk talk = getTalkAtSequenceAsync(program, sequencePosition);
                         subscriber.onNext(talk);
                         subscriber.onCompleted();
                     }
@@ -193,9 +193,9 @@ public class ParseHelper {
                 return null;
             }
 
-            private ITalk getTalkAtSequenceAsync(String sequencePosition) {
+            private ITalk getTalkAtSequenceAsync(IProgram program, String sequencePosition) {
                 try {
-                    return Queries.Local.getTalkAtSequence(sequencePosition);
+                    return Queries.Local.getTalkAtSequence(program, sequencePosition);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

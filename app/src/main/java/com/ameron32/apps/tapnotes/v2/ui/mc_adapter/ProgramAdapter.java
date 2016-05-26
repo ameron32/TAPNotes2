@@ -14,6 +14,7 @@ import com.ameron32.apps.tapnotes.v2.data.model.ITalk;
 import com.ameron32.apps.tapnotes.v2.ui.delegate.IProgramDelegate;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -95,6 +96,9 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
             }
         }
 
+        // sort dates by earliest to latest
+        Collections.sort(dates, DateTimeComparator.getInstance());
+
         for (DateTime date:dates){
             ArrayList<ITalk>talksForThisDate = new ArrayList<>();
             for (ITalk t:talks){
@@ -106,8 +110,6 @@ public class ProgramAdapter extends MicahExpandableRecyclerView.ExpandableAdapte
             Collections.sort(talksForThisDate, new ITalkComparator());
             sortedTalks.add(talksForThisDate);
         }
-
-
 
         content = sortedTalks;
         headers = dates;

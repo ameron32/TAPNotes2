@@ -19,7 +19,7 @@
   <color name="blue2016_colorPrimaryDark">@color/LightBlue</color>
   <color name="blue2016_colorAccent">@color/BurntOrange</color>
 
-  <color name="blue2016_textColorPrimary">@color/UltraWhite</color>
+  <color name="blue2016_textColorPrimary">@color/UltraBlack</color>
   <color name="blue2016_colorPrimaryText">@color/TextBlue</color>
 
   <color name="blue2016_notes_container_background">@color/LightGreyCloud</color>

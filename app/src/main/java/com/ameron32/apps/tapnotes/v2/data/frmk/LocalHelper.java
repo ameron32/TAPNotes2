@@ -20,7 +20,7 @@ public interface LocalHelper extends Helper {
 
     Observable<IProgram> getProgram(String programId);
     Observable<ITalk> getTalk(String talkId);
-    Observable<ITalk> getTalkAtSequence(String sequencePosition);
+    Observable<ITalk> getTalkAtSequence(IProgram program, String sequencePosition);
     Observable<List<ITalk>> getProgramTalks(IProgram iProgram);
     Observable<List<INote>> getNotes(final IProgram program, final ITalk talk, final DateTime date, final IUser user);
 
